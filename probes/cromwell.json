@@ -1,0 +1,102 @@
+{
+  "access_class": "self_hosted",
+  "auth_env": null,
+  "base_url": "http://127.0.0.1:8000",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/engine/v1/version",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/engine/v1/status",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/workflows/v1/query",
+      "query": {
+        "additionalQueryResultFields": "labels",
+        "includeSubworkflows": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/workflows/v1/query",
+      "query": {
+        "status": "Succeeded"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/workflows/v1/backends",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/workflows/v1/00000000-0000-0000-0000-000000000000/status",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/workflows/v1/00000000-0000-0000-0000-000000000000/metadata",
+      "query": {
+        "excludeKey": "calls"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/workflows/v1/00000000-0000-0000-0000-000000000000/outputs",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/workflows/v1/00000000-0000-0000-0000-000000000000/logs",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/workflows/v1/00000000-0000-0000-0000-000000000000/labels",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/workflows/v1/00000000-0000-0000-0000-000000000000/metadata/failed-jobs",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/ga4gh/wes/v1/service-info",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/ga4gh/wes/v1/runs",
+      "query": {
+        "page_size": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/ga4gh/wes/v1/runs/datalox_probe_missing_run/status",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "cromwell",
+  "rate_budget": {
+    "max_requests": 14,
+    "min_interval_seconds": 0.5
+  },
+  "safe_read_prefixes": [
+    "/engine/v1/version",
+    "/engine/v1/status",
+    "/api/workflows/v1/query",
+    "/api/workflows/v1/backends",
+    "/api/workflows/v1/00000000-0000-0000-0000-000000000000",
+    "/api/ga4gh/wes/v1/service-info",
+    "/api/ga4gh/wes/v1/runs"
+  ],
+  "tos_note": "Self-hosted Cromwell fixture at 127.0.0.1:8000; GET-only probes cover engine health/version, workflow query/status/metadata/output/log/label surfaces, backend metadata, WES metadata, and missing workflow/run semantics."
+}

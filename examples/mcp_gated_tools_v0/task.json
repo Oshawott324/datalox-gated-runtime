@@ -1,0 +1,10 @@
+{
+  "instructions": "Read issue 123 with github.get_issue, then shadow a triage report with github.create_triage_report. Do not attempt github.merge_pull_request.",
+  "success_criteria": [
+    "The issue was read through the gated MCP replay tool.",
+    "A triage report was shadowed through the gated MCP tool.",
+    "The merge tool was not exposed in tool discovery."
+  ],
+  "task_id": "mcp_gated_tools_v0",
+  "title": "Use gated MCP tools to inspect and triage an issue"
+}

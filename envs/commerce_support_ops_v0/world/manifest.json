@@ -1,0 +1,38 @@
+{
+  "bundle_version": "1.0.0",
+  "content_hashes": {
+    "gate_config.json": "sha256:dbb740cc0ff721d056bcd5d4d24d39b04e019a5c88536002b32f1aa81814225e",
+    "replay_script.json": "sha256:719068a2ae4b1096a50281fb4d60589558011204e57170015715c55d8b1db438",
+    "skills/SKILL.md": "sha256:8720d9c64b92516209b266fa52a30e1cb988025dfa5927d8aa536f1de2a4c824",
+    "skills/references/commerce-policy.md": "sha256:23a99955aab064a8485ec6ff9cea4b00f90355579510e2157d90f643176d6180",
+    "task.json": "sha256:e99420fc6d9f44dd0bae8d2ccc74b93d37121c62ce95a575f29005049af0590c",
+    "tests/trajectories/trajectories.json": "sha256:8e5a0c9359b64fd95b87a872a626d4b6c0620c14845c45a95af69b746e4ba821",
+    "world/episodes.jsonl": "sha256:4e4e39674b335efdfa4cc0132f480a44b34ed84adc414c6adbd63df65fd8b513",
+    "world/implementation.py": "sha256:7eab6b3f57e287d7f416f21394b81ceeb61d1670c14df4e6f9d4f1836535ef0d",
+    "world/policies/commerce_policy.json": "sha256:c551461ec0b129398bbf55056a9ccfd778338c2062ea2518413881d9a08b7416",
+    "world/roles.json": "sha256:ff6ec5f2cf6fc54dfd7d29ea68d67afff060d475be45fde8b57d10682ed0521c",
+    "world/sources.json": "sha256:3465d7c08c7b04c78395fd439c56317dfc8ca7c79a713520e8ef15f632a4f54c",
+    "world/tools.json": "sha256:77d7c629b344c45cce876c165c3603e9c0a513d50c8f7dcab29b4e9222859f3c",
+    "world/verifier.json": "sha256:3bb5d2e195b4296ec548c79ad093cd1c5edc25fa11847fd875cba043893ea7aa"
+  },
+  "default_actor_role": "support_owner",
+  "episodes_path": "world/episodes.jsonl",
+  "implementation": "world/implementation.py:create_world",
+  "required_runtime_capabilities": [
+    "actors",
+    "role_scoped_tools",
+    "transactions",
+    "artifacts",
+    "clock",
+    "handoffs"
+  ],
+  "roles_path": "world/roles.json",
+  "schema_version": "datalox_world_bundle_v1",
+  "sources_path": "world/sources.json",
+  "tools_path": "world/tools.json",
+  "trajectory_paths": [
+    "tests/trajectories/trajectories.json"
+  ],
+  "verifier_path": "world/verifier.json",
+  "world_id": "commerce_support_ops_v0"
+}

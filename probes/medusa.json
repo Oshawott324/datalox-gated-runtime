@@ -1,0 +1,162 @@
+{
+  "access_class": "self_hosted",
+  "auth_profile": "medusa_fixture",
+  "auth_profiles": {
+    "medusa_fixture": {
+      "inject": [
+        {
+          "env": "MEDUSA_ADMIN_JWT",
+          "in": "header",
+          "name": "Authorization",
+          "scheme": "Bearer"
+        },
+        {
+          "env": "MEDUSA_PUBLISHABLE_API_KEY",
+          "in": "header",
+          "name": "x-publishable-api-key",
+          "scheme": ""
+        }
+      ],
+      "kind": "env_static"
+    }
+  },
+  "base_url": "http://127.0.0.1:9000",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/regions",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/store/collections",
+      "query": {
+        "limit": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/product-categories",
+      "query": {
+        "limit": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/carts/cart_datalox_probe_missing",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/store/products/datalox_probe_missing_product",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/admin/products",
+      "query": {
+        "limit": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/product-categories",
+      "query": {
+        "limit": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/collections",
+      "query": {
+        "limit": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/regions",
+      "query": {
+        "limit": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/sales-channels",
+      "query": {
+        "limit": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/stock-locations",
+      "query": {
+        "limit": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/inventory-items",
+      "query": {
+        "limit": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/customers",
+      "query": {
+        "limit": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/orders",
+      "query": {
+        "limit": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/products/prod_datalox_probe_missing",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/admin/orders/order_datalox_probe_missing",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/admin/customers/cus_datalox_probe_missing",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/admin/inventory-items/iitem_datalox_probe_missing",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "medusa",
+  "rate_budget": {
+    "max_requests": 20,
+    "min_interval_seconds": 0.05
+  },
+  "safe_read_prefixes": [
+    "/admin/",
+    "/health",
+    "/store/"
+  ],
+  "tos_note": "Self-hosted Medusa fixture seeded outside Datalox. Datalox captures GET reads only; admin and store auth are injected from MEDUSA_ADMIN_JWT and MEDUSA_PUBLISHABLE_API_KEY."
+}

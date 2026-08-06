@@ -1,0 +1,158 @@
+{
+  "access_class": "open_public",
+  "auth_env": null,
+  "base_url": "https://api.crossref.org",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/works/10.1038/nphys1170",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/works",
+      "query": {
+        "query.bibliographic": "room temperature superconductivity",
+        "rows": "1",
+        "select": "DOI,title,type,publisher,published"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/works",
+      "query": {
+        "filter": "type:dataset",
+        "rows": "1",
+        "select": "DOI,title,type,publisher,published"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/works/10.1038/nphys1170/agency",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/journals",
+      "query": {
+        "rows": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/journals/1476-4687",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/journals/1476-4687/works",
+      "query": {
+        "rows": "1",
+        "select": "DOI,title,type,publisher,published"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members",
+      "query": {
+        "rows": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/297",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/members/297/works",
+      "query": {
+        "rows": "1",
+        "select": "DOI,title,type,publisher,published"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/funders",
+      "query": {
+        "rows": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/funders/100000001",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/funders/100000001/works",
+      "query": {
+        "rows": "1",
+        "select": "DOI,title,type,publisher,published,funder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/prefixes/10.1038",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/prefixes/10.1038/works",
+      "query": {
+        "rows": "1",
+        "select": "DOI,title,type,publisher,published,prefix"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/types",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/types/journal-article",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/types/journal-article/works",
+      "query": {
+        "rows": "1",
+        "select": "DOI,title,type,publisher,published"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/licenses",
+      "query": {
+        "rows": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/works/10.5555/datalox-crossref-missing-20260720",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "crossref",
+  "rate_budget": {
+    "max_requests": 20,
+    "min_interval_seconds": 0.5
+  },
+  "safe_read_prefixes": [
+    "/works",
+    "/journals",
+    "/members",
+    "/funders",
+    "/prefixes",
+    "/types",
+    "/licenses"
+  ],
+  "static_headers": {
+    "Accept": "application/json",
+    "User-Agent": "datalox-gated-runtime-crossref-probe/1.0 (public metadata capture)"
+  },
+  "tos_note": "Official Crossref REST API public pool; Crossref documents that anyone may access it without signup, registration, authentication, or identification. This low-rate GET-only probe intentionally omits mailto because no authorized contact address was supplied."
+}

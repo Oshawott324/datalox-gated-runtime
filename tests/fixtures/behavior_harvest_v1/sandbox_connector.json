@@ -1,0 +1,166 @@
+{
+  "allowed_request_headers": [],
+  "auth": {
+    "contexts": [
+      {
+        "actor_alias": "api_actor",
+        "context_id": "anonymous",
+        "grant": null,
+        "grant_required": false,
+        "secret_source_names": [
+          "api_token"
+        ],
+        "strategy_id": "bearer"
+      }
+    ],
+    "kind": "secret",
+    "profile_id": "bearer",
+    "secret_sources": [
+      {
+        "kind": "environment",
+        "name": "api_token",
+        "scan_variants": [
+          "raw",
+          "urlencoded",
+          "base64",
+          "bearer"
+        ]
+      }
+    ]
+  },
+  "authoring_policy": {
+    "concurrency": 1,
+    "write_retries": 0
+  },
+  "boundary": {
+    "kind": "managed_sandbox",
+    "production_equivalence": "limited",
+    "statement": "A dedicated writable test tenant."
+  },
+  "bounds": {
+    "max_polls": 0,
+    "max_request_bytes": 16384,
+    "max_requests": 8,
+    "max_response_bytes": 16384,
+    "max_total_response_bytes": 131072,
+    "min_request_interval_ms": 0,
+    "request_timeout_ms": 5000
+  },
+  "collectors": [
+    {
+      "call": {
+        "assertions": [
+          {
+            "assertion_id": "event_status",
+            "expected": 200,
+            "kind": "status_equals",
+            "pattern": null,
+            "pointer": null,
+            "prior_pointer": null,
+            "prior_step_id": null,
+            "value_type": null
+          },
+          {
+            "assertion_id": "event_complete",
+            "expected": true,
+            "kind": "json_pointer_equals",
+            "pattern": null,
+            "pointer": "/complete",
+            "prior_pointer": null,
+            "prior_step_id": null,
+            "value_type": null
+          }
+        ],
+        "auth_context_id": "anonymous",
+        "call_id": "events",
+        "request": {
+          "body": null,
+          "headers": {},
+          "method": "GET",
+          "path": "/events",
+          "query": {}
+        },
+        "strategy_id": "event_collection"
+      },
+      "collector_id": "events",
+      "kind": "event",
+      "required": true
+    }
+  ],
+  "connector_id": "widget_sandbox",
+  "driver_id": "behavior_harvest_http11",
+  "driver_kind": "http",
+  "driver_source_sha256": "sha256:2e44e4de720458dd8d3441f91eec8fbcbcd938c81c9aa171e191d0b40fdcd797",
+  "driver_version": "1",
+  "identity_preflight": {
+    "authenticated_context_ids": [],
+    "calls": [
+      {
+        "assertions": [
+          {
+            "assertion_id": "identity_status",
+            "expected": 200,
+            "kind": "status_equals",
+            "pattern": null,
+            "pointer": null,
+            "prior_pointer": null,
+            "prior_step_id": null,
+            "value_type": null
+          },
+          {
+            "assertion_id": "identity_tenant",
+            "expected": "sandbox",
+            "kind": "json_pointer_equals",
+            "pattern": null,
+            "pointer": "/tenant",
+            "prior_pointer": null,
+            "prior_step_id": null,
+            "value_type": null
+          }
+        ],
+        "auth_context_id": "anonymous",
+        "call_id": "identity",
+        "request": {
+          "body": null,
+          "headers": {},
+          "method": "GET",
+          "path": "/identity",
+          "query": {}
+        },
+        "strategy_id": "tenant_identity"
+      }
+    ],
+    "expected_identity": {
+      "tenant": "sandbox"
+    },
+    "identity_call_id": "identity",
+    "identity_pointer": "",
+    "static_projections": [],
+    "strategy_id": "tenant_identity"
+  },
+  "isolation": {
+    "cleanup_kind": "delete_run_resources",
+    "cleanup_strategy_id": "delete_run",
+    "isolation_kind": "run_scoped_resources",
+    "reset_equivalence_claimed": false,
+    "reset_kind": "none",
+    "reset_strategy_id": null
+  },
+  "known_limitations": [
+    "Only the declared workflow is harvested."
+  ],
+  "origin": "https://sandbox.example.test",
+  "provider_id": "widget",
+  "provider_version": "v1",
+  "request_encoding": "canonical_json",
+  "schema_id": "datalox_behavior_connector_v1",
+  "source_pins": [
+    {
+      "pin_id": "provider_contract",
+      "sha256": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "source_ref": "https://docs.example.test/api",
+      "version": "2026-07-30"
+    }
+  ],
+  "static_json_inputs": []
+}

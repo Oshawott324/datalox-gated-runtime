@@ -1,0 +1,189 @@
+{
+  "access_class": "open_public",
+  "auth_env": null,
+  "base_url": "https://cmr.earthdata.nasa.gov",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/search/collections.json",
+      "query": {
+        "page_size": "1",
+        "provider": "LPCLOUD",
+        "short_name": "MOD13Q1",
+        "version": "061"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/collections.json",
+      "query": {
+        "has_granules": "true",
+        "page_size": "1",
+        "platform": "Aqua"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/collections.json",
+      "query": {
+        "has_granules": "true",
+        "keyword": "wildfire",
+        "page_size": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/collections.json",
+      "query": {
+        "bounding_box": "-125,25,-65,50",
+        "has_granules": "true",
+        "page_size": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/collections.umm_json",
+      "query": {
+        "page_size": "1",
+        "provider": "LPCLOUD",
+        "short_name": "MOD13Q1",
+        "version": "061"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/granules.json",
+      "query": {
+        "page_size": "1",
+        "provider": "LPCLOUD",
+        "short_name": "MOD13Q1",
+        "version": "061"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/granules.json",
+      "query": {
+        "page_size": "1",
+        "provider": "LPCLOUD",
+        "short_name": "MOD13Q1",
+        "temporal": "2024-01-01T00:00:00Z,2024-01-31T23:59:59Z",
+        "version": "061"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/granules.json",
+      "query": {
+        "bounding_box": "-125,25,-65,50",
+        "page_size": "1",
+        "provider": "LPCLOUD",
+        "short_name": "MOD13Q1",
+        "version": "061"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/granules.umm_json",
+      "query": {
+        "page_size": "1",
+        "provider": "LPCLOUD",
+        "short_name": "MOD13Q1",
+        "version": "061"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/variables.json",
+      "query": {
+        "keyword": "temperature",
+        "page_size": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/variables.umm_json",
+      "query": {
+        "keyword": "temperature",
+        "page_size": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/services.json",
+      "query": {
+        "keyword": "OPeNDAP",
+        "page_size": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/services.umm_json",
+      "query": {
+        "keyword": "OPeNDAP",
+        "page_size": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/tools.json",
+      "query": {
+        "page_size": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/tools.umm_json",
+      "query": {
+        "page_size": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/providers",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/stac/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/stac/LPCLOUD",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/stac/LPCLOUD/collections",
+      "query": {
+        "limit": "1"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "nasa_cmr",
+  "rate_budget": {
+    "max_requests": 19,
+    "min_interval_seconds": 0.5
+  },
+  "safe_read_prefixes": [
+    "/search/collections.json",
+    "/search/collections.umm_json",
+    "/search/granules.json",
+    "/search/granules.umm_json",
+    "/search/variables.json",
+    "/search/variables.umm_json",
+    "/search/services.json",
+    "/search/services.umm_json",
+    "/search/tools.json",
+    "/search/tools.umm_json",
+    "/search/providers",
+    "/stac/"
+  ],
+  "static_headers": {
+    "Accept": "application/json",
+    "Client-Id": "datalox-gated-runtime"
+  },
+  "tos_note": "Official NASA Earthdata CMR production search and STAC APIs; public metadata discovery via low-rate, credential-free GET requests only."
+}

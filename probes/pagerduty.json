@@ -1,0 +1,281 @@
+{
+  "access_class": "instant_sandbox",
+  "auth_profile": "pagerduty",
+  "auth_profiles": {
+    "pagerduty": {
+      "inject": [
+        {
+          "env": "PAGERDUTY_AUTHORIZATION",
+          "in": "header",
+          "name": "Authorization",
+          "scheme": ""
+        }
+      ],
+      "kind": "env_static"
+    }
+  },
+  "base_url": "https://api.pagerduty.com",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/abilities",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/incidents",
+      "query": {
+        "limit": "25",
+        "total": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/incidents/__INCIDENT_ID__",
+      "query": {
+        "include[]": "services"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/incidents/__INCIDENT_ID__/alerts",
+      "query": {
+        "limit": "25",
+        "total": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/incidents/__INCIDENT_ID__/alerts/__ALERT_ID__",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/incidents/__INCIDENT_ID__/log_entries",
+      "query": {
+        "limit": "25",
+        "total": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/incidents/__INCIDENT_ID__/notes",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/services",
+      "query": {
+        "limit": "25",
+        "total": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/__SERVICE_ID__",
+      "query": {
+        "include[]": "escalation_policies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/__SERVICE_ID__/rules",
+      "query": {
+        "limit": "25",
+        "total": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/__SERVICE_ID__/rules/__SERVICE_RULE_ID__",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/escalation_policies",
+      "query": {
+        "limit": "25",
+        "total": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/escalation_policies/__ESCALATION_POLICY_ID__",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/schedules",
+      "query": {
+        "include[]": "schedule_layers",
+        "limit": "25",
+        "total": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/schedules/__SCHEDULE_ID__",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/schedules/__SCHEDULE_ID__/users",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/oncalls",
+      "query": {
+        "limit": "25",
+        "total": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "query": {
+        "limit": "25",
+        "total": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/me",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/users/__USER_ID__",
+      "query": {
+        "include[]": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams",
+      "query": {
+        "limit": "25",
+        "total": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/__TEAM_ID__",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/teams/__TEAM_ID__/members",
+      "query": {
+        "limit": "25",
+        "total": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/maintenance_windows",
+      "query": {
+        "limit": "25",
+        "total": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/maintenance_windows/__MAINTENANCE_WINDOW_ID__",
+      "query": {
+        "include[]": "services"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event_orchestrations",
+      "query": {
+        "limit": "25"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event_orchestrations/__ORCHESTRATION_ID__",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/event_orchestrations/__ORCHESTRATION_ID__/router",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/event_orchestrations/__ORCHESTRATION_ID__/global",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/event_orchestrations/__ORCHESTRATION_ID__/unrouted",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/event_orchestrations/__ORCHESTRATION_ID__/integrations",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/event_orchestrations/services/__SERVICE_ID__",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/event_orchestrations/services/__SERVICE_ID__/active",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/rulesets",
+      "query": {
+        "limit": "25",
+        "total": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rulesets/__RULESET_ID__",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/rulesets/__RULESET_ID__/rules",
+      "query": {
+        "limit": "25",
+        "total": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rulesets/__RULESET_ID__/rules/__RULE_ID__",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "pagerduty",
+  "rate_budget": {
+    "max_requests": 37,
+    "min_interval_seconds": 0.25
+  },
+  "safe_read_prefixes": [
+    "/abilities",
+    "/incidents",
+    "/services",
+    "/escalation_policies",
+    "/schedules",
+    "/oncalls",
+    "/users",
+    "/teams",
+    "/maintenance_windows",
+    "/event_orchestrations",
+    "/rulesets"
+  ],
+  "static_headers": {
+    "Accept": "application/vnd.pagerduty+json;version=2"
+  },
+  "tos_note": "Trial-account template. Render concrete detail IDs with scripts/providers/pagerduty-sandbox.sh before probing. Datalox live capture remains GET-only; direct authoring writes are separate, explicit, and never routed through Datalox."
+}

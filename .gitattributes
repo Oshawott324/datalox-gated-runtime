@@ -1,0 +1,2 @@
+# Content-addressed world bundles hash exact bytes. Keep text stable on every OS.
+* text=auto eol=lf

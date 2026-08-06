@@ -1,0 +1,212 @@
+{
+  "access_class": "open_public",
+  "auth_env": null,
+  "base_url": "https://api.fda.gov",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/drug/event.json",
+      "query": {
+        "limit": "1",
+        "search": "receivedate:[20240101 TO 20240131]"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drug/event.json",
+      "query": {
+        "count": "receivedate",
+        "limit": "5",
+        "search": "receivedate:[20240101 TO 20240131]"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drug/event.json",
+      "query": {
+        "limit": "1",
+        "search": "receivedate:[20240101 TO 20240131]",
+        "skip": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drug/label.json",
+      "query": {
+        "limit": "1",
+        "search": "_exists_:boxed_warning"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drug/label.json",
+      "query": {
+        "limit": "1",
+        "search": "openfda.brand_name.exact:\"DATALOX_NO_SUCH_PRODUCT_20260720\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drug/ndc.json",
+      "query": {
+        "limit": "1",
+        "search": "finished:true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drug/enforcement.json",
+      "query": {
+        "limit": "1",
+        "search": "classification:\"Class I\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drug/drugsfda.json",
+      "query": {
+        "limit": "1",
+        "search": "products.dosage_form:\"LOTION\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drug/shortages.json",
+      "query": {
+        "limit": "1",
+        "search": "dosage_form:\"Capsule\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/event.json",
+      "query": {
+        "limit": "1",
+        "search": "device.generic_name:x-ray"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/event.json",
+      "query": {
+        "count": "event_type.exact",
+        "limit": "5"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/recall.json",
+      "query": {
+        "limit": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/enforcement.json",
+      "query": {
+        "limit": "1",
+        "search": "classification:\"Class I\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/classification.json",
+      "query": {
+        "limit": "1",
+        "search": "product_code:NOB"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/510k.json",
+      "query": {
+        "limit": "1",
+        "search": "advisory_committee:cv"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/pma.json",
+      "query": {
+        "limit": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/registrationlisting.json",
+      "query": {
+        "limit": "1",
+        "search": "products.product_code:HQY"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/udi.json",
+      "query": {
+        "limit": "1",
+        "search": "_exists_:public_device_record_key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/covid19serology.json",
+      "query": {
+        "limit": "1",
+        "search": "antibody_truth:\"Positive\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/food/event.json",
+      "query": {
+        "limit": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/food/event.json",
+      "query": {
+        "limit": "1",
+        "skip": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/food/enforcement.json",
+      "query": {
+        "limit": "1",
+        "search": "classification:\"Class I\""
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "openfda",
+  "rate_budget": {
+    "max_requests": 22,
+    "min_interval_seconds": 0.75
+  },
+  "safe_read_prefixes": [
+    "/drug/event.json",
+    "/drug/label.json",
+    "/drug/ndc.json",
+    "/drug/enforcement.json",
+    "/drug/drugsfda.json",
+    "/drug/shortages.json",
+    "/device/event.json",
+    "/device/recall.json",
+    "/device/enforcement.json",
+    "/device/classification.json",
+    "/device/510k.json",
+    "/device/pma.json",
+    "/device/registrationlisting.json",
+    "/device/udi.json",
+    "/device/covid19serology.json",
+    "/food/event.json",
+    "/food/enforcement.json"
+  ],
+  "static_headers": {
+    "Accept": "application/json",
+    "User-Agent": "datalox-gated-runtime-openfda-probe/1.0 (https://github.com/Oshawott324/datalox-gated-runtime)"
+  },
+  "tos_note": "Official openFDA public GET APIs. The provider publishes a no-key quota while recommending API keys for regular use; this bounded probe uses no credential, performs no writes, and captures point-in-time public drug, device, and food records through the Datalox live gate."
+}

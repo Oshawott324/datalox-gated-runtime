@@ -1,0 +1,151 @@
+{
+  "access_class": "self_hosted",
+  "auth_profile": "openproject_fixture_api_token",
+  "auth_profiles": {
+    "openproject_fixture_api_token": {
+      "inject": [
+        {
+          "env": "OPENPROJECT_BASIC_AUTH_B64",
+          "in": "header",
+          "name": "Authorization",
+          "scheme": "Basic"
+        }
+      ],
+      "kind": "env_static"
+    }
+  },
+  "base_url": "http://127.0.0.1:8080",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/api/v3",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/configuration",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/users/me",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/projects",
+      "query": {
+        "filters": "[{\"name_and_identifier\":{\"operator\":\"~\",\"values\":[\"datalox-openproject-probe\"]}}]"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/projects/99001",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/projects/available_parent_projects",
+      "query": {
+        "filters": "[{\"name_and_identifier\":{\"operator\":\"~\",\"values\":[\"datalox-openproject-probe\"]}}]",
+        "of": "datalox-openproject-probe"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/projects/99001/types",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/priorities",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/statuses",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/types",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/work_packages",
+      "query": {
+        "filters": "[{\"project\":{\"operator\":\"=\",\"values\":[\"99001\"]}}]"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/work_packages/99001",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/work_packages/99001/relations",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/relations",
+      "query": {
+        "filters": "[{\"involved\":{\"operator\":\"=\",\"values\":[\"99001\"]}}]"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/relations/99001",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/time_entries",
+      "query": {
+        "filters": "[{\"entity_type\":{\"operator\":\"=\",\"values\":[\"WorkPackage\"]}},{\"entity_id\":{\"operator\":\"=\",\"values\":[\"99001\"]}}]"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/time_entries/99001",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/time_entries/activities/99001",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/projects/999999",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/work_packages/999999",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/relations/999999",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/time_entries/999999",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "openproject",
+  "rate_budget": {
+    "max_requests": 22,
+    "min_interval_seconds": 0.25
+  },
+  "safe_read_prefixes": [
+    "/api/v3"
+  ],
+  "tos_note": "Self-hosted OpenProject fixture seeded outside Datalox. Datalox live capture is GET-only and uses an env-backed API token."
+}

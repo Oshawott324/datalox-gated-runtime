@@ -1,0 +1,57 @@
+{
+  "api_version": "v1",
+  "cases": [
+    {
+      "body": {
+        "items": [
+          {
+            "id": "item-101"
+          }
+        ]
+      },
+      "case_id": "fixture:list_items",
+      "derivation": "Deterministic minimal instance of the official response schema.",
+      "family": "items",
+      "grounding": "G1_SCHEMA_INSTANTIATED",
+      "method": "GET",
+      "operation_id": "listItems",
+      "path": "/v1/items",
+      "query": {
+        "limit": "1"
+      },
+      "source_locator": "GET /v1/items response schema",
+      "source_refs": [
+        "fixture-openapi"
+      ],
+      "status_code": 200,
+      "synthetic_values": {
+        "items[0].id": "Deterministic fixture identifier."
+      }
+    }
+  ],
+  "coverage": {
+    "case_count": 1,
+    "documented_example_count": 0,
+    "families": [
+      "items"
+    ],
+    "known_gaps": [
+      "No live behavior captured."
+    ],
+    "schema_instantiated_count": 1
+  },
+  "display_name": "Fixture API",
+  "not_live_reason": "Official-documentation/schema-derived G1 cases; no provider traffic was captured.",
+  "provider_id": "fixture",
+  "retrieved_at": "2026-07-13",
+  "schema_version": "documented_provider_v0",
+  "sources": [
+    {
+      "kind": "official_openapi",
+      "locator": "paths./v1/items.get.responses.200",
+      "retrieved_at": "2026-07-13",
+      "source_id": "fixture-openapi",
+      "url": "https://api.example.test/openapi.json"
+    }
+  ]
+}

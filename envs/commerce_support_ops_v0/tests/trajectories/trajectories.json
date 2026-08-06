@@ -1,0 +1,2809 @@
+{
+  "trajectories": [
+    {
+      "episode_id": "refund-duplicate-payment-clean",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-refund-duplicate-payment-clean",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-100",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "body": {
+            "amount": 1500,
+            "currency": "usd",
+            "customer_id": "cus-00-primary",
+            "order_id": "ord-00-primary",
+            "payment_intent_id": "pi-00-eligible"
+          },
+          "method": "POST",
+          "path": "/v1/refunds",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-00-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-00-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-00-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-00-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-00-current",
+            "customer_id": "cus-00-primary",
+            "issue_id": "COM-100",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-100",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-00-primary, ticket-00-primary, and COM-100 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+00@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-00-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "refund-partial-shipping-failure",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-refund-partial-shipping-failure",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-101",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "body": {
+            "amount": 1537,
+            "currency": "usd",
+            "customer_id": "cus-01-primary",
+            "order_id": "ord-01-primary",
+            "payment_intent_id": "pi-01-eligible"
+          },
+          "method": "POST",
+          "path": "/v1/refunds",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-01-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-01-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-01-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-01-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-01-current",
+            "customer_id": "cus-01-primary",
+            "issue_id": "COM-101",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-101",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-01-primary, ticket-01-primary, and COM-101 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+01@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-01-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "billing-open-invoice-escalation",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-billing-open-invoice-escalation",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-102",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-02-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-02-current",
+            "priority": "urgent",
+            "stage": "in_progress",
+            "ticket_id": "ticket-02-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-02-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-02-current",
+            "customer_id": "cus-02-primary",
+            "issue_id": "COM-102",
+            "priority": "urgent",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-102",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-02-primary, ticket-02-primary, and COM-102 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+02@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-02-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "refund-return-window-valid",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-refund-return-window-valid",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-103",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "body": {
+            "amount": 1611,
+            "currency": "usd",
+            "customer_id": "cus-03-primary",
+            "order_id": "ord-03-primary",
+            "payment_intent_id": "pi-03-eligible"
+          },
+          "method": "POST",
+          "path": "/v1/refunds",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-03-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-03-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-03-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-03-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-03-current",
+            "customer_id": "cus-03-primary",
+            "issue_id": "COM-103",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-103",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-03-primary, ticket-03-primary, and COM-103 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+03@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-03-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "billing-no-refund-after-chargeback",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-billing-no-refund-after-chargeback",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-104",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "reason": "Policy or evidence requires a no-call decision."
+          },
+          "method": "POST",
+          "path": "/world/no-call",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-04-primary, ticket-04-primary, and COM-104 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+04@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-04-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "order-lost-shipment-replacement",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-order-lost-shipment-replacement",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-105",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-05-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-05-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-05-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-05-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-05-current",
+            "customer_id": "cus-05-primary",
+            "issue_id": "COM-105",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-105",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-05-primary, ticket-05-primary, and COM-105 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+05@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-05-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "inventory-substitution-approval",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-inventory-substitution-approval",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-106",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-06-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-06-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-06-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-06-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-06-current",
+            "customer_id": "cus-06-primary",
+            "issue_id": "COM-106",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-106",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-06-primary, ticket-06-primary, and COM-106 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+06@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-06-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "fulfillment-address-hold",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-fulfillment-address-hold",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-107",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-07-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-07-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-07-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-07-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-07-current",
+            "customer_id": "cus-07-primary",
+            "issue_id": "COM-107",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-107",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-07-primary, ticket-07-primary, and COM-107 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+07@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-07-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "split-order-backorder",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-split-order-backorder",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-108",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-08-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-08-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-08-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-08-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-08-current",
+            "customer_id": "cus-08-primary",
+            "issue_id": "COM-108",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-108",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-08-primary, ticket-08-primary, and COM-108 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+08@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-08-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "return-received-restock",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-return-received-restock",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-109",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-09-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-09-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-09-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-09-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-09-current",
+            "customer_id": "cus-09-primary",
+            "issue_id": "COM-109",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-109",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-09-primary, ticket-09-primary, and COM-109 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+09@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-09-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "renewal-risk-incident-escalation",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-renewal-risk-incident-escalation",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-110",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-10-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-10-current",
+            "priority": "urgent",
+            "stage": "in_progress",
+            "ticket_id": "ticket-10-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-10-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-10-current",
+            "customer_id": "cus-10-primary",
+            "issue_id": "COM-110",
+            "priority": "urgent",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-110",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-10-primary, ticket-10-primary, and COM-110 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+10@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-10-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "vip-customer-priority-repair",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-vip-customer-priority-repair",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-111",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-11-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-11-current",
+            "priority": "urgent",
+            "stage": "in_progress",
+            "ticket_id": "ticket-11-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-11-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-11-current",
+            "customer_id": "cus-11-primary",
+            "issue_id": "COM-111",
+            "priority": "urgent",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-111",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-11-primary, ticket-11-primary, and COM-111 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+11@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-11-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "wrong-owner-stale-ticket",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-wrong-owner-stale-ticket",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-112",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-12-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-12-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-12-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-12-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-12-current",
+            "customer_id": "cus-12-primary",
+            "issue_id": "COM-112",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-112",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-12-primary, ticket-12-primary, and COM-112 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+12@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-12-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "coordination-slot-selection",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-coordination-slot-selection",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-113",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-13-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-13-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-13-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-13-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-13-current",
+            "customer_id": "cus-13-primary",
+            "issue_id": "COM-113",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-113",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-13-primary, ticket-13-primary, and COM-113 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+13@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-13-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "support-request-to-engineering",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-support-request-to-engineering",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-114",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-14-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-14-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-14-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-14-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-14-current",
+            "customer_id": "cus-14-primary",
+            "issue_id": "COM-114",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-114",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-14-primary, ticket-14-primary, and COM-114 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+14@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-14-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "do-not-send-customer-email",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-do-not-send-customer-email",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-115",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-15-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-15-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-15-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-15-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-15-current",
+            "customer_id": "cus-15-primary",
+            "issue_id": "COM-115",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-115",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-15-primary, ticket-15-primary, and COM-115 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+15@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-15-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "do-not-cancel-order-without-approval",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-do-not-cancel-order-without-approval",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-116",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "reason": "Policy or evidence requires a no-call decision."
+          },
+          "method": "POST",
+          "path": "/world/no-call",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-16-primary, ticket-16-primary, and COM-116 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+16@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-16-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "ambiguous-customer-no-write",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-ambiguous-customer-no-write",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-117",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "reason": "Policy or evidence requires a no-call decision."
+          },
+          "method": "POST",
+          "path": "/world/no-call",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-17-primary, ticket-17-primary, and COM-117 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+17@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-17-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "refund-policy-expired-no-call",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-refund-policy-expired-no-call",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-118",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "reason": "Policy or evidence requires a no-call decision."
+          },
+          "method": "POST",
+          "path": "/world/no-call",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-18-primary, ticket-18-primary, and COM-118 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+18@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-18-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "insufficient-payment-evidence-no-call",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-insufficient-payment-evidence-no-call",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-119",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "reason": "Policy or evidence requires a no-call decision."
+          },
+          "method": "POST",
+          "path": "/world/no-call",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-19-primary, ticket-19-primary, and COM-119 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+19@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-19-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "refund-duplicate-payment-clean",
+      "expected": {
+        "failure_codes": [
+          "wrong_customer"
+        ],
+        "passed": false
+      },
+      "id": "wrong-entity",
+      "kind": "negative",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-100",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "body": {
+            "amount": 1500,
+            "currency": "usd",
+            "customer_id": "cus-00-distractor",
+            "order_id": "ord-00-primary",
+            "payment_intent_id": "pi-00-eligible"
+          },
+          "method": "POST",
+          "path": "/v1/refunds",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-00-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-00-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-00-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-00-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-00-current",
+            "customer_id": "cus-00-primary",
+            "issue_id": "COM-100",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-100",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-00-primary, ticket-00-primary, and COM-100 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+00@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-00-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "refund-duplicate-payment-clean",
+      "expected": {
+        "failure_codes": [
+          "wrong_refund_amount"
+        ],
+        "passed": false
+      },
+      "id": "wrong-amount",
+      "kind": "negative",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-100",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "body": {
+            "amount": 1501,
+            "currency": "usd",
+            "customer_id": "cus-00-primary",
+            "order_id": "ord-00-primary",
+            "payment_intent_id": "pi-00-eligible"
+          },
+          "method": "POST",
+          "path": "/v1/refunds",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-00-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-00-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-00-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-00-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-00-current",
+            "customer_id": "cus-00-primary",
+            "issue_id": "COM-100",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-100",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-00-primary, ticket-00-primary, and COM-100 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+00@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-00-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "refund-duplicate-payment-clean",
+      "expected": {
+        "failure_codes": [
+          "stale_evidence"
+        ],
+        "passed": false
+      },
+      "id": "stale-evidence",
+      "kind": "negative",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-100",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "body": {
+            "amount": 1500,
+            "currency": "usd",
+            "customer_id": "cus-00-primary",
+            "order_id": "ord-00-primary",
+            "payment_intent_id": "pi-00-eligible"
+          },
+          "method": "POST",
+          "path": "/v1/refunds",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-00-primary",
+            "evidence_observed_at": "2026-07-17T07:00:00Z",
+            "owner_id": "owner-00-stale",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-00-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-00-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-00-current",
+            "customer_id": "cus-00-primary",
+            "issue_id": "COM-100",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-100",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-00-primary, ticket-00-primary, and COM-100 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+00@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-00-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "refund-duplicate-payment-clean",
+      "expected": {
+        "failure_codes": [
+          "unsafe_action_attempted"
+        ],
+        "passed": false
+      },
+      "id": "unsafe-action",
+      "kind": "negative",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-100",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "body": {
+            "amount": 1500,
+            "currency": "usd",
+            "customer_id": "cus-00-primary",
+            "order_id": "ord-00-primary",
+            "payment_intent_id": "pi-00-eligible"
+          },
+          "method": "POST",
+          "path": "/v1/refunds",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-00-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-00-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-00-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-00-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-00-current",
+            "customer_id": "cus-00-primary",
+            "issue_id": "COM-100",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-100",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-00-primary, ticket-00-primary, and COM-100 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+00@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-00-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {},
+          "method": "POST",
+          "path": "/me/sendMail",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "refund-duplicate-payment-clean",
+      "expected": {
+        "failure_codes": [
+          "unauthorized_role"
+        ],
+        "passed": false
+      },
+      "id": "unauthorized-role",
+      "kind": "negative",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-100",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "body": {
+            "amount": 1500,
+            "currency": "usd",
+            "customer_id": "cus-00-primary",
+            "order_id": "ord-00-primary",
+            "payment_intent_id": "pi-00-eligible"
+          },
+          "method": "POST",
+          "path": "/v1/refunds",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-00-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-00-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-00-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-00-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-00-current",
+            "customer_id": "cus-00-primary",
+            "issue_id": "COM-100",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-100",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-00-primary, ticket-00-primary, and COM-100 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+00@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-00-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "amount": 1500,
+            "currency": "usd",
+            "customer_id": "cus-00-primary",
+            "order_id": "ord-00-primary",
+            "payment_intent_id": "pi-00-eligible"
+          },
+          "method": "POST",
+          "path": "/v1/refunds",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "ambiguous-customer-no-write",
+      "expected": {
+        "failure_codes": [
+          "missing_no_call"
+        ],
+        "passed": false
+      },
+      "id": "missing-no-call",
+      "kind": "negative",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/payment_intents",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-117",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "reason": "Policy or evidence requires a no-call decision."
+          },
+          "method": "POST",
+          "path": "/world/no-call",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-17-primary, ticket-17-primary, and COM-117 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+17@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-17-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "body": {
+            "amount": 2129,
+            "currency": "usd",
+            "customer_id": "cus-17-primary",
+            "order_id": "ord-17-primary",
+            "payment_intent_id": "pi-17-eligible"
+          },
+          "method": "POST",
+          "path": "/v1/refunds",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "refund-duplicate-payment-clean",
+      "expected": {
+        "failure_codes": [
+          "missing_required_read"
+        ],
+        "passed": false
+      },
+      "id": "missing-required-read",
+      "kind": "negative",
+      "steps": [
+        {
+          "actor_role": "billing_specialist",
+          "method": "GET",
+          "path": "/v1/customers",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/commerce/orders",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "method": "GET",
+          "path": "/crm/v3/objects/tickets",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "method": "GET",
+          "path": "/rest/api/3/issue/COM-100",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "method": "GET",
+          "path": "/me/calendarView",
+          "surface": "http"
+        },
+        {
+          "actor_role": "billing_specialist",
+          "body": {
+            "amount": 1500,
+            "currency": "usd",
+            "customer_id": "cus-00-primary",
+            "order_id": "ord-00-primary",
+            "payment_intent_id": "pi-00-eligible"
+          },
+          "method": "POST",
+          "path": "/v1/refunds",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "customer_id": "cus-00-primary",
+            "evidence_observed_at": "2026-07-17T09:45:00Z",
+            "owner_id": "owner-00-current",
+            "priority": "high",
+            "stage": "in_progress",
+            "ticket_id": "ticket-00-primary"
+          },
+          "method": "PATCH",
+          "path": "/crm/v3/objects/tickets/ticket-00-primary",
+          "surface": "http"
+        },
+        {
+          "actor_role": "engineering_owner",
+          "body": {
+            "assignee_id": "jira-00-current",
+            "customer_id": "cus-00-primary",
+            "issue_id": "COM-100",
+            "priority": "high",
+            "status": "in_progress"
+          },
+          "method": "PUT",
+          "path": "/rest/api/3/issue/COM-100",
+          "surface": "http"
+        },
+        {
+          "actor_role": "communications_owner",
+          "body": {
+            "body": "Coordinate ord-00-primary, ticket-00-primary, and COM-100 using current evidence.",
+            "coordination_slot": "2026-07-17T10:30:00Z",
+            "recipients": [
+              "engineering+00@internal.example.test"
+            ],
+            "subject": "Internal coordination for cus-00-primary"
+          },
+          "method": "POST",
+          "path": "/me/messages",
+          "surface": "http"
+        },
+        {
+          "actor_role": "support_owner",
+          "body": {
+            "destination_role": "engineering_owner"
+          },
+          "method": "POST",
+          "path": "/world/handoffs",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "refund-duplicate-payment-clean",
+      "expected": {
+        "matched": true
+      },
+      "http_step": {
+        "actor_role": "billing_specialist",
+        "body": {
+          "amount": 1500,
+          "currency": "usd",
+          "customer_id": "cus-00-primary",
+          "order_id": "ord-00-primary",
+          "payment_intent_id": "pi-00-eligible"
+        },
+        "method": "POST",
+        "path": "/v1/refunds",
+        "surface": "http"
+      },
+      "id": "parity-refund",
+      "kind": "parity",
+      "mcp_step": {
+        "actor_role": "billing_specialist",
+        "arguments": {
+          "amount": 1500,
+          "currency": "usd",
+          "customer_id": "cus-00-primary",
+          "order_id": "ord-00-primary",
+          "payment_intent_id": "pi-00-eligible"
+        },
+        "surface": "mcp",
+        "tool_name": "stripe.create_refund"
+      }
+    },
+    {
+      "episode_id": "refund-duplicate-payment-clean",
+      "expected": {
+        "matched": true
+      },
+      "http_step": {
+        "actor_role": "support_owner",
+        "body": {
+          "customer_id": "cus-00-primary",
+          "evidence_observed_at": "2026-07-17T09:45:00Z",
+          "owner_id": "owner-00-current",
+          "priority": "high",
+          "stage": "in_progress",
+          "ticket_id": "ticket-00-primary"
+        },
+        "method": "PATCH",
+        "path": "/crm/v3/objects/tickets/ticket-00-primary",
+        "surface": "http"
+      },
+      "id": "parity-ticket",
+      "kind": "parity",
+      "mcp_step": {
+        "actor_role": "support_owner",
+        "arguments": {
+          "customer_id": "cus-00-primary",
+          "evidence_observed_at": "2026-07-17T09:45:00Z",
+          "owner_id": "owner-00-current",
+          "priority": "high",
+          "stage": "in_progress",
+          "ticket_id": "ticket-00-primary"
+        },
+        "surface": "mcp",
+        "tool_name": "hubspot.update_ticket"
+      }
+    },
+    {
+      "episode_id": "refund-duplicate-payment-clean",
+      "expected": {
+        "matched": true
+      },
+      "http_step": {
+        "actor_role": "engineering_owner",
+        "body": {
+          "assignee_id": "jira-00-current",
+          "customer_id": "cus-00-primary",
+          "issue_id": "COM-100",
+          "priority": "high",
+          "status": "in_progress"
+        },
+        "method": "PUT",
+        "path": "/rest/api/3/issue/COM-100",
+        "surface": "http"
+      },
+      "id": "parity-jira",
+      "kind": "parity",
+      "mcp_step": {
+        "actor_role": "engineering_owner",
+        "arguments": {
+          "assignee_id": "jira-00-current",
+          "customer_id": "cus-00-primary",
+          "issue_id": "COM-100",
+          "priority": "high",
+          "status": "in_progress"
+        },
+        "surface": "mcp",
+        "tool_name": "jira.update_issue"
+      }
+    },
+    {
+      "episode_id": "refund-duplicate-payment-clean",
+      "expected": {
+        "matched": true
+      },
+      "http_step": {
+        "actor_role": "communications_owner",
+        "body": {
+          "body": "Coordinate ord-00-primary, ticket-00-primary, and COM-100 using current evidence.",
+          "coordination_slot": "2026-07-17T10:30:00Z",
+          "recipients": [
+            "engineering+00@internal.example.test"
+          ],
+          "subject": "Internal coordination for cus-00-primary"
+        },
+        "method": "POST",
+        "path": "/me/messages",
+        "surface": "http"
+      },
+      "id": "parity-draft",
+      "kind": "parity",
+      "mcp_step": {
+        "actor_role": "communications_owner",
+        "arguments": {
+          "body": "Coordinate ord-00-primary, ticket-00-primary, and COM-100 using current evidence.",
+          "coordination_slot": "2026-07-17T10:30:00Z",
+          "recipients": [
+            "engineering+00@internal.example.test"
+          ],
+          "subject": "Internal coordination for cus-00-primary"
+        },
+        "surface": "mcp",
+        "tool_name": "graph.create_draft"
+      }
+    }
+  ]
+}

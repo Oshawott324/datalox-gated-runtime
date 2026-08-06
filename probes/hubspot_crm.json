@@ -1,0 +1,554 @@
+{
+  "access_class": "instant_sandbox",
+  "auth_profile": "hubspot_access_token_bearer",
+  "auth_profiles": {
+    "hubspot_access_token_bearer": {
+      "inject": [
+        {
+          "env": "HUBSPOT_ACCESS_TOKEN",
+          "in": "header",
+          "name": "Authorization",
+          "scheme": "Bearer"
+        }
+      ],
+      "kind": "env_static"
+    }
+  },
+  "base_url": "https://api.hubapi.com",
+  "fixture_expansions": {
+    "probe_requests": [
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/contacts/{contact_id}",
+        "query": {
+          "associations": "companies,deals,tickets,calls,emails,meetings,notes,tasks,communications",
+          "properties": "email,firstname,lastname,hubspot_owner_id"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/companies/{company_id}",
+        "query": {
+          "associations": "contacts,deals,tickets,calls,emails,meetings,notes,tasks,communications",
+          "properties": "name,domain,hubspot_owner_id"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/deals/{deal_id}",
+        "query": {
+          "associations": "contacts,companies,tickets,line_items,quotes,calls,emails,meetings,notes,tasks,communications",
+          "properties": "dealname,amount,dealstage,pipeline,hubspot_owner_id"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/tickets/{ticket_id}",
+        "query": {
+          "associations": "contacts,companies,deals,calls,emails,meetings,notes,tasks,communications",
+          "properties": "subject,hs_ticket_priority,hs_pipeline,hs_pipeline_stage,hubspot_owner_id"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/products/{product_id}",
+        "query": {
+          "properties": "name,description,hs_sku,price"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/line_items/{deal_line_item_id}",
+        "query": {
+          "associations": "deals",
+          "properties": "name,description,hs_product_id,hs_sku,price,quantity,amount"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/line_items/{quote_line_item_id}",
+        "query": {
+          "associations": "quotes",
+          "properties": "name,description,hs_product_id,hs_sku,price,quantity,amount"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/quotes/{quote_id}",
+        "query": {
+          "associations": "deals,contacts,companies,line_items",
+          "properties": "hs_title,hs_expiration_date,hs_status,hs_quote_amount,hubspot_owner_id"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/calls/{call_id}",
+        "query": {
+          "associations": "contacts,companies,deals,tickets",
+          "properties": "hs_timestamp,hs_call_title,hs_call_body,hs_call_direction,hs_call_status,hubspot_owner_id"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/emails/{email_id}",
+        "query": {
+          "associations": "contacts,companies,deals,tickets",
+          "properties": "hs_timestamp,hs_email_subject,hs_email_text,hs_email_direction,hubspot_owner_id"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/meetings/{meeting_id}",
+        "query": {
+          "associations": "contacts,companies,deals,tickets",
+          "properties": "hs_timestamp,hs_meeting_title,hs_meeting_body,hs_meeting_start_time,hs_meeting_end_time,hs_meeting_outcome,hubspot_owner_id"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/notes/{note_id}",
+        "query": {
+          "associations": "contacts,companies,deals,tickets",
+          "properties": "hs_timestamp,hs_note_body,hubspot_owner_id"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/tasks/{task_id}",
+        "query": {
+          "associations": "contacts,companies,deals,tickets",
+          "properties": "hs_timestamp,hs_task_subject,hs_task_body,hs_task_status,hs_task_priority,hs_task_type,hubspot_owner_id"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/communications/{communication_id}",
+        "query": {
+          "associations": "contacts,companies,deals,tickets",
+          "properties": "hs_timestamp,hs_communication_channel_type,hs_communication_logged_from,hs_communication_body,hubspot_owner_id"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/crm/owners/2026-03/{owner_id}",
+        "query": {
+          "idProperty": "id"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/crm/pipelines/2026-03/deals/{deal_pipeline_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/pipelines/2026-03/deals/{deal_pipeline_id}/stages",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/pipelines/2026-03/deals/{deal_pipeline_id}/stages/{deal_stage_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/pipelines/2026-03/tickets/{ticket_pipeline_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/pipelines/2026-03/tickets/{ticket_pipeline_id}/stages",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/pipelines/2026-03/tickets/{ticket_pipeline_id}/stages/{ticket_stage_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/contacts/{contact_id}/associations/companies",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/contacts/{contact_id}/associations/deals",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/contacts/{contact_id}/associations/tickets",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/companies/{company_id}/associations/contacts",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/companies/{company_id}/associations/deals",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/companies/{company_id}/associations/tickets",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/deals/{deal_id}/associations/contacts",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/deals/{deal_id}/associations/companies",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/deals/{deal_id}/associations/line_items",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/deals/{deal_id}/associations/quotes",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/tickets/{ticket_id}/associations/contacts",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/tickets/{ticket_id}/associations/companies",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/tickets/{ticket_id}/associations/calls",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/tickets/{ticket_id}/associations/emails",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/tickets/{ticket_id}/associations/meetings",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/tickets/{ticket_id}/associations/notes",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/tickets/{ticket_id}/associations/tasks",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/tickets/{ticket_id}/associations/communications",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/quotes/{quote_id}/associations/deals",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/quotes/{quote_id}/associations/contacts",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/quotes/{quote_id}/associations/companies",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/quotes/{quote_id}/associations/line_items",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/line_items/{deal_line_item_id}/associations/deals",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/crm/objects/2026-03/line_items/{quote_line_item_id}/associations/quotes",
+        "query": {}
+      }
+    ]
+  },
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/account-info/2026-03/details",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/owners/2026-03",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/objects/2026-03/contacts",
+      "query": {
+        "associations": "companies,deals,tickets",
+        "limit": "100",
+        "properties": "email,firstname,lastname,hubspot_owner_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/objects/2026-03/companies",
+      "query": {
+        "associations": "contacts,deals,tickets",
+        "limit": "100",
+        "properties": "name,domain,hubspot_owner_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/objects/2026-03/deals",
+      "query": {
+        "associations": "contacts,companies,tickets,line_items,quotes",
+        "limit": "100",
+        "properties": "dealname,amount,dealstage,pipeline,hubspot_owner_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/objects/2026-03/tickets",
+      "query": {
+        "associations": "contacts,companies,deals",
+        "limit": "100",
+        "properties": "subject,hs_ticket_priority,hs_pipeline,hs_pipeline_stage,hubspot_owner_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/objects/2026-03/calls",
+      "query": {
+        "associations": "contacts,companies,deals,tickets",
+        "limit": "100",
+        "properties": "hs_timestamp,hs_call_title,hs_call_body,hs_call_direction,hs_call_status,hubspot_owner_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/objects/2026-03/emails",
+      "query": {
+        "associations": "contacts,companies,deals,tickets",
+        "limit": "100",
+        "properties": "hs_timestamp,hs_email_subject,hs_email_text,hs_email_direction,hubspot_owner_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/objects/2026-03/meetings",
+      "query": {
+        "associations": "contacts,companies,deals,tickets",
+        "limit": "100",
+        "properties": "hs_timestamp,hs_meeting_title,hs_meeting_body,hs_meeting_start_time,hs_meeting_end_time,hs_meeting_outcome,hubspot_owner_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/objects/2026-03/notes",
+      "query": {
+        "associations": "contacts,companies,deals,tickets",
+        "limit": "100",
+        "properties": "hs_timestamp,hs_note_body,hubspot_owner_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/objects/2026-03/tasks",
+      "query": {
+        "associations": "contacts,companies,deals,tickets",
+        "limit": "100",
+        "properties": "hs_timestamp,hs_task_subject,hs_task_body,hs_task_status,hs_task_priority,hs_task_type,hubspot_owner_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/objects/2026-03/communications",
+      "query": {
+        "associations": "contacts,companies,deals,tickets",
+        "limit": "100",
+        "properties": "hs_timestamp,hs_communication_channel_type,hs_communication_logged_from,hs_communication_body,hubspot_owner_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/objects/2026-03/products",
+      "query": {
+        "limit": "100",
+        "properties": "name,description,hs_sku,price"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/objects/2026-03/line_items",
+      "query": {
+        "associations": "deals,quotes",
+        "limit": "100",
+        "properties": "name,description,hs_product_id,hs_sku,price,quantity,amount"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/objects/2026-03/quotes",
+      "query": {
+        "associations": "deals,contacts,companies,line_items",
+        "limit": "100",
+        "properties": "hs_title,hs_expiration_date,hs_status,hs_quote_amount,hubspot_owner_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/crm/properties/2026-03/contacts",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/properties/2026-03/companies",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/properties/2026-03/deals",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/properties/2026-03/tickets",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/properties/2026-03/calls",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/properties/2026-03/emails",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/properties/2026-03/meetings",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/properties/2026-03/notes",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/properties/2026-03/tasks",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/properties/2026-03/communications",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/properties/2026-03/products",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/properties/2026-03/line_items",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/properties/2026-03/quotes",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/pipelines/2026-03/deals",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/pipelines/2026-03/tickets",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm-object-schemas/2026-03/schemas",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/associations/2026-03/contacts/companies/labels",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/associations/2026-03/contacts/deals/labels",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/associations/2026-03/companies/deals/labels",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/associations/2026-03/tickets/contacts/labels",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/associations/2026-03/tickets/companies/labels",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/associations/2026-03/deals/line_items/labels",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/crm/associations/2026-03/quotes/line_items/labels",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "hubspot_crm",
+  "rate_budget": {
+    "max_requests": 38,
+    "min_interval_seconds": 0.2
+  },
+  "safe_read_prefixes": [
+    "/account-info/2026-03/",
+    "/crm/owners/2026-03",
+    "/crm/objects/2026-03/",
+    "/crm/properties/2026-03/",
+    "/crm/pipelines/2026-03/",
+    "/crm/associations/2026-03/",
+    "/crm-object-schemas/2026-03/"
+  ],
+  "static_headers": {
+    "Accept": "application/json"
+  },
+  "tos_note": "Operator-owned HubSpot developer test account only. Use an OAuth or private app access token in HUBSPOT_ACCESS_TOKEN. Datalox live capture is GET-only. The separate seed command verifies accountType DEVELOPER_TEST and requires --confirm-test-account-writes before making provider writes; seed manifests contain non-secret IDs only."
+}

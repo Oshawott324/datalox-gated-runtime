@@ -1,0 +1,212 @@
+{
+  "access_class": "open_public",
+  "auth_env": null,
+  "base_url": "https://earthquake.usgs.gov",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/application.json",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/version",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/catalogs",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/contributors",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/query",
+      "query": {
+        "endtime": "2024-01-02",
+        "format": "geojson",
+        "jsonerror": "true",
+        "limit": "5",
+        "minmagnitude": "5",
+        "orderby": "magnitude",
+        "starttime": "2024-01-01"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/query",
+      "query": {
+        "endtime": "2023-02-07",
+        "format": "geojson",
+        "jsonerror": "true",
+        "limit": "5",
+        "maxlatitude": "40",
+        "maxlongitude": "40",
+        "minlatitude": "35",
+        "minlongitude": "35",
+        "orderby": "magnitude",
+        "starttime": "2023-02-06"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/query",
+      "query": {
+        "endtime": "2024-04-06",
+        "format": "geojson",
+        "jsonerror": "true",
+        "latitude": "40.696",
+        "limit": "5",
+        "longitude": "-74.760",
+        "maxradiuskm": "200",
+        "minmagnitude": "2.5",
+        "orderby": "magnitude",
+        "starttime": "2024-04-05"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/query",
+      "query": {
+        "eventid": "ci38457511",
+        "format": "geojson",
+        "jsonerror": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/query",
+      "query": {
+        "eventid": "at00sbh3yv",
+        "format": "geojson",
+        "jsonerror": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/query",
+      "query": {
+        "endtime": "2019-07-07",
+        "format": "geojson",
+        "jsonerror": "true",
+        "limit": "5",
+        "producttype": "shakemap",
+        "starttime": "2019-07-04"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/query",
+      "query": {
+        "alertlevel": "green",
+        "endtime": "2024-01-10",
+        "format": "geojson",
+        "jsonerror": "true",
+        "limit": "5",
+        "minmagnitude": "5",
+        "starttime": "2024-01-01"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/query",
+      "query": {
+        "endtime": "2024-01-02",
+        "format": "geojson",
+        "jsonerror": "true",
+        "limit": "5",
+        "minmagnitude": "4",
+        "reviewstatus": "reviewed",
+        "starttime": "2024-01-01"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/query",
+      "query": {
+        "endtime": "2024-01-02",
+        "eventtype": "earthquake",
+        "format": "geojson",
+        "jsonerror": "true",
+        "limit": "5",
+        "minmagnitude": "4",
+        "starttime": "2024-01-01"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/count",
+      "query": {
+        "endtime": "2024-01-02",
+        "format": "geojson",
+        "minmagnitude": "5",
+        "starttime": "2024-01-01"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/count",
+      "query": {
+        "endtime": "2023-02-07",
+        "format": "geojson",
+        "maxlatitude": "40",
+        "maxlongitude": "40",
+        "minlatitude": "35",
+        "minlongitude": "35",
+        "starttime": "2023-02-06"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/count",
+      "query": {
+        "endtime": "2019-07-07",
+        "format": "geojson",
+        "producttype": "shakemap",
+        "starttime": "2019-07-04"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/query",
+      "query": {
+        "format": "geojson",
+        "jsonerror": "true",
+        "minlatitude": "95"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fdsnws/event/1/query",
+      "query": {
+        "eventid": "datalox-not-a-real-event",
+        "format": "geojson",
+        "jsonerror": "true",
+        "nodata": "404"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "usgs_earthquake",
+  "rate_budget": {
+    "max_requests": 18,
+    "min_interval_seconds": 0.5
+  },
+  "safe_read_prefixes": [
+    "/fdsnws/event/1/application.json",
+    "/fdsnws/event/1/version",
+    "/fdsnws/event/1/catalogs",
+    "/fdsnws/event/1/contributors",
+    "/fdsnws/event/1/query",
+    "/fdsnws/event/1/count"
+  ],
+  "static_headers": {
+    "Accept": "application/json",
+    "User-Agent": "datalox-gated-runtime-usgs-earthquake-probe/1.0 (https://github.com/Oshawott324/datalox-gated-runtime)"
+  },
+  "tos_note": "Official USGS implementation of the FDSN Event Web Service; low-rate, credential-free, GET-only access to public earthquake catalogs, contributors, event queries, counts, and service metadata. Fixed historical windows and bounded query limits are used where supported."
+}

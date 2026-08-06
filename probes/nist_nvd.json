@@ -1,0 +1,187 @@
+{
+  "access_class": "open_public",
+  "auth_env": null,
+  "base_url": "https://services.nvd.nist.gov/rest/json",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/cves/2.0",
+      "query": {
+        "cveIds": "CVE-2024-3094"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cves/2.0",
+      "query": {
+        "cveIds": "CVE-2021-44228,CVE-2023-44487"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cves/2.0",
+      "query": {
+        "cveIds": "CVE-2099-999999"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cves/2.0",
+      "query": {
+        "keywordSearch": "remote code execution",
+        "resultsPerPage": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cves/2.0",
+      "query": {
+        "cweId": "CWE-287",
+        "resultsPerPage": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cves/2.0",
+      "query": {
+        "cvssV3Severity": "CRITICAL",
+        "resultsPerPage": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cves/2.0",
+      "query": {
+        "cpeName": "cpe:2.3:o:microsoft:windows_10:1607:*:*:*:*:*:*:*",
+        "resultsPerPage": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cves/2.0",
+      "query": {
+        "resultsPerPage": "1",
+        "versionEnd": "2.7",
+        "versionEndType": "excluding",
+        "versionStart": "2.6",
+        "versionStartType": "including",
+        "virtualMatchString": "cpe:2.3:o:linux:linux_kernel"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cves/2.0",
+      "query": {
+        "pubEndDate": "2024-04-01T23:59:59.999Z",
+        "pubStartDate": "2024-03-29T00:00:00.000Z",
+        "resultsPerPage": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cvehistory/2.0",
+      "query": {
+        "cveId": "CVE-2024-3094",
+        "resultsPerPage": "2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cvehistory/2.0",
+      "query": {
+        "changeEndDate": "2024-04-01T23:59:59.999Z",
+        "changeStartDate": "2024-03-29T00:00:00.000Z",
+        "eventName": "CVE Received",
+        "resultsPerPage": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cpes/2.0",
+      "query": {
+        "cpeNameId": "87316812-5F2C-4286-94FE-CC98B9EAEF53",
+        "resultsPerPage": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cpes/2.0",
+      "query": {
+        "cpeMatchString": "cpe:2.3:o:microsoft:windows_10:1511",
+        "resultsPerPage": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cpes/2.0",
+      "query": {
+        "keywordSearch": "Red Hat",
+        "resultsPerPage": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cpes/2.0",
+      "query": {
+        "cpeNameId": "00000000-0000-0000-0000-000000000000",
+        "resultsPerPage": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cpematch/2.0",
+      "query": {
+        "cveId": "CVE-2022-32223",
+        "resultsPerPage": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cpematch/2.0",
+      "query": {
+        "matchCriteriaId": "36FBCF0F-8CEE-474C-8A04-5075AF53FAF4",
+        "resultsPerPage": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cpematch/2.0",
+      "query": {
+        "matchStringSearch": "cpe:2.3:*:cisco:adaptive_security_appliance:*",
+        "resultsPerPage": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/source/2.0",
+      "query": {
+        "sourceIdentifier": "secalert@redhat.com"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/source/2.0",
+      "query": {
+        "resultsPerPage": "1",
+        "startIndex": "0"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "nist_nvd",
+  "rate_budget": {
+    "max_requests": 20,
+    "min_interval_seconds": 6.5
+  },
+  "safe_read_prefixes": [
+    "/cves/2.0",
+    "/cvehistory/2.0",
+    "/cpes/2.0",
+    "/cpematch/2.0",
+    "/source/2.0"
+  ],
+  "static_headers": {
+    "User-Agent": "datalox-gated-runtime-nvd-probe/1.0"
+  },
+  "tos_note": "NIST NVD public GET APIs. No API key is supplied. The probe follows NVD's public limit of five requests per rolling 30 seconds and its recommendation to sleep six seconds between requests. This product uses data from the NVD API but is not endorsed or certified by the NVD."
+}

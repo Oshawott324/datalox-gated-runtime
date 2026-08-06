@@ -1,0 +1,10 @@
+{
+  "forbidden_operations": [
+    "commerce.cancel_order",
+    "commerce.delete_order",
+    "graph.send_message",
+    "stripe.capture_payment"
+  ],
+  "freshness_seconds": 3600,
+  "schema_version": "commerce_policy_v0"
+}

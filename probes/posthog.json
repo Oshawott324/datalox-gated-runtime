@@ -1,0 +1,396 @@
+{
+  "access_class": "approval_gated",
+  "auth_profile": "posthog_bearer",
+  "auth_profiles": {
+    "posthog_bearer": {
+      "inject": [
+        {
+          "env": "POSTHOG_PERSONAL_API_KEY",
+          "in": "header",
+          "name": "Authorization",
+          "scheme": "Bearer"
+        }
+      ],
+      "kind": "env_static"
+    }
+  },
+  "base_url": "https://{posthog_region}.posthog.com/api",
+  "fixture_expansions": {
+    "probe_requests": [
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/persons/{person_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/persons/{person_id}/activity/",
+        "query": {
+          "limit": "100"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/groups/find/",
+        "query": {
+          "group_key": "{group_key}",
+          "group_type_index": "{group_type_index}"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/events/{event_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/actions/{action_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/actions/{action_id}/references/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/annotations/{annotation_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/cohorts/{cohort_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/cohorts/{cohort_id}/persons/",
+        "query": {
+          "limit": "100"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/dashboards/{dashboard_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/insights/{insight_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/insights/{insight_id}/activity/",
+        "query": {
+          "limit": "100"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/feature_flags/{feature_flag_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/feature_flags/{feature_flag_id}/activity/",
+        "query": {
+          "limit": "100"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/experiments/{experiment_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/experiments/{experiment_id}/timeseries_results/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/surveys/{survey_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/surveys/{survey_id}/responses/",
+        "query": {
+          "limit": "100"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/surveys/{survey_id}/stats/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/session_recordings/{recording_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/early_access_feature/{early_access_feature_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/batch_exports/{batch_export_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/batch_exports/{batch_export_id}/runs/",
+        "query": {
+          "limit": "100"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/batch_exports/{batch_export_id}/logs/",
+        "query": {
+          "limit": "100"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/hog_functions/{hog_function_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/hog_functions/{hog_function_id}/logs/",
+        "query": {
+          "limit": "100"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/hog_functions/{hog_function_id}/metrics/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/error_tracking/issues/{issue_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/error_tracking/issues/{issue_id}/activity/",
+        "query": {
+          "limit": "100"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{project_id}/query/{query_id}/",
+        "query": {}
+      }
+    ]
+  },
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/organizations/",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/projects/",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/persons/",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/persons/",
+      "query": {
+        "limit": "100",
+        "search": "{person_search}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/groups_types/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/groups/",
+      "query": {
+        "group_type_index": "{group_type_index}",
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/events/",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/events/",
+      "query": {
+        "event": "{event_name}",
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/actions/",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/annotations/",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/annotations/",
+      "query": {
+        "after": "{date_from}",
+        "before": "{date_to}",
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/cohorts/",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/dashboards/",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/insights/",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/feature_flags/",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/experiments/",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/surveys/",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/session_recordings/",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/early_access_feature/",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/batch_exports/",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/hog_functions/",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/error_tracking/issues/",
+      "query": {
+        "limit": "100"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "posthog",
+  "rate_budget": {
+    "max_requests": 24,
+    "min_interval_seconds": 1.0
+  },
+  "safe_read_prefixes": [
+    "/organizations/",
+    "/organizations/{organization_id}/",
+    "/organizations/{organization_id}/projects/",
+    "/projects/{project_id}/",
+    "/projects/{project_id}/persons/",
+    "/projects/{project_id}/groups/",
+    "/projects/{project_id}/groups_types/",
+    "/projects/{project_id}/events/",
+    "/projects/{project_id}/actions/",
+    "/projects/{project_id}/annotations/",
+    "/projects/{project_id}/cohorts/",
+    "/projects/{project_id}/dashboards/",
+    "/projects/{project_id}/insights/",
+    "/projects/{project_id}/feature_flags/",
+    "/projects/{project_id}/experiments/",
+    "/projects/{project_id}/surveys/",
+    "/projects/{project_id}/session_recordings/",
+    "/projects/{project_id}/early_access_feature/",
+    "/projects/{project_id}/batch_exports/",
+    "/projects/{project_id}/hog_functions/",
+    "/projects/{project_id}/error_tracking/issues/",
+    "/projects/{project_id}/query/"
+  ],
+  "static_headers": {
+    "Accept": "application/json"
+  },
+  "tos_note": "Operator-approved PostHog Cloud organization only. Render posthog_region as us or eu so the base URL is https://us.posthog.com/api or https://eu.posthog.com/api, then render organization_id, project_id, filters, and linked fixture identifiers before live capture. Datalox live capture is GET-only. PostHog's general query execution endpoint is POST-based read access and is intentionally omitted; only the officially documented GET retrieval route for an existing query_id is listed as a fixture expansion. Batch exports and Hog functions cover verified GET-readable data-pipeline and destination configuration surfaces; no unverified destination route is included."
+}

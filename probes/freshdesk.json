@@ -1,0 +1,320 @@
+{
+  "access_class": "instant_sandbox",
+  "auth_profile": "freshdesk_api_key_basic",
+  "auth_profiles": {
+    "freshdesk_api_key_basic": {
+      "inject": [
+        {
+          "env": "FRESHDESK_BASIC_TOKEN",
+          "in": "header",
+          "name": "Authorization",
+          "scheme": "Basic"
+        }
+      ],
+      "kind": "env_static"
+    }
+  },
+  "base_url": "https://FRESHDESK_ACCOUNT.freshdesk.com",
+  "fixture_expansions": {
+    "probe_requests": [
+      {
+        "method": "GET",
+        "path": "/api/v2/tickets/{ticket_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/tickets/{child_ticket_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/tickets/{ticket_id}/conversations",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/tickets/{ticket_id}/time_entries",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/tickets/{ticket_id}/satisfaction_ratings",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/tickets/{ticket_id}/associated_tickets",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/tickets/{child_ticket_id}/prime_association",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/tickets",
+        "query": {
+          "company_id": "{company_id}",
+          "per_page": "30"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/search/tickets",
+        "query": {
+          "query": "\"tag:'{ticket_tag}'\""
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/contacts/{contact_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/contacts/autocomplete",
+        "query": {
+          "term": "{contact_email}"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/companies/{company_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/companies/autocomplete",
+        "query": {
+          "name": "{company_name}"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/agents/{agent_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/agents/{agent_id}/availability",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/time_entries",
+        "query": {
+          "company_id": "{company_id}"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/solutions/categories/{solution_category_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/solutions/categories/{solution_category_id}/folders",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/solutions/folders/{solution_folder_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/solutions/folders/{solution_folder_id}/subfolders",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/solutions/folders/{solution_folder_id}/articles",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/solutions/articles/{solution_article_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/search/solutions",
+        "query": {
+          "term": "{solution_title}"
+        }
+      }
+    ]
+  },
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/api/v2/account",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/settings/helpdesk",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/tickets",
+      "query": {
+        "per_page": "30"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/ticket_fields",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/ticket-forms",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contacts",
+      "query": {
+        "per_page": "30"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contact_fields",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/companies",
+      "query": {
+        "per_page": "30"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/company_fields",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/agents",
+      "query": {
+        "per_page": "30"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/agents/me",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/agents",
+      "query": {
+        "only": "availability",
+        "per_page": "30"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/roles",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/groups",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/products",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/business_hours",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/sla_policies",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/time_entries",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/customer-satisfaction/surveys",
+      "query": {
+        "per_page": "30"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/surveys",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/surveys/satisfaction_ratings",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/solutions/categories",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/email_configs",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/custom_objects/schemas",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "freshdesk",
+  "rate_budget": {
+    "max_requests": 24,
+    "min_interval_seconds": 2.0
+  },
+  "safe_read_prefixes": [
+    "/api/v2/account",
+    "/api/v2/settings/",
+    "/api/v2/tickets",
+    "/api/v2/search/tickets",
+    "/api/v2/ticket_fields",
+    "/api/v2/ticket-forms",
+    "/api/v2/contacts",
+    "/api/v2/contact_fields",
+    "/api/v2/companies",
+    "/api/v2/company_fields",
+    "/api/v2/agents",
+    "/api/v2/roles",
+    "/api/v2/groups",
+    "/api/v2/products",
+    "/api/v2/business_hours",
+    "/api/v2/sla_policies",
+    "/api/v2/time_entries",
+    "/api/v2/customer-satisfaction/",
+    "/api/v2/surveys",
+    "/api/v2/solutions/",
+    "/api/v2/search/solutions",
+    "/api/v2/email_configs",
+    "/api/v2/custom_objects/"
+  ],
+  "static_headers": {
+    "Accept": "application/json"
+  },
+  "tos_note": "Operator-owned Freshdesk trial tenant only. The tracked file is a tenant placeholder; render it with scripts/providers/freshdesk-sandbox.sh. Datalox live capture is GET-only. The explicit seed helper performs provider writes outside Datalox and stores only non-secret IDs and names."
+}

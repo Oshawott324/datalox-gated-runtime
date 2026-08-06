@@ -1,0 +1,160 @@
+{
+  "access_class": "open_public",
+  "auth_env": null,
+  "base_url": "https://api.gbif.org",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/v1/occurrence/3008413909",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v1/occurrence/search",
+      "query": {
+        "hasCoordinate": "true",
+        "limit": "1",
+        "scientificName": "Puma concolor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/occurrence/count",
+      "query": {
+        "taxonKey": "2435099"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/occurrence/counts/countries",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/species/match",
+      "query": {
+        "scientificName": "Puma concolor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/parser/name",
+      "query": {
+        "name": "Puma concolor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/species/search",
+      "query": {
+        "limit": "1",
+        "q": "Puma concolor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/species/2435099",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v1/dataset/search",
+      "query": {
+        "limit": "1",
+        "q": "iNaturalist Research-grade Observations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/dataset/50c9509d-22c7-4a22-a47d-8c48425ef4a7",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organization",
+      "query": {
+        "limit": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/network",
+      "query": {
+        "limit": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/grscicoll/institution",
+      "query": {
+        "limit": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/grscicoll/collection",
+      "query": {
+        "limit": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/grscicoll/search",
+      "query": {
+        "limit": "1",
+        "q": "Natural History Museum"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/vocabularies",
+      "query": {
+        "limit": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/enumeration/basic",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v1/geocode/gadm/search",
+      "query": {
+        "limit": "1",
+        "q": "Hovedstaden"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/geocode/gadm/browse/DNK",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "gbif",
+  "rate_budget": {
+    "max_requests": 19,
+    "min_interval_seconds": 0.5
+  },
+  "safe_read_prefixes": [
+    "/v1/occurrence/",
+    "/v1/occurrence/search",
+    "/v1/occurrence/count",
+    "/v2/species/match",
+    "/v1/parser/name",
+    "/v1/species/",
+    "/v1/dataset/",
+    "/v1/organization",
+    "/v1/network",
+    "/v1/grscicoll/",
+    "/v1/vocabularies",
+    "/v1/enumeration/",
+    "/v1/geocode/gadm/"
+  ],
+  "static_headers": {
+    "Accept": "application/json",
+    "User-Agent": "datalox-gated-runtime-gbif-probe/1.0 (https://github.com/Oshawott324/datalox-gated-runtime)"
+  },
+  "tos_note": "Official GBIF production API; most reads require no authentication. Deliberate low-rate credential-free GET probes only. Authenticated asynchronous occurrence downloads, publishing operations, and all writes are excluded."
+}

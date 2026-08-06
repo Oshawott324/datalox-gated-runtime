@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Neutral Opentrons lab-automation identity tile</title>
+  <rect width="64" height="64" rx="14" fill="#7c3aed"/>
+  <path d="M18 15h28v10H18z" fill="#fff"/>
+  <path d="M24 25v13M32 25v18M40 25v13" stroke="#ddd6fe" stroke-width="5" stroke-linecap="round"/>
+  <path d="M21 45h22l5 7H16z" fill="#fff"/>
+  <circle cx="24" cy="41" r="3" fill="#a78bfa"/>
+  <circle cx="32" cy="46" r="3" fill="#a78bfa"/>
+  <circle cx="40" cy="41" r="3" fill="#a78bfa"/>
+</svg>

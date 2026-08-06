@@ -1,0 +1,53 @@
+{
+  "assertions": [
+    {
+      "expected_pointer": "/assignee",
+      "name": "incident_assigned",
+      "pointer": "/data/assignee",
+      "state_key": "incident",
+      "type": "state_equals"
+    },
+    {
+      "expected": true,
+      "name": "evidence_fresh",
+      "pointer": "/ticket/evidence/fresh",
+      "state_key": "customer_ticket",
+      "type": "state_equals"
+    },
+    {
+      "expected_pointer": "/assignee",
+      "name": "customer_owner_matches",
+      "pointer": "/ticket/owner",
+      "state_key": "customer_ticket",
+      "type": "state_equals"
+    },
+    {
+      "name": "workflow_order",
+      "operations": [
+        "assign_incident",
+        "add_note",
+        "mark_evidence_fresh",
+        "copy_assignee"
+      ],
+      "type": "operation_order"
+    },
+    {
+      "expected_pointer": "/assignee",
+      "name": "assignment_request_actor",
+      "operation_id": "assign_incident",
+      "request_pointer": "/assignee",
+      "type": "request_value_equals"
+    },
+    {
+      "name": "send_denied",
+      "operation_id": "send_customer_draft",
+      "type": "operation_denied"
+    },
+    {
+      "name": "resolve_denied",
+      "operation_id": "resolve_incident",
+      "type": "operation_denied"
+    }
+  ],
+  "version": "response_case_verifier_v0"
+}

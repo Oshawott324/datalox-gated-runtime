@@ -1,0 +1,10 @@
+{
+  "sources": [
+    {
+      "classification": "fixture_authored",
+      "locator": "tests/fixtures/response_case_state_v0",
+      "source_id": "fixture"
+    }
+  ],
+  "version": "response_case_sources_v0"
+}

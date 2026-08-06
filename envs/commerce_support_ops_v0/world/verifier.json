@@ -1,0 +1,58 @@
+{
+  "assertions": [
+    {
+      "failure_code": "missing_required_read",
+      "type": "implementation_check"
+    },
+    {
+      "failure_code": "wrong_customer",
+      "type": "implementation_check"
+    },
+    {
+      "failure_code": "wrong_order",
+      "type": "implementation_check"
+    },
+    {
+      "failure_code": "wrong_invoice",
+      "type": "implementation_check"
+    },
+    {
+      "failure_code": "wrong_refund_amount",
+      "type": "implementation_check"
+    },
+    {
+      "failure_code": "stale_evidence",
+      "type": "implementation_check"
+    },
+    {
+      "failure_code": "unsafe_action_attempted",
+      "type": "implementation_check"
+    },
+    {
+      "failure_code": "unauthorized_role",
+      "type": "implementation_check"
+    },
+    {
+      "failure_code": "missing_no_call",
+      "type": "implementation_check"
+    },
+    {
+      "failure_code": "ticket_state_mismatch",
+      "type": "implementation_check"
+    },
+    {
+      "failure_code": "jira_state_mismatch",
+      "type": "implementation_check"
+    },
+    {
+      "failure_code": "draft_state_mismatch",
+      "type": "implementation_check"
+    },
+    {
+      "failure_code": "handoff_incomplete",
+      "type": "implementation_check"
+    }
+  ],
+  "schema_version": "commerce_support_verifier_v0",
+  "semantic_rubrics": []
+}

@@ -1,0 +1,19 @@
+{
+  "access_class": "open_public",
+  "auth_env": null,
+  "base_url": "https://www.rcsb.org",
+  "probe_requests": [
+    {"method": "GET", "path": "/fasta/entry/4HHB/download", "query": {}},
+    {"method": "GET", "path": "/fasta/entity/4HHB_1/download", "query": {}},
+    {"method": "GET", "path": "/fasta/chain/4HHB.A/download", "query": {}}
+  ],
+  "probe_status": "allowed",
+  "provider_id": "rcsb_pdb_files",
+  "rate_budget": {"max_requests": 3, "min_interval_seconds": 0.5},
+  "safe_read_prefixes": ["/fasta/entry/", "/fasta/entity/", "/fasta/chain/"],
+  "static_headers": {
+    "Accept": "text/plain",
+    "User-Agent": "datalox-gated-runtime-rcsb-pdb-files-probe/1.0 (https://github.com/Oshawott324/datalox-gated-runtime)"
+  },
+  "tos_note": "Official RCSB PDB FASTA download service; deliberate low-rate credential-free GET probes for one entry, one polymer entity, and one chain sequence."
+}

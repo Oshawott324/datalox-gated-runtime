@@ -1,0 +1,185 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "operation_id": "get_incident",
+      "path_parameters": {
+        "incident_id": {
+          "pointer": "/data/id",
+          "state_key": "incident"
+        }
+      },
+      "path_template": "/incidents/{incident_id}",
+      "query": {
+        "view": "full"
+      },
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "incident",
+      "route_id": "get_incident",
+      "success_status_code": 200
+    },
+    {
+      "method": "PATCH",
+      "operation_id": "assign_incident",
+      "path_parameters": {
+        "incident_id": {
+          "pointer": "/data/id",
+          "state_key": "incident"
+        }
+      },
+      "path_template": "/incidents/{incident_id}/assign",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "assignee": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "assignee"
+        ],
+        "type": "object"
+      },
+      "response_state": "incident",
+      "route_id": "assign_incident",
+      "success_status_code": 201
+    },
+    {
+      "method": "POST",
+      "operation_id": "add_note",
+      "path_parameters": {
+        "incident_id": {
+          "pointer": "/data/id",
+          "state_key": "incident"
+        }
+      },
+      "path_template": "/incidents/{incident_id}/notes",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "note"
+        ],
+        "type": "object"
+      },
+      "response_state": "incident",
+      "route_id": "add_note",
+      "success_status_code": 201
+    },
+    {
+      "method": "POST",
+      "operation_id": "mark_evidence_fresh",
+      "path_parameters": {
+        "ticket_id": {
+          "pointer": "/ticket/id",
+          "state_key": "customer_ticket"
+        }
+      },
+      "path_template": "/tickets/{ticket_id}/evidence/fresh",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": null,
+      "route_id": "mark_evidence_fresh",
+      "success_status_code": 204
+    },
+    {
+      "method": "POST",
+      "operation_id": "copy_assignee",
+      "path_parameters": {
+        "ticket_id": {
+          "pointer": "/ticket/id",
+          "state_key": "customer_ticket"
+        }
+      },
+      "path_template": "/tickets/{ticket_id}/copy-assignee",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "customer_ticket",
+      "route_id": "copy_assignee",
+      "success_status_code": 200
+    },
+    {
+      "method": "POST",
+      "operation_id": "atomic_failure",
+      "path_parameters": {
+        "incident_id": {
+          "pointer": "/data/id",
+          "state_key": "incident"
+        }
+      },
+      "path_template": "/incidents/{incident_id}/atomic-failure",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "assignee": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "response_state": "incident",
+      "route_id": "atomic_failure",
+      "success_status_code": 200
+    },
+    {
+      "method": "POST",
+      "operation_id": "send_customer_draft",
+      "path_parameters": {
+        "ticket_id": {
+          "pointer": "/ticket/id",
+          "state_key": "customer_ticket"
+        }
+      },
+      "path_template": "/tickets/{ticket_id}/send",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "customer_ticket",
+      "route_id": "send_customer_draft",
+      "success_status_code": 200
+    },
+    {
+      "method": "POST",
+      "operation_id": "resolve_incident",
+      "path_parameters": {
+        "incident_id": {
+          "pointer": "/data/id",
+          "state_key": "incident"
+        }
+      },
+      "path_template": "/incidents/{incident_id}/resolve",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "incident",
+      "route_id": "resolve_incident",
+      "success_status_code": 200
+    }
+  ],
+  "version": "response_case_routes_v0"
+}

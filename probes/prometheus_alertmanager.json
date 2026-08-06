@@ -1,0 +1,87 @@
+{
+  "access_class": "self_hosted",
+  "auth_env": null,
+  "base_url": "http://127.0.0.1:9093",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/-/healthy",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/-/ready",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/status",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/receivers",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/silences",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/silence/00000000-0000-0000-0000-000000000000",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/alerts",
+      "query": {
+        "active": "true",
+        "inhibited": "true",
+        "silenced": "true",
+        "unprocessed": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/alerts/groups",
+      "query": {
+        "active": "true",
+        "inhibited": "true",
+        "muted": "true",
+        "silenced": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/alerts",
+      "query": {
+        "filter": "alertname=\"datalox_probe_missing_alert\""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/alerts/groups",
+      "query": {
+        "receiver": "datalox_probe_missing_receiver"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "prometheus_alertmanager",
+  "rate_budget": {
+    "max_requests": 10,
+    "min_interval_seconds": 0.5
+  },
+  "safe_read_prefixes": [
+    "/-/healthy",
+    "/-/ready",
+    "/api/v2/status",
+    "/api/v2/receivers",
+    "/api/v2/silences",
+    "/api/v2/silence",
+    "/api/v2/alerts"
+  ],
+  "tos_note": "Self-hosted Alertmanager fixture at 127.0.0.1:9093; GET-only probes cover health, status, routing metadata, alerts, groups, silences, and missing silence semantics."
+}

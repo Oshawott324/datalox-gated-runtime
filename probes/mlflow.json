@@ -1,0 +1,64 @@
+{
+  "access_class": "self_hosted",
+  "auth_env": null,
+  "base_url": "http://127.0.0.1:5000",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/version",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/2.0/mlflow/experiments/search",
+      "query": {
+        "max_results": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/2.0/mlflow/experiments/get",
+      "query": {
+        "experiment_id": "0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/2.0/mlflow/experiments/get",
+      "query": {
+        "experiment_id": "999999999"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/2.0/mlflow/registered-models/search",
+      "query": {
+        "max_results": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/2.0/mlflow/model-versions/search",
+      "query": {
+        "max_results": "10"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "mlflow",
+  "rate_budget": {
+    "max_requests": 7,
+    "min_interval_seconds": 0.05
+  },
+  "safe_read_prefixes": [
+    "/health",
+    "/version",
+    "/api/2.0/mlflow/"
+  ],
+  "tos_note": "Self-hosted MLflow tracking server fixture with no auth. Experiment/run/model mutations remain shadow-only."
+}

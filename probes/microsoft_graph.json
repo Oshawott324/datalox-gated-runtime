@@ -1,0 +1,550 @@
+{
+  "access_class": "approval_gated",
+  "auth_profile": "microsoft_graph_delegated",
+  "auth_profiles": {
+    "microsoft_graph_delegated": {
+      "inject": [
+        {
+          "env": "MICROSOFT_GRAPH_ACCESS_TOKEN",
+          "in": "header",
+          "name": "Authorization",
+          "scheme": "Bearer"
+        }
+      ],
+      "kind": "env_static"
+    }
+  },
+  "base_url": "https://graph.microsoft.com/v1.0",
+  "fixture_expansions": {
+    "probe_requests": [
+      {
+        "method": "GET",
+        "path": "/users/{user_id}",
+        "query": {
+          "$select": "id,displayName,userPrincipalName,mail,accountEnabled"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/users/{user_id}/memberOf",
+        "query": {
+          "$select": "id,displayName,mail,groupTypes",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/groups/{group_id}",
+        "query": {
+          "$select": "id,displayName,mail,mailEnabled,securityEnabled,groupTypes"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/groups/{group_id}/members",
+        "query": {
+          "$select": "id,displayName",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/groups/{group_id}/owners",
+        "query": {
+          "$select": "id,displayName",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/groups/{group_id}/drive",
+        "query": {
+          "$select": "id,driveType,name,webUrl"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/groups/{group_id}/drive/root/children",
+        "query": {
+          "$select": "id,name,size,webUrl,file,folder,parentReference",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/me/messages/{message_id}",
+        "query": {
+          "$select": "id,subject,receivedDateTime,isDraft,from,toRecipients,parentFolderId,conversationId,bodyPreview"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/me/messages/{message_id}/attachments",
+        "query": {
+          "$select": "id,name,contentType,size,isInline",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/me/mailFolders/{mail_folder_id}",
+        "query": {
+          "$select": "id,displayName,totalItemCount,unreadItemCount,childFolderCount"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/me/mailFolders/{mail_folder_id}/childFolders",
+        "query": {
+          "$select": "id,displayName,totalItemCount,unreadItemCount,childFolderCount",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/me/mailFolders/{mail_folder_id}/messages",
+        "query": {
+          "$select": "id,subject,receivedDateTime,isDraft,from,parentFolderId,conversationId",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/me/calendars/{calendar_id}",
+        "query": {
+          "$select": "id,name,canEdit,canShare,owner"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/me/calendars/{calendar_id}/events",
+        "query": {
+          "$select": "id,subject,start,end,location,organizer,isAllDay,seriesMasterId",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/me/events/{event_id}",
+        "query": {
+          "$select": "id,subject,start,end,location,organizer,attendees,isAllDay,seriesMasterId,bodyPreview"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/me/events/{event_id}/instances",
+        "query": {
+          "$select": "id,subject,start,end,seriesMasterId",
+          "endDateTime": "{calendar_end}",
+          "startDateTime": "{calendar_start}",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/me/drive/items/{drive_item_id}",
+        "query": {
+          "$select": "id,name,size,webUrl,file,folder,parentReference,createdDateTime,lastModifiedDateTime"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/me/drive/items/{drive_item_id}/children",
+        "query": {
+          "$select": "id,name,size,webUrl,file,folder,parentReference",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/me/drive/items/{drive_item_id}/versions",
+        "query": {
+          "$select": "id,lastModifiedDateTime,size,lastModifiedBy",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/me/drive/items/{drive_item_id}/permissions",
+        "query": {
+          "$select": "id,roles,grantedToV2,inheritedFrom,link",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/sites/{site_id}",
+        "query": {
+          "$select": "id,name,displayName,webUrl,siteCollection"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/sites/{site_id}/drives",
+        "query": {
+          "$select": "id,driveType,name,webUrl",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/sites/{site_id}/drive",
+        "query": {
+          "$select": "id,driveType,name,webUrl"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/sites/{site_id}/drive/root/children",
+        "query": {
+          "$select": "id,name,size,webUrl,file,folder,parentReference",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/sites/{site_id}/drive/items/{site_drive_item_id}",
+        "query": {
+          "$select": "id,name,size,webUrl,file,folder,parentReference,createdDateTime,lastModifiedDateTime"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/sites/{site_id}/drive/items/{site_drive_item_id}/children",
+        "query": {
+          "$select": "id,name,size,webUrl,file,folder,parentReference",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/chats/{chat_id}",
+        "query": {
+          "$select": "id,topic,chatType,createdDateTime,lastUpdatedDateTime,webUrl"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/chats/{chat_id}/members",
+        "query": {
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/chats/{chat_id}/messages",
+        "query": {
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/chats/{chat_id}/messages/{chat_message_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/teams/{team_id}",
+        "query": {
+          "$select": "id,displayName,description,isArchived,webUrl"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/teams/{team_id}/channels",
+        "query": {
+          "$select": "id,displayName,description,membershipType,webUrl",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/teams/{team_id}/channels/{channel_id}",
+        "query": {
+          "$select": "id,displayName,description,membershipType,webUrl"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/teams/{team_id}/channels/{channel_id}/members",
+        "query": {
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/teams/{team_id}/channels/{channel_id}/messages",
+        "query": {
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/teams/{team_id}/channels/{channel_id}/messages/{channel_message_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/me/todo/lists/{todo_list_id}",
+        "query": {
+          "$select": "id,displayName,isOwner,isShared,wellknownListName"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/me/todo/lists/{todo_list_id}/tasks",
+        "query": {
+          "$select": "id,title,status,importance,createdDateTime,dueDateTime,completedDateTime",
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/me/todo/lists/{todo_list_id}/tasks/{todo_task_id}",
+        "query": {
+          "$select": "id,title,status,importance,body,createdDateTime,dueDateTime,completedDateTime"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/planner/plans/{planner_plan_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/planner/plans/{planner_plan_id}/details",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/planner/plans/{planner_plan_id}/tasks",
+        "query": {
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/planner/plans/{planner_plan_id}/buckets",
+        "query": {
+          "$top": "25"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/planner/tasks/{planner_task_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/planner/tasks/{planner_task_id}/details",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/planner/buckets/{planner_bucket_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/planner/buckets/{planner_bucket_id}/tasks",
+        "query": {
+          "$top": "25"
+        }
+      }
+    ]
+  },
+  "operator_permissions": {
+    "delegated_read_scopes": [
+      "Calendars.Read",
+      "Channel.ReadBasic.All",
+      "ChannelMember.Read.All",
+      "ChannelMessage.Read.All",
+      "Chat.Read",
+      "Files.Read.All",
+      "Group.Read.All",
+      "Mail.Read",
+      "Sites.Read.All",
+      "Tasks.Read",
+      "Team.ReadBasic.All",
+      "User.Read",
+      "User.ReadBasic.All"
+    ],
+    "note": "Use a delegated work-or-school token. Tenant policy can require administrator consent for broad directory, SharePoint, Teams, chat, and channel-message scopes. Render only the surfaces approved for the dedicated test tenant."
+  },
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/me",
+      "query": {
+        "$select": "id,displayName,userPrincipalName,mail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "query": {
+        "$select": "id,displayName,userPrincipalName,mail,accountEnabled",
+        "$top": "25"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups",
+      "query": {
+        "$select": "id,displayName,mail,mailEnabled,securityEnabled,groupTypes",
+        "$top": "25"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/messages",
+      "query": {
+        "$select": "id,subject,receivedDateTime,isDraft,from,parentFolderId,conversationId",
+        "$top": "25"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/mailFolders",
+      "query": {
+        "$select": "id,displayName,totalItemCount,unreadItemCount,childFolderCount",
+        "$top": "25"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/mailFolders/inbox/messages",
+      "query": {
+        "$select": "id,subject,receivedDateTime,isDraft,from,parentFolderId,conversationId",
+        "$top": "25"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/calendar",
+      "query": {
+        "$select": "id,name,canEdit,canShare,owner"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/calendars",
+      "query": {
+        "$select": "id,name,canEdit,canShare,owner",
+        "$top": "25"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/events",
+      "query": {
+        "$select": "id,subject,start,end,location,organizer,isAllDay,seriesMasterId",
+        "$top": "25"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/calendarView",
+      "query": {
+        "$select": "id,subject,start,end,location,organizer,isAllDay,seriesMasterId",
+        "endDateTime": "{calendar_end}",
+        "startDateTime": "{calendar_start}",
+        "$top": "25"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/drive",
+      "query": {
+        "$select": "id,driveType,name,webUrl,owner,quota"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/drive/root/children",
+      "query": {
+        "$select": "id,name,size,webUrl,file,folder,parentReference",
+        "$top": "25"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sites/root",
+      "query": {
+        "$select": "id,name,displayName,webUrl,siteCollection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sites",
+      "query": {
+        "$select": "id,name,displayName,webUrl",
+        "search": "{site_search}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/followedSites",
+      "query": {
+        "$select": "id,name,displayName,webUrl",
+        "$top": "25"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/joinedTeams",
+      "query": {
+        "$select": "id,displayName,description,isArchived,webUrl"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/chats",
+      "query": {
+        "$select": "id,topic,chatType,createdDateTime,lastUpdatedDateTime,webUrl",
+        "$top": "25"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/todo/lists",
+      "query": {
+        "$select": "id,displayName,isOwner,isShared,wellknownListName",
+        "$top": "25"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/planner/tasks",
+      "query": {
+        "$top": "25"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/planner/plans",
+      "query": {
+        "$top": "25"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "microsoft_graph",
+  "rate_budget": {
+    "max_requests": 20,
+    "min_interval_seconds": 0.25
+  },
+  "safe_read_prefixes": [
+    "/chats",
+    "/groups",
+    "/me",
+    "/planner",
+    "/sites",
+    "/teams",
+    "/users"
+  ],
+  "static_headers": {
+    "Accept": "application/json"
+  },
+  "tos_note": "Microsoft 365 delegated-auth test-tenant template. OAuth token acquisition and tenant consent are external operator steps. Render optional linked reads from a non-secret seed manifest. Datalox captures configured Microsoft Graph v1.0 GETs only; this helper performs no provider authoring writes."
+}

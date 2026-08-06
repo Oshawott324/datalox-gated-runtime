@@ -1,0 +1,36 @@
+{
+  "access_class": "instant_sandbox",
+  "auth_env": "POLYGON_API_KEY",
+  "auth_header": "Authorization",
+  "auth_scheme": "Bearer",
+  "base_url": "https://api.polygon.io",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/v2/aggs/ticker/AAPL/range/1/day/2026-07-01/2026-07-02",
+      "query": {
+        "adjusted": "true",
+        "limit": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reference/tickers",
+      "query": {
+        "limit": "1",
+        "market": "stocks"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "polygon",
+  "rate_budget": {
+    "max_requests": 2,
+    "min_interval_seconds": 12.0
+  },
+  "safe_read_prefixes": [
+    "/v2/aggs/",
+    "/v3/reference/"
+  ],
+  "tos_note": "Market-data API with useful pagination/rate-limit behavior; API key required."
+}

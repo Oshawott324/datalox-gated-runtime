@@ -1,0 +1,323 @@
+{
+  "access_class": "approval_gated",
+  "auth_profile": "sentry_bearer",
+  "auth_profiles": {
+    "sentry_bearer": {
+      "inject": [
+        {
+          "env": "SENTRY_AUTH_TOKEN",
+          "in": "header",
+          "name": "Authorization",
+          "scheme": "Bearer"
+        }
+      ],
+      "kind": "env_static"
+    }
+  },
+  "base_url": "https://sentry.io/api/0",
+  "fixture_expansions": {
+    "probe_requests": [
+      {
+        "method": "GET",
+        "path": "/teams/{org_slug}/{team_slug}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/teams/{org_slug}/{team_slug}/members/",
+        "query": {
+          "per_page": "100"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/organizations/{org_slug}/members/{member_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/organizations/{org_slug}/issues/{issue_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/organizations/{org_slug}/issues/{issue_id}/events/",
+        "query": {
+          "per_page": "100"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/organizations/{org_slug}/issues/{issue_id}/hashes/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/organizations/{org_slug}/issues/{issue_id}/tags/{tag_key}/values/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{org_slug}/{project_slug}/events/{event_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/organizations/{org_slug}/releases/{release_version}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/organizations/{org_slug}/releases/{release_version}/commits/",
+        "query": {
+          "per_page": "100"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/organizations/{org_slug}/releases/{release_version}/deploys/",
+        "query": {
+          "per_page": "100"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/organizations/{org_slug}/releases/{release_version}/files/",
+        "query": {
+          "per_page": "100"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/organizations/{org_slug}/releases/{release_version}/commitfiles/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/organizations/{org_slug}/repos/{repo_id}/commits/",
+        "query": {
+          "per_page": "100"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/organizations/{org_slug}/detectors/{detector_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/organizations/{org_slug}/monitors/{monitor_id}/",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/projects/{org_slug}/{project_slug}/hooks/{hook_id}/",
+        "query": {}
+      }
+    ]
+  },
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/organizations/",
+      "query": {
+        "per_page": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org_slug}/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org_slug}/projects/",
+      "query": {
+        "per_page": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org_slug}/teams/",
+      "query": {
+        "per_page": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org_slug}/members/",
+      "query": {
+        "per_page": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org_slug}/repos/",
+      "query": {
+        "per_page": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org_slug}/integrations/",
+      "query": {
+        "per_page": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org_slug}/issues/",
+      "query": {
+        "limit": "100",
+        "query": "is:unresolved",
+        "statsPeriod": "14d"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org_slug}/issues/",
+      "query": {
+        "limit": "100",
+        "query": "is:all",
+        "statsPeriod": "14d"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org_slug}/releases/",
+      "query": {
+        "per_page": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org_slug}/detectors/",
+      "query": {
+        "per_page": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org_slug}/workflows/",
+      "query": {
+        "per_page": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org_slug}/monitors/",
+      "query": {
+        "per_page": "100"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org_slug}/replays/",
+      "query": {
+        "per_page": "100",
+        "statsPeriod": "14d"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{org_slug}/replay-selectors/",
+      "query": {
+        "statsPeriod": "14d"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{org_slug}/{project_slug}/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{org_slug}/{project_slug}/issues/",
+      "query": {
+        "limit": "100",
+        "query": "is:unresolved",
+        "statsPeriod": "14d"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{org_slug}/{project_slug}/teams/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{org_slug}/{project_slug}/environments/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{org_slug}/{project_slug}/stats/",
+      "query": {
+        "resolution": "1d",
+        "stat": "received"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{org_slug}/{project_slug}/hooks/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{org_slug}/{project_slug}/user-feedback/",
+      "query": {
+        "per_page": "100"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "sentry",
+  "rate_budget": {
+    "max_requests": 22,
+    "min_interval_seconds": 1.0
+  },
+  "safe_read_prefixes": [
+    "/organizations/",
+    "/organizations/{org_slug}/",
+    "/organizations/{org_slug}/projects/",
+    "/organizations/{org_slug}/teams/",
+    "/organizations/{org_slug}/members/",
+    "/organizations/{org_slug}/members/{member_id}/",
+    "/organizations/{org_slug}/repos/",
+    "/organizations/{org_slug}/repos/{repo_id}/commits/",
+    "/organizations/{org_slug}/integrations/",
+    "/organizations/{org_slug}/issues/",
+    "/organizations/{org_slug}/issues/{issue_id}/",
+    "/organizations/{org_slug}/issues/{issue_id}/events/",
+    "/organizations/{org_slug}/issues/{issue_id}/hashes/",
+    "/organizations/{org_slug}/issues/{issue_id}/tags/{tag_key}/values/",
+    "/organizations/{org_slug}/releases/",
+    "/organizations/{org_slug}/releases/{release_version}/",
+    "/organizations/{org_slug}/releases/{release_version}/commits/",
+    "/organizations/{org_slug}/releases/{release_version}/deploys/",
+    "/organizations/{org_slug}/releases/{release_version}/files/",
+    "/organizations/{org_slug}/releases/{release_version}/commitfiles/",
+    "/organizations/{org_slug}/detectors/",
+    "/organizations/{org_slug}/detectors/{detector_id}/",
+    "/organizations/{org_slug}/workflows/",
+    "/organizations/{org_slug}/monitors/",
+    "/organizations/{org_slug}/monitors/{monitor_id}/",
+    "/organizations/{org_slug}/replays/",
+    "/organizations/{org_slug}/replay-selectors/",
+    "/projects/{org_slug}/{project_slug}/",
+    "/projects/{org_slug}/{project_slug}/issues/",
+    "/projects/{org_slug}/{project_slug}/teams/",
+    "/projects/{org_slug}/{project_slug}/environments/",
+    "/projects/{org_slug}/{project_slug}/stats/",
+    "/projects/{org_slug}/{project_slug}/hooks/",
+    "/projects/{org_slug}/{project_slug}/hooks/{hook_id}/",
+    "/projects/{org_slug}/{project_slug}/user-feedback/",
+    "/projects/{org_slug}/{project_slug}/events/{event_id}/",
+    "/teams/{org_slug}/{team_slug}/",
+    "/teams/{org_slug}/{team_slug}/members/"
+  ],
+  "static_headers": {
+    "Accept": "application/json"
+  },
+  "tos_note": "Operator-approved Sentry organization only. Render org_slug and project_slug and linked fixture identifiers before live capture. Datalox live capture is GET-only."
+}

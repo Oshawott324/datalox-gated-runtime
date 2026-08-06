@@ -1,0 +1,151 @@
+{
+  "access_class": "open_public",
+  "auth_env": null,
+  "base_url": "https://www.fema.gov",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/api/open/v1/OpenFemaDataSets",
+      "query": {
+        "$filter": "name eq 'DisasterDeclarationsSummaries' or name eq 'PublicAssistanceFundedProjectsDetails' or name eq 'RegistrationIntakeIndividualsHouseholdPrograms' or name eq 'HazardMitigationAssistanceProjects' or name eq 'FimaNfipClaims' or name eq 'FimaNfipPolicies' or name eq 'IpawsArchivedAlerts'",
+        "$top": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/open/v1/OpenFemaDataSetFields",
+      "query": {
+        "$filter": "openFemaDataSet eq 'DisasterDeclarationsSummaries' and datasetVersion eq 2",
+        "$top": "3"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/open/v1/OpenFemaDataSetFields",
+      "query": {
+        "$filter": "openFemaDataSet eq 'PublicAssistanceFundedProjectsDetails' and datasetVersion eq 2",
+        "$top": "3"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/open/v1/OpenFemaDataSetFields",
+      "query": {
+        "$filter": "openFemaDataSet eq 'RegistrationIntakeIndividualsHouseholdPrograms' and datasetVersion eq 2",
+        "$top": "3"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/open/v1/OpenFemaDataSetFields",
+      "query": {
+        "$filter": "openFemaDataSet eq 'HazardMitigationAssistanceProjects' and datasetVersion eq 4",
+        "$top": "3"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/open/v1/OpenFemaDataSetFields",
+      "query": {
+        "$filter": "openFemaDataSet eq 'FimaNfipClaims' and datasetVersion eq 2",
+        "$top": "3"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/open/v1/OpenFemaDataSetFields",
+      "query": {
+        "$filter": "openFemaDataSet eq 'FimaNfipPolicies' and datasetVersion eq 2",
+        "$top": "3"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/open/v1/OpenFemaDataSetFields",
+      "query": {
+        "$filter": "openFemaDataSet eq 'IpawsArchivedAlerts' and datasetVersion eq 1",
+        "$top": "3"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/open/v2/DisasterDeclarationsSummaries",
+      "query": {
+        "$top": "2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/open/v2/DisasterDeclarationsSummaries",
+      "query": {
+        "$filter": "notAField eq 1",
+        "$top": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/open/v2/PublicAssistanceFundedProjectsDetails",
+      "query": {
+        "$top": "2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/open/v2/RegistrationIntakeIndividualsHouseholdPrograms",
+      "query": {
+        "$top": "2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/open/v4/HazardMitigationAssistanceProjects",
+      "query": {
+        "$top": "2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/open/v2/FimaNfipClaims",
+      "query": {
+        "$top": "2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/open/v2/FimaNfipPolicies",
+      "query": {
+        "$top": "2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/open/v1/IpawsArchivedAlerts",
+      "query": {
+        "$select": "identifier,sent,sender,status,msgType,scope",
+        "$top": "1"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "openfema",
+  "rate_budget": {
+    "max_requests": 16,
+    "min_interval_seconds": 0.5
+  },
+  "safe_read_prefixes": [
+    "/api/open/v1/OpenFemaDataSets",
+    "/api/open/v1/OpenFemaDataSetFields",
+    "/api/open/v2/DisasterDeclarationsSummaries",
+    "/api/open/v2/PublicAssistanceFundedProjectsDetails",
+    "/api/open/v2/RegistrationIntakeIndividualsHouseholdPrograms",
+    "/api/open/v4/HazardMitigationAssistanceProjects",
+    "/api/open/v2/FimaNfipClaims",
+    "/api/open/v2/FimaNfipPolicies",
+    "/api/open/v1/IpawsArchivedAlerts"
+  ],
+  "static_headers": {
+    "Accept": "application/json",
+    "User-Agent": "datalox-gated-runtime-openfema-probe/1.0"
+  },
+  "tos_note": "Official OpenFEMA read-only API. FEMA states that API use requires no registration; this low-rate probe captures bounded public JSON records only."
+}

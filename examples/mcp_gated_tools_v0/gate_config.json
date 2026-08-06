@@ -1,0 +1,81 @@
+{
+  "audit_rules": [
+    {
+      "arguments_contains": {
+        "number": 123
+      },
+      "failure_code": "missing_issue_read",
+      "tool_name": "github.get_issue",
+      "type": "require_mcp_call"
+    },
+    {
+      "arguments_contains": {
+        "issue_number": 123
+      },
+      "failure_code": "missing_triage_report",
+      "tool_name": "github.create_triage_report",
+      "type": "require_mcp_shadow"
+    }
+  ],
+  "config_id": "mcp_gated_tools_v0",
+  "mcp": {
+    "generated": {
+      "response_cases": [
+        {
+          "arguments": {
+            "number": 123
+          },
+          "case_id": "mcp_cap_issue_123",
+          "evidence_ref": "example:mcp_gated_tools_v0",
+          "result": {
+            "structuredContent": {
+              "number": 123,
+              "state": "open",
+              "title": "Example issue for MCP-gated tools v0"
+            }
+          },
+          "tool_name": "github.get_issue"
+        }
+      ],
+      "tool_schemas": {
+        "github.create_triage_report": {
+          "inputSchema": {
+            "properties": {
+              "issue_number": {
+                "type": "integer"
+              },
+              "summary": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "issue_number",
+              "summary"
+            ],
+            "type": "object"
+          }
+        },
+        "github.get_issue": {
+          "inputSchema": {
+            "properties": {
+              "number": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "number"
+            ],
+            "type": "object"
+          }
+        }
+      }
+    },
+    "tools": {
+      "github.create_triage_report": "shadow",
+      "github.get_issue": "replay",
+      "github.merge_pull_request": "deny"
+    },
+    "upstreams": {}
+  },
+  "response_cases": []
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "method": "PATCH",
+    "path": "/incidents/inc-001/assign",
+    "body": {
+      "assignee": "owner@example.test"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/incidents/inc-001",
+    "query": {
+      "view": "full"
+    }
+  }
+]

@@ -1,0 +1,370 @@
+{
+  "access_class": "instant_sandbox",
+  "auth_profile": "jira_cloud_basic",
+  "auth_profiles": {
+    "jira_cloud_basic": {
+      "inject": [
+        {
+          "env": "JIRA_CLOUD_BASIC_AUTH_B64",
+          "in": "header",
+          "name": "Authorization",
+          "scheme": "Basic"
+        }
+      ],
+      "kind": "env_static"
+    }
+  },
+  "base_url": "https://{jira_site}.atlassian.net",
+  "fixture_expansions": {
+    "probe_requests": [
+      {
+        "method": "GET",
+        "path": "/rest/api/3/project/{project_key}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/issuetype/project",
+        "query": {
+          "projectId": "{project_id}"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/issuetype/{issue_type_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/issue/createmeta/{project_key}/issuetypes/{issue_type_id}",
+        "query": {
+          "maxResults": "50",
+          "startAt": "0"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/user",
+        "query": {
+          "accountId": "{account_id}"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/group/member",
+        "query": {
+          "groupId": "{group_id}",
+          "maxResults": "50",
+          "startAt": "0"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/search/jql",
+        "query": {
+          "fields": "id,key,summary,status,issuetype,project",
+          "jql": "project = \"{project_key}\" ORDER BY key ASC",
+          "maxResults": "50"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/issue/{issue_key}",
+        "query": {
+          "expand": "names,schema,renderedFields"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/issue/{issue_key}/changelog",
+        "query": {
+          "maxResults": "50",
+          "startAt": "0"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/issue/{issue_key}/comment",
+        "query": {
+          "maxResults": "50",
+          "orderBy": "created",
+          "startAt": "0"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/issue/{issue_key}/comment/{jira_comment_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/issue/{issue_key}/transitions",
+        "query": {
+          "expand": "transitions.fields"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/project/{project_key}/statuses",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/status/{status_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/workflows/search",
+        "query": {
+          "maxResults": "50",
+          "orderBy": "name",
+          "projectId": "{project_id}",
+          "startAt": "0"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/workflowscheme/project",
+        "query": {
+          "projectId": "{project_id}"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/workflowscheme/{workflow_scheme_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/rest/api/3/issuetypescheme/project",
+        "query": {
+          "maxResults": "50",
+          "projectId": "{project_id}",
+          "startAt": "0"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/servicedesk/{service_desk_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/servicedesk/{service_desk_id}/requesttype",
+        "query": {
+          "limit": "50",
+          "start": "0"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/servicedesk/{service_desk_id}/requesttype/{request_type_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/servicedesk/{service_desk_id}/requesttype/{request_type_id}/field",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/servicedesk/{service_desk_id}/queue",
+        "query": {
+          "includeCount": "true",
+          "limit": "50",
+          "start": "0"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/servicedesk/{service_desk_id}/queue/{queue_id}",
+        "query": {
+          "includeCount": "true"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/servicedesk/{service_desk_id}/queue/{queue_id}/issue",
+        "query": {
+          "limit": "50",
+          "start": "0"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/request",
+        "query": {
+          "limit": "50",
+          "requestTypeId": "{request_type_id}",
+          "serviceDeskId": "{service_desk_id}",
+          "start": "0"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/request/{request_key}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/request/{request_key}/comment",
+        "query": {
+          "limit": "50",
+          "start": "0"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/request/{request_key}/comment/{request_comment_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/request/{request_key}/transition",
+        "query": {
+          "limit": "50",
+          "start": "0"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/request/{request_key}/status",
+        "query": {
+          "limit": "50",
+          "start": "0"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/request/{request_key}/approval",
+        "query": {
+          "limit": "50",
+          "start": "0"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/request/{request_key}/approval/{approval_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/request/{request_key}/sla",
+        "query": {
+          "limit": "50",
+          "start": "0"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/rest/servicedeskapi/request/{request_key}/sla/{sla_metric_id}",
+        "query": {}
+      }
+    ]
+  },
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/rest/api/3/myself",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/project/search",
+      "query": {
+        "maxResults": "50",
+        "orderBy": "key",
+        "startAt": "0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/issuetype",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/field/search",
+      "query": {
+        "maxResults": "50",
+        "orderBy": "name",
+        "startAt": "0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/users/search",
+      "query": {
+        "maxResults": "50",
+        "startAt": "0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/group/bulk",
+      "query": {
+        "maxResults": "50",
+        "startAt": "0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/status",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/statuses/search",
+      "query": {
+        "includeGlobalStatuses": "true",
+        "maxResults": "50",
+        "startAt": "0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/api/3/workflows/search",
+      "query": {
+        "maxResults": "50",
+        "orderBy": "name",
+        "startAt": "0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/servicedeskapi/info",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/rest/servicedeskapi/servicedesk",
+      "query": {
+        "limit": "50",
+        "start": "0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/servicedeskapi/request",
+      "query": {
+        "limit": "50",
+        "start": "0"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "jira_cloud",
+  "rate_budget": {
+    "max_requests": 12,
+    "min_interval_seconds": 0.25
+  },
+  "safe_read_prefixes": [
+    "/rest/api/3",
+    "/rest/servicedeskapi"
+  ],
+  "static_headers": {
+    "Accept": "application/json"
+  },
+  "tos_note": "Dedicated Jira Cloud/Jira Service Management tenant template. Render tenant and object identifiers with scripts/providers/jira-cloud-sandbox.sh. Datalox live capture remains GET-only; deterministic direct authoring is separate and requires explicit dedicated-tenant confirmation."
+}

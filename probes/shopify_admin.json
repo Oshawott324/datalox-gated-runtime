@@ -1,0 +1,279 @@
+{
+  "access_class": "approval_gated",
+  "auth_profile": "shopify_admin_access_token",
+  "auth_profiles": {
+    "shopify_admin_access_token": {
+      "inject": [
+        {
+          "env": "SHOPIFY_ADMIN_ACCESS_TOKEN",
+          "in": "header",
+          "name": "X-Shopify-Access-Token",
+          "scheme": ""
+        }
+      ],
+      "kind": "env_static"
+    }
+  },
+  "base_url": "https://{shop}.myshopify.com/admin/api/2026-07",
+  "fixture_expansions": {
+    "probe_requests": [
+      {
+        "method": "GET",
+        "path": "/orders/{order_id}.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/orders/{order_id}/transactions.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/orders/{order_id}/fulfillment_orders.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/orders/{order_id}/fulfillments.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/orders/{order_id}/refunds.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/orders/{order_id}/refunds/{refund_id}.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/fulfillment_orders/{fulfillment_order_id}.json",
+        "query": {
+          "include_order_reference_fields": "true"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/fulfillment_orders/{fulfillment_order_id}/fulfillments.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/orders/{order_id}/fulfillments/{fulfillment_id}.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/customers/{customer_id}.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/products/{product_id}.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/variants/{variant_id}.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/inventory_items/{inventory_item_id}.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/inventory_levels.json",
+        "query": {
+          "inventory_item_ids": "{inventory_item_id}",
+          "location_ids": "{location_id}"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/locations/{location_id}.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/locations/{location_id}/inventory_levels.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/draft_orders/{draft_order_id}.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/price_rules/{price_rule_id}.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/price_rules/{price_rule_id}/discount_codes.json",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/price_rules/{price_rule_id}/discount_codes/{discount_code_id}.json",
+        "query": {}
+      }
+    ]
+  },
+  "plan_expansions": {
+    "carrier_services": {
+      "probe_requests": [
+        {
+          "method": "GET",
+          "path": "/carrier_services.json",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/carrier_services/{carrier_service_id}.json",
+          "query": {}
+        }
+      ]
+    },
+    "shopify_payments": {
+      "probe_requests": [
+        {
+          "method": "GET",
+          "path": "/shopify_payments/balance.json",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/shopify_payments/payouts.json",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/shopify_payments/balance/transactions.json",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/shopify_payments/disputes.json",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/shopify_payments/payouts/{payout_id}.json",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/shopify_payments/disputes/{dispute_id}.json",
+          "query": {}
+        }
+      ]
+    }
+  },
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/shop.json",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/orders.json",
+      "query": {
+        "limit": "50",
+        "status": "any"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/locations.json",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/draft_orders.json",
+      "query": {
+        "limit": "50",
+        "status": "any"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/price_rules.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fulfillment_services.json",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "shopify_admin",
+  "rate_budget": {
+    "max_requests": 8,
+    "min_interval_seconds": 0.55
+  },
+  "safe_read_prefixes": [
+    "/shop.json",
+    "/orders.json",
+    "/orders/{order_id}.json",
+    "/orders/{order_id}/transactions.json",
+    "/orders/{order_id}/fulfillment_orders.json",
+    "/orders/{order_id}/fulfillments.json",
+    "/orders/{order_id}/fulfillments/{fulfillment_id}.json",
+    "/orders/{order_id}/refunds.json",
+    "/orders/{order_id}/refunds/{refund_id}.json",
+    "/customers.json",
+    "/customers/{customer_id}.json",
+    "/products.json",
+    "/products/{product_id}.json",
+    "/variants/{variant_id}.json",
+    "/inventory_items/{inventory_item_id}.json",
+    "/inventory_levels.json",
+    "/locations.json",
+    "/locations/{location_id}.json",
+    "/locations/{location_id}/inventory_levels.json",
+    "/draft_orders.json",
+    "/draft_orders/{draft_order_id}.json",
+    "/price_rules.json",
+    "/price_rules/{price_rule_id}.json",
+    "/price_rules/{price_rule_id}/discount_codes.json",
+    "/price_rules/{price_rule_id}/discount_codes/{discount_code_id}.json",
+    "/fulfillment_orders/{fulfillment_order_id}.json",
+    "/fulfillment_orders/{fulfillment_order_id}/fulfillments.json",
+    "/fulfillment_services.json",
+    "/carrier_services.json",
+    "/carrier_services/{carrier_service_id}.json",
+    "/shopify_payments/balance.json",
+    "/shopify_payments/payouts.json",
+    "/shopify_payments/payouts/{payout_id}.json",
+    "/shopify_payments/balance/transactions.json",
+    "/shopify_payments/disputes.json",
+    "/shopify_payments/disputes/{dispute_id}.json"
+  ],
+  "static_headers": {
+    "Accept": "application/json"
+  },
+  "tos_note": "Approval-gated Shopify development-store probe. Datalox capture is GET-only. The versioned REST Admin API is legacy and is used here only because the live gate cannot express the POST-only GraphQL Admin query endpoint."
+}

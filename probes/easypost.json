@@ -1,0 +1,113 @@
+{
+  "access_class": "instant_sandbox",
+  "auth_profile": "easypost_basic",
+  "auth_profiles": {
+    "easypost_basic": {
+      "inject": [
+        {
+          "env": "EASYPOST_BASIC_CREDENTIAL",
+          "in": "header",
+          "name": "Authorization",
+          "scheme": "Basic"
+        }
+      ],
+      "kind": "env_static"
+    }
+  },
+  "base_url": "https://api.easypost.com",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/v2/addresses",
+      "query": {
+        "page_size": "5"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/addresses/__EASYPOST_ADDRESS_ID__",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/parcels/__EASYPOST_PARCEL_ID__",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/shipments",
+      "query": {
+        "page_size": "5",
+        "purchased": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/shipments/__EASYPOST_SHIPMENT_ID__",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/shipments/__EASYPOST_SHIPMENT_ID__/smartrate",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/trackers",
+      "query": {
+        "page_size": "5"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/trackers/__EASYPOST_TRACKER_ID__",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/batches",
+      "query": {
+        "page_size": "5",
+        "sort": "desc"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/batches/__EASYPOST_BATCH_ID__",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/pickups",
+      "query": {
+        "page_size": "5"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/pickups/__EASYPOST_PICKUP_ID__",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/carrier_types",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "easypost",
+  "rate_budget": {
+    "max_requests": 13,
+    "min_interval_seconds": 1.0
+  },
+  "safe_read_prefixes": [
+    "/v2/addresses",
+    "/v2/parcels",
+    "/v2/shipments",
+    "/v2/trackers",
+    "/v2/batches",
+    "/v2/pickups",
+    "/v2/carrier_types"
+  ],
+  "tos_note": "EasyPost test-key probe. Use scripts/providers/easypost-sandbox.sh to derive process-local HTTP Basic auth and replace seeded-ID placeholders. Datalox live capture remains GET-only; the helper's explicitly confirmed sandbox writes run directly against EasyPost before capture. Pickup collection is always rendered, while Pickup detail is rendered only when authoring yields an ID. Production-only carrier-account, API-key, user, and child-user endpoints are excluded."
+}

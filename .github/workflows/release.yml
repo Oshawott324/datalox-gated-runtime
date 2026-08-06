@@ -1,0 +1,60 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.12"
+      - name: Validate semantic version tag
+        shell: bash
+        run: |
+          if [[ ! "$GITHUB_REF_NAME" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Release tag must be semantic version prefixed with v."
+            exit 1
+          fi
+      - name: Install locked environment
+        run: |
+          python -m pip install --disable-pip-version-check "uv==0.12.1"
+          uv sync --frozen --extra dev
+      - name: Build and verify public source
+        run: |
+          uv run python scripts/public_release.py check
+          uv run python scripts/public_release.py build --out .tmp/public-source
+          uv run python scripts/public_release.py verify-built --source .tmp/public-source
+      - name: Build Python distributions
+        run: uv build
+      - name: Build deterministic public source archive
+        run: |
+          epoch="$(git show -s --format=%ct HEAD)"
+          tar --sort=name --mtime="@$epoch" --owner=0 --group=0 --numeric-owner \
+            -C .tmp -czf "dist/datalox-public-source-$GITHUB_REF_NAME.tar.gz" public-source
+      - name: Generate dependency SBOM
+        run: |
+          uv export --frozen --no-dev --no-emit-project --format requirements-txt --output-file .tmp/runtime-requirements.txt
+          uv run pip-audit --requirement .tmp/runtime-requirements.txt --disable-pip \
+            --format cyclonedx-json --output "dist/datalox-runtime-$GITHUB_REF_NAME.cdx.json"
+      - name: Generate checksums
+        run: cd dist && sha256sum * > SHA256SUMS
+      - uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2.4.0
+        with:
+          subject-path: dist/*
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/* --generate-notes --verify-tag

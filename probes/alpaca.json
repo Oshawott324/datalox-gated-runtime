@@ -1,0 +1,222 @@
+{
+  "access_class": "instant_sandbox",
+  "auth_env": "ALPACA_KEY_ID",
+  "auth_header": "APCA-API-KEY-ID",
+  "auth_scheme": "",
+  "base_url": "https://paper-api.alpaca.markets",
+  "extra_auth": [
+    {
+      "env": "ALPACA_SECRET_KEY",
+      "header": "APCA-API-SECRET-KEY",
+      "scheme": ""
+    }
+  ],
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/v1/locates",
+      "query": {
+        "status": "open"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/locates/00000000-0000-0000-0000-000000000000",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v1/locates/quotes",
+      "query": {
+        "symbols": "AAPL"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/account",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/account/activities",
+      "query": {
+        "direction": "desc",
+        "page_size": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/account/activities/FILL",
+      "query": {
+        "direction": "desc",
+        "page_size": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/account/configurations",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/account/portfolio/history",
+      "query": {
+        "period": "1D",
+        "timeframe": "1D"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/assets",
+      "query": {
+        "asset_class": "crypto",
+        "status": "active"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/assets/AAPL",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/assets/fixed_income/us_corporates",
+      "query": {
+        "bond_status": "outstanding",
+        "tickers": "AAPL"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/assets/fixed_income/us_treasuries",
+      "query": {
+        "bond_status": "outstanding",
+        "cusips": "912797JH4"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/calendar",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/clock",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/corporate_actions/announcements",
+      "query": {
+        "ca_types": "Dividend",
+        "since": "2026-07-07",
+        "until": "2026-07-08"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/corporate_actions/announcements/datalox_probe_missing_announcement",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/options/contracts",
+      "query": {
+        "limit": "1",
+        "status": "active",
+        "underlying_symbols": "AAPL"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/options/contracts/DATALOXPROBE",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orders",
+      "query": {
+        "direction": "desc",
+        "limit": "1",
+        "nested": "false",
+        "status": "all"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orders/00000000-0000-0000-0000-000000000000",
+      "query": {
+        "nested": "false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orders:by_client_order_id",
+      "query": {
+        "client_order_id": "datalox-probe-nonexistent-client-order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/positions",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/positions/00000000-0000-0000-0000-000000000000",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/watchlists",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/watchlists/00000000-0000-0000-0000-000000000000",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/v2/watchlists:by_name",
+      "query": {
+        "name": "datalox-probe-nonexistent-watchlist"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "alpaca",
+  "rate_budget": {
+    "max_requests": 26,
+    "min_interval_seconds": 0.5
+  },
+  "safe_read_prefixes": [
+    "/v1/locates",
+    "/v1/locates/00000000-0000-0000-0000-000000000000",
+    "/v1/locates/quotes",
+    "/v2/account",
+    "/v2/account/activities",
+    "/v2/account/activities/FILL",
+    "/v2/account/configurations",
+    "/v2/account/portfolio/history",
+    "/v2/assets",
+    "/v2/assets/AAPL",
+    "/v2/assets/fixed_income/us_corporates",
+    "/v2/assets/fixed_income/us_treasuries",
+    "/v2/calendar",
+    "/v2/clock",
+    "/v2/corporate_actions/announcements",
+    "/v2/corporate_actions/announcements/datalox_probe_missing_announcement",
+    "/v2/options/contracts",
+    "/v2/options/contracts/DATALOXPROBE",
+    "/v2/orders",
+    "/v2/orders/00000000-0000-0000-0000-000000000000",
+    "/v2/orders:by_client_order_id",
+    "/v2/positions",
+    "/v2/positions/00000000-0000-0000-0000-000000000000",
+    "/v2/watchlists",
+    "/v2/watchlists/00000000-0000-0000-0000-000000000000",
+    "/v2/watchlists:by_name"
+  ],
+  "tos_note": "Paper trading API intended for sandbox trading workflows; live probes are GET-only and never submit, modify, cancel, liquidate, exercise, or locate orders/positions."
+}

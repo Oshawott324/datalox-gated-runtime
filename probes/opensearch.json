@@ -1,0 +1,64 @@
+{
+  "access_class": "self_hosted",
+  "auth_env": null,
+  "base_url": "http://127.0.0.1:9200",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/_cluster/health",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/_cluster/state/metadata",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/_nodes",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/_cat/indices",
+      "query": {
+        "format": "json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/_cat/aliases",
+      "query": {
+        "format": "json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/_search",
+      "query": {
+        "size": "0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datalox_probe_missing_index/_search",
+      "query": {
+        "size": "0"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "opensearch",
+  "rate_budget": {
+    "max_requests": 8,
+    "min_interval_seconds": 0.05
+  },
+  "safe_read_prefixes": [
+    "/_cluster/",
+    "/_nodes",
+    "/_cat/",
+    "/_search",
+    "/datalox_probe_missing_index/"
+  ],
+  "tos_note": "Self-hosted single-node OpenSearch fixture with demo security disabled. Index writes and destructive cluster actions remain shadow-only or denied."
+}

@@ -1,0 +1,306 @@
+{
+  "access_class": "approval_gated",
+  "auth_profile": "google_workspace_oauth_bearer",
+  "auth_profiles": {
+    "google_workspace_oauth_bearer": {
+      "inject": [
+        {
+          "env": "GOOGLE_WORKSPACE_ACCESS_TOKEN",
+          "in": "header",
+          "name": "Authorization",
+          "scheme": "Bearer"
+        }
+      ],
+      "kind": "env_static"
+    }
+  },
+  "base_url": "https://www.googleapis.com",
+  "fixture_expansions": {
+    "probe_requests": [
+      {
+        "method": "GET",
+        "path": "/calendar/v3/calendars/primary/events/{calendar_event_id}",
+        "query": {
+          "alwaysIncludeEmail": "false"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/drive/v3/files/{drive_folder_id}",
+        "query": {
+          "fields": "id,name,mimeType,createdTime,modifiedTime,parents,appProperties,webViewLink"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/drive/v3/files/{document_id}",
+        "query": {
+          "fields": "id,name,mimeType,createdTime,modifiedTime,parents,appProperties,capabilities,webViewLink"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/drive/v3/files/{spreadsheet_id}",
+        "query": {
+          "fields": "id,name,mimeType,createdTime,modifiedTime,parents,appProperties,capabilities,webViewLink"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/drive/v3/files/{document_id}/permissions",
+        "query": {
+          "fields": "nextPageToken,permissions(id,type,role,displayName,emailAddress,domain,allowFileDiscovery,pendingOwner)",
+          "pageSize": "20"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/drive/v3/files/{spreadsheet_id}/permissions",
+        "query": {
+          "fields": "nextPageToken,permissions(id,type,role,displayName,emailAddress,domain,allowFileDiscovery,pendingOwner)",
+          "pageSize": "20"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/drive/v3/files/{document_id}/comments",
+        "query": {
+          "fields": "nextPageToken,comments(id,content,createdTime,modifiedTime,resolved,quotedFileContent)",
+          "includeDeleted": "false",
+          "pageSize": "20"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/drive/v3/files/{spreadsheet_id}/comments",
+        "query": {
+          "fields": "nextPageToken,comments(id,content,createdTime,modifiedTime,resolved,quotedFileContent)",
+          "includeDeleted": "false",
+          "pageSize": "20"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/drive/v3/files/{document_id}/revisions",
+        "query": {
+          "fields": "nextPageToken,revisions(id,modifiedTime,keepForever,publishAutoPublished,published,publishedOutsideDomain)",
+          "pageSize": "20"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/drive/v3/files/{spreadsheet_id}/revisions",
+        "query": {
+          "fields": "nextPageToken,revisions(id,modifiedTime,keepForever,publishAutoPublished,published,publishedOutsideDomain)",
+          "pageSize": "20"
+        }
+      }
+    ]
+  },
+  "oauth": {
+    "author_scopes": [
+      "https://www.googleapis.com/auth/calendar.events",
+      "https://www.googleapis.com/auth/documents",
+      "https://www.googleapis.com/auth/drive.file",
+      "https://www.googleapis.com/auth/gmail.compose",
+      "https://www.googleapis.com/auth/spreadsheets"
+    ],
+    "capture_scopes": [
+      "https://www.googleapis.com/auth/calendar.readonly",
+      "https://www.googleapis.com/auth/documents.readonly",
+      "https://www.googleapis.com/auth/drive.readonly",
+      "https://www.googleapis.com/auth/gmail.readonly",
+      "https://www.googleapis.com/auth/spreadsheets.readonly"
+    ],
+    "token_acquisition": "external_operator_step"
+  },
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/calendar/v3/users/me/calendarList",
+      "query": {
+        "maxResults": "20",
+        "showDeleted": "false",
+        "showHidden": "false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calendar/v3/calendars/primary",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/calendar/v3/calendars/primary/events",
+      "query": {
+        "maxResults": "20",
+        "showDeleted": "false",
+        "singleEvents": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calendar/v3/users/me/settings",
+      "query": {
+        "maxResults": "20"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calendar/v3/colors",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/drive/v3/about",
+      "query": {
+        "fields": "user(displayName,emailAddress,me,permissionId),storageQuota(limit,usage,usageInDrive,usageInDriveTrash),appInstalled"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drive/v3/files",
+      "query": {
+        "fields": "nextPageToken,files(id,name,mimeType,createdTime,modifiedTime,parents,starred,trashed,webViewLink)",
+        "orderBy": "modifiedTime desc",
+        "pageSize": "20",
+        "q": "trashed = false",
+        "spaces": "drive"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drive/v3/changes/startPageToken",
+      "query": {
+        "fields": "startPageToken"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drive/v3/drives",
+      "query": {
+        "fields": "nextPageToken,drives(id,name,createdTime,capabilities)",
+        "pageSize": "20"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "google_workspace",
+  "rate_budget": {
+    "max_requests": 9,
+    "min_interval_seconds": 0.5
+  },
+  "safe_read_prefixes": [
+    "/calendar/v3",
+    "/drive/v3"
+  ],
+  "service_probes": {
+    "docs": {
+      "base_url": "https://docs.googleapis.com",
+      "probe_requests": [
+        {
+          "method": "GET",
+          "path": "/v1/documents/{document_id}",
+          "query": {
+            "fields": "documentId,title,revisionId,suggestionsViewMode,tabs(tabProperties(tabId,title,index))",
+            "includeTabsContent": "true"
+          }
+        }
+      ],
+      "provider_id": "google_workspace_docs",
+      "requires_fixture_manifest": true,
+      "safe_read_prefixes": [
+        "/v1/documents"
+      ]
+    },
+    "gmail": {
+      "base_url": "https://gmail.googleapis.com",
+      "fixture_expansions": {
+        "probe_requests": [
+          {
+            "method": "GET",
+            "path": "/gmail/v1/users/me/drafts/{gmail_draft_id}",
+            "query": {
+              "format": "metadata"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/gmail/v1/users/me/messages/{gmail_message_id}",
+            "query": {
+              "format": "metadata",
+              "metadataHeaders": "Subject"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/gmail/v1/users/me/threads/{gmail_thread_id}",
+            "query": {
+              "format": "metadata",
+              "metadataHeaders": "Subject"
+            }
+          }
+        ]
+      },
+      "probe_requests": [
+        {
+          "method": "GET",
+          "path": "/gmail/v1/users/me/profile",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/gmail/v1/users/me/labels",
+          "query": {}
+        },
+        {
+          "method": "GET",
+          "path": "/gmail/v1/users/me/messages",
+          "query": {
+            "includeSpamTrash": "false",
+            "maxResults": "20"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/gmail/v1/users/me/threads",
+          "query": {
+            "includeSpamTrash": "false",
+            "maxResults": "20"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/gmail/v1/users/me/drafts",
+          "query": {
+            "includeSpamTrash": "false",
+            "maxResults": "20"
+          }
+        }
+      ],
+      "provider_id": "google_workspace_gmail",
+      "safe_read_prefixes": [
+        "/gmail/v1/users/me"
+      ]
+    },
+    "sheets": {
+      "base_url": "https://sheets.googleapis.com",
+      "probe_requests": [
+        {
+          "method": "GET",
+          "path": "/v4/spreadsheets/{spreadsheet_id}",
+          "query": {
+            "fields": "spreadsheetId,properties(title,locale,timeZone,autoRecalc,defaultFormat,iterativeCalculationSettings,spreadsheetTheme),sheets(properties(sheetId,title,index,sheetType,gridProperties,hidden,rightToLeft,tabColorStyle))",
+            "includeGridData": "false"
+          }
+        }
+      ],
+      "provider_id": "google_workspace_sheets",
+      "requires_fixture_manifest": true,
+      "safe_read_prefixes": [
+        "/v4/spreadsheets"
+      ]
+    }
+  },
+  "tos_note": "Google Workspace OAuth test-user template grounded in the Gmail v1, Calendar v3, Drive v3, Docs v1, and Sheets v4 discovery documents. OAuth bearer acquisition is an external operator step. Render each service host separately. Deterministic fixture authoring is outside Datalox and requires explicit confirmation of a dedicated test workspace. Datalox live capture is GET-only. Admin SDK Directory is excluded because ordinary developer/test-user access does not establish Workspace administrator authority."
+}

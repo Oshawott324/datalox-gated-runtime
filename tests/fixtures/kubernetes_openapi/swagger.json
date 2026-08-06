@@ -1,0 +1,216 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Kubernetes",
+    "version": "v9.fixture"
+  },
+  "paths": {
+    "/api/v1/namespaces": {
+      "get": {
+        "operationId": "listCoreV1Namespace",
+        "description": "list or watch objects of kind Namespace",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "resourceVersion",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "watch",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/io.k8s.api.core.v1.NamespaceList"
+            }
+          }
+        },
+        "tags": [
+          "core_v1"
+        ]
+      },
+      "post": {
+        "operationId": "createCoreV1Namespace",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/io.k8s.api.core.v1.Namespace"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/namespaces/{name}": {
+      "get": {
+        "operationId": "readCoreV1Namespace",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/io.k8s.api.core.v1.Namespace"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/namespaces/{namespace}/pods/{name}": {
+      "get": {
+        "operationId": "readCoreV1NamespacedPod",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/io.k8s.api.core.v1.Pod"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/namespaces/{namespace}/pods/{name}/proxy/{path}": {
+      "get": {
+        "operationId": "connectCoreV1GetNamespacedPodProxyWithPath",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/apis/apps/v1/deployments": {
+      "get": {
+        "operationId": "listAppsV1DeploymentForAllNamespaces",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/io.k8s.api.apps.v1.DeploymentList"
+            }
+          }
+        }
+      }
+    },
+    "/healthz": {
+      "get": {
+        "operationId": "getHealthz",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "io.k8s.api.apps.v1.DeploymentList": {
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/io.k8s.api.apps.v1.Deployment"
+          }
+        },
+        "kind": {
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ListMeta"
+        }
+      }
+    },
+    "io.k8s.api.apps.v1.Deployment": {
+      "type": "object",
+      "properties": {
+        "metadata": {
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+        },
+        "spec": {
+          "type": "object"
+        }
+      }
+    },
+    "io.k8s.api.core.v1.Namespace": {
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+        }
+      }
+    },
+    "io.k8s.api.core.v1.NamespaceList": {
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/io.k8s.api.core.v1.Namespace"
+          }
+        },
+        "kind": {
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ListMeta"
+        }
+      }
+    },
+    "io.k8s.api.core.v1.Pod": {
+      "type": "object",
+      "properties": {
+        "metadata": {
+          "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+        },
+        "status": {
+          "type": "object"
+        }
+      }
+    },
+    "io.k8s.apimachinery.pkg.apis.meta.v1.ListMeta": {
+      "type": "object",
+      "properties": {
+        "continue": {
+          "type": "string"
+        },
+        "resourceVersion": {
+          "type": "string"
+        }
+      }
+    },
+    "io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,198 @@
+{
+  "access_class": "self_hosted",
+  "auth_profile": "mattermost_session",
+  "auth_profiles": {
+    "mattermost_session": {
+      "inject": [
+        {
+          "env": "MATTERMOST_TOKEN",
+          "in": "header",
+          "name": "Authorization",
+          "scheme": "Bearer"
+        }
+      ],
+      "kind": "env_static"
+    }
+  },
+  "base_url": "http://127.0.0.1:8065",
+  "fixture_expansions": {
+    "probe_requests": [
+      {
+        "method": "GET",
+        "path": "/api/v4/teams/{team_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v4/users/{user_id}/teams",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v4/teams/{team_id}/members",
+        "query": {
+          "page": "0",
+          "per_page": "10"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/v4/channels/{public_channel_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v4/channels/{private_channel_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v4/teams/{team_id}/channels",
+        "query": {
+          "page": "0",
+          "per_page": "10"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/v4/teams/{team_id}/channels/private",
+        "query": {
+          "page": "0",
+          "per_page": "10"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/v4/channels/{public_channel_id}/members",
+        "query": {
+          "page": "0",
+          "per_page": "10"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/v4/channels/{private_channel_id}/members",
+        "query": {
+          "page": "0",
+          "per_page": "10"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/v4/channels/{public_channel_id}/posts",
+        "query": {
+          "page": "0",
+          "per_page": "10"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/v4/posts/{root_post_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v4/posts/{root_post_id}/thread",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v4/posts/{root_post_id}/reactions",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v4/posts/{file_post_id}/files/info",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v4/files/{file_id}/info",
+        "query": {}
+      }
+    ]
+  },
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/api/v4/system/ping",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/config/client",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/license/client",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/users/me",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/users",
+      "query": {
+        "page": "0",
+        "per_page": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/users/username/dataloxprobe",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/teams",
+      "query": {
+        "page": "0",
+        "per_page": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/teams/name/dataloxprobe",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/teams/name/dataloxprobe/channels/name/probe-public",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/teams/name/dataloxprobe/channels/name/probe-private",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/teams/name/datalox-probe-missing-team",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/channels/datalox_probe_missing_channel",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/posts/datalox_probe_missing_post",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "mattermost",
+  "rate_budget": {
+    "max_requests": 13,
+    "min_interval_seconds": 0.05
+  },
+  "safe_read_prefixes": [
+    "/api/v4/"
+  ],
+  "tos_note": "Self-hosted Mattermost fixture. Seed direct local writes outside Datalox, export MATTERMOST_TOKEN from the generated fixture env file, then Datalox captures configured GET reads only. Run scripts/fixtures/mattermost_fixture.py render-probe to expand ID-specific team/channel/post/reaction/file reads from the seed manifest."
+}

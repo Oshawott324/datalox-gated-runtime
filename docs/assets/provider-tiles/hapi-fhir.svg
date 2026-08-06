@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Neutral HAPI FHIR healthcare identity tile</title>
+  <rect width="64" height="64" rx="14" fill="#0f766e"/>
+  <path d="M32 51S12 40 12 24c0-7 5-12 12-12 4 0 7 2 8 5 2-3 5-5 9-5 7 0 11 5 11 12 0 16-20 27-20 27z" fill="#fff"/>
+  <path d="M29 22h6v7h7v6h-7v7h-6v-7h-7v-6h7z" fill="#14b8a6"/>
+</svg>

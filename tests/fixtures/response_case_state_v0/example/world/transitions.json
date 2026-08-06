@@ -1,0 +1,86 @@
+{
+  "operations": [
+    {
+      "disposition": "mutate",
+      "effects": [
+        {
+          "operator": "set_from_request",
+          "request_pointer": "/assignee",
+          "state_key": "incident",
+          "target": "/data/assignee"
+        }
+      ],
+      "operation_id": "assign_incident"
+    },
+    {
+      "disposition": "mutate",
+      "effects": [
+        {
+          "operator": "append_from_request",
+          "request_pointer": "/note",
+          "state_key": "incident",
+          "target": "/data/notes"
+        }
+      ],
+      "operation_id": "add_note"
+    },
+    {
+      "disposition": "mutate",
+      "effects": [
+        {
+          "operator": "set_literal",
+          "state_key": "customer_ticket",
+          "target": "/ticket/evidence/fresh",
+          "value": true
+        }
+      ],
+      "operation_id": "mark_evidence_fresh"
+    },
+    {
+      "disposition": "mutate",
+      "effects": [
+        {
+          "operator": "copy_state",
+          "source_pointer": "/data/assignee",
+          "source_state_key": "incident",
+          "state_key": "customer_ticket",
+          "target": "/ticket/owner"
+        }
+      ],
+      "operation_id": "copy_assignee"
+    },
+    {
+      "disposition": "mutate",
+      "effects": [
+        {
+          "operator": "set_literal",
+          "state_key": "incident",
+          "target": "/data/status",
+          "value": "mutated-before-error"
+        },
+        {
+          "operator": "set_from_request",
+          "request_pointer": "/assignee",
+          "state_key": "incident",
+          "target": "/data/assignee"
+        }
+      ],
+      "operation_id": "atomic_failure"
+    },
+    {
+      "disposition": "deny",
+      "effects": [],
+      "message": "External customer sends are denied in v0.",
+      "operation_id": "send_customer_draft",
+      "reason_code": "external_send_denied"
+    },
+    {
+      "disposition": "deny",
+      "effects": [],
+      "message": "Incident resolution is denied in v0.",
+      "operation_id": "resolve_incident",
+      "reason_code": "incident_resolve_denied"
+    }
+  ],
+  "version": "response_case_transitions_v0"
+}

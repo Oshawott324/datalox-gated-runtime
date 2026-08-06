@@ -1,0 +1,15 @@
+{
+  "schema_version": "api_gym.api_source_pack.v0",
+  "source_pack_id": "api.fixture_provider.2026-07-07",
+  "provider": "fixture_provider",
+  "version": "2026-07-07",
+  "status": "normalized",
+  "records": {
+    "operations": "operations.jsonl",
+    "response_cases": "response_cases.jsonl"
+  },
+  "live_execution": {
+    "allowed": false,
+    "reason": "Fixture pack for importer tests."
+  }
+}

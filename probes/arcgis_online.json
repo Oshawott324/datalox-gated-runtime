@@ -1,0 +1,100 @@
+{
+  "access_class": "open_public",
+  "auth_env": null,
+  "base_url": "https://www.arcgis.com",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/sharing/rest/search",
+      "query": {
+        "f": "pjson",
+        "num": "2",
+        "q": "id:baaf896d846146c1a4cb816e5aaf0cfe"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sharing/rest/search",
+      "query": {
+        "f": "pjson",
+        "num": "2",
+        "q": "type:\"Feature Service\" AND tags:hunting",
+        "sortField": "modified",
+        "sortOrder": "desc",
+        "start": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sharing/rest/search",
+      "query": {
+        "f": "pjson",
+        "num": "2",
+        "q": "type:\"Feature Service\" AND tags:hunting",
+        "sortField": "modified",
+        "sortOrder": "desc",
+        "start": "3"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sharing/rest/search",
+      "query": {
+        "bbox": "-125,24,-66,50",
+        "f": "pjson",
+        "num": "2",
+        "q": "type:\"Feature Service\" AND access:public"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sharing/rest/content/items/baaf896d846146c1a4cb816e5aaf0cfe",
+      "query": {
+        "f": "pjson"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sharing/rest/content/items/194f655317a34ab7b4d185782010f4ce",
+      "query": {
+        "f": "pjson"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sharing/rest/content/items/baaf896d846146c1a4cb816e5aaf0cfe/data",
+      "query": {
+        "f": "pjson"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sharing/rest/content/items/194f655317a34ab7b4d185782010f4ce/data",
+      "query": {
+        "f": "pjson"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sharing/rest/content/items/datalox-missing-item",
+      "query": {
+        "f": "pjson"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "arcgis_online",
+  "rate_budget": {
+    "max_requests": 9,
+    "min_interval_seconds": 0.5
+  },
+  "safe_read_prefixes": [
+    "/sharing/rest/search",
+    "/sharing/rest/content/items/"
+  ],
+  "static_headers": {
+    "Accept": "application/json",
+    "User-Agent": "datalox-gated-runtime-arcgis-public-probe/1.0 (https://github.com/Oshawott324/datalox-gated-runtime)"
+  },
+  "tos_note": "Credential-free, low-rate, GET-only capture of public ArcGIS Online sharing API content search and item resources. Only public items are requested; no user, organization, token, premium-content, or mutation surfaces are accessed."
+}

@@ -1,0 +1,22 @@
+{
+  "access_class": "open_public",
+  "auth_env": null,
+  "base_url": "https://models.rcsb.org",
+  "probe_requests": [
+    {"method": "GET", "path": "/v1/1crn/full", "query": {"encoding": "cif"}},
+    {"method": "GET", "path": "/v1/1crn/assembly", "query": {"encoding": "cif", "name": "1"}},
+    {"method": "GET", "path": "/v1/1crn/atoms", "query": {"encoding": "cif", "label_asym_id": "A", "label_seq_id": "1"}},
+    {"method": "GET", "path": "/v1/1crn/residueSurroundings", "query": {"encoding": "cif", "label_asym_id": "A", "label_seq_id": "1", "radius": "3"}},
+    {"method": "GET", "path": "/v1/4hhb/ligand", "query": {"encoding": "sdf", "label_comp_id": "HEM"}},
+    {"method": "GET", "path": "/v1/xxxx/full", "query": {"encoding": "cif"}}
+  ],
+  "probe_status": "allowed",
+  "provider_id": "rcsb_pdb_modelserver",
+  "rate_budget": {"max_requests": 6, "min_interval_seconds": 0.5},
+  "safe_read_prefixes": ["/v1/"],
+  "static_headers": {
+    "Accept": "text/plain",
+    "User-Agent": "datalox-gated-runtime-rcsb-pdb-modelserver-probe/1.0 (https://github.com/Oshawott324/datalox-gated-runtime)"
+  },
+  "tos_note": "Official RCSB PDB production ModelServer; deliberate low-rate credential-free GET probes requesting bounded text CIF/SDF coordinate subsets only."
+}

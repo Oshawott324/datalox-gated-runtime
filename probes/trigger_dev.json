@@ -1,0 +1,229 @@
+{
+  "access_class": "approval_gated",
+  "auth_profile": "trigger_dev_environment",
+  "auth_profiles": {
+    "trigger_dev_environment": {
+      "inject": [
+        {
+          "env": "TRIGGER_SECRET_KEY",
+          "in": "header",
+          "name": "Authorization",
+          "scheme": "Bearer"
+        }
+      ],
+      "kind": "env_static"
+    },
+    "trigger_dev_pat": {
+      "inject": [
+        {
+          "env": "TRIGGER_ACCESS_TOKEN",
+          "in": "header",
+          "name": "Authorization",
+          "scheme": "Bearer"
+        }
+      ],
+      "kind": "env_static"
+    }
+  },
+  "base_url": "https://api.trigger.dev",
+  "fixture_expansions": {
+    "probe_requests": [
+      {
+        "method": "GET",
+        "path": "/api/v3/runs/{run_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/runs/{run_id}/events",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/runs/{run_id}/result",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/runs/{run_id}/trace",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/batches/{batch_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/batches/{batch_id}/results",
+        "query": {
+          "page": "1",
+          "perPage": "20"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/deployments/{deployment_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/errors/{error_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/queues/{queue_param}",
+        "query": {
+          "type": "id"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/schedules/{schedule_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/sessions/{session_id}",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/waitpoints/tokens/{waitpoint_id}",
+        "query": {}
+      }
+    ]
+  },
+  "pat_capture": {
+    "probe_requests": [
+      {
+        "method": "GET",
+        "path": "/api/v1/projects/{project_ref}/envvars/dev",
+        "query": {}
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/projects/{project_ref}/envvars/dev/{envvar_name}",
+        "query": {}
+      }
+    ],
+    "safe_read_prefixes": [
+      "/api/v1/projects"
+    ]
+  },
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/api/v1/runs",
+      "query": {
+        "page[size]": "20"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runs",
+      "query": {
+        "filter[createdAt][period]": "1d",
+        "filter[status]": "COMPLETED",
+        "filter[taskIdentifier]": "datalox-trigger-dev-probe",
+        "page[size]": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/deployments",
+      "query": {
+        "page": "1",
+        "perPage": "20"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/deployments/latest",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/errors",
+      "query": {
+        "page": "1",
+        "perPage": "20"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/query/dashboards",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/query/schema",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/queues",
+      "query": {
+        "page": "1",
+        "perPage": "20"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/schedules",
+      "query": {
+        "page": "1",
+        "perPage": "20"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/timezones",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sessions",
+      "query": {
+        "page[size]": "20"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/waitpoints/tokens",
+      "query": {
+        "page[size]": "20"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/waitpoints/tokens",
+      "query": {
+        "filter[createdAt][period]": "1d",
+        "filter[status]": "COMPLETED",
+        "page[size]": "10"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "trigger_dev",
+  "rate_budget": {
+    "max_requests": 13,
+    "min_interval_seconds": 0.5
+  },
+  "safe_read_prefixes": [
+    "/api/v1/batches",
+    "/api/v1/deployments",
+    "/api/v1/errors",
+    "/api/v1/query",
+    "/api/v1/queues",
+    "/api/v1/runs",
+    "/api/v3/runs",
+    "/api/v1/schedules",
+    "/api/v1/sessions",
+    "/api/v1/timezones",
+    "/api/v1/waitpoints/tokens"
+  ],
+  "tos_note": "Trigger.dev cloud developer-environment template. Render it with scripts/providers/trigger-dev-local.sh. Datalox captures only documented Management API GETs. Environment-secret and PAT-scoped reads are captured separately because Trigger.dev environment secrets and PATs have different documented permissions."
+}

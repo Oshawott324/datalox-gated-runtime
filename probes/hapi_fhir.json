@@ -1,0 +1,147 @@
+{
+  "access_class": "open_public",
+  "auth_env": null,
+  "base_url": "https://hapi.fhir.org/baseR4",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/metadata",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/Patient",
+      "query": {
+        "_count": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Observation",
+      "query": {
+        "_count": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Encounter",
+      "query": {
+        "_count": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Condition",
+      "query": {
+        "_count": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/DiagnosticReport",
+      "query": {
+        "_count": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ServiceRequest",
+      "query": {
+        "_count": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/MedicationRequest",
+      "query": {
+        "_count": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Procedure",
+      "query": {
+        "_count": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Practitioner",
+      "query": {
+        "_count": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Organization",
+      "query": {
+        "_count": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Location",
+      "query": {
+        "_count": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Specimen",
+      "query": {
+        "_count": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ValueSet",
+      "query": {
+        "_count": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/CodeSystem",
+      "query": {
+        "_count": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/StructureDefinition",
+      "query": {
+        "_count": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Patient/datalox-probe-missing-patient",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "hapi_fhir",
+  "rate_budget": {
+    "max_requests": 17,
+    "min_interval_seconds": 1.0
+  },
+  "safe_read_prefixes": [
+    "/metadata",
+    "/Patient",
+    "/Observation",
+    "/Encounter",
+    "/Condition",
+    "/DiagnosticReport",
+    "/ServiceRequest",
+    "/MedicationRequest",
+    "/Procedure",
+    "/Practitioner",
+    "/Organization",
+    "/Location",
+    "/Specimen",
+    "/ValueSet",
+    "/CodeSystem",
+    "/StructureDefinition"
+  ],
+  "tos_note": "Open public HAPI FHIR R4 test server; low-rate read-only probing."
+}

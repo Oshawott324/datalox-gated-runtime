@@ -1,0 +1,9 @@
+{"id":"operation:list_items","source_pack_id":"api.fixture_provider.2026-07-07","operation_id":"list_items","method":"GET","path":"/v1/items","summary":"List items","source_refs":[{"kind":"docs","url":"https://example.test/items"}]}
+{"id":"operation:get_me","source_pack_id":"api.fixture_provider.2026-07-07","operation_id":"get_me","method":"GET","path":"https://api.example.test/v1/me","summary":"Get current user","source_refs":[{"kind":"docs","url":"https://example.test/me"}]}
+{"id":"operation:get_item","source_pack_id":"api.fixture_provider.2026-07-07","operation_id":"get_item","method":"GET","path":"/v1/items/{item_id}","summary":"Get item","source_refs":[{"kind":"docs","url":"https://example.test/item"}]}
+{"id":"operation:create_item","source_pack_id":"api.fixture_provider.2026-07-07","operation_id":"create_item","method":"POST","path":"/v1/items","summary":"Create item","source_refs":[{"kind":"docs","url":"https://example.test/create"}]}
+{"id":"operation:bad_status","source_pack_id":"api.fixture_provider.2026-07-07","operation_id":"bad_status","method":"GET","path":"/v1/bad-status","summary":"Bad status","source_refs":[]}
+{"id":"operation:duplicate","source_pack_id":"api.fixture_provider.2026-07-07","operation_id":"duplicate","method":"GET","path":"/v1/duplicate","summary":"Duplicate","source_refs":[]}
+{"id":"operation:no_body","source_pack_id":"api.fixture_provider.2026-07-07","operation_id":"no_body","method":"GET","path":"/v1/no-body","summary":"No body","source_refs":[]}
+{"id":"operation:excerpt","source_pack_id":"api.fixture_provider.2026-07-07","operation_id":"excerpt","method":"GET","path":"/v1/excerpt","summary":"Excerpt","source_refs":[]}
+{"id":"operation:error_case","source_pack_id":"api.fixture_provider.2026-07-07","operation_id":"error_case","method":"GET","path":"/v1/error","summary":"Error","source_refs":[]}

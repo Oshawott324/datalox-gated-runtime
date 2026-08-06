@@ -1,0 +1,19 @@
+{
+  "audit_rules": [],
+  "config_id": "response_case_state_fixture",
+  "mcp": {
+    "tools": {}
+  },
+  "response_cases": [],
+  "world": {
+    "episodes": "world/episodes.jsonl",
+    "kind": "response_case_state_v0",
+    "routes": "world/routes.json",
+    "seed": 0,
+    "sources": "world/sources.json",
+    "state_db": "state.sqlite",
+    "tool_catalog": "world/tool_catalog.json",
+    "transitions": "world/transitions.json",
+    "verifier": "world/verifier.json"
+  }
+}

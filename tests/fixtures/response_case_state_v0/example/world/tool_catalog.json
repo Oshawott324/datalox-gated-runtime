@@ -1,0 +1,132 @@
+{
+  "tools": [
+    {
+      "description": "Read incident state.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "incident_id"
+        ],
+        "type": "object"
+      },
+      "name": "world.get_incident",
+      "operation_id": "get_incident"
+    },
+    {
+      "description": "Assign the incident.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "assignee": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "incident_id",
+          "assignee"
+        ],
+        "type": "object"
+      },
+      "name": "world.assign_incident",
+      "operation_id": "assign_incident"
+    },
+    {
+      "description": "Add an incident note.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "incident_id",
+          "note"
+        ],
+        "type": "object"
+      },
+      "name": "world.add_note",
+      "operation_id": "add_note"
+    },
+    {
+      "description": "Mark evidence fresh.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ],
+        "type": "object"
+      },
+      "name": "world.mark_evidence_fresh",
+      "operation_id": "mark_evidence_fresh"
+    },
+    {
+      "description": "Copy the incident assignee to the customer ticket owner.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ],
+        "type": "object"
+      },
+      "name": "world.copy_assignee",
+      "operation_id": "copy_assignee"
+    },
+    {
+      "description": "Attempt to send the customer draft.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ],
+        "type": "object"
+      },
+      "name": "world.send_customer_draft",
+      "operation_id": "send_customer_draft"
+    },
+    {
+      "description": "Attempt to resolve the incident.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "incident_id"
+        ],
+        "type": "object"
+      },
+      "name": "world.resolve_incident",
+      "operation_id": "resolve_incident"
+    }
+  ],
+  "version": "response_case_tool_catalog_v0"
+}

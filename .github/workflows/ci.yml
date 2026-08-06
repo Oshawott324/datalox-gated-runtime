@@ -1,0 +1,163 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  UV_VERSION: "0.12.1"
+
+jobs:
+  quality:
+    name: quality and release boundary
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.12"
+      - name: Install locked toolchain
+        run: |
+          python -m pip install --disable-pip-version-check "uv==$UV_VERSION"
+          uv sync --frozen --extra dev
+      - name: Lockfile is current
+        run: uv lock --check
+      - name: Lint
+        run: uv run ruff check . --select E4,E7,E9,F
+      - name: Public data boundary
+        run: uv run python scripts/public_release.py check
+      - name: Credential-free world proof
+        run: uv run python scripts/demo/offline-world-smoke.py
+
+  tests:
+    name: tests (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      UV_PROJECT_ENVIRONMENT: ${{ github.workspace }}/.tmp/public-venv-${{ matrix.python }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Build exact public tree
+        run: |
+          python -m pip install --disable-pip-version-check "uv==$UV_VERSION"
+          python scripts/public_release.py build --out .tmp/public-source
+      - name: Install locked public environment
+        working-directory: .tmp/public-source
+        run: uv sync --frozen --extra dev --python "${{ matrix.python }}"
+      - name: Test
+        working-directory: .tmp/public-source
+        run: uv run --python "${{ matrix.python }}" pytest -q
+
+  public-source:
+    name: exact public source
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.12"
+      - name: Install locked environment
+        run: |
+          python -m pip install --disable-pip-version-check "uv==$UV_VERSION"
+          uv sync --frozen --extra dev
+      - name: Build exact public tree
+        run: uv run python scripts/public_release.py build --out .tmp/public-source
+      - name: Verify exact public tree
+        run: uv run python scripts/public_release.py verify-built --source .tmp/public-source
+      - name: Archive public source
+        run: tar -C .tmp -czf datalox-public-source.tar.gz public-source
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: public-source
+          path: datalox-public-source.tar.gz
+          archive: false
+
+  package-smoke:
+    name: package smoke (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.12"
+      - name: Build wheel and source distribution
+        run: |
+          python -m pip install --disable-pip-version-check "uv==$UV_VERSION"
+          uv build
+      - name: Install wheel into runner environment
+        run: python -m pip install --disable-pip-version-check dist/*.whl
+      - name: CLI smoke
+        run: datalox-gate --help
+      - name: Offline world smoke
+        run: python scripts/demo/offline-world-smoke.py
+
+  security:
+    name: secrets and dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.12"
+      - name: Install locked environment
+        run: |
+          python -m pip install --disable-pip-version-check "uv==$UV_VERSION"
+          uv sync --frozen --extra dev
+      - name: Audit locked runtime dependencies
+        run: |
+          uv export --frozen --no-dev --no-emit-project --format requirements-txt --output-file .tmp/runtime-requirements.txt
+          uv run pip-audit --requirement .tmp/runtime-requirements.txt --disable-pip
+      - name: Install Gitleaks 8.30.1
+        run: |
+          curl --fail --location --retry 3 --output /tmp/gitleaks.tar.gz \
+            https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz
+          echo "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  /tmp/gitleaks.tar.gz" | sha256sum --check
+          tar -xzf /tmp/gitleaks.tar.gz -C /tmp gitleaks
+      - name: Scan complete Git history
+        run: |
+          if [[ -f PUBLIC_SOURCE_MANIFEST.json ]]; then
+            /tmp/gitleaks git --redact=100 --config .gitleaks.toml --no-banner
+          else
+            uv run python scripts/public_release.py build --out .tmp/public-source-secret-scan
+            /tmp/gitleaks dir --redact=100 --config .gitleaks.toml --no-banner .tmp/public-source-secret-scan
+          fi

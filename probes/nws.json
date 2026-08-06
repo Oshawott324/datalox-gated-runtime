@@ -1,0 +1,132 @@
+{
+  "access_class": "open_public",
+  "auth_env": null,
+  "base_url": "https://api.weather.gov",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/glossary",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/points/38.8894,-77.0352",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/gridpoints/LWX/96,70",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/gridpoints/LWX/96,70/forecast",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/gridpoints/LWX/96,70/forecast/hourly",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/gridpoints/LWX/96,70/stations",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/stations/KDCA",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/stations/KDCA/observations/latest",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/stations/KDCA/observations",
+      "query": {
+        "limit": "1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/alerts/types",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/alerts/active/count",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/alerts/active",
+      "query": {
+        "zone": "DCZ001"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/alerts/active",
+      "query": {
+        "unsupported": "datalox"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/offices/LWX",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/zones/forecast/DCZ001",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/zones/forecast/DCZ001/forecast",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/products/types",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/products/types/AFD/locations/LWX",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/radar/stations/KLWX",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "nws",
+  "rate_budget": {
+    "max_requests": 19,
+    "min_interval_seconds": 1.0
+  },
+  "safe_read_prefixes": [
+    "/glossary",
+    "/points/38.8894,-77.0352",
+    "/gridpoints/LWX/96,70",
+    "/stations/KDCA",
+    "/alerts/types",
+    "/alerts/active/count",
+    "/alerts/active",
+    "/offices/LWX",
+    "/zones/forecast/DCZ001",
+    "/products/types",
+    "/radar/stations/KLWX"
+  ],
+  "static_headers": {
+    "Accept": "application/geo+json, application/ld+json, application/json",
+    "User-Agent": "datalox-gated-runtime-nws-probe/1.0 (https://github.com/Oshawott324/datalox-gated-runtime)"
+  },
+  "tos_note": "Official api.weather.gov production service; public open weather data via low-rate, credential-free, GET-only requests with a descriptive non-secret User-Agent as required by NWS. NWS documentation says this identification mechanism may be replaced by an API key in the future."
+}

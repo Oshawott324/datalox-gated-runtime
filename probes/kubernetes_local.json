@@ -1,0 +1,33 @@
+{
+  "access_class": "self_hosted",
+  "auth_env": null,
+  "base_url": "http://127.0.0.1:8001",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/api/v1/namespaces",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/pods",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/apis/apps/v1/deployments",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "kubernetes_local",
+  "rate_budget": {
+    "max_requests": 3,
+    "min_interval_seconds": 1.0
+  },
+  "safe_read_prefixes": [
+    "/api/",
+    "/apis/"
+  ],
+  "tos_note": "Self-hosted Kubernetes API via local kubectl proxy at 127.0.0.1:8001."
+}

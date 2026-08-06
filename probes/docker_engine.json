@@ -1,0 +1,115 @@
+{
+  "access_class": "self_hosted",
+  "auth_env": null,
+  "base_url": "http://127.0.0.1:2375",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/_ping",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/version",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/info",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/system/df",
+      "query": {
+        "verbose": "false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/containers/json",
+      "query": {
+        "all": "true",
+        "limit": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/containers/datalox_probe_missing_container/json",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/containers/datalox_probe_missing_container/logs",
+      "query": {
+        "stderr": "true",
+        "stdout": "true",
+        "tail": "20",
+        "timestamps": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/containers/datalox_probe_missing_container/stats",
+      "query": {
+        "one-shot": "true",
+        "stream": "false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/images/json",
+      "query": {
+        "all": "true"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/images/datalox_probe_missing_image/json",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/networks",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/networks/datalox_probe_missing_network",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/volumes",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/volumes/datalox_probe_missing_volume",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/swarm",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "docker_engine",
+  "rate_budget": {
+    "max_requests": 15,
+    "min_interval_seconds": 0.5
+  },
+  "safe_read_prefixes": [
+    "/_ping",
+    "/version",
+    "/info",
+    "/system/df",
+    "/containers",
+    "/images",
+    "/networks",
+    "/volumes",
+    "/swarm"
+  ],
+  "tos_note": "Self-hosted Docker Engine over a fixture-owned TCP socket proxy or isolated daemon only; the normal host Docker socket is host-powerful and must not be the default probe target."
+}

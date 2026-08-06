@@ -1,0 +1,415 @@
+{
+  "access_class": "self_hosted",
+  "auth_env": null,
+  "base_url": "http://127.0.0.1:31950",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/accessControl/settings",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/calibration/pipette_offset",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/calibration/status",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/calibration/tip_length",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/camera",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/camera/cameraSettings/datalox_probe_missing_camera",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/camera/stream/settings",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/clientData/datalox_probe_missing_key",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/commands",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/commands/datalox_probe_missing_command",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/dataFiles",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/dataFiles/datalox_probe_missing_data_file",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/dataFiles/datalox_probe_missing_run/all",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/dataFiles/datalox_probe_missing_run/images",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/deck_configuration",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/errorRecovery/settings",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/instruments",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/labware/calibrations",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/labware/calibrations/datalox_probe_missing_calibration",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/labwareOffsets",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/maintenance_runs/current_run",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/maintenance_runs/datalox_probe_missing_run",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/maintenance_runs/datalox_probe_missing_run/commands",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/maintenance_runs/datalox_probe_missing_run/commands/datalox_probe_missing_command",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/modules",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/motors/engaged",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/networking/status",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/pipettes",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/protocols",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/protocols/ids",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/protocols/datalox_probe_missing_protocol",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/protocols/datalox_probe_missing_protocol/analyses",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/protocols/datalox_probe_missing_protocol/analyses/datalox_probe_missing_analysis",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/protocols/datalox_probe_missing_protocol/dataFiles",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/robot/control/estopStatus",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/robot/door/status",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/robot/lights",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/robot/positions",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/runs",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/runs/datalox_probe_missing_run",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/runs/datalox_probe_missing_run/cameraSettings/datalox_probe_missing_camera",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/runs/datalox_probe_missing_run/commandAnnotations",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/runs/datalox_probe_missing_run/commandAnnotations/datalox_probe_missing_annotation",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/runs/datalox_probe_missing_run/commandErrors",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/runs/datalox_probe_missing_run/commands",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/runs/datalox_probe_missing_run/commands/datalox_probe_missing_command",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/runs/datalox_probe_missing_run/commandsAsPreSerializedList",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/runs/datalox_probe_missing_run/currentState",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/runs/datalox_probe_missing_run/errorRecoveryPolicy",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/runs/datalox_probe_missing_run/loaded_labware_definitions",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/sessions",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/sessions/datalox_probe_missing_session",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/settings",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/settings/pipettes",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/settings/pipettes/datalox_probe_missing_pipette",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/settings/reset/options",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/settings/robot",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/subsystems/status",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/subsystems/status/datalox_probe_missing_subsystem",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/subsystems/updates/all",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/subsystems/updates/all/datalox_probe_missing_update",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/subsystems/updates/current",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/subsystems/updates/current/datalox_probe_missing_subsystem",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/system/time",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/wifi/eap-options",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "opentrons_local",
+  "rate_budget": {
+    "max_requests": 66,
+    "min_interval_seconds": 0.1
+  },
+  "safe_read_prefixes": [
+    "/accessControl/settings",
+    "/calibration/pipette_offset",
+    "/calibration/status",
+    "/calibration/tip_length",
+    "/camera",
+    "/camera/cameraSettings/datalox_probe_missing_camera",
+    "/camera/stream/settings",
+    "/clientData/datalox_probe_missing_key",
+    "/commands",
+    "/commands/datalox_probe_missing_command",
+    "/dataFiles",
+    "/dataFiles/datalox_probe_missing_data_file",
+    "/dataFiles/datalox_probe_missing_run/all",
+    "/dataFiles/datalox_probe_missing_run/images",
+    "/deck_configuration",
+    "/errorRecovery/settings",
+    "/health",
+    "/instruments",
+    "/labware/calibrations",
+    "/labware/calibrations/datalox_probe_missing_calibration",
+    "/labwareOffsets",
+    "/maintenance_runs/current_run",
+    "/maintenance_runs/datalox_probe_missing_run",
+    "/maintenance_runs/datalox_probe_missing_run/commands",
+    "/maintenance_runs/datalox_probe_missing_run/commands/datalox_probe_missing_command",
+    "/modules",
+    "/motors/engaged",
+    "/networking/status",
+    "/pipettes",
+    "/protocols",
+    "/protocols/ids",
+    "/protocols/datalox_probe_missing_protocol",
+    "/protocols/datalox_probe_missing_protocol/analyses",
+    "/protocols/datalox_probe_missing_protocol/analyses/datalox_probe_missing_analysis",
+    "/protocols/datalox_probe_missing_protocol/dataFiles",
+    "/robot/control/estopStatus",
+    "/robot/door/status",
+    "/robot/lights",
+    "/robot/positions",
+    "/runs",
+    "/runs/datalox_probe_missing_run",
+    "/runs/datalox_probe_missing_run/cameraSettings/datalox_probe_missing_camera",
+    "/runs/datalox_probe_missing_run/commandAnnotations",
+    "/runs/datalox_probe_missing_run/commandAnnotations/datalox_probe_missing_annotation",
+    "/runs/datalox_probe_missing_run/commandErrors",
+    "/runs/datalox_probe_missing_run/commands",
+    "/runs/datalox_probe_missing_run/commands/datalox_probe_missing_command",
+    "/runs/datalox_probe_missing_run/commandsAsPreSerializedList",
+    "/runs/datalox_probe_missing_run/currentState",
+    "/runs/datalox_probe_missing_run/errorRecoveryPolicy",
+    "/runs/datalox_probe_missing_run/loaded_labware_definitions",
+    "/sessions",
+    "/sessions/datalox_probe_missing_session",
+    "/settings",
+    "/settings/pipettes",
+    "/settings/pipettes/datalox_probe_missing_pipette",
+    "/settings/reset/options",
+    "/settings/robot",
+    "/subsystems/status",
+    "/subsystems/status/datalox_probe_missing_subsystem",
+    "/subsystems/updates/all",
+    "/subsystems/updates/all/datalox_probe_missing_update",
+    "/subsystems/updates/current",
+    "/subsystems/updates/current/datalox_probe_missing_subsystem",
+    "/system/time",
+    "/wifi/eap-options"
+  ],
+  "static_headers": {
+    "opentrons-version": "*"
+  },
+  "tos_note": "Self-hosted Opentrons robot-server/emulator expected on localhost."
+}

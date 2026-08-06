@@ -1,0 +1,30 @@
+{
+  "access_class": "approval_gated",
+  "auth_env": "BENCHLING_API_KEY",
+  "auth_header": "Authorization",
+  "auth_scheme": "Bearer",
+  "base_url": "https://benchling.com/api/v2",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/users",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/projects",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "benchling",
+  "rate_budget": {
+    "max_requests": 2,
+    "min_interval_seconds": 1.0
+  },
+  "safe_read_prefixes": [
+    "/users",
+    "/projects"
+  ],
+  "tos_note": "Tenant/API key required; approval-gated lab R&D provider."
+}

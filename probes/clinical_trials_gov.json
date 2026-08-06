@@ -1,0 +1,141 @@
+{
+  "access_class": "open_public",
+  "auth_env": null,
+  "base_url": "https://clinicaltrials.gov",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/api/v2/version",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/studies/metadata",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/studies/search-areas",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/studies/NCT04280705",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/studies/NCT04777396",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/studies/NCT99999999",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/studies",
+      "query": {
+        "countTotal": "true",
+        "format": "json",
+        "pageSize": "2",
+        "query.cond": "Breast Cancer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/studies",
+      "query": {
+        "countTotal": "true",
+        "format": "json",
+        "pageSize": "2",
+        "query.intr": "Semaglutide"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/studies",
+      "query": {
+        "countTotal": "true",
+        "format": "json",
+        "pageSize": "2",
+        "query.locn": "Boston Massachusetts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/studies",
+      "query": {
+        "countTotal": "true",
+        "format": "json",
+        "pageSize": "2",
+        "query.spons": "National Cancer Institute"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/studies",
+      "query": {
+        "countTotal": "true",
+        "filter.overallStatus": "RECRUITING",
+        "format": "json",
+        "pageSize": "2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/studies",
+      "query": {
+        "countTotal": "true",
+        "fields": "NCTId,BriefTitle,OverallStatus,Condition,InterventionName,LocationCity,LocationCountry",
+        "format": "json",
+        "pageSize": "2",
+        "query.term": "AREA[ConditionSearch]Alzheimer Disease AND AREA[InterventionName]Semaglutide"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/stats/field/values",
+      "query": {
+        "fields": "OverallStatus"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/stats/field/values",
+      "query": {
+        "fields": "Phase"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/stats/field/values",
+      "query": {
+        "fields": "StudyType"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/stats/field/sizes",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "clinical_trials_gov",
+  "rate_budget": {
+    "max_requests": 16,
+    "min_interval_seconds": 0.5
+  },
+  "safe_read_prefixes": [
+    "/api/v2/version",
+    "/api/v2/studies",
+    "/api/v2/stats/field/values",
+    "/api/v2/stats/field/sizes"
+  ],
+  "static_headers": {
+    "Accept": "application/json",
+    "User-Agent": "datalox-gated-runtime-clinical-trials-probe/1.0"
+  },
+  "tos_note": "Official ClinicalTrials.gov API v2 operated by the U.S. National Library of Medicine; low-rate, credential-free, GET-only access to public study records, API metadata, search metadata, and aggregate field statistics."
+}

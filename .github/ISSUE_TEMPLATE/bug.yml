@@ -1,0 +1,36 @@
+name: Bug report
+description: Report a reproducible runtime or contract defect.
+title: "[bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include credentials, tenant identifiers, provider bodies, or private run exports.
+  - type: input
+    id: version
+    attributes:
+      label: Datalox version
+      placeholder: v0.1.0 or commit SHA
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: Python 3.12, macOS 15
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal sanitized reproduction
+      description: Include the command, structured error code, expected behavior, and actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: security
+    attributes:
+      label: Security check
+      description: Confirm that this is not a vulnerability or sensitive-data report. Use Security → Report a vulnerability for those.
+    validations:
+      required: true

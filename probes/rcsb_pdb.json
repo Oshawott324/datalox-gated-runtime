@@ -1,0 +1,57 @@
+{
+  "access_class": "open_public",
+  "auth_env": null,
+  "base_url": "https://data.rcsb.org",
+  "probe_requests": [
+    {"method": "GET", "path": "/rest/v1/core/entry/4HHB", "query": {}},
+    {"method": "GET", "path": "/rest/v1/core/entry/1CRN", "query": {}},
+    {"method": "GET", "path": "/rest/v1/core/assembly/4HHB/1", "query": {}},
+    {"method": "GET", "path": "/rest/v1/core/polymer_entity/4HHB/1", "query": {}},
+    {"method": "GET", "path": "/rest/v1/core/polymer_entity_instance/4HHB/A", "query": {}},
+    {"method": "GET", "path": "/rest/v1/core/nonpolymer_entity/4G22/2", "query": {}},
+    {"method": "GET", "path": "/rest/v1/core/nonpolymer_entity_instance/2FBW/J", "query": {}},
+    {"method": "GET", "path": "/rest/v1/core/branched_entity/4CYG/2", "query": {}},
+    {"method": "GET", "path": "/rest/v1/core/branched_entity_instance/1US2/C", "query": {}},
+    {"method": "GET", "path": "/rest/v1/core/chemcomp/HEM", "query": {}},
+    {"method": "GET", "path": "/rest/v1/core/uniprot/4G22/1", "query": {}},
+    {"method": "GET", "path": "/rest/v1/core/pubmed/4HHB", "query": {}},
+    {"method": "GET", "path": "/rest/v1/core/drugbank/CFF", "query": {}},
+    {"method": "GET", "path": "/rest/v1/holdings/status", "query": {"ids": "4HHB,1CRN"}},
+    {"method": "GET", "path": "/rest/v1/holdings/status/4HHB", "query": {}},
+    {
+      "method": "GET",
+      "path": "/graphql",
+      "query": {
+        "query": "{entry(entry_id:\"4HHB\"){rcsb_id exptl{method}}}"
+      }
+    },
+    {"method": "GET", "path": "/rest/v1/schema/entry", "query": {}},
+    {"method": "GET", "path": "/rest/v1/schema/chem_comp", "query": {}},
+    {"method": "GET", "path": "/rest/v1/core/entry/XXXX", "query": {}}
+  ],
+  "probe_status": "allowed",
+  "provider_id": "rcsb_pdb",
+  "rate_budget": {"max_requests": 19, "min_interval_seconds": 0.5},
+  "safe_read_prefixes": [
+    "/rest/v1/core/entry/",
+    "/rest/v1/core/assembly/",
+    "/rest/v1/core/polymer_entity/",
+    "/rest/v1/core/polymer_entity_instance/",
+    "/rest/v1/core/nonpolymer_entity/",
+    "/rest/v1/core/nonpolymer_entity_instance/",
+    "/rest/v1/core/branched_entity/",
+    "/rest/v1/core/branched_entity_instance/",
+    "/rest/v1/core/chemcomp/",
+    "/rest/v1/core/uniprot/",
+    "/rest/v1/core/pubmed/",
+    "/rest/v1/core/drugbank/",
+    "/rest/v1/holdings/status",
+    "/rest/v1/schema/",
+    "/graphql"
+  ],
+  "static_headers": {
+    "Accept": "application/json",
+    "User-Agent": "datalox-gated-runtime-rcsb-pdb-probe/1.0 (https://github.com/Oshawott324/datalox-gated-runtime)"
+  },
+  "tos_note": "Official RCSB PDB production Data API; deliberate low-rate credential-free GET probes only. Search API and Sequence Coordinates POST-only operations are excluded."
+}

@@ -1,0 +1,16 @@
+{
+  "audit_rules": [],
+  "config_id": "billing_support_world_v0",
+  "response_cases": [],
+  "world": {
+    "http_prefixes": [
+      "/support/",
+      "/billing/"
+    ],
+    "id": "billing_support_v0",
+    "scenario": "duplicate_payment_refund",
+    "seed": 1,
+    "state_db": "state.sqlite",
+    "verifier": "billing_support_v0"
+  }
+}

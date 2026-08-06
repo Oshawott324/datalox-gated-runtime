@@ -1,0 +1,180 @@
+{
+  "access_class": "open_public",
+  "auth_env": null,
+  "base_url": "https://services.arcgis.com",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_National_2021_2022_Hunt_Units/FeatureServer",
+      "query": {
+        "f": "pjson"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_National_2021_2022_Hunt_Units/FeatureServer/0",
+      "query": {
+        "f": "pjson"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_National_2021_2022_Hunt_Units/FeatureServer/1",
+      "query": {
+        "f": "pjson"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_National_2021_2022_Hunt_Units/FeatureServer/0/query",
+      "query": {
+        "f": "pjson",
+        "orderByFields": "OBJECTID ASC",
+        "outFields": "OBJECTID,FBMS_Cost_Center_Code,Hunt_Unit_Name,Acreage,Organization_Name",
+        "resultRecordCount": "2",
+        "returnGeometry": "false",
+        "where": "1=1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_National_2021_2022_Hunt_Units/FeatureServer/0/query",
+      "query": {
+        "f": "pjson",
+        "geometry": "-125,24,-66,50",
+        "geometryType": "esriGeometryEnvelope",
+        "inSR": "4326",
+        "orderByFields": "OBJECTID ASC",
+        "outFields": "OBJECTID,FBMS_Cost_Center_Code,Hunt_Unit_Name,Acreage,Organization_Name",
+        "resultRecordCount": "2",
+        "returnGeometry": "true",
+        "spatialRel": "esriSpatialRelIntersects",
+        "where": "1=1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_National_2021_2022_Hunt_Units/FeatureServer/0/query",
+      "query": {
+        "f": "pjson",
+        "returnCountOnly": "true",
+        "where": "1=1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_National_2021_2022_Hunt_Units/FeatureServer/0/query",
+      "query": {
+        "f": "pjson",
+        "returnIdsOnly": "true",
+        "where": "OBJECTID <= 5"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_National_2021_2022_Hunt_Units/FeatureServer/0/query",
+      "query": {
+        "f": "pjson",
+        "groupByFieldsForStatistics": "Organization_Type",
+        "orderByFields": "hunt_unit_count DESC",
+        "outStatistics": "[{\"statisticType\":\"count\",\"onStatisticField\":\"OBJECTID\",\"outStatisticFieldName\":\"hunt_unit_count\"}]",
+        "resultRecordCount": "5",
+        "returnGeometry": "false",
+        "where": "1=1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_National_2021_2022_Hunt_Units/FeatureServer/0/query",
+      "query": {
+        "f": "pjson",
+        "orderByFields": "OBJECTID ASC",
+        "outFields": "OBJECTID,FBMS_Cost_Center_Code,Hunt_Unit_Name,Acreage,Organization_Name",
+        "resultOffset": "0",
+        "resultRecordCount": "2",
+        "returnGeometry": "false",
+        "where": "1=1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_National_2021_2022_Hunt_Units/FeatureServer/0/query",
+      "query": {
+        "f": "pjson",
+        "orderByFields": "OBJECTID ASC",
+        "outFields": "OBJECTID,FBMS_Cost_Center_Code,Hunt_Unit_Name,Acreage,Organization_Name",
+        "resultOffset": "2",
+        "resultRecordCount": "2",
+        "returnGeometry": "false",
+        "where": "1=1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_National_2021_2022_Hunt_Units/FeatureServer/1/queryRelatedRecords",
+      "query": {
+        "f": "pjson",
+        "objectIds": "1",
+        "outFields": "OBJECTID,FBMS_Cost_Center_Code,Hunt_Unit_Name,Organization_Name",
+        "relationshipId": "0",
+        "returnGeometry": "false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_National_2021_2022_Hunt_Units/FeatureServer/1/queryRelatedRecords",
+      "query": {
+        "f": "pjson",
+        "objectIds": "999999999",
+        "outFields": "OBJECTID,FBMS_Cost_Center_Code,Hunt_Unit_Name,Organization_Name",
+        "relationshipId": "0",
+        "returnGeometry": "false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_National_2021_2022_Hunt_Units/FeatureServer/1/query",
+      "query": {
+        "f": "pjson",
+        "orderByFields": "OBJECTID ASC",
+        "outFields": "OBJECTID,CCCODE,State,HuntUnit",
+        "resultRecordCount": "2",
+        "returnGeometry": "false",
+        "where": "1=1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_National_2021_2022_Hunt_Units/FeatureServer/1/query",
+      "query": {
+        "f": "pjson",
+        "returnCountOnly": "true",
+        "where": "1=1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_National_2021_2022_Hunt_Units/FeatureServer/0/query",
+      "query": {
+        "f": "pjson",
+        "outFields": "DATALOX_NOT_A_FIELD",
+        "returnGeometry": "false",
+        "where": "1=1"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "arcgis_featureserver",
+  "rate_budget": {
+    "max_requests": 15,
+    "min_interval_seconds": 0.5
+  },
+  "safe_read_prefixes": [
+    "/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_National_2021_2022_Hunt_Units/FeatureServer"
+  ],
+  "static_headers": {
+    "Accept": "application/json",
+    "User-Agent": "datalox-gated-runtime-arcgis-public-probe/1.0 (https://github.com/Oshawott324/datalox-gated-runtime)"
+  },
+  "tos_note": "Credential-free, low-rate, GET-only capture of one public ArcGIS hosted FeatureServer and its public layer/table query surfaces. The gate never invokes editing, sync, extract, upload, replica, attachment mutation, or other write-capable operations even when the service metadata advertises them."
+}

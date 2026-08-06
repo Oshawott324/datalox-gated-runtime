@@ -1,0 +1,17 @@
+[
+  {
+    "method": "GET",
+    "path": "/v1/customers",
+    "surface": "http"
+  },
+  {
+    "method": "GET",
+    "path": "/commerce/orders",
+    "surface": "http"
+  },
+  {
+    "method": "GET",
+    "path": "/crm/v3/objects/tickets",
+    "surface": "http"
+  }
+]

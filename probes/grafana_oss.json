@@ -1,0 +1,59 @@
+{
+  "access_class": "self_hosted",
+  "auth_env": null,
+  "base_url": "http://127.0.0.1:3000",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/api/health",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/frontend/settings",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/search",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/datasources",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/folders",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/annotations",
+      "query": {
+        "limit": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/dashboards/uid/datalox_probe_missing_dashboard",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/api/alertmanager/grafana/api/v2/status",
+      "query": {}
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "grafana_oss",
+  "rate_budget": {
+    "max_requests": 8,
+    "min_interval_seconds": 0.05
+  },
+  "safe_read_prefixes": [
+    "/api/"
+  ],
+  "tos_note": "Self-hosted Grafana fixture with anonymous local read role. Dashboard, datasource, and alert mutations remain shadow-only."
+}

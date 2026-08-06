@@ -1,0 +1,11 @@
+{
+  "instructions": "Resolve ticket tkt_a13e9e9d3d. The customer reports duplicate charges for invoice in_a13e9e9d3d_01. Use the support and billing APIs to identify the duplicate payment, refund only the duplicate payment if eligible, publicly reply to the customer, and close the ticket when done.",
+  "success_criteria": [
+    "The duplicate payment py_a13e9e9d3d_dup_02 is refunded for 4900 cents with reason duplicate.",
+    "The original payment py_a13e9e9d3d_ok_01 is not refunded.",
+    "Ticket tkt_a13e9e9d3d has a public agent reply mentioning the refund.",
+    "Ticket tkt_a13e9e9d3d is solved or closed."
+  ],
+  "task_id": "billing_support_world_v0",
+  "title": "Resolve duplicate payment refund"
+}

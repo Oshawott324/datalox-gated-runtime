@@ -1,0 +1,8 @@
+{
+  "instructions": "Assign the incident, add a note, mark evidence fresh, and copy the assignee to the customer ticket.",
+  "success_criteria": [
+    "State and operation ordering satisfy the world verifier."
+  ],
+  "task_id": "response_case_state_fixture",
+  "title": "Coordinate an incident"
+}

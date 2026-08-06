@@ -1,0 +1,61 @@
+{
+  "sources": [
+    {
+      "derivation": "Response cases informed Stripe-shaped customer and payment records.",
+      "grounding_level": "G3",
+      "id": "stripe_billing_ops_v0",
+      "kind": "local_environment",
+      "locator": "envs/stripe_billing_ops_v0",
+      "supports": [
+        "customer reads",
+        "payment intent reads",
+        "refund record shape"
+      ]
+    },
+    {
+      "derivation": "Authorized probe informed order and inventory shapes.",
+      "grounding_level": "G2",
+      "id": "medusa_probe_v0",
+      "kind": "local_environment",
+      "locator": "envs/probed_medusa_v0",
+      "supports": [
+        "order reads",
+        "inventory reads"
+      ]
+    },
+    {
+      "derivation": "Official documented examples informed CRM object shapes.",
+      "grounding_level": "G1",
+      "id": "hubspot_docs_v0",
+      "kind": "local_environment",
+      "locator": "envs/documented_hubspot_crm_v0",
+      "supports": [
+        "ticket reads",
+        "owner reads",
+        "company and deal reads"
+      ]
+    },
+    {
+      "derivation": "Official documentation informed issue and transition shapes.",
+      "grounding_level": "G1",
+      "id": "jira_docs_v0",
+      "kind": "local_environment",
+      "locator": "envs/documented_jira_cloud_v0",
+      "supports": [
+        "issue reads",
+        "issue transition reads"
+      ]
+    },
+    {
+      "derivation": "Official documentation informed calendar and draft shapes.",
+      "grounding_level": "G1",
+      "id": "graph_docs_v0",
+      "kind": "local_environment",
+      "locator": "envs/documented_microsoft_graph_v0",
+      "supports": [
+        "calendar reads",
+        "draft artifact shape"
+      ]
+    }
+  ]
+}

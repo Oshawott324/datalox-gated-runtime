@@ -1,0 +1,20 @@
+{
+  "roles": [
+    {
+      "description": "Reviews payment evidence and refunds.",
+      "id": "billing_specialist"
+    },
+    {
+      "description": "Owns customer support and no-call decisions.",
+      "id": "support_owner"
+    },
+    {
+      "description": "Owns engineering escalation state.",
+      "id": "engineering_owner"
+    },
+    {
+      "description": "Creates internal coordination artifacts.",
+      "id": "communications_owner"
+    }
+  ]
+}

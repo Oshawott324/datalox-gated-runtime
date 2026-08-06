@@ -1,0 +1,137 @@
+{
+  "access_class": "self_hosted",
+  "auth_profile": "woocommerce_admin_basic",
+  "auth_profiles": {
+    "woocommerce_admin_basic": {
+      "inject": [
+        {
+          "env": "WOOCOMMERCE_ADMIN_AUTH",
+          "in": "header",
+          "name": "Authorization",
+          "scheme": ""
+        }
+      ],
+      "kind": "env_static"
+    }
+  },
+  "base_url": "http://127.0.0.1:8081",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/wp-json/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/store/v1/products/",
+      "query": {
+        "per_page": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/store/v1/products/categories/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/store/v1/cart/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/store/v1/products/999999999/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/",
+      "query": {
+        "per_page": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/categories/",
+      "query": {
+        "per_page": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/999999999/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/orders/",
+      "query": {
+        "per_page": "10",
+        "status": "any"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/orders/999999999/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/customers/",
+      "query": {
+        "per_page": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/coupons/",
+      "query": {
+        "per_page": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/reports/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/reports/sales/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/system_status/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/shipping/zones/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/shipping_methods/",
+      "query": {}
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/taxes/",
+      "query": {
+        "per_page": "10"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "woocommerce",
+  "rate_budget": {
+    "max_requests": 18,
+    "min_interval_seconds": 0.05
+  },
+  "safe_read_prefixes": [
+    "/wp-json",
+    "/wp-json/wc/store/v1",
+    "/wp-json/wc/v3"
+  ],
+  "tos_note": "Self-hosted WooCommerce fixture. Public Store API reads are unauthenticated by WooCommerce; admin REST reads use a local WordPress application-password Basic Authorization header injected from WOOCOMMERCE_ADMIN_AUTH. Seed writes happen outside Datalox through scripts/fixtures/woocommerce-local.sh; Datalox captures GET reads only."
+}

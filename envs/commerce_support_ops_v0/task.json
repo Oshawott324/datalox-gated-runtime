@@ -1,0 +1,8 @@
+{
+  "instructions": "Use the selected episode task and provider-shaped tools.",
+  "success_criteria": [
+    "Satisfy deterministic state and process verification."
+  ],
+  "task_id": "commerce-support-ops-v0",
+  "title": "Commerce support operations task pack"
+}
