@@ -1,0 +1,63 @@
+schema_version = "1.4"
+
+[task]
+name = "datalox/incident_customer_coordination_v0"
+version = "1.0.0"
+description = "A resettable, stateful cross-provider workflow with hidden verification."
+authors = [{ name = "Datalox" }]
+keywords = ["agents", "mcp", "stateful", "cross-provider", "verification"]
+
+[metadata]
+datalox_world_id = "incident_customer_coordination_v0"
+datalox_episode_id = "incident-customer-coordination-00"
+datalox_task_id = "incident-customer-coordination-00"
+grounding = "source-grounded synthetic behavior"
+
+[agent]
+timeout_sec = 1800
+
+[verifier]
+timeout_sec = 120
+environment_mode = "separate"
+
+[verifier.environment]
+cpus = 1
+memory_mb = 512
+build_timeout_sec = 300
+
+[[verifier.collect]]
+service = "world"
+command = 'python -m datalox_gated_runtime.world_package.entrypoint finalize --package-root /opt/datalox --run /var/lib/datalox/run --out /var/lib/datalox/verdict.json'
+timeout_sec = 120
+
+[environment]
+docker_image = "python:3.12-slim-bookworm@sha256:d50fb7611f86d04a3b0471b46d7557818d88983fc3136726336b2a4c657aa30b"
+cpus = 2
+memory_mb = 2048
+build_timeout_sec = 900
+
+[environment.healthcheck]
+command = "python -c \"import socket; socket.create_connection(('world', 8000), 2).close()\""
+interval_sec = 1.0
+timeout_sec = 2.0
+retries = 30
+
+[[environment.mcp_servers]]
+name = "datalox-incident-commander"
+transport = "streamable-http"
+url = "http://world:8000/actors/incident_commander/mcp"
+
+[[environment.mcp_servers]]
+name = "datalox-support-owner"
+transport = "streamable-http"
+url = "http://world:8000/actors/support_owner/mcp"
+
+[[environment.mcp_servers]]
+name = "datalox-communications"
+transport = "streamable-http"
+url = "http://world:8000/actors/communications/mcp"
+
+[[artifacts]]
+source = "/var/lib/datalox/verdict.json"
+destination = "datalox/verdict.json"
+service = "world"

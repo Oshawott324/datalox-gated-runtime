@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "datalox-gated-runtime"
+version = "0.1.0"
+description = "Transparent, stateful provider API interception for isolated AI-agent execution."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Datalox" }]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+keywords = ["agents", "api", "interception", "simulation", "replay", "sandbox"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Testing",
+]
+dependencies = [
+  "cryptography>=45",
+  "fastapi>=0.115",
+  "httpx>=0.27",
+  "mcp>=1.27.0,<2",
+  "uvicorn>=0.30",
+]
+
+[project.optional-dependencies]
+dev = [
+  "build>=1.2",
+  "httpx>=0.27",
+  "pip-audit==2.10.1",
+  "pytest>=8.0",
+  "ruff>=0.5",
+]
+
+[project.urls]
+Documentation = "https://github.com/Oshawott324/datalox-gated-runtime#readme"
+Issues = "https://github.com/Oshawott324/datalox-gated-runtime/issues"
+Repository = "https://github.com/Oshawott324/datalox-gated-runtime"
+Security = "https://github.com/Oshawott324/datalox-gated-runtime/security/policy"
+
+[project.scripts]
+datalox-gate = "datalox_gated_runtime.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.uv]
+required-version = "==0.12.1"

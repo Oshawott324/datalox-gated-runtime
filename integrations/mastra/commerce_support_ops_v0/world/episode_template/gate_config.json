@@ -1,0 +1,12 @@
+{
+  "audit_rules": [],
+  "config_id": "world_package_commerce_support_ops_v0_1.0.0",
+  "metadata": {
+    "runtime_only_world_package": true
+  },
+  "response_cases": [],
+  "world": {
+    "kind": "world_bundle_v1",
+    "seed": 0
+  }
+}

@@ -1,0 +1,27 @@
+services:
+  main:
+    depends_on:
+      world:
+        condition: service_healthy
+    networks:
+      - datalox-internal
+  world:
+    build:
+      context: ./world
+    environment:
+      DATALOX_ALLOWED_HOSTS: "world:*,localhost:*,127.0.0.1:*"
+      DATALOX_HOST: "0.0.0.0"
+      DATALOX_PORT: "8000"
+      DATALOX_WORLD_PACKAGE_ACTORS: '[{"actor_id":"harbor-incident_commander","role":"incident_commander"},{"actor_id":"harbor-support_owner","role":"support_owner"},{"actor_id":"harbor-communications","role":"communications"}]'
+    networks:
+      - datalox-internal
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=64m,mode=1777
+      - /var/lib/datalox/run:rw,noexec,nosuid,nodev,size=256m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+networks:
+  datalox-internal:
+    internal: true

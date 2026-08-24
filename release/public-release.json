@@ -4,6 +4,8 @@
     "documented_sources/",
     "envs/",
     "examples/",
+    "integrations/harbor/incident_customer_coordination_v0/environment/world/episode_template/",
+    "integrations/mastra/commerce_support_ops_v0/world/episode_template/",
     "runs/"
   ],
   "public_overrides": [

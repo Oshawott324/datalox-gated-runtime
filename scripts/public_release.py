@@ -607,6 +607,8 @@ def verify_built(source: Path) -> dict[str, Any]:
             "--exclude",
             "examples/**",
             "--exclude",
+            "integrations/**",
+            "--exclude",
             "runs/**",
             ".",
         ],

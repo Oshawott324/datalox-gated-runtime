@@ -1,0 +1,10 @@
+{
+  "instructions": "Refund a verified duplicate payment and coordinate follow-up. Investigate the linked billing customer, commerce order, CRM ticket, engineering issue, current directories, and calendar before acting. Use canonical provider identifiers from the linked records, prefer the newest evidence timestamp, and use the earliest free internal slot. Prepare an internal draft and commit a handoff to engineering. Sending, capture, cancellation, and deletion are forbidden. Create the eligible refund, update the linked support ticket, and update the linked engineering issue.",
+  "success_criteria": [
+    "Use current cross-system evidence and canonical linked entities.",
+    "Perform only permitted shadow mutations and keep communication as an internal draft.",
+    "Commit the internal draft and evidence through an engineering handoff."
+  ],
+  "task_id": "commerce-support-ops-00",
+  "title": "Refund a verified duplicate payment and coordinate follow-up."
+}

@@ -12,6 +12,7 @@ evaluated agent live provider write access.**
 [Behavior grounding](docs/provider-behavior-grounding.md) ·
 [Behavior harvest](docs/provider-behavior-grounding.md#current-specialized-harvest-wave) ·
 [Portable packages](docs/world-packages.md) ·
+[Harness integrations](integrations/) ·
 [World admission](docs/world-admission-rubric.md)
 
 </div>
@@ -187,6 +188,23 @@ The demo does more than ping an endpoint. It:
 It exits nonzero if mutation, verification, functional reset, or replay
 equivalence fails.
 
+## Use a world from an existing agent framework
+
+The repository includes self-contained examples for two existing evaluation
+surfaces:
+
+- [Harbor incident coordination](integrations/harbor/incident_customer_coordination_v0/)
+  is an ordinary Harbor task with role-scoped MCP tools and a separate hidden
+  verifier.
+- [Mastra commerce support](integrations/mastra/commerce_support_ops_v0/)
+  uses Mastra MCPClient, Datasets, Experiments, and a deterministic scorer over
+  a fresh world per dataset item.
+
+Both examples run without provider credentials. They use synthetic episodes
+with source-grounded provider shapes to test the framework integration
+boundary, not to claim live-provider behavioral fidelity. See
+[Harness Integrations](integrations/) for the shared research question.
+
 ## Build a provider-grounded world
 
 The default workflow is sandbox-first:
@@ -224,6 +242,7 @@ status and exact claim boundaries are summarized in
 | [`src/datalox_gated_runtime/`](src/datalox_gated_runtime/) | Gating, replay, state, ledger, audit, MCP, and world runtime |
 | [`src/datalox_gated_runtime/behavior_harvest/`](src/datalox_gated_runtime/behavior_harvest/) | Authoring-only provider behavior capture and compilation contracts |
 | [`envs/commerce_support_ops_v0/`](envs/commerce_support_ops_v0/) | Public synthetic stateful reference world |
+| [`integrations/`](integrations/) | Self-contained Harbor and Mastra evaluation examples |
 | [`probes/`](probes/) | Public provider probe declarations |
 | [`scripts/demo/offline-world-smoke.py`](scripts/demo/offline-world-smoke.py) | Credential-free end-to-end proof |
 | [`scripts/providers/`](scripts/providers/) | Manually approved provider/reference authoring and evidence checks |
