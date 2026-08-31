@@ -1,0 +1,67 @@
+diff --git a/src/manager/mcp_client_manager.py b/src/manager/mcp_client_manager.py
+index aa64c46..bb8d636 100644
+--- a/src/manager/mcp_client_manager.py
++++ b/src/manager/mcp_client_manager.py
+@@ -45,6 +45,7 @@ class MCPClientManager:
+         self._base_clients: Dict[str, Client] = {}
+         self.server_to_path_mapping: Dict[str, str] = {}
+         self.tools: Dict[str, dict] = {}
++        self.output_schemas: Dict[str, dict] = {}
+ 
+         self._loop = asyncio.new_event_loop()
+         self._loop_thread = threading.Thread(target=self._run_loop, daemon=True)
+@@ -97,6 +98,7 @@ class MCPClientManager:
+             with self._lock:
+                 self.server_to_path_mapping.clear()
+                 self.tools.clear()
++                self.output_schemas.clear()
+ 
+         tasks = [
+             self.register_mcp_server_async(
+@@ -125,12 +127,19 @@ class MCPClientManager:
+             })
+             for tool in tools
+         ]
++        output_schemas = {
++            f"{server_name}-{tool.name}": (
++                (tool.meta or {}).get("datalox/outputSchema") or tool.outputSchema or {}
++            )
++            for tool in tools
++        }
+ 
+         async with self._register_lock:
+             with self._lock:
+                 self.server_to_path_mapping[server_name] = tool_path
+                 for tool_name, schema in schemas:
+                     self.tools[tool_name] = schema
++                self.output_schemas.update(output_schemas)
+ 
+                 if is_stateless:
+                     self.stateless_clients[server_name] = client
+@@ -276,7 +285,24 @@ class MCPClientManager:
+             async with client:
+                 result = await client.call_tool(short_name, args)
+ 
+-        return ",".join(item.text for item in result.content if hasattr(item, "text"))
++        text_items = [item.text for item in result.content if hasattr(item, "text")]
++        output_schema = self.output_schemas.get(f"{server_name}-{short_name}", {})
++        if output_schema.get("type") == "array":
++            item_schema = output_schema.get("items", {})
++            values = []
++            for item in text_items:
++                if item_schema.get("type") == "string":
++                    values.append(item)
++                else:
++                    values.append(json.loads(item))
++            return json.dumps(values)
++        if output_schema.get("type") == "null":
++            return "null"
++        if text_items:
++            return ",".join(text_items)
++        if result.structured_content is not None:
++            return json.dumps(result.structured_content)
++        return json.dumps(result.data)
+ 
+     def save_all_scenario(self, client_id_list: List[str]) -> Dict[str, Optional[dict]]:
+         """Save scenarios from all specified clients."""
+

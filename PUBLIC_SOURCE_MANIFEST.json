@@ -2687,13 +2687,18 @@
     },
     {
       "path": "src/datalox_gated_runtime/harness_adapters/envfactory-eff3b22d3fc26afa14165cfe208c2a4c9ecc39e3.patch",
-      "sha256": "sha256:3954298c553fdfda79626b3bb67fb9d97eafef93089fbe769cd6de3d3bd7bf32",
+      "sha256": "sha256:40a1b5577c3ed7d76b7efc262af0293ea8c15aa0876ab08c3cfbfe7d061c735f",
       "size": 14320
     },
     {
+      "path": "src/datalox_gated_runtime/harness_adapters/envfactory-zz-eff3b22d3fc26afa14165cfe208c2a4c9ecc39e3-structured-output.patch",
+      "sha256": "sha256:f7c5ea058470c22226c49efa5d994e1b3cecde21133156c7924dda858f1841b7",
+      "size": 2801
+    },
+    {
       "path": "src/datalox_gated_runtime/harness_adapters/envfactory.py",
-      "sha256": "sha256:d1742e187443d2fb19575279e175aaa92b538b37ebfc20f800737e77669052ca",
-      "size": 38423
+      "sha256": "sha256:71c77a0b0e810a75ffa9c860e791edf51a673a71c11ee6fb26216de264ea5d94",
+      "size": 38951
     },
     {
       "path": "src/datalox_gated_runtime/harness_adapters/harbor.py",
@@ -3742,5 +3747,5 @@
     }
   ],
   "schema_version": "datalox_public_source_manifest_v1",
-  "source_revision": "171a6579eb29a756b577fad26554913d987c8a5e"
+  "source_revision": "c2a2a459807bb7ad47376d2d90df5a2a9c836232"
 }

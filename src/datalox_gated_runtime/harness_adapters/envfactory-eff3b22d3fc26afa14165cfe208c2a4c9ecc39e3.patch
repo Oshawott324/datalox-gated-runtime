@@ -321,7 +321,7 @@ index 595da26..cfd6a9d 100644
 
      async def _close_base_client(self, server_name: str):
          """Close a base client and remove from pool."""
-@@ -321,12 +373,13 @@ class MCPClientManager:
+@@ -321,11 +373,12 @@ class MCPClientManager:
          if not self._loop.is_running():
              return
 

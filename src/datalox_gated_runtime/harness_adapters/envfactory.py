@@ -35,6 +35,9 @@ ENVFACTORY_PROJECTION_SCHEMA_VERSION = "datalox_envfactory_projection_v2"
 ENVFACTORY_COMPATIBILITY_COMMIT = "eff3b22d3fc26afa14165cfe208c2a4c9ecc39e3"
 ENVFACTORY_SCENARIO_SCHEMA_VERSION = "datalox_envfactory_scenario_v1"
 _ENVFACTORY_PATCH_NAME = f"envfactory-{ENVFACTORY_COMPATIBILITY_COMMIT}.patch"
+_ENVFACTORY_STRUCTURED_OUTPUT_PATCH_NAME = (
+    f"envfactory-zz-{ENVFACTORY_COMPATIBILITY_COMMIT}-structured-output.patch"
+)
 _LIFECYCLE_TOOLS = frozenset({"load_scenario", "save_scenario"})
 _CHECKPOINT_SCHEMA = {
     "type": "object",
@@ -323,9 +326,11 @@ def build_envfactory_projection(
         )
         patch_dir = temporary / "patches"
         patch_dir.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(
-            Path(__file__).with_name(_ENVFACTORY_PATCH_NAME), patch_dir / _ENVFACTORY_PATCH_NAME
-        )
+        for patch_name in (
+            _ENVFACTORY_PATCH_NAME,
+            _ENVFACTORY_STRUCTURED_OUTPUT_PATCH_NAME,
+        ):
+            shutil.copy2(Path(__file__).with_name(patch_name), patch_dir / patch_name)
         (temporary / "install.py").write_text(_INSTALLER_SOURCE, encoding="utf-8")
         (temporary / "README.md").write_text(
             _readme(
@@ -428,6 +433,7 @@ def _register_tool(
             "operation_id": item["operation_id"],
             "service_actor_id": item["service_actor_id"],
             "service_actor_role": item["service_actor_role"],
+            "datalox/outputSchema": deepcopy(item["output_schema"]),
         },
     )
 
@@ -897,12 +903,13 @@ python install.py /path/to/EnvFactory
 The installer requires EnvFactory commit `{ENVFACTORY_COMPATIBILITY_COMMIT}`. It
 copies the native `envs/tools`, `envs/metadata`, and `envs/datalox` files,
 registers `{server_name}` in `configs/mcp_server.json`, and applies the included
-compatibility patch. It refuses incompatible commits, overwrites, and config
+compatibility patches. It refuses incompatible commits, overwrites, and config
 collisions.
 
-The patch gives every stateful EnvFactory client its own stdio process for
-pass@k isolation and teaches ToolGraph to retain root array, primitive, and
-union outputs. It is version-pinned because it changes EnvFactory internals.
+The patches give every stateful EnvFactory client its own stdio process for
+pass@k isolation, preserve schema-declared structured MCP results, and teach
+ToolGraph to retain root array, primitive, and union outputs. They are
+version-pinned because they change EnvFactory internals.
 
 ## Data boundary
 
@@ -968,16 +975,21 @@ def main() -> int:
     if existing:
         raise SystemExit("Refusing to overwrite existing files:\n" + "\n".join(existing))
 
-    patch = next((overlay / "patches").glob("envfactory-*.patch"))
-    can_apply = run("git", "apply", "--check", str(patch), cwd=target, check=False)
-    if can_apply.returncode == 0:
-        run("git", "apply", str(patch), cwd=target)
-    else:
+    patches = sorted((overlay / "patches").glob("envfactory-*.patch"))
+    if not patches:
+        raise SystemExit("EnvFactory compatibility patches are missing.")
+    for patch in patches:
+        can_apply = run("git", "apply", "--check", str(patch), cwd=target, check=False)
+        if can_apply.returncode == 0:
+            run("git", "apply", str(patch), cwd=target)
+            continue
         already_applied = run(
             "git", "apply", "--reverse", "--check", str(patch), cwd=target, check=False
         )
         if already_applied.returncode != 0:
-            raise SystemExit("EnvFactory compatibility patch cannot be applied cleanly.")
+            raise SystemExit(
+                f"EnvFactory compatibility patch cannot be applied cleanly: {patch.name}"
+            )
 
     for source, destination in destinations:
         destination.parent.mkdir(parents=True, exist_ok=True)
