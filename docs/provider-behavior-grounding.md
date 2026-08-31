@@ -176,11 +176,29 @@ four-provider wave applies the shared authoring and packaging contracts to:
   and
 - the Opentrons virtual protocol and run lifecycle.
 
+The separately promoted Hamilton STAR lane uses PyLabRobot `0.2.1` as a
+device-free reference system. Its standard eight-channel slice is
+core-complete: setup, stop, tip pickup/drop, aspiration, dispense, and the
+corresponding state reads all execute through one task-free provider pack. All
+six writes and selected native failures were observed against
+`LiquidHandlerChatterboxBackend`. This is G2 local reference execution, not
+physical Hamilton hardware evidence. See
+[PyLabRobot-Backed Hamilton STAR Provider](pylabrobot-hamilton-star-provider.md).
+
 These lanes intentionally have different outcomes. A lane may contain complete
 reference-observed programs, a fully executable but mismatching differential,
 or a precise capture blocker. None of those should be flattened into one
 “supported” flag. The private superset maintains the operation-level status,
 reset evidence, package proof, and exact blockers in its classified artifacts.
+
+OpenLMIS no longer has a per-step actor execution blocker. Its 11 complete
+retained programs all execute through the provider-neutral differential target
+with explicit principal contexts. The five-step
+`notification.update_contact_details` program—administrator read, supervisor
+denial, administrator write, duplicate, and read-after-write—passes exactly.
+The other ten report their concrete response or state mismatches. This is one
+bounded behavior-equivalence result, not provider-wide faithfulness; nine
+partial programs and functional reset equivalence remain incomplete.
 
 Stripe remains a narrow construction-machine regression and a useful example
 of the sandbox-first rule below. Reproducing its already capable playground is

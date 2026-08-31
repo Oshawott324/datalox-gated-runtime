@@ -10,8 +10,7 @@ from tempfile import mkdtemp
 from typing import Any
 from urllib.parse import urlparse
 
-import httpx
-
+from datalox_gated_runtime.audit import run_config_audit
 from datalox_gated_runtime.auth import (
     AuthBrokerConfig,
     AuthBrokerError,
@@ -21,14 +20,18 @@ from datalox_gated_runtime.auth import (
     parse_auth_profile_ref,
     preflight_auth,
 )
-from datalox_gated_runtime.audit import run_config_audit
+from datalox_gated_runtime.authoring_runtime import AuthoringGatedRuntime
+from datalox_gated_runtime.capture import (
+    CaptureStore,
+    LiveCaptureClient,
+    validate_live_capture_prefixes,
+)
 from datalox_gated_runtime.config import load_gate_config
-from datalox_gated_runtime.ledger import load_events, shadow_state_from_events
-from datalox_gated_runtime.models import RunExport, path_prefix_matches
-from datalox_gated_runtime.query import QueryParams, iter_query_items
-from datalox_gated_runtime.server_control import pick_free_port, start_server, stop_server
+from datalox_gated_runtime.ledger import SessionLedger, load_events, shadow_state_from_events
+from datalox_gated_runtime.models import CallRequest, RunExport, path_prefix_matches
+from datalox_gated_runtime.policy import GatePolicy
+from datalox_gated_runtime.query import QueryParams
 from datalox_gated_runtime.session import create_session
-
 
 ACCESS_CLASSES = frozenset({"approval_gated", "instant_sandbox", "self_hosted", "open_public"})
 PAGINATION_KEYS = ("has_more", "next_cursor", "next_page", "offset")
@@ -274,28 +277,31 @@ def run_provider_probe(config_path: Path, out_dir: Path) -> tuple[int, dict[str,
 
     examples_root = Path(mkdtemp(prefix="datalox_probe_example_"))
     prior_examples_dir = os.environ.get("DATALOX_GATE_EXAMPLES_DIR")
-    stopped = False
     try:
         _write_ephemeral_example(examples_root, config)
         manifest = create_session(
             example=config.provider_id,
             out_dir=out_dir,
-            http_port=pick_free_port(),
+            http_port=0,
         )
-        server = start_server(
-            run_dir=Path(manifest.run_dir),
-            port=int(manifest.http_base_url.rsplit(":", 1)[1]),
-            allow_live=True,
+        gate_config = load_gate_config(Path(manifest.run_dir) / "gate_config.json")
+        if gate_config.live is None:
+            raise ValueError("provider probe authoring config requires live upstreams")
+        validate_live_capture_prefixes(gate_config.policy, gate_config.live)
+        capture_client = LiveCaptureClient(gate_config.live)
+        runtime = AuthoringGatedRuntime(
+            policy=GatePolicy.from_config(gate_config.policy, allow_live=True),
+            response_cases=gate_config.response_cases,
+            ledger=SessionLedger(path=out_dir / "ledger.jsonl"),
+            capture_client=capture_client,
+            capture_store=CaptureStore(out_dir / "captures.jsonl"),
         )
         try:
-            requests = _drive_probe_requests(config, manifest.http_base_url)
+            requests = _drive_probe_requests(config, runtime)
         finally:
-            stop_server(out_dir)
-            stopped = True
+            capture_client.close()
         audit_payload = _finalize_run(out_dir)
     finally:
-        if not stopped:
-            stop_server(out_dir)
         if prior_examples_dir is None:
             os.environ.pop("DATALOX_GATE_EXAMPLES_DIR", None)
         else:
@@ -312,7 +318,7 @@ def run_provider_probe(config_path: Path, out_dir: Path) -> tuple[int, dict[str,
         "auth_preflight": auth_preflight.to_dict(),
         "base_url": config.base_url,
         "tos_note": config.tos_note,
-        "server": {"allow_live": bool(server.get("allow_live"))},
+        "authoring": {"mode": "direct", "provider_access": True},
         "requests": requests,
         "counts": counts,
         "pagination_signals": _pagination_signals(requests),
@@ -692,54 +698,46 @@ def _write_ephemeral_example(examples_root: Path, config: ProbeConfig) -> None:
     os.environ["DATALOX_GATE_EXAMPLES_DIR"] = str(examples_root)
 
 
-def _drive_probe_requests(config: ProbeConfig, base_url: str) -> list[dict[str, Any]]:
+def _drive_probe_requests(
+    config: ProbeConfig, runtime: AuthoringGatedRuntime
+) -> list[dict[str, Any]]:
     results: list[dict[str, Any]] = []
-    with httpx.Client(base_url=base_url, timeout=30.0) as client:
-        for index, request in enumerate(config.probe_requests[: config.rate_budget.max_requests]):
-            if index > 0 and config.rate_budget.min_interval_seconds:
-                time.sleep(config.rate_budget.min_interval_seconds)
-            gate_path = f"/{config.provider_id}{request.path}"
-            try:
-                response = client.get(gate_path, params=list(iter_query_items(request.query)))
-            except httpx.HTTPError as exc:
-                results.append(
-                    {
-                        "path": request.path,
-                        "upstream_path": request.path,
-                        "gate_path": gate_path,
-                        "query": request.query,
-                        "upstream_status": None,
-                        "decision": "error",
-                        "case_id": None,
-                        "error": {"code": "gate_request_failed", "message": str(exc)},
-                        "pagination_signals": [],
-                    }
-                )
-                continue
-            response_body = _response_json_or_text(response)
+    for index, request in enumerate(config.probe_requests[: config.rate_budget.max_requests]):
+        if index > 0 and config.rate_budget.min_interval_seconds:
+            time.sleep(config.rate_budget.min_interval_seconds)
+        gate_path = f"/{config.provider_id}{request.path}"
+        try:
+            response = runtime.handle(
+                CallRequest(method=request.method, path=gate_path, query=request.query)
+            )
+        except (OSError, ValueError) as exc:
             results.append(
                 {
                     "path": request.path,
                     "upstream_path": request.path,
                     "gate_path": gate_path,
                     "query": request.query,
-                    "upstream_status": response.status_code,
-                    "decision": response.headers.get("x-datalox-decision"),
-                    "case_id": response.headers.get("x-datalox-response-case-id"),
-                    "pagination_signals": _pagination_keys(response_body),
+                    "upstream_status": None,
+                    "decision": "error",
+                    "case_id": None,
+                    "error": {"code": "authoring_request_failed", "message": str(exc)},
+                    "pagination_signals": [],
                 }
             )
+            continue
+        results.append(
+            {
+                "path": request.path,
+                "upstream_path": request.path,
+                "gate_path": gate_path,
+                "query": request.query,
+                "upstream_status": response.status_code,
+                "decision": response.decision.kind,
+                "case_id": response.response_case_id,
+                "pagination_signals": _pagination_keys(response.body),
+            }
+        )
     return results
-
-
-def _response_json_or_text(response: httpx.Response) -> Any:
-    content_type = response.headers.get("content-type", "")
-    if "json" in content_type.lower():
-        try:
-            return response.json()
-        except ValueError:
-            return None
-    return response.text
 
 
 def _finalize_run(run_dir: Path) -> dict[str, Any]:

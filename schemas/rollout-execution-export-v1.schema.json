@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/rollout-execution-export-v1.schema.json",
+  "title": "Datalox isolated rollout provider execution export",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "uid",
+    "session_id",
+    "environment_seed",
+    "provider_set_sha256",
+    "providers",
+    "initial_provider_fingerprint",
+    "final_provider_exports",
+    "consumer_exit_codes",
+    "consumer_exit_code"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_rollout_execution_export_v1"},
+    "uid": {"type": "string", "minLength": 1, "maxLength": 256},
+    "session_id": {
+      "oneOf": [
+        {"type": "integer", "minimum": 0},
+        {"type": "string", "minLength": 1, "maxLength": 256}
+      ]
+    },
+    "environment_seed": {"type": "integer", "minimum": 0},
+    "provider_set_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "providers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["provider_id", "provider_runtime_sha256", "authorities"],
+        "properties": {
+          "provider_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"
+          },
+          "provider_runtime_sha256": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "authorities": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "initial_provider_fingerprint": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "final_provider_exports": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["schema_version", "provider_id"],
+        "properties": {
+          "schema_version": {"const": "datalox_provider_run_v1"},
+          "provider_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"
+          }
+        }
+      }
+    },
+    "consumer_exit_codes": {
+      "type": "array",
+      "items": {"type": "integer", "minimum": 0, "maximum": 255}
+    },
+    "consumer_exit_code": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "maximum": 255
+    }
+  }
+}

@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/provider-operation-claims-v1.schema.json",
+  "title": "Authored provider operation claims for runtime admission",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "provider_id",
+    "bundle_version",
+    "evidence_sources",
+    "operations",
+    "provider_invariants",
+    "receipt_predicates",
+    "reset_profiles",
+    "behavior_probes"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_provider_operation_claims_v1"},
+    "provider_id": {"$ref": "#/$defs/identifier"},
+    "bundle_version": {"type": "string", "minLength": 1},
+    "evidence_sources": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/evidenceSource"}
+    },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/operation"}
+    },
+    "provider_invariants": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/predicate"}
+    },
+    "receipt_predicates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/predicate"}
+    },
+    "reset_profiles": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["profile_id", "kind"],
+        "properties": {
+          "profile_id": {"const": "default"},
+          "kind": {"const": "compiled_seed"}
+        }
+      }
+    },
+    "behavior_probes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/probe"}
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "evidenceSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "artifact_ref",
+        "artifact_sha256",
+        "grounding_level",
+        "observed_at",
+        "valid_through",
+        "distribution_label",
+        "rights_basis"
+      ],
+      "properties": {
+        "evidence_id": {"$ref": "#/$defs/identifier"},
+        "artifact_ref": {"type": "string", "minLength": 1},
+        "artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "grounding_level": {"$ref": "#/$defs/groundingLevel"},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "valid_through": {"type": "string", "format": "date-time"},
+        "distribution_label": {"enum": ["public", "restricted", "private"]},
+        "rights_basis": {"type": "string", "minLength": 1}
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "native_surface",
+        "mutability",
+        "behavior_program",
+        "state_effects",
+        "grounding",
+        "rights",
+        "covered_behaviors"
+      ],
+      "properties": {
+        "operation_id": {"$ref": "#/$defs/identifier"},
+        "native_surface": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "scheme", "authority", "method", "path_template"],
+          "properties": {
+            "type": {"const": "http"},
+            "scheme": {"const": "https"},
+            "authority": {"type": "string", "minLength": 1},
+            "method": {"type": "string", "pattern": "^[A-Z]+$"},
+            "path_template": {
+              "type": "string",
+              "pattern": "^/(?:$|(?:\\{[A-Za-z_][A-Za-z0-9_]*\\}|[^/{}]+)(?:/(?:\\{[A-Za-z_][A-Za-z0-9_]*\\}|[^/{}]+))*)$"
+            }
+          }
+        },
+        "mutability": {"enum": ["read", "write"]},
+        "behavior_program": {"$ref": "#/$defs/identifier"},
+        "state_effects": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/identifier"}
+        },
+        "grounding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["level", "evidence_refs"],
+          "properties": {
+            "level": {"$ref": "#/$defs/groundingLevel"},
+            "evidence_refs": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {"$ref": "#/$defs/identifier"}
+            }
+          }
+        },
+        "rights": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["distribution_label", "behavior_distribution_basis"],
+          "properties": {
+            "distribution_label": {"enum": ["public", "restricted", "private"]},
+            "behavior_distribution_basis": {"type": "string", "minLength": 1}
+          }
+        },
+        "covered_behaviors": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["success", "failure", "duplicate", "readback", "async", "pagination"]
+          }
+        }
+      }
+    },
+    "predicate": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["predicate_id", "source", "operator", "pointer"],
+          "properties": {
+            "predicate_id": {"$ref": "#/$defs/identifier"},
+            "source": {"enum": ["response_body", "provider_state", "call_evidence"]},
+            "operator": {"const": "exists"},
+            "pointer": {"$ref": "#/$defs/jsonPointer"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["predicate_id", "source", "operator", "pointer", "expected"],
+          "properties": {
+            "predicate_id": {"$ref": "#/$defs/identifier"},
+            "source": {"enum": ["response_body", "provider_state", "call_evidence"]},
+            "operator": {"const": "equals"},
+            "pointer": {"$ref": "#/$defs/jsonPointer"},
+            "expected": {}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["predicate_id", "source", "operator", "pointer", "expected_type"],
+          "properties": {
+            "predicate_id": {"$ref": "#/$defs/identifier"},
+            "source": {"enum": ["response_body", "provider_state", "call_evidence"]},
+            "operator": {"const": "type"},
+            "pointer": {"$ref": "#/$defs/jsonPointer"},
+            "expected_type": {
+              "enum": ["object", "array", "string", "number", "integer", "boolean", "null"]
+            }
+          }
+        }
+      ]
+    },
+    "probe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["probe_id", "reset_profile", "steps"],
+      "properties": {
+        "probe_id": {"$ref": "#/$defs/identifier"},
+        "reset_profile": {"const": "default"},
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/probeStep"}
+        }
+      }
+    },
+    "probeStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "step_id",
+        "operation_id",
+        "request",
+        "expected_status_code",
+        "covers",
+        "receipt_predicate_refs"
+      ],
+      "properties": {
+        "step_id": {"$ref": "#/$defs/identifier"},
+        "operation_id": {"$ref": "#/$defs/identifier"},
+        "request": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scheme", "authority", "method", "path", "query", "headers", "body"],
+          "properties": {
+            "scheme": {"const": "https"},
+            "authority": {"type": "string", "minLength": 1},
+            "method": {"type": "string", "pattern": "^[A-Z]+$"},
+            "path": {"type": "string", "pattern": "^/"},
+            "query": {
+              "type": "object",
+              "additionalProperties": {
+                "oneOf": [
+                  {"type": "string"},
+                  {"type": "array", "items": {"type": "string"}}
+                ]
+              }
+            },
+            "headers": {
+              "type": "object",
+              "additionalProperties": {"type": "string"}
+            },
+            "body": {}
+          }
+        },
+        "expected_status_code": {"type": "integer", "minimum": 100, "maximum": 599},
+        "expected_decision_kind": {
+          "enum": ["replay", "shadow_read", "shadow_write", "deny", "miss"]
+        },
+        "covers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["operation_id", "behavior"],
+            "properties": {
+              "operation_id": {"$ref": "#/$defs/identifier"},
+              "behavior": {
+                "enum": ["success", "failure", "duplicate", "readback", "async", "pagination"]
+              }
+            }
+          }
+        },
+        "receipt_predicate_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/identifier"}
+        }
+      }
+    },
+    "groundingLevel": {
+      "type": "string",
+      "pattern": "^G[0-4](?:_[A-Z0-9]+)*$"
+    },
+    "jsonPointer": {
+      "type": "string",
+      "pattern": "^(?:/(?:[^~/]|~[01])*)*$"
+    }
+  }
+}

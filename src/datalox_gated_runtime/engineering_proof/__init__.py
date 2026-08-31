@@ -8,11 +8,19 @@ from datalox_gated_runtime.engineering_proof.contracts import (
     GeneratedIdBinding,
     OperationMapping,
     PathPrefixMapping,
+    PrincipalMapping,
+    StaticValueMapping,
+    StateRecordOverride,
     WorldTargetSpec,
 )
 from datalox_gated_runtime.engineering_proof.program import (
     CompiledDifferentialProgram,
     reference_trace_program,
+)
+from datalox_gated_runtime.engineering_proof.principal_target import (
+    PrincipalBoundTraceTarget,
+    PrincipalStepBinding,
+    principal_bindings_from_recipe_steps,
 )
 from datalox_gated_runtime.engineering_proof.runner import (
     ProofOutputBuilder,
@@ -31,9 +39,15 @@ __all__ = [
     "GeneratedIdBinding",
     "OperationMapping",
     "PathPrefixMapping",
+    "PrincipalBoundTraceTarget",
+    "PrincipalMapping",
+    "PrincipalStepBinding",
+    "StaticValueMapping",
+    "StateRecordOverride",
     "ProofOutputBuilder",
     "WorldBundleTraceTarget",
     "WorldTargetSpec",
     "reference_trace_program",
+    "principal_bindings_from_recipe_steps",
     "run_engineering_proof",
 ]

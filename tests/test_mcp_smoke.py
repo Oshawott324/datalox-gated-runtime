@@ -4,11 +4,11 @@ from pathlib import Path
 
 from mcp import types
 
+from datalox_gated_runtime.authoring_mcp_runtime import AuthoringMcpGatedRuntime
 from datalox_gated_runtime.config import load_gate_config
 from datalox_gated_runtime.ledger import SessionLedger
 from datalox_gated_runtime.mcp_capture import McpCaptureStore
 from datalox_gated_runtime.mcp_registry import McpToolRegistry
-from datalox_gated_runtime.mcp_runtime import McpGatedRuntime
 from datalox_gated_runtime.promote import promote_session
 from datalox_gated_runtime.verify import verify_replay
 
@@ -103,12 +103,11 @@ def test_mcp_gated_tools_capture_promote_verify_smoke(tmp_path: Path) -> None:
     assert config.mcp is not None
     upstream = FakeGitHubMcp()
     ledger = SessionLedger(path=run_dir / "ledger.jsonl")
-    runtime = McpGatedRuntime(
+    runtime = AuthoringMcpGatedRuntime(
         config=config.mcp,
         ledger=ledger,
         upstream_client=upstream,
         capture_store=McpCaptureStore(run_dir / "mcp_captures.jsonl"),
-        allow_live=True,
         input_schemas={
             "github.get_issue": {
                 "type": "object",

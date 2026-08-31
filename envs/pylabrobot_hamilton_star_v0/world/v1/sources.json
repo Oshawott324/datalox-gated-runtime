@@ -1,0 +1,51 @@
+{
+  "grounding_gaps": [
+    {
+      "claim": "physical Hamilton STAR hardware equivalence",
+      "operation_family": "all",
+      "reason": "The reference system is PyLabRobot 0.2.1 LiquidHandlerChatterboxBackend. No physical robot, VENUS run, calibration, collision, timing, or Hamilton liquid-class behavior is claimed."
+    },
+    {
+      "claim": "native provider HTTP API",
+      "operation_family": "all",
+      "reason": "PyLabRobot is a Python SDK. The HTTPS paths are an internal Datalox transport projection; evaluated code keeps the native LiquidHandler call surface."
+    },
+    {
+      "claim": "runtime live provider writes",
+      "operation_family": "all",
+      "reason": "All runtime state changes are isolated local shadows. The provider runtime contains no Hamilton or PyLabRobot upstream client."
+    }
+  ],
+  "sources": [
+    {
+      "derivation": "Pinned PyLabRobot 0.2.1 source and stable documentation define the backend-agnostic LiquidHandler contract, Chatterbox dry-run backend, standard channel operations, resource trackers, and native exceptions.",
+      "grounding_level": "G1_OFFICIAL_SPEC",
+      "id": "pylabrobot_0_2_1_official",
+      "kind": "official_source",
+      "locator": "https://github.com/PyLabRobot/pylabrobot/tree/c8c9dcbcf4124ed078f4a8b4b21ec83474d7b7b1",
+      "supports": [
+        "service:pylabrobot_hamilton_star_dry_run_0_2_1"
+      ]
+    },
+    {
+      "derivation": "A fresh PyLabRobot 0.2.1 environment executed setup, stop, pickup, return/drop, aspirate, dispense, duplicate pickup, no-tip aspiration, source underflow, tip underflow, container overflow, occupied-tip-spot drop, duplicate setup, and duplicate stop against LiquidHandlerChatterboxBackend.",
+      "grounding_level": "G2_LOCAL_EXECUTED",
+      "id": "pylabrobot_chatterbox_reference_20260810",
+      "kind": "local_provider_execution",
+      "locator": "envs/pylabrobot_hamilton_star_v0/evidence/reference_execution.json",
+      "supports": [
+        "observed:standard_eight_channel_dry_run_writes_and_failures"
+      ]
+    },
+    {
+      "derivation": "Local tests execute native PyLabRobot calls through the Datalox backend, provider-runtime transitions, atomic failures, task-free compilation, reset, and explicit hardware-scope denials.",
+      "grounding_level": "G2_LOCAL_EXECUTED",
+      "id": "pylabrobot_hamilton_star_world_execution",
+      "kind": "local_executed_world",
+      "locator": "tests/test_pylabrobot_hamilton_star_world.py",
+      "supports": [
+        "local_world:standard_eight_channel_dry_run"
+      ]
+    }
+  ]
+}

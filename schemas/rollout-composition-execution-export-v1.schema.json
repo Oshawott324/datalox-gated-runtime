@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/rollout-composition-execution-export-v1.schema.json",
+  "title": "Datalox admitted composition rollout execution export",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "uid",
+    "session_id",
+    "environment_seed",
+    "provider_set_sha256",
+    "provider_set_schema_version",
+    "providers",
+    "composition",
+    "initial_composition_fingerprint",
+    "final_composition_export",
+    "consumer_exit_codes",
+    "consumer_exit_code"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_rollout_composition_execution_export_v1"},
+    "uid": {"type": "string", "minLength": 1, "maxLength": 256},
+    "session_id": {
+      "oneOf": [
+        {"type": "integer", "minimum": 0},
+        {"type": "string", "minLength": 1, "maxLength": 256}
+      ]
+    },
+    "environment_seed": {"type": "integer", "minimum": 0},
+    "provider_set_sha256": {"$ref": "#/$defs/sha256"},
+    "provider_set_schema_version": {"const": "datalox_rollout_provider_set_v2"},
+    "providers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/provider"}
+    },
+    "composition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pack_id",
+        "pack_version",
+        "composition_pack_sha256",
+        "composition_admission_sha256",
+        "episode_seed",
+        "time_scope",
+        "initial_composition_delivery_time"
+      ],
+      "properties": {
+        "pack_id": {"$ref": "#/$defs/identifier"},
+        "pack_version": {"type": "string", "minLength": 1},
+        "composition_pack_sha256": {"$ref": "#/$defs/sha256"},
+        "composition_admission_sha256": {"$ref": "#/$defs/sha256"},
+        "episode_seed": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/@-]{0,127}$"
+        },
+        "time_scope": {"const": "delivery_scheduler_only_v1"},
+        "initial_composition_delivery_time": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        }
+      }
+    },
+    "initial_composition_fingerprint": {"$ref": "#/$defs/sha256"},
+    "final_composition_export": {
+      "allOf": [
+        {"$ref": "composition-session-export-v1.schema.json"},
+        {"properties": {"finalized": {"const": true}}}
+      ]
+    },
+    "consumer_exit_codes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/exit_code"}
+    },
+    "consumer_exit_code": {
+      "oneOf": [{"$ref": "#/$defs/exit_code"}, {"type": "null"}]
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "exit_code": {"type": "integer", "minimum": 0, "maximum": 255},
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_id",
+        "release_reference",
+        "release_manifest_sha256",
+        "release_config_sha256",
+        "profile_id",
+        "profile_layer_sha256",
+        "provider_runtime_sha256",
+        "provider_admission_sha256",
+        "operation_contract_sha256",
+        "authorities"
+      ],
+      "properties": {
+        "provider_id": {"$ref": "#/$defs/identifier"},
+        "release_reference": {"type": "string", "minLength": 1},
+        "release_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "release_config_sha256": {"$ref": "#/$defs/sha256"},
+        "profile_id": {"$ref": "#/$defs/identifier"},
+        "profile_layer_sha256": {"$ref": "#/$defs/sha256"},
+        "provider_runtime_sha256": {"$ref": "#/$defs/sha256"},
+        "provider_admission_sha256": {"$ref": "#/$defs/sha256"},
+        "operation_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "authorities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

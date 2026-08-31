@@ -40,7 +40,7 @@ passing differential report.
 
 - The manually approved authoring runner and independent offline checker.
 - A compiler from the validated Stripe capture to
-  `datalox_reference_trace_v1`, followed by the provider-neutral
+  `datalox_reference_trace_v2`, followed by the provider-neutral
   `datalox_engineering_proof_v1` runner. Stripe no longer owns a separate
   differential target or proof orchestrator.
 - An explicit comparison profile for status, customer identity binding,

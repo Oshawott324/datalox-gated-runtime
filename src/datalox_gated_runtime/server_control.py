@@ -19,8 +19,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
-from urllib.request import urlopen
-
+from urllib.request import ProxyHandler, build_opener
 
 SERVER_STATE_NAME = "server.json"
 SERVER_LOG_NAME = "server.log"
@@ -35,14 +34,12 @@ def pick_free_port() -> int:
         return int(sock.getsockname()[1])
 
 
-def start_server(*, run_dir: Path, port: int, allow_live: bool = False) -> dict[str, Any]:
+def start_server(*, run_dir: Path, port: int) -> dict[str, Any]:
     run_dir = run_dir.resolve()
     state_path = run_dir / SERVER_STATE_NAME
     log_path = run_dir / SERVER_LOG_NAME
     server_token = uuid.uuid4().hex
-    command = _server_command(
-        run_dir=run_dir, port=port, allow_live=allow_live, server_token=server_token
-    )
+    command = _server_command(run_dir=run_dir, port=port, server_token=server_token)
     existing = _read_server_state(state_path)
     if existing is not None:
         pid = existing.get("pid")
@@ -76,7 +73,6 @@ def start_server(*, run_dir: Path, port: int, allow_live: bool = False) -> dict[
     state = {
         "pid": child.pid,
         "port": port,
-        "allow_live": allow_live,
         "command": command,
         "run_dir": str(run_dir),
         "started_at": datetime.now(UTC).isoformat(),
@@ -182,6 +178,7 @@ def _wait_for_health(
 ) -> None:
     deadline = time.monotonic() + deadline_seconds
     health_url = f"{base_url}/_datalox/health"
+    local_opener = build_opener(ProxyHandler({}))
     last_error: Exception | None = None
     while time.monotonic() < deadline:
         returncode = child.poll()
@@ -190,7 +187,7 @@ def _wait_for_health(
                 f"server process exited before becoming healthy: exit code {returncode}"
             )
         try:
-            with urlopen(health_url, timeout=0.5) as response:
+            with local_opener.open(health_url, timeout=0.5) as response:
                 payload = json.loads(response.read().decode("utf-8"))
                 if (
                     response.status == 200
@@ -212,8 +209,8 @@ def _wait_for_health(
     raise ValueError(f"server did not become healthy within {deadline_seconds:.0f}s{detail}")
 
 
-def _server_command(*, run_dir: Path, port: int, allow_live: bool, server_token: str) -> list[str]:
-    command = [
+def _server_command(*, run_dir: Path, port: int, server_token: str) -> list[str]:
+    return [
         sys.executable,
         "-m",
         "datalox_gated_runtime.cli",
@@ -225,9 +222,6 @@ def _server_command(*, run_dir: Path, port: int, allow_live: bool, server_token:
         "--server-token",
         server_token,
     ]
-    if allow_live:
-        command.append("--allow-live")
-    return command
 
 
 def _ensure_port_available(port: int) -> None:

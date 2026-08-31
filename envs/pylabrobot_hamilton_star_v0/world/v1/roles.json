@@ -1,0 +1,12 @@
+{
+  "roles": [
+    {
+      "description": "Operates the standard eight-channel Hamilton STAR dry-run backend.",
+      "id": "lab_operator"
+    },
+    {
+      "description": "Reads isolated Hamilton STAR lifecycle, tip, and liquid state.",
+      "id": "auditor"
+    }
+  ]
+}

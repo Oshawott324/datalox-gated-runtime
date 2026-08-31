@@ -1,0 +1,505 @@
+{
+  "authority_note": "Compilation uses reserved .invalid authorities only for structural proof. A deployment must compile the exact operator-declared provider authority.",
+  "excluded": [
+    {
+      "env_id": "commerce_support_ops_v0",
+      "reason": "consumer-owned cross-provider world, not a provider behavior pack"
+    },
+    {
+      "env_id": "incident_customer_coordination_v0",
+      "reason": "consumer-owned cross-provider world, not a provider behavior pack"
+    }
+  ],
+  "providers": [
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "chembl_public_v0",
+      "operation_count": 60,
+      "provider_id": "chembl",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "documented_datadog_v0",
+      "operation_count": 21,
+      "provider_id": "datadog",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "documented_github_rest_v0",
+      "operation_count": 27,
+      "provider_id": "github_rest",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "documented_google_workspace_v0",
+      "operation_count": 20,
+      "provider_id": "google_workspace",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "documented_hubspot_crm_v0",
+      "operation_count": 24,
+      "provider_id": "hubspot_crm",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "documented_jira_cloud_v0",
+      "operation_count": 17,
+      "provider_id": "jira_cloud",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "documented_microsoft_graph_v0",
+      "operation_count": 17,
+      "provider_id": "microsoft_graph",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "documented_notion_v0",
+      "operation_count": 21,
+      "provider_id": "notion",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "documented_shopify_admin_v0",
+      "operation_count": 19,
+      "provider_id": "shopify_admin",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "documented_slack_web_v0",
+      "operation_count": 17,
+      "provider_id": "slack_web",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "ecb_data_portal_public_v0",
+      "operation_count": 11,
+      "provider_id": "ecb_data_portal",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "ensembl_public_v0",
+      "operation_count": 106,
+      "provider_id": "ensembl",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "federal_register_public_v0",
+      "operation_count": 16,
+      "provider_id": "federal_register",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "galaxy_usegalaxy_public_v0",
+      "operation_count": 62,
+      "provider_id": "galaxy_usegalaxy",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "gs1_epcis_2_0_1_v0",
+      "operation_count": 37,
+      "provider_id": "gs1_epcis",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "kubernetes_openapi_g1_v1_36_2",
+      "operation_count": 1359,
+      "provider_id": "kubernetes",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "msc_geomet_public_v0",
+      "operation_count": 14,
+      "provider_id": "msc_geomet",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "openlmis_supply_chain_v0",
+      "operation_count": 71,
+      "provider_id": "openlmis",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "optimade_cod_public_v0",
+      "operation_count": 12,
+      "provider_id": "optimade_cod",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_alpaca_v0",
+      "operation_count": 26,
+      "provider_id": "alpaca",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_arcgis_public_v0",
+      "operation_count": 24,
+      "provider_id": "arcgis_public",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_clinical_trials_gov_v0",
+      "operation_count": 16,
+      "provider_id": "clinical_trials_gov",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_cromwell_v0",
+      "operation_count": 14,
+      "provider_id": "cromwell",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_crossref_v0",
+      "operation_count": 20,
+      "provider_id": "crossref",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_docker_engine_v0",
+      "operation_count": 9,
+      "provider_id": "docker_engine",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_easypost_v0",
+      "operation_count": 13,
+      "provider_id": "easypost",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_gbif_v0",
+      "operation_count": 19,
+      "provider_id": "gbif",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_grafana_oss_v0",
+      "operation_count": 8,
+      "provider_id": "grafana_oss",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "probed_hapi_fhir_v0",
+      "operation_count": 38,
+      "provider_id": "hapi_fhir",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_medusa_v0",
+      "operation_count": 20,
+      "provider_id": "medusa",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_mlflow_v0",
+      "operation_count": 7,
+      "provider_id": "mlflow",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_nasa_cmr_v0",
+      "operation_count": 19,
+      "provider_id": "nasa_cmr",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_nist_nvd_v0",
+      "operation_count": 20,
+      "provider_id": "nist_nvd",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_nws_v0",
+      "operation_count": 19,
+      "provider_id": "nws",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_openfda_v0",
+      "operation_count": 22,
+      "provider_id": "openfda",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_openfema_v0",
+      "operation_count": 16,
+      "provider_id": "openfema",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "probed_opensearch_v0",
+      "operation_count": 64,
+      "provider_id": "opensearch",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "probed_opentrons_local_v0",
+      "operation_count": 19,
+      "provider_id": "opentrons_robot_server",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_prometheus_alertmanager_v0",
+      "operation_count": 9,
+      "provider_id": "prometheus_alertmanager",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_rcsb_pdb_v0",
+      "operation_count": 28,
+      "provider_id": "rcsb_pdb",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_usgs_earthquake_v0",
+      "operation_count": 18,
+      "provider_id": "usgs_earthquake",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "probed_woocommerce_v0",
+      "operation_count": 18,
+      "provider_id": "woocommerce",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "pubchem_public_v0",
+      "operation_count": 16,
+      "provider_id": "pubchem",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "pylabrobot_hamilton_star_v0",
+      "operation_count": 9,
+      "provider_id": "pylabrobot_hamilton_star",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "stac_earth_search_public_v0",
+      "operation_count": 15,
+      "provider_id": "stac_earth_search",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "stripe_billing_ops_v0",
+      "operation_count": 65,
+      "provider_id": "stripe",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "tmforum_carrier_operations_v0",
+      "operation_count": 350,
+      "provider_id": "tmforum_carrier_operations",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
+      "behavior_protocol": "world_v1_adapter",
+      "env_id": "uniprot_public_v0",
+      "operation_count": 43,
+      "provider_id": "uniprot",
+      "reset_passed": true,
+      "source_kind": "world_v1",
+      "status": "passed",
+      "task_assets_present": false
+    }
+  ],
+  "schema_version": "datalox_provider_runtime_coverage_v1",
+  "scope": "registered actual-provider environments",
+  "summary": {
+    "excluded_composite_count": 2,
+    "gate_config_count": 30,
+    "passed_count": 48,
+    "provider_count": 48,
+    "registered_environment_count": 50,
+    "world_v1_count": 18
+  }
+}

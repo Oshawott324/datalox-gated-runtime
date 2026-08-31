@@ -1,0 +1,190 @@
+{
+  "grounding_gaps": [
+    {
+      "claim": "production permissions, pagination, rate limits, and error timing",
+      "operation_family": "incident_investigation",
+      "reason": "The world is grounded in pinned schemas, not sandbox or traffic evidence."
+    },
+    {
+      "claim": "production CRM side effects and tenant permission behavior",
+      "operation_family": "customer_coordination",
+      "reason": "Writes are deterministic shadow transitions over G1 shapes."
+    },
+    {
+      "claim": "live delivery behavior",
+      "operation_family": "internal_communications",
+      "reason": "Sending is deliberately denied and no live write is modeled."
+    }
+  ],
+  "sources": [
+    {
+      "derivation": "Retrieved 2026-07-13. Provider bodies instantiate cited response schemas; PATCH and DELETE are deny-only.",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "id": "datadog_v2_openapi",
+      "kind": "official_schema_instantiated",
+      "locator": "https://github.com/DataDog/datadog-api-client-python/blob/9ec36317e0bc105b627a388a0f622928a9c1c3c8/.generator/schemas/v2/openapi.yaml :: /paths/~1api~1v2~1incidents; /paths/~1api~1v2~1services~1definitions; /paths/~1api~1v2~1users; /paths/~1api~1v2~1on-call~1schedules~1{schedule_id}~1on-call; /paths/~1api~1v2~1incidents~1{incident_id}",
+      "supports": [
+        "operation:datadog_get_current_oncall",
+        "operation:datadog_list_incidents",
+        "operation:datadog_list_service_definitions",
+        "operation:datadog_list_users"
+      ]
+    },
+    {
+      "derivation": "Retrieved 2026-07-13. Owner values are coherently synthesized from the official schema.",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "id": "hubspot_owners_openapi",
+      "kind": "official_schema_instantiated",
+      "locator": "https://github.com/HubSpot/HubSpot-public-api-spec-collection/blob/cbe42d0c762de0dafbde5ce69e12957e574ca2f8/PublicApiSpecs/CRM/Crm%20Owners/Rollouts/146888/2026-03/crmOwners.json :: #/paths/~1crm~1owners~12026-03/get/responses/200; #/components/schemas/PublicOwner",
+      "supports": [
+        "operation:hubspot_list_owners"
+      ]
+    },
+    {
+      "derivation": "Retrieved 2026-07-13. Contact and association values are fixture-authored schema instances.",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "id": "hubspot_contacts_openapi",
+      "kind": "official_schema_instantiated",
+      "locator": "https://github.com/HubSpot/HubSpot-public-api-spec-collection/blob/cbe42d0c762de0dafbde5ce69e12957e574ca2f8/PublicApiSpecs/CRM/Contacts/Rollouts/424/2026-03/contacts.json :: #/paths/~1crm~1objects~12026-03~1contacts/get/responses/200; #/components/schemas/SimplePublicObjectWithAssociations",
+      "supports": [
+        "operation:hubspot_list_contacts"
+      ]
+    },
+    {
+      "derivation": "Retrieved 2026-07-13. Company and association values are fixture-authored schema instances.",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "id": "hubspot_companies_openapi",
+      "kind": "official_schema_instantiated",
+      "locator": "https://github.com/HubSpot/HubSpot-public-api-spec-collection/blob/cbe42d0c762de0dafbde5ce69e12957e574ca2f8/PublicApiSpecs/CRM/Companies/Rollouts/424/2026-03/companies.json :: #/paths/~1crm~1objects~12026-03~1companies/get/responses/200; #/components/schemas/SimplePublicObjectWithAssociations",
+      "supports": [
+        "operation:hubspot_list_companies"
+      ]
+    },
+    {
+      "derivation": "Retrieved 2026-07-13. Open renewal deal values are fixture-authored schema instances.",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "id": "hubspot_deals_openapi",
+      "kind": "official_schema_instantiated",
+      "locator": "https://github.com/HubSpot/HubSpot-public-api-spec-collection/blob/cbe42d0c762de0dafbde5ce69e12957e574ca2f8/PublicApiSpecs/CRM/Deals/Rollouts/424/2026-03/deals.json :: #/paths/~1crm~1objects~12026-03~10-3/get/responses/200; #/components/schemas/SimplePublicObjectWithAssociations",
+      "supports": [
+        "operation:hubspot_list_deals"
+      ]
+    },
+    {
+      "derivation": "Retrieved 2026-07-13. PATCH uses properties and returns a SimplePublicObject with status 200.",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "id": "hubspot_tickets_openapi",
+      "kind": "official_schema_instantiated",
+      "locator": "https://github.com/HubSpot/HubSpot-public-api-spec-collection/blob/cbe42d0c762de0dafbde5ce69e12957e574ca2f8/PublicApiSpecs/CRM/Tickets/Rollouts/424/2026-03/tickets.json :: #/paths/~1crm~1objects~12026-03~1tickets/get/responses/200; #/paths/~1crm~1objects~12026-03~1tickets~1{ticketId}/get; #/paths/~1crm~1objects~12026-03~1tickets~1{ticketId}/patch; #/components/schemas/SimplePublicObjectInput",
+      "supports": [
+        "operation:hubspot_get_ticket",
+        "operation:hubspot_list_tickets",
+        "operation:hubspot_update_ticket"
+      ]
+    },
+    {
+      "derivation": "Retrieved 2026-07-13. The official issue example writes assignee.accountId and priority.id without priority.name; PUT fields update and POST transition use documented 204 responses.",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "id": "jira_issue_docs",
+      "kind": "official_schema_instantiated",
+      "locator": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/ :: GET and PUT /rest/api/3/issue/{issueIdOrKey}; POST /rest/api/3/issue/{issueIdOrKey}/transitions; Edit issue and Transition issue request/response sections",
+      "supports": [
+        "operation:jira_get_issue",
+        "operation:jira_transition_issue",
+        "operation:jira_update_issue"
+      ]
+    },
+    {
+      "derivation": "Retrieved 2026-07-13. Available transition records expose the transition ID and target status.",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "id": "jira_transition_docs",
+      "kind": "official_schema_instantiated",
+      "locator": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/ :: GET /rest/api/3/issue/{issueIdOrKey}/transitions; Get transitions; 200 transitions response",
+      "supports": [
+        "operation:jira_get_transitions",
+        "operation:jira_transition_issue"
+      ]
+    },
+    {
+      "derivation": "Retrieved 2026-07-13. Priority records expose provider IDs and names used by issue updates.",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "id": "jira_priority_docs",
+      "kind": "official_schema_instantiated",
+      "locator": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-priorities/ :: GET /rest/api/3/priority; Get priorities; 200 array<Priority> response",
+      "supports": [
+        "operation:jira_list_priorities"
+      ]
+    },
+    {
+      "derivation": "Retrieved 2026-07-13. Assignable user records connect email identity to Jira accountId.",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "id": "jira_user_search_docs",
+      "kind": "official_schema_instantiated",
+      "locator": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-user-search/ :: GET /rest/api/3/user/assignable/search; Find users assignable to projects; 200 array<User> response",
+      "supports": [
+        "operation:jira_list_assignable_users"
+      ]
+    },
+    {
+      "derivation": "Retrieved 2026-07-13. Customer request values instantiate fields shown in the official response example.",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "id": "jira_jsm_request_docs",
+      "kind": "official_schema_instantiated",
+      "locator": "https://developer.atlassian.com/cloud/jira/service-desk/rest/api-group-request/ :: GET /rest/servicedeskapi/request/{issueIdOrKey}; Get customer request by id or key; 200 CustomerRequestDTO example",
+      "supports": [
+        "operation:jira_get_customer_request"
+      ]
+    },
+    {
+      "derivation": "Retrieved 2026-07-13. Internal directory user bodies use documented user fields and types.",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "id": "graph_user_list_docs",
+      "kind": "official_schema_instantiated",
+      "locator": "https://github.com/microsoftgraph/microsoft-graph-docs-contrib/blob/0b9104fac0621887d68ba6af9e367744c0cf58c0/api-reference/v1.0/api/user-list.md :: Examples > Example 1: Get all users > Response",
+      "supports": [
+        "operation:microsoft_graph_list_users"
+      ]
+    },
+    {
+      "derivation": "Retrieved 2026-07-13. Calendar values are fixture-authored event schema instances.",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "id": "graph_calendar_view_docs",
+      "kind": "official_schema_instantiated",
+      "locator": "https://github.com/microsoftgraph/microsoft-graph-docs-contrib/blob/0b9104fac0621887d68ba6af9e367744c0cf58c0/api-reference/v1.0/api/user-list-calendarview.md :: GET /users/{id|userPrincipalName}/calendarView; startDateTime and endDateTime query parameters; 200 event collection response",
+      "supports": [
+        "operation:microsoft_graph_get_calendar_view"
+      ]
+    },
+    {
+      "derivation": "Retrieved 2026-07-13. The shadow write creates a draft and never sends it.",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "id": "graph_message_draft_docs",
+      "kind": "official_schema_instantiated",
+      "locator": "https://github.com/microsoftgraph/microsoft-graph-docs-contrib/blob/0b9104fac0621887d68ba6af9e367744c0cf58c0/api-reference/v1.0/api/user-post-messages.md :: POST /me/messages; Example 1 create JSON draft request and 201 message response",
+      "supports": [
+        "operation:microsoft_graph_create_draft",
+        "operation:microsoft_graph_get_draft"
+      ]
+    },
+    {
+      "derivation": "Retrieved 2026-07-13. The official external-send operation is declared only as an HTTP denial route.",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "id": "graph_sendmail_docs",
+      "kind": "official_schema_instantiated",
+      "locator": "https://github.com/microsoftgraph/microsoft-graph-docs-contrib/blob/0b9104fac0621887d68ba6af9e367744c0cf58c0/api-reference/v1.0/api/user-sendmail.md :: POST /me/sendMail; JSON request body; 202 empty response",
+      "supports": [
+        "denial:microsoft_graph_send_mail"
+      ]
+    },
+    {
+      "derivation": "Generated deterministically on 2026-07-13; no live provider calls, credentials, or observed tenant values.",
+      "grounding_level": "G0_FIXTURE_AUTHORED",
+      "id": "composite_fixture_authoring",
+      "kind": "fixture_authored",
+      "locator": "scripts/worlds/build_incident_customer_coordination.py",
+      "supports": [
+        "world:episode_generation"
+      ]
+    }
+  ]
+}

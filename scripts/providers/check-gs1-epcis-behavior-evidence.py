@@ -20,7 +20,10 @@ from datalox_gated_runtime.behavior_harvest.engines.v3.contracts import (  # noq
 )
 from datalox_gated_runtime.engineering_proof import (  # noqa: E402
     PathPrefixMapping,
+    PrincipalBoundTraceTarget,
+    PrincipalMapping,
     WorldTargetSpec,
+    principal_bindings_from_recipe_steps,
 )
 from datalox_gated_runtime.engineering_proof.world_target import (  # noqa: E402
     WorldBundleTraceTarget,
@@ -58,8 +61,7 @@ def _target(name: str) -> WorldBundleTraceTarget:
             target_id="gs1_epcis_local_world",
             target_version="1.0.0",
             episode_id="cold-chain-trace-001",
-            actor_id=f"proof-{name}",
-            actor_role=ROLES[name],
+            principal_mappings=(PrincipalMapping("reference_actor", f"proof-{name}", ROLES[name]),),
             path_mappings=(PathPrefixMapping("/", "/"),),
             operation_mappings=(),
         ),
@@ -94,8 +96,15 @@ def compute_report() -> dict[str, Any]:
         )
         target = _target(name)
         try:
+            recipe_contract = v3.load_recipe(
+                recipe,
+                expected_sha256=program["recipe_sha256"],
+            ).value
             report = v3.run_compiled_behavior_trace(
-                target=target,
+                target=PrincipalBoundTraceTarget(
+                    target=target,
+                    bindings=principal_bindings_from_recipe_steps(recipe_contract.steps),
+                ),
                 capture_path=capture,
                 expected_capture_sha256=program["capture_sha256"],
                 connector_path=connector,

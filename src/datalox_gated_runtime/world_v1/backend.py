@@ -108,6 +108,12 @@ def _runtime_files(validated: ValidatedWorldBundle) -> tuple[Path, ...]:
     return tuple(sorted(files))
 
 
+def world_runtime_files(validated: ValidatedWorldBundle) -> tuple[Path, ...]:
+    """Return the content-hashed files needed to execute provider behavior."""
+
+    return _runtime_files(validated)
+
+
 def _runtime_payload(
     validated: ValidatedWorldBundle,
     episode_id: str,
@@ -435,6 +441,31 @@ class WorldBundleBackend:
             actor = self._actor_for_denial(request)
             self._record_denial(request=request, actor=actor, tool_id=tool_id, error=exc)
             return self._denial_response(request=request, error=exc, tool_id=tool_id)
+        return self._handle_as_actor(request, actor=actor, tool_id=tool_id)
+
+    def handle_as(self, request: CallRequest, *, actor: ActorContext) -> WorldResponse | None:
+        """Execute using controller-supplied identity, never agent-supplied actor headers."""
+
+        if not isinstance(actor, ActorContext):
+            raise TypeError("actor must be an ActorContext")
+        if actor.role not in self.bundle.tool_catalog.role_ids:
+            raise WorldAuthorizationError(
+                "world_actor_role_unknown",
+                f"Actor role {actor.role!r} is not declared by this world.",
+                actor_id=actor.actor_id,
+                role=actor.role,
+                declared_roles=sorted(self.bundle.tool_catalog.role_ids),
+            )
+        tool_id = self.bundle.implementation.tool_for_request(request)
+        return self._handle_as_actor(request, actor=actor, tool_id=tool_id)
+
+    def _handle_as_actor(
+        self,
+        request: CallRequest,
+        *,
+        actor: ActorContext,
+        tool_id: str | None,
+    ) -> WorldResponse | None:
         if tool_id is not None:
             try:
                 self.bundle.tool_catalog.require_invocation(actor, tool_id)

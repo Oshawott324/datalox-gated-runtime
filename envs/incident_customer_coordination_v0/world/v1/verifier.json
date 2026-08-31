@@ -1,0 +1,15 @@
+{
+  "additional_assertions": [
+    "coordination_workspace_draft_exists",
+    "coordination_workspace_draft_status",
+    "coordination_workspace_draft_scope",
+    "coordination_workspace_draft_lineage",
+    "datadog_oncall_evidence_fresh",
+    "coordination_handoff_committed",
+    "unauthorized_jira_update_attempted"
+  ],
+  "assertions": [],
+  "legacy_assertions_path": "world/verifier.json",
+  "schema_version": "datalox_compositional_verifier_v1",
+  "semantic_rubrics": []
+}

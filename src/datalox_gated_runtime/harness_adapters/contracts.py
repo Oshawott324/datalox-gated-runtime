@@ -3,7 +3,7 @@
 ADAPTER_SCHEMA_VERSION = "datalox_harness_adapter_v1"
 ADAPTER_MANIFEST = "DATALOX_ADAPTER.json"
 HUD_VERSION = "0.6.12"
-HARBOR_VERSION = "0.20.0"
+HARBOR_VERSION = "0.21.0"
 
 
 class HarnessAdapterError(ValueError):

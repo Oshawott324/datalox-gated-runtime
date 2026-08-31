@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.ai/schemas/rollout-information-boundary-v1.schema.json",
+  "title": "Datalox rollout information boundary v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "integration_id",
+    "task_plane",
+    "observation_plane",
+    "evaluation_plane"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datalox_rollout_information_boundary_v1"
+    },
+    "integration_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{1,63}$"
+    },
+    "task_plane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "agent_visible", "availability", "contents", "carrier"],
+      "properties": {
+        "owner": {"const": "consumer"},
+        "agent_visible": {"const": true},
+        "availability": {"const": "before_interaction"},
+        "contents": {
+          "const": ["task_objectives", "agent_visible_constraints"]
+        },
+        "carrier": {"$ref": "#/$defs/carrier"}
+      }
+    },
+    "observation_plane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "agent_visible", "availability", "contents", "carrier"],
+      "properties": {
+        "owner": {"const": "consumer_environment_and_provider_runtime"},
+        "agent_visible": {"const": true},
+        "availability": {"const": "after_causal_environment_interaction"},
+        "contents": {
+          "const": ["provider_responses", "environment_anomalies"]
+        },
+        "carrier": {"$ref": "#/$defs/carrier"}
+      }
+    },
+    "evaluation_plane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "agent_visible", "availability", "contents", "carrier"],
+      "properties": {
+        "owner": {"const": "consumer"},
+        "agent_visible": {"const": false},
+        "availability": {"const": "trusted_generation_or_evaluation_only"},
+        "contents": {
+          "const": ["evaluation_ground_truth", "oracle_state", "verifier_inputs"]
+        },
+        "carrier": {"$ref": "#/$defs/carrier"}
+      }
+    }
+  },
+  "$defs": {
+    "carrier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^\\S(?:.*\\S)?$"
+    }
+  }
+}

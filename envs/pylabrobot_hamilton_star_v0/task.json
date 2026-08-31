@@ -1,0 +1,11 @@
+{
+  "instructions": "Set up the device-free Hamilton STAR deck, move 100 microliters from the source container to the target with one standard channel, return the tip, inspect resulting state, and stop the liquid handler.",
+  "success_criteria": [
+    "The source loses exactly 100 microliters and the target gains exactly 100 microliters.",
+    "The selected tip is returned to its original spot with no liquid remaining on a channel.",
+    "The liquid handler reaches the stopped state after every selected operation family is exercised.",
+    "No invalid or denied operation occurs."
+  ],
+  "task_id": "pylabrobot-hamilton-star-transfer-001",
+  "title": "Execute a device-free Hamilton STAR transfer"
+}

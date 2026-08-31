@@ -1,0 +1,16 @@
+{
+  "roles": [
+    {
+      "description": "Investigates the incident and coordinates engineering state.",
+      "id": "incident_commander"
+    },
+    {
+      "description": "Owns affected-customer and CRM coordination.",
+      "id": "support_owner"
+    },
+    {
+      "description": "Creates the internal coordination draft without sending it.",
+      "id": "communications"
+    }
+  ]
+}

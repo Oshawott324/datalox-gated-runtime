@@ -41,6 +41,16 @@ class WorldBundleTraceTarget:
         self.target_version = spec.target_version
         self._temporary: tempfile.TemporaryDirectory[str] | None = None
         self._backend: WorldBundleBackend | None = None
+        self._actors = {
+            item.principal_context_id: ActorContext(item.actor_id, item.actor_role)
+            for item in spec.principal_mappings
+        }
+        self._static_reference_to_world = {
+            item.reference_value: item.world_value for item in spec.static_value_mappings
+        }
+        self._static_world_to_reference = {
+            item.world_value: item.reference_value for item in spec.static_value_mappings
+        }
         self._reference_bindings = self._validate_reference_bindings(reference_bindings or {})
         self._local_bindings: dict[str, str] = {}
         self._transcript: list[dict[str, Any]] = []
@@ -90,8 +100,27 @@ class WorldBundleTraceTarget:
         )
         self._backend = WorldBundleBackend(
             run_dir=run_dir,
-            configured_actor=ActorContext(self.spec.actor_id, self.spec.actor_role),
+            configured_actor=None,
         )
+        if self.spec.state_record_overrides:
+            controller = ActorContext(
+                "proof-fixture-controller",
+                self.spec.principal_mappings[0].actor_role,
+            )
+            with self._backend.session.transaction(
+                operation_id="engineering_proof.seed_override",
+                actor=controller,
+                tool_name=None,
+                request={"override_count": len(self.spec.state_record_overrides)},
+            ):
+                for override in self.spec.state_record_overrides:
+                    collection = self._backend.session.get_state(override.collection)
+                    if not isinstance(collection, dict):
+                        raise EngineeringProofContractError(
+                            f"state override collection is not an object: {override.collection}"
+                        )
+                    collection[override.record_id] = thaw_json(override.value)
+                    self._backend.session.set_state(override.collection, collection)
         self._local_bindings = {}
         self._transcript = []
         self._reset_generation += 1
@@ -100,9 +129,21 @@ class WorldBundleTraceTarget:
     def reset_generation(self) -> int:
         return self._reset_generation
 
-    def execute(self, call: ReferenceCall) -> ObservedResponse:
+    def execute(
+        self,
+        call: ReferenceCall,
+        *,
+        principal_context_id: str,
+    ) -> ObservedResponse:
         if self._backend is None:
             raise EngineeringProofContractError("world target must be reset before execution")
+        try:
+            actor = self._actors[principal_context_id]
+        except KeyError as error:
+            raise EngineeringProofContractError(
+                "reference step principal is absent from explicit target mappings: "
+                f"{principal_context_id}"
+            ) from error
         mapped_path = self._map_path(call.path)
         mapped_path = self._replace_path_segments(mapped_path)
         mapped_operation = self._map_operation(call.operation_id)
@@ -114,7 +155,7 @@ class WorldBundleTraceTarget:
             headers=dict(call.headers),
             operation_id=mapped_operation,
         )
-        response = self._backend.handle(request)
+        response = self._backend.handle_as(request, actor=actor)
         if response is None:
             raise EngineeringProofContractError(
                 f"world has no route for {request.normalized_method()} {request.path}"
@@ -129,6 +170,9 @@ class WorldBundleTraceTarget:
                     "body": self._normalize_values(request.body),
                     "headers": dict(sorted(request.headers.items())),
                     "operation_id": request.operation_id,
+                    "principal_context_id": principal_context_id,
+                    "actor_id": actor.actor_id,
+                    "actor_role": actor.role,
                 },
                 "response": {
                     "status_code": response.status_code,
@@ -144,7 +188,7 @@ class WorldBundleTraceTarget:
         )
         return ObservedResponse(
             status_code=response.status_code,
-            body=response.body,
+            body=self._restore_reference_values(response.body),
             headers=response.headers,
         )
 
@@ -229,9 +273,21 @@ class WorldBundleTraceTarget:
 
     def _replacement_map(self) -> dict[str, str]:
         return {
-            self._reference_bindings[binding_id]: local_value
-            for binding_id, local_value in self._local_bindings.items()
+            **self._static_reference_to_world,
+            **{
+                self._reference_bindings[binding_id]: local_value
+                for binding_id, local_value in self._local_bindings.items()
+            },
         }
+
+    def _restore_reference_values(self, value: Any) -> Any:
+        if isinstance(value, Mapping):
+            return {key: self._restore_reference_values(item) for key, item in value.items()}
+        if isinstance(value, (tuple, list)):
+            return [self._restore_reference_values(item) for item in value]
+        if type(value) is str:
+            return self._static_world_to_reference.get(value, value)
+        return value
 
     def _normalize_path(self, path: str) -> str:
         replacements = {

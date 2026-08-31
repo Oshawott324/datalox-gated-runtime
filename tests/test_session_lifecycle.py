@@ -1,7 +1,7 @@
 import json
 import os
-import signal
 import shutil
+import signal
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -12,7 +12,6 @@ import httpx
 import pytest
 
 from datalox_gated_runtime import server_control
-
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 RESPONSE_CASE_FIXTURE = REPO_ROOT / "tests" / "fixtures" / "response_case_state_v0" / "example"
@@ -45,7 +44,7 @@ def test_session_start_serves_and_stop_terminates(tmp_path: Path) -> None:
     base_url = payload["http_base_url"]
     try:
         assert payload["server"]["pid"] > 0
-        assert payload["server"]["allow_live"] is False
+        assert "allow_live" not in payload["server"]
         assert Path(payload["server"]["log_path"]) == run_dir / "server.log"
         assert isinstance(payload["server"]["server_token"], str)
         assert len(payload["server"]["server_token"]) == 32
@@ -55,7 +54,7 @@ def test_session_start_serves_and_stop_terminates(tmp_path: Path) -> None:
         state = json.loads((run_dir / "server.json").read_text(encoding="utf-8"))
         assert state["server_token"] == payload["server"]["server_token"]
 
-        health = httpx.get(f"{base_url}/_datalox/health", timeout=2.0)
+        health = httpx.get(f"{base_url}/_datalox/health", timeout=2.0, trust_env=False)
         assert health.status_code == 200
         assert health.json()["server_token"] == payload["server"]["server_token"]
 
@@ -65,7 +64,7 @@ def test_session_start_serves_and_stop_terminates(tmp_path: Path) -> None:
         assert not (run_dir / "server.json").exists()
 
         try:
-            after_stop = httpx.get(f"{base_url}/_datalox/health", timeout=0.5)
+            after_stop = httpx.get(f"{base_url}/_datalox/health", timeout=0.5, trust_env=False)
         except httpx.HTTPError:
             after_stop = None
         assert after_stop is None or after_stop.status_code != 200
@@ -129,6 +128,7 @@ def test_session_create_and_start_seed_select_distinct_immutable_world_episodes(
             f"{started_payload['http_base_url']}/incidents/inc-002",
             params={"view": "full"},
             timeout=2.0,
+            trust_env=False,
         )
         assert selected_state.status_code == 200
         assert selected_state.json()["data"]["id"] == "inc-002"
@@ -372,9 +372,6 @@ def test_stop_server_does_not_trust_health_token_for_pid_identity(
     )
     monkeypatch.setattr(server_control, "_pid_is_alive", lambda pid: True)
     monkeypatch.setattr(server_control, "_process_command_contains_token", lambda pid, token: False)
-    monkeypatch.setattr(
-        server_control, "urlopen", lambda url, timeout: _HealthResponse({"server_token": "token"})
-    )
 
     def fail_if_signaled(pid: int, sig: int) -> None:
         if sig in {signal.SIGTERM, signal.SIGKILL}:
@@ -406,9 +403,6 @@ def test_running_server_pid_does_not_trust_health_token_for_pid_identity(
     )
     monkeypatch.setattr(server_control, "_pid_is_alive", lambda pid: True)
     monkeypatch.setattr(server_control, "_process_command_contains_token", lambda pid, token: False)
-    monkeypatch.setattr(
-        server_control, "urlopen", lambda url, timeout: _HealthResponse({"server_token": "token"})
-    )
 
     assert server_control.running_server_pid(run_dir) is None
 
@@ -418,7 +412,9 @@ def test_wait_for_health_rejects_wrong_server_token(monkeypatch: pytest.MonkeyPa
 
     monkeypatch.setattr(server_control, "POLL_INTERVAL_SECONDS", 0.001)
     monkeypatch.setattr(
-        server_control, "urlopen", lambda url, timeout: _HealthResponse({"server_token": "wrong"})
+        server_control,
+        "build_opener",
+        lambda *handlers: _HealthOpener({"server_token": "wrong"}),
     )
 
     with pytest.raises(ValueError, match="exit code 17"):
@@ -467,3 +463,11 @@ class _HealthResponse:
 
     def __exit__(self, *args: object) -> None:
         return None
+
+
+class _HealthOpener:
+    def __init__(self, payload: dict[str, object]) -> None:
+        self._payload = payload
+
+    def open(self, url: str, timeout: float) -> _HealthResponse:
+        return _HealthResponse(self._payload)

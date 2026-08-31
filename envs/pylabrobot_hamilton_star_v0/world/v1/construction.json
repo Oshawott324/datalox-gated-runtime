@@ -1,0 +1,28 @@
+{
+  "behavior_program_count": 6,
+  "grounding_gaps": [
+    {
+      "claim": "physical Hamilton STAR hardware equivalence",
+      "operation_family": "all",
+      "reason": "The provider pack models the PyLabRobot 0.2.1 Chatterbox device-free reference, not robot firmware, VENUS, calibration, timing, collisions, or liquid classes."
+    },
+    {
+      "claim": "native provider HTTP API",
+      "operation_family": "all",
+      "reason": "The internal HTTPS projection is consumed by the Datalox PyLabRobot backend; evaluated programs continue to call LiquidHandler methods."
+    }
+  ],
+  "lifecycle_contract": "setup registers an eight-channel deck snapshot and fails when repeated while running; stop transitions running to stopped and fails when repeated; tip pickup/drop and aspirate/dispense are atomic across each batch and expose native PyLabRobot error names for invalid state.",
+  "operation_families": [
+    "lifecycle",
+    "tip_handling",
+    "liquid_handling"
+  ],
+  "provider_id": "pylabrobot_hamilton_star",
+  "provider_version": "PyLabRobot 0.2.1 / Hamilton STAR dry-run",
+  "schema_version": "datalox_provider_construction_v1",
+  "scope_boundary": "Standard eight-channel device-free setup, stop, tip pickup/drop, aspiration, dispense, and state inspection. CoRe 96, iSWAP, physical motion, calibration, VENUS, auxiliary instruments, and Hamilton liquid-class execution are excluded.",
+  "source_commit": "c8c9dcbcf4124ed078f4a8b4b21ec83474d7b7b1",
+  "tool_count": 9,
+  "write_count": 6
+}

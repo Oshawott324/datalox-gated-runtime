@@ -1,0 +1,579 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "operation_id": "datadog_list_incidents",
+      "path_parameters": {},
+      "path_template": "/api/v2/incidents",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "datadog_incidents",
+      "route_id": "datadog_list_incidents",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "datadog_list_service_definitions",
+      "path_parameters": {},
+      "path_template": "/api/v2/services/definitions",
+      "query": {
+        "page[size]": "25"
+      },
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "datadog_services",
+      "route_id": "datadog_list_service_definitions",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "datadog_list_users",
+      "path_parameters": {},
+      "path_template": "/api/v2/users",
+      "query": {
+        "page[size]": "25"
+      },
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "datadog_users",
+      "route_id": "datadog_list_users",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "datadog_get_current_oncall",
+      "path_parameters": {
+        "schedule_id": {
+          "pointer": "/data/0/attributes/schema/extensions/operations~1on-call-schedule-id",
+          "state_key": "datadog_services"
+        }
+      },
+      "path_template": "/api/v2/on-call/schedules/{schedule_id}/on-call",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "datadog_oncall",
+      "route_id": "datadog_get_current_oncall",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "hubspot_list_owners",
+      "path_parameters": {},
+      "path_template": "/crm/owners/2026-03",
+      "query": {
+        "limit": "100"
+      },
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "hubspot_owners",
+      "route_id": "hubspot_list_owners",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "hubspot_list_contacts",
+      "path_parameters": {},
+      "path_template": "/crm/objects/2026-03/contacts",
+      "query": {
+        "associations": "companies,deals,tickets",
+        "limit": "100",
+        "properties": "email,firstname,lastname,hubspot_owner_id"
+      },
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "hubspot_contacts",
+      "route_id": "hubspot_list_contacts",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "hubspot_list_companies",
+      "path_parameters": {},
+      "path_template": "/crm/objects/2026-03/companies",
+      "query": {
+        "associations": "contacts,deals,tickets",
+        "limit": "100",
+        "properties": "name,domain,hubspot_owner_id"
+      },
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "hubspot_companies",
+      "route_id": "hubspot_list_companies",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "hubspot_list_deals",
+      "path_parameters": {},
+      "path_template": "/crm/objects/2026-03/0-3",
+      "query": {
+        "associations": "contacts,companies,tickets,line_items,quotes",
+        "limit": "100",
+        "properties": "dealname,amount,closedate,dealstage,pipeline,hubspot_owner_id"
+      },
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "hubspot_deals",
+      "route_id": "hubspot_list_deals",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "hubspot_list_tickets",
+      "path_parameters": {},
+      "path_template": "/crm/objects/2026-03/tickets",
+      "query": {
+        "associations": "contacts,companies,deals",
+        "limit": "100",
+        "properties": "subject,hs_ticket_priority,hs_pipeline,hs_pipeline_stage,hubspot_owner_id"
+      },
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "hubspot_tickets",
+      "route_id": "hubspot_list_tickets",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "hubspot_get_ticket",
+      "path_parameters": {
+        "ticket_id": {
+          "pointer": "/id",
+          "state_key": "hubspot_ticket"
+        }
+      },
+      "path_template": "/crm/objects/2026-03/tickets/{ticket_id}",
+      "query": {
+        "associations": "contacts,companies,deals",
+        "properties": "subject,hs_ticket_priority,hs_pipeline,hs_pipeline_stage,hubspot_owner_id"
+      },
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "hubspot_ticket",
+      "route_id": "hubspot_get_ticket",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "jira_get_issue",
+      "path_parameters": {
+        "issue_id": {
+          "pointer": "/key",
+          "state_key": "jira_issue"
+        }
+      },
+      "path_template": "/rest/api/3/issue/{issue_id}",
+      "query": {
+        "expand": "names,schema,renderedFields"
+      },
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "jira_issue",
+      "route_id": "jira_get_issue",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "jira_list_priorities",
+      "path_parameters": {},
+      "path_template": "/rest/api/3/priority",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "jira_priorities",
+      "route_id": "jira_list_priorities",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "jira_get_transitions",
+      "path_parameters": {
+        "issue_id": {
+          "pointer": "/key",
+          "state_key": "jira_issue"
+        }
+      },
+      "path_template": "/rest/api/3/issue/{issue_id}/transitions",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "jira_transitions",
+      "route_id": "jira_get_transitions",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "jira_list_assignable_users",
+      "path_parameters": {},
+      "path_template": "/rest/api/3/user/assignable/search",
+      "query": {
+        "maxResults": "50",
+        "project": "OPS",
+        "startAt": "0"
+      },
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "jira_users",
+      "route_id": "jira_list_assignable_users",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "jira_get_customer_request",
+      "path_parameters": {
+        "request_id": {
+          "pointer": "/issueKey",
+          "state_key": "jira_service_request"
+        }
+      },
+      "path_template": "/rest/servicedeskapi/request/{request_id}",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "jira_service_request",
+      "route_id": "jira_get_customer_request",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "microsoft_graph_list_users",
+      "path_parameters": {},
+      "path_template": "/users",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "graph_users",
+      "route_id": "microsoft_graph_list_users",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "microsoft_graph_get_calendar_view",
+      "path_parameters": {
+        "user_id": {
+          "pointer": "/value/0/id",
+          "state_key": "graph_users"
+        }
+      },
+      "path_template": "/users/{user_id}/calendarView",
+      "query": {
+        "endDateTime": "2026-07-13T13:00:00Z",
+        "startDateTime": "2026-07-13T09:00:00Z"
+      },
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "graph_calendar",
+      "route_id": "microsoft_graph_get_calendar_view",
+      "success_status_code": 200
+    },
+    {
+      "method": "GET",
+      "operation_id": "microsoft_graph_get_draft",
+      "path_parameters": {
+        "message_id": {
+          "pointer": "/id",
+          "state_key": "graph_draft"
+        }
+      },
+      "path_template": "/me/messages/{message_id}",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": "graph_draft",
+      "route_id": "microsoft_graph_get_draft",
+      "success_status_code": 200
+    },
+    {
+      "method": "PUT",
+      "operation_id": "jira_update_issue",
+      "path_parameters": {
+        "issue_id": {
+          "pointer": "/key",
+          "state_key": "jira_issue"
+        }
+      },
+      "path_template": "/rest/api/3/issue/{issue_id}",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "fields": {
+            "additionalProperties": false,
+            "properties": {
+              "assignee": {
+                "additionalProperties": false,
+                "properties": {
+                  "accountId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "accountId"
+                ],
+                "type": "object"
+              },
+              "priority": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "assignee",
+              "priority"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "fields"
+        ],
+        "type": "object"
+      },
+      "response_state": null,
+      "route_id": "jira_update_issue",
+      "success_status_code": 204
+    },
+    {
+      "method": "POST",
+      "operation_id": "jira_transition_issue",
+      "path_parameters": {
+        "issue_id": {
+          "pointer": "/key",
+          "state_key": "jira_issue"
+        }
+      },
+      "path_template": "/rest/api/3/issue/{issue_id}/transitions",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "transition": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "transition"
+        ],
+        "type": "object"
+      },
+      "response_state": null,
+      "route_id": "jira_transition_issue",
+      "success_status_code": 204
+    },
+    {
+      "method": "PATCH",
+      "operation_id": "hubspot_update_ticket",
+      "path_parameters": {
+        "ticket_id": {
+          "pointer": "/id",
+          "state_key": "hubspot_ticket"
+        }
+      },
+      "path_template": "/crm/objects/2026-03/tickets/{ticket_id}",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "properties": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "properties"
+        ],
+        "type": "object"
+      },
+      "response_state": "hubspot_ticket_update_response",
+      "route_id": "hubspot_update_ticket",
+      "success_status_code": 200
+    },
+    {
+      "method": "POST",
+      "operation_id": "microsoft_graph_create_draft",
+      "path_parameters": {},
+      "path_template": "/me/messages",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "type": "object"
+          },
+          "importance": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "toRecipients": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "subject",
+          "body",
+          "toRecipients",
+          "importance"
+        ],
+        "type": "object"
+      },
+      "response_state": "graph_draft",
+      "route_id": "microsoft_graph_create_draft",
+      "success_status_code": 201
+    },
+    {
+      "method": "POST",
+      "operation_id": "microsoft_graph_send_mail_denied",
+      "path_parameters": {},
+      "path_template": "/me/sendMail",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "message": {
+            "type": "object"
+          },
+          "saveToSentItems": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "response_state": null,
+      "route_id": "microsoft_graph_send_mail_denied",
+      "success_status_code": 202
+    },
+    {
+      "method": "POST",
+      "operation_id": "microsoft_graph_send_draft_denied",
+      "path_parameters": {
+        "message_id": {
+          "pointer": "/id",
+          "state_key": "graph_draft"
+        }
+      },
+      "path_template": "/me/messages/{message_id}/send",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": null,
+      "route_id": "microsoft_graph_send_draft_denied",
+      "success_status_code": 202
+    },
+    {
+      "method": "PATCH",
+      "operation_id": "datadog_update_or_resolve_incident_denied",
+      "path_parameters": {
+        "incident_id": {
+          "pointer": "/data/id",
+          "state_key": "datadog_incident"
+        }
+      },
+      "path_template": "/api/v2/incidents/{incident_id}",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "response_state": "datadog_incident",
+      "route_id": "datadog_update_or_resolve_incident_denied",
+      "success_status_code": 200
+    },
+    {
+      "method": "DELETE",
+      "operation_id": "datadog_delete_incident_denied",
+      "path_parameters": {
+        "incident_id": {
+          "pointer": "/data/id",
+          "state_key": "datadog_incident"
+        }
+      },
+      "path_template": "/api/v2/incidents/{incident_id}",
+      "query": {},
+      "request_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "response_state": null,
+      "route_id": "datadog_delete_incident_denied",
+      "success_status_code": 204
+    }
+  ],
+  "version": "response_case_routes_v0"
+}

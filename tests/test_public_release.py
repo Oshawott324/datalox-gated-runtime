@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 import subprocess
 import sys
+from pathlib import Path
 
 import pytest
 
@@ -15,7 +15,6 @@ from scripts.public_release import (
     check,
     verify_built,
 )
-
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -38,9 +37,26 @@ def test_public_build_contains_safe_reference_world_but_not_private_sources(
     assert result["passed"] is True
     assert (out / PUBLIC_MANIFEST_NAME).is_file()
     assert (out / "envs/commerce_support_ops_v0/world/manifest.json").is_file()
+    assert (out / "envs/pylabrobot_hamilton_star_v0/world/manifest.json").is_file()
+    assert (out / "envs/pylabrobot_hamilton_star_v0/world_admission.json").is_file()
+    assert (
+        out
+        / "integrations"
+        / "harbor"
+        / "incident_customer_coordination_v0"
+        / "DATALOX_ADAPTER.json"
+    ).is_file()
+    assert (
+        out / "integrations" / "mastra" / "commerce_support_ops_v0" / "DATALOX_ADAPTER.json"
+    ).is_file()
     assert not (out / "runs").exists()
     assert not (out / "documented_sources").exists()
-    assert not (out / "docs/reports").exists()
+    public_reports = sorted(
+        path.relative_to(out).as_posix()
+        for path in (out / "docs/reports").glob("**/*")
+        if path.is_file()
+    )
+    assert public_reports == ["docs/reports/provider-runtime-coverage.json"]
     public_classification_path = out / "release/data-classification.json"
     assert public_classification_path.is_file()
 
@@ -100,8 +116,7 @@ def test_committed_public_tree_can_export_itself_again(tmp_path: Path) -> None:
         cwd=public_repo,
         check=False,
         text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
     )
 
     assert completed.returncode == 0, completed.stderr

@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from datetime import UTC, datetime
 import json
 import math
-from pathlib import Path
 import re
+from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any
-
 
 PUBLIC_EXPORT_SCHEMA = "datalox_public_run_export_v1"
 _HTTP_EVENT_FIELDS = frozenset(
@@ -131,6 +130,10 @@ def _public_event(raw: Any, index: int) -> dict[str, Any]:
         _exact_fields(
             request,
             required={"method", "path", "query", "body", "headers", "operation_id"},
+            # Wire metadata remains in the controller-only provider run export. The
+            # public projection omits authorities just as it omits request headers,
+            # because both can identify a private tenant or internal deployment.
+            optional={"scheme", "authority", "raw_body_sha256"},
             path=f"{path}.request",
         )
         decision = _public_decision(

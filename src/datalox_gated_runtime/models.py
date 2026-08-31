@@ -32,6 +32,9 @@ class CallRequest:
     body: dict[str, Any] | list[Any] | str | None = None
     headers: dict[str, str] = field(default_factory=dict)
     operation_id: str | None = None
+    scheme: str = "https"
+    authority: str = ""
+    raw_body_sha256: str | None = None
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "query", normalize_query(self.query))

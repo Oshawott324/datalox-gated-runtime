@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import Any, TypeAlias
 
-REFERENCE_TRACE_SCHEMA_ID = "datalox_reference_trace_v1"
+REFERENCE_TRACE_SCHEMA_ID = "datalox_reference_trace_v2"
 CONFORMANCE_REPORT_SCHEMA_ID = "datalox_conformance_report_v1"
 
 JsonValue: TypeAlias = (
@@ -331,6 +331,7 @@ class ExpectedObservation:
 @dataclass(frozen=True)
 class ReferenceStep:
     step_id: str
+    principal_context_id: str
     call: ReferenceCall
     expected_response: ObservedResponse
     post_observations: tuple[ExpectedObservation, ...] = ()
@@ -340,6 +341,14 @@ class ReferenceStep:
             self,
             "step_id",
             _require_identifier(self.step_id, path="step.step_id"),
+        )
+        object.__setattr__(
+            self,
+            "principal_context_id",
+            _require_identifier(
+                self.principal_context_id,
+                path="step.principal_context_id",
+            ),
         )
         if not isinstance(self.call, ReferenceCall):
             raise ReferenceContractError("step.call is invalid")
@@ -358,6 +367,7 @@ class ReferenceStep:
     def to_dict(self) -> dict[str, Any]:
         return {
             "step_id": self.step_id,
+            "principal_context_id": self.principal_context_id,
             "call": self.call.to_dict(),
             "expected_response": self.expected_response.to_dict(),
             "post_observations": [item.to_dict() for item in self.post_observations],
@@ -368,7 +378,15 @@ class ReferenceStep:
         raw = _require_object(value, path="step")
         _require_shape(
             raw,
-            required=frozenset({"step_id", "call", "expected_response", "post_observations"}),
+            required=frozenset(
+                {
+                    "step_id",
+                    "principal_context_id",
+                    "call",
+                    "expected_response",
+                    "post_observations",
+                }
+            ),
             path="step",
         )
         observations = raw["post_observations"]
@@ -376,6 +394,7 @@ class ReferenceStep:
             raise ReferenceContractError("step.post_observations must be an array")
         return cls(
             step_id=raw["step_id"],
+            principal_context_id=raw["principal_context_id"],
             call=ReferenceCall.from_dict(raw["call"]),
             expected_response=ObservedResponse.from_dict(raw["expected_response"]),
             post_observations=tuple(ExpectedObservation.from_dict(item) for item in observations),

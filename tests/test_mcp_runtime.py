@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from datalox_gated_runtime.authoring_mcp_runtime import AuthoringMcpGatedRuntime
 from datalox_gated_runtime.config import load_gate_config
 from datalox_gated_runtime.ledger import SessionLedger
 from datalox_gated_runtime.mcp_capture import McpCaptureStore
@@ -114,12 +115,12 @@ def test_live_tool_without_allow_live_denies_without_calling_upstream(tmp_path: 
     config = load_gate_config(config_path)
     assert config.mcp is not None
     upstream = FakeUpstream()
-    runtime = McpGatedRuntime(config=config.mcp, ledger=SessionLedger(), upstream_client=upstream)
+    runtime = McpGatedRuntime(config=config.mcp, ledger=SessionLedger())
 
     response = asyncio.run(runtime.handle(McpToolCall("github.get_issue", {"number": 123})))
 
     assert response.decision.kind == "deny"
-    assert response.decision.reason_code == "mcp_live_disabled"
+    assert response.decision.reason_code == "provider_access_forbidden"
     assert upstream.calls == []
 
 
@@ -142,12 +143,11 @@ def test_live_tool_records_structured_deny_when_upstream_call_raises(tmp_path: P
     assert config.mcp is not None
     capture_path = tmp_path / "mcp_captures.jsonl"
     ledger_path = tmp_path / "ledger.jsonl"
-    runtime = McpGatedRuntime(
+    runtime = AuthoringMcpGatedRuntime(
         config=config.mcp,
         ledger=SessionLedger(path=ledger_path),
         upstream_client=RaisingUpstream(),
         capture_store=McpCaptureStore(capture_path),
-        allow_live=True,
     )
 
     response = asyncio.run(runtime.handle(McpToolCall("github.get_issue", {"number": 123})))
@@ -183,12 +183,11 @@ def test_live_tool_with_allow_live_captures_result(tmp_path: Path) -> None:
     assert config.mcp is not None
     upstream = FakeUpstream()
     capture_path = tmp_path / "mcp_captures.jsonl"
-    runtime = McpGatedRuntime(
+    runtime = AuthoringMcpGatedRuntime(
         config=config.mcp,
         ledger=SessionLedger(path=tmp_path / "ledger.jsonl"),
         upstream_client=upstream,
         capture_store=McpCaptureStore(capture_path),
-        allow_live=True,
         input_schemas={
             "github.get_issue": {"type": "object", "properties": {"number": {"type": "integer"}}}
         },
@@ -228,11 +227,10 @@ def test_live_tool_without_declared_upstream_denies_without_calling_upstream(
     config = load_gate_config(config_path)
     assert config.mcp is not None
     upstream = FakeUpstream()
-    runtime = McpGatedRuntime(
+    runtime = AuthoringMcpGatedRuntime(
         config=config.mcp,
         ledger=SessionLedger(),
         upstream_client=upstream,
-        allow_live=True,
     )
 
     response = asyncio.run(runtime.handle(McpToolCall("github.get_issue", {"number": 123})))
@@ -259,12 +257,12 @@ def test_live_tool_without_upstream_client_records_unavailable(tmp_path: Path) -
     )
     config = load_gate_config(config_path)
     assert config.mcp is not None
-    runtime = McpGatedRuntime(config=config.mcp, ledger=SessionLedger(), allow_live=True)
+    runtime = McpGatedRuntime(config=config.mcp, ledger=SessionLedger())
 
     response = asyncio.run(runtime.handle(McpToolCall("github.get_issue", {"number": 123})))
 
     assert response.decision.kind == "deny"
-    assert response.decision.reason_code == "mcp_upstream_unavailable"
+    assert response.decision.reason_code == "provider_access_forbidden"
     assert response.result["isError"] is True
 
 

@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/rollout-pool-api-v1.schema.json",
+  "title": "Datalox trusted node-local rollout pool messages",
+  "oneOf": [
+    {"$ref": "#/$defs/acquire_request"},
+    {"$ref": "#/$defs/acquire_response"},
+    {"$ref": "#/$defs/exec_request"},
+    {"$ref": "#/$defs/exec_response"},
+    {"$ref": "#/$defs/finalize_request"},
+    {"$ref": "#/$defs/finalize_response"},
+    {"$ref": "#/$defs/cancel_request"},
+    {"$ref": "#/$defs/cancel_response"},
+    {"$ref": "#/$defs/error_response"}
+  ],
+  "$defs": {
+    "token": {"type": "string", "minLength": 1},
+    "lease_id": {"type": "string", "minLength": 1},
+    "fingerprint": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "exit_code": {"type": "integer", "minimum": 0, "maximum": 255},
+    "acquire_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "uid", "session_id", "environment_seed"],
+      "properties": {
+        "schema_version": {"const": "datalox_rollout_pool_acquire_request_v1"},
+        "uid": {"type": "string", "minLength": 1, "maxLength": 256},
+        "session_id": {
+          "oneOf": [
+            {"type": "integer", "minimum": 0},
+            {"type": "string", "minLength": 1, "maxLength": 256}
+          ]
+        },
+        "environment_seed": {"type": "integer", "minimum": 0}
+      }
+    },
+    "acquire_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "lease_id",
+        "lease_token",
+        "initial_provider_fingerprint"
+      ],
+      "properties": {
+        "schema_version": {"const": "datalox_rollout_pool_acquire_response_v1"},
+        "lease_id": {"$ref": "#/$defs/lease_id"},
+        "lease_token": {"$ref": "#/$defs/token"},
+        "initial_provider_fingerprint": {"$ref": "#/$defs/fingerprint"}
+      }
+    },
+    "exec_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "lease_token", "task_image", "command"],
+      "properties": {
+        "schema_version": {"const": "datalox_rollout_pool_exec_request_v1"},
+        "lease_token": {"$ref": "#/$defs/token"},
+        "task_image": {"type": "string", "minLength": 1},
+        "command": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1, "pattern": "^[^\\u0000]+$"}
+        }
+      }
+    },
+    "exec_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "lease_id",
+        "execution_index",
+        "consumer_exit_code",
+        "stdout",
+        "stderr"
+      ],
+      "properties": {
+        "schema_version": {"const": "datalox_rollout_pool_exec_response_v1"},
+        "lease_id": {"$ref": "#/$defs/lease_id"},
+        "execution_index": {"type": "integer", "minimum": 0},
+        "consumer_exit_code": {"$ref": "#/$defs/exit_code"},
+        "stdout": {"type": "string"},
+        "stderr": {"type": "string"}
+      }
+    },
+    "finalize_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "lease_token"],
+      "properties": {
+        "schema_version": {"const": "datalox_rollout_pool_finalize_request_v1"},
+        "lease_token": {"$ref": "#/$defs/token"}
+      }
+    },
+    "finalize_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "lease_id", "output_dir", "consumer_exit_codes"],
+      "properties": {
+        "schema_version": {"const": "datalox_rollout_pool_finalize_response_v1"},
+        "lease_id": {"$ref": "#/$defs/lease_id"},
+        "output_dir": {"type": "string", "minLength": 1},
+        "consumer_exit_codes": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/exit_code"}
+        }
+      }
+    },
+    "cancel_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "lease_token"],
+      "properties": {
+        "schema_version": {"const": "datalox_rollout_pool_cancel_request_v1"},
+        "lease_token": {"$ref": "#/$defs/token"}
+      }
+    },
+    "cancel_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "lease_id", "state"],
+      "properties": {
+        "schema_version": {"const": "datalox_rollout_pool_cancel_response_v1"},
+        "lease_id": {"$ref": "#/$defs/lease_id"},
+        "state": {"const": "cancelled"}
+      }
+    },
+    "error_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "error"],
+      "properties": {
+        "schema_version": {"const": "datalox_rollout_pool_error_response_v1"},
+        "error": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["code", "message"],
+          "properties": {
+            "code": {"type": "string", "minLength": 1},
+            "message": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    }
+  }
+}

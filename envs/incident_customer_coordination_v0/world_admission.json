@@ -1,0 +1,407 @@
+{
+  "admission_timestamp": "2026-07-17T10:05:20.007567+00:00",
+  "admitted": true,
+  "artifact_hashes": {
+    "gate_config.json": "sha256:083ca1ebe693960d6d372cc374dd091bcb1bfedea05125f60e39db15c9e492a7",
+    "replay_script.json": "sha256:9202ce90fdc15c30db3c66d61022cadd9565e7926dce045b696a6640d4badb37",
+    "task.json": "sha256:919b73a139830ddf8b98b092f1c33383970b5d75b093d95cefade48bf30f31d4",
+    "tests/trajectories/incident_world_v1.json": "sha256:200d7b6031ca6e9bc39532f15e7b3f3e46faef529971e15b6f1ba4e56533c9de",
+    "world/episodes.jsonl": "sha256:6f5d8e15649bc16ca0be312920bd81231ccc01e945f6e38601bef52217012449",
+    "world/routes.json": "sha256:aabc494c21e422717ea20918e788a2c790fc0b7e76ffcd3c7bfadeb5385ce555",
+    "world/sources.json": "sha256:d6e2c7180866a19b396f773c12b469d54fb75eb852db81f0125d81e312706399",
+    "world/tool_catalog.json": "sha256:f82d345d4113f0f40081deae674c55f7fc40c1839ed0dad44173ec41a6d1a15c",
+    "world/transitions.json": "sha256:c91f298b764ca6dc94b679e8c65b1c57c37929a7072db78b06e30f78beba5d37",
+    "world/v1/compiled_data.py": "sha256:e961818ded5ea848a9780efea6d754b2fa4ffee5d445ae50763fb350107c3030",
+    "world/v1/episodes.jsonl": "sha256:0af347d562e70ba52d6d7260e90d383bdeba00e5a57a02575d0b9889cbd73ddb",
+    "world/v1/implementation.py": "sha256:4173c727fca2f79ee04c661e19a13a98dd07c3fc68107b37f2220f1945d89b92",
+    "world/v1/roles.json": "sha256:3154fd42ba72f9a1a09f198b9a3d2106ed41eea3f8a18872071a5ff2fad73d84",
+    "world/v1/sources.json": "sha256:d5f7590709c9649c07dc6e3c748b84ad16ddab76ac2a52556a67d0e312d69921",
+    "world/v1/tools.json": "sha256:cfe39211714fbba388015b417ce25abe3ae0987e804ca9ea6075e52dc49b2339",
+    "world/v1/verifier.json": "sha256:e3d77d228f7aa7a674d5da8e3d4bb92a776fde6cf07ec41060cdf4c22dd7593d",
+    "world/verifier.json": "sha256:cb4e492df2e09d751b307c47393b97ff7187eb5e2df6d4bf0441cb9d7e449b57"
+  },
+  "bundle_path": "envs/incident_customer_coordination_v0",
+  "bundle_version": "1.0.0",
+  "checks": {
+    "credential_freedom": {
+      "executed": true,
+      "finding_codes": [],
+      "passed": true
+    },
+    "cross_references": {
+      "executed": true,
+      "finding_codes": [],
+      "passed": true
+    },
+    "hashes": {
+      "executed": true,
+      "finding_codes": [],
+      "passed": true
+    },
+    "hidden_leakage": {
+      "executed": true,
+      "finding_codes": [],
+      "passed": true
+    },
+    "no_live_writes": {
+      "executed": true,
+      "finding_codes": [],
+      "passed": true
+    },
+    "provenance": {
+      "executed": true,
+      "finding_codes": [],
+      "passed": true
+    },
+    "reset_determinism": {
+      "executed": true,
+      "finding_codes": [],
+      "passed": true
+    },
+    "session_export": {
+      "executed": true,
+      "finding_codes": [],
+      "passed": true
+    },
+    "structure": {
+      "executed": true,
+      "finding_codes": [],
+      "passed": true
+    },
+    "surface_parity": {
+      "executed": true,
+      "finding_codes": [],
+      "passed": true
+    },
+    "trajectories": {
+      "executed": true,
+      "finding_codes": [],
+      "passed": true
+    }
+  },
+  "coverage": {
+    "episode_count": 20,
+    "negative_trajectory_count": 6,
+    "operation_families": [
+      "customer_coordination",
+      "engineering_coordination",
+      "incident_investigation",
+      "internal_communications"
+    ],
+    "parity_case_count": 1,
+    "reference_trajectory_count": 20,
+    "role_count": 3,
+    "tool_count": 22,
+    "trajectory_count": 27
+  },
+  "findings": [],
+  "provenance": {
+    "grounding_gaps": [
+      {
+        "claim": "production permissions, pagination, rate limits, and error timing",
+        "operation_family": "incident_investigation",
+        "reason": "The world is grounded in pinned schemas, not sandbox or traffic evidence."
+      },
+      {
+        "claim": "production CRM side effects and tenant permission behavior",
+        "operation_family": "customer_coordination",
+        "reason": "Writes are deterministic shadow transitions over G1 shapes."
+      },
+      {
+        "claim": "live delivery behavior",
+        "operation_family": "internal_communications",
+        "reason": "Sending is deliberately denied and no live write is modeled."
+      }
+    ],
+    "grounding_levels": {
+      "G0_FIXTURE_AUTHORED": 1,
+      "G1_SCHEMA_INSTANTIATED": 15
+    },
+    "source_count": 16
+  },
+  "schema_version": "datalox_world_admission_v1",
+  "tests": {
+    "reset_episode_count": 20,
+    "session_export_executed": true,
+    "trajectory_results": [
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-00",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-01",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-02",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-03",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-04",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-05",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-06",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-07",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-08",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-09",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-10",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-11",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-12",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-13",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-14",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-15",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-16",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-17",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-18",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [],
+          "passed": true
+        },
+        "id": "reference-19",
+        "kind": "reference",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [
+            "graph_draft_body_grounded",
+            "graph_draft_subject_grounded"
+          ],
+          "passed": false
+        },
+        "id": "negative-wrong-entity",
+        "kind": "negative",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [
+            "datadog_oncall_evidence_fresh",
+            "hubspot_ticket_owner",
+            "jira_assignee",
+            "read_datadog_get_current_oncall"
+          ],
+          "passed": false
+        },
+        "id": "negative-stale-evidence",
+        "kind": "negative",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [
+            "microsoft_graph_send_mail_not_attempted"
+          ],
+          "passed": false
+        },
+        "id": "negative-unsafe-action",
+        "kind": "negative",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [
+            "jira_transition_selected"
+          ],
+          "passed": false
+        },
+        "id": "negative-wrong-value",
+        "kind": "negative",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [
+            "unauthorized_jira_update_attempted"
+          ],
+          "passed": false
+        },
+        "id": "negative-unauthorized-role",
+        "kind": "negative",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      },
+      {
+        "declared_outcome": {
+          "failure_codes": [
+            "datadog_oncall_evidence_fresh",
+            "read_datadog_get_current_oncall"
+          ],
+          "passed": false
+        },
+        "id": "negative-missing-call",
+        "kind": "negative",
+        "passed": true,
+        "path": "tests/trajectories/incident_world_v1.json"
+      }
+    ]
+  },
+  "world_id": "incident_customer_coordination_v0"
+}

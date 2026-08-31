@@ -1,0 +1,42 @@
+{
+  "bundle_version": "1.0.0",
+  "content_hashes": {
+    "gate_config.json": "sha256:083ca1ebe693960d6d372cc374dd091bcb1bfedea05125f60e39db15c9e492a7",
+    "replay_script.json": "sha256:9202ce90fdc15c30db3c66d61022cadd9565e7926dce045b696a6640d4badb37",
+    "task.json": "sha256:919b73a139830ddf8b98b092f1c33383970b5d75b093d95cefade48bf30f31d4",
+    "tests/trajectories/incident_world_v1.json": "sha256:200d7b6031ca6e9bc39532f15e7b3f3e46faef529971e15b6f1ba4e56533c9de",
+    "world/episodes.jsonl": "sha256:6f5d8e15649bc16ca0be312920bd81231ccc01e945f6e38601bef52217012449",
+    "world/routes.json": "sha256:aabc494c21e422717ea20918e788a2c790fc0b7e76ffcd3c7bfadeb5385ce555",
+    "world/sources.json": "sha256:d6e2c7180866a19b396f773c12b469d54fb75eb852db81f0125d81e312706399",
+    "world/tool_catalog.json": "sha256:f82d345d4113f0f40081deae674c55f7fc40c1839ed0dad44173ec41a6d1a15c",
+    "world/transitions.json": "sha256:c91f298b764ca6dc94b679e8c65b1c57c37929a7072db78b06e30f78beba5d37",
+    "world/v1/compiled_data.py": "sha256:e961818ded5ea848a9780efea6d754b2fa4ffee5d445ae50763fb350107c3030",
+    "world/v1/episodes.jsonl": "sha256:0af347d562e70ba52d6d7260e90d383bdeba00e5a57a02575d0b9889cbd73ddb",
+    "world/v1/implementation.py": "sha256:4173c727fca2f79ee04c661e19a13a98dd07c3fc68107b37f2220f1945d89b92",
+    "world/v1/roles.json": "sha256:3154fd42ba72f9a1a09f198b9a3d2106ed41eea3f8a18872071a5ff2fad73d84",
+    "world/v1/sources.json": "sha256:d5f7590709c9649c07dc6e3c748b84ad16ddab76ac2a52556a67d0e312d69921",
+    "world/v1/tools.json": "sha256:cfe39211714fbba388015b417ce25abe3ae0987e804ca9ea6075e52dc49b2339",
+    "world/v1/verifier.json": "sha256:e3d77d228f7aa7a674d5da8e3d4bb92a776fde6cf07ec41060cdf4c22dd7593d",
+    "world/verifier.json": "sha256:cb4e492df2e09d751b307c47393b97ff7187eb5e2df6d4bf0441cb9d7e449b57"
+  },
+  "default_actor_role": "incident_commander",
+  "episodes_path": "world/v1/episodes.jsonl",
+  "implementation": "world/v1/implementation.py:create_world",
+  "required_runtime_capabilities": [
+    "actors",
+    "role_scoped_tools",
+    "transactions",
+    "artifacts",
+    "clock",
+    "handoffs"
+  ],
+  "roles_path": "world/v1/roles.json",
+  "schema_version": "datalox_world_bundle_v1",
+  "sources_path": "world/v1/sources.json",
+  "tools_path": "world/v1/tools.json",
+  "trajectory_paths": [
+    "tests/trajectories/incident_world_v1.json"
+  ],
+  "verifier_path": "world/v1/verifier.json",
+  "world_id": "incident_customer_coordination_v0"
+}

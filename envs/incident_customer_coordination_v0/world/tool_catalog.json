@@ -1,0 +1,357 @@
+{
+  "tools": [
+    {
+      "description": "List Datadog incidents.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "name": "datadog.list_incidents",
+      "operation_id": "datadog_list_incidents"
+    },
+    {
+      "description": "List Datadog service definitions.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "name": "datadog.list_service_definitions",
+      "operation_id": "datadog_list_service_definitions"
+    },
+    {
+      "description": "List Datadog users.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "name": "datadog.list_users",
+      "operation_id": "datadog_list_users"
+    },
+    {
+      "description": "Read the current shift for a Datadog on-call schedule.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "schedule_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "schedule_id"
+        ],
+        "type": "object"
+      },
+      "name": "datadog.get_current_oncall",
+      "operation_id": "datadog_get_current_oncall"
+    },
+    {
+      "description": "List HubSpot owners.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "name": "hubspot.list_owners",
+      "operation_id": "hubspot_list_owners"
+    },
+    {
+      "description": "List HubSpot contacts.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "name": "hubspot.list_contacts",
+      "operation_id": "hubspot_list_contacts"
+    },
+    {
+      "description": "List HubSpot companies.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "name": "hubspot.list_companies",
+      "operation_id": "hubspot_list_companies"
+    },
+    {
+      "description": "List HubSpot deals.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "name": "hubspot.list_deals",
+      "operation_id": "hubspot_list_deals"
+    },
+    {
+      "description": "List HubSpot tickets.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "name": "hubspot.list_tickets",
+      "operation_id": "hubspot_list_tickets"
+    },
+    {
+      "description": "Read one HubSpot ticket.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ],
+        "type": "object"
+      },
+      "name": "hubspot.get_ticket",
+      "operation_id": "hubspot_get_ticket"
+    },
+    {
+      "description": "Read one Jira engineering issue.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_id"
+        ],
+        "type": "object"
+      },
+      "name": "jira.get_issue",
+      "operation_id": "jira_get_issue"
+    },
+    {
+      "description": "List Jira priorities and their provider IDs.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "name": "jira.list_priorities",
+      "operation_id": "jira_list_priorities"
+    },
+    {
+      "description": "List the transitions currently available for a Jira issue.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_id"
+        ],
+        "type": "object"
+      },
+      "name": "jira.get_transitions",
+      "operation_id": "jira_get_transitions"
+    },
+    {
+      "description": "List users assignable to the OPS Jira project.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "name": "jira.list_assignable_users",
+      "operation_id": "jira_list_assignable_users"
+    },
+    {
+      "description": "Read one Jira Service Management customer request.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id"
+        ],
+        "type": "object"
+      },
+      "name": "jira.get_customer_request",
+      "operation_id": "jira_get_customer_request"
+    },
+    {
+      "description": "List internal Microsoft Graph users.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "name": "microsoft_graph.list_users",
+      "operation_id": "microsoft_graph_list_users"
+    },
+    {
+      "description": "Read an internal user's calendar view for the coordination window.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "type": "object"
+      },
+      "name": "microsoft_graph.get_calendar_view",
+      "operation_id": "microsoft_graph_get_calendar_view"
+    },
+    {
+      "description": "Read a Microsoft Graph message draft.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "message_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message_id"
+        ],
+        "type": "object"
+      },
+      "name": "microsoft_graph.get_draft",
+      "operation_id": "microsoft_graph_get_draft"
+    },
+    {
+      "description": "Update Jira issue fields using the official PUT issue contract.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "fields": {
+            "additionalProperties": false,
+            "properties": {
+              "assignee": {
+                "additionalProperties": false,
+                "properties": {
+                  "accountId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "accountId"
+                ],
+                "type": "object"
+              },
+              "priority": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "assignee",
+              "priority"
+            ],
+            "type": "object"
+          },
+          "issue_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_id",
+          "fields"
+        ],
+        "type": "object"
+      },
+      "name": "jira.update_issue",
+      "operation_id": "jira_update_issue"
+    },
+    {
+      "description": "Transition a Jira issue using the official POST transitions contract.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "transition": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "issue_id",
+          "transition"
+        ],
+        "type": "object"
+      },
+      "name": "jira.transition_issue",
+      "operation_id": "jira_transition_issue"
+    },
+    {
+      "description": "Partially update a HubSpot ticket using its properties object.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "properties": {
+            "type": "object"
+          },
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id",
+          "properties"
+        ],
+        "type": "object"
+      },
+      "name": "hubspot.update_ticket",
+      "operation_id": "hubspot_update_ticket"
+    },
+    {
+      "description": "Create a Microsoft Graph message draft without sending it.",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "type": "object"
+          },
+          "importance": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "toRecipients": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "subject",
+          "body",
+          "toRecipients",
+          "importance"
+        ],
+        "type": "object"
+      },
+      "name": "microsoft_graph.create_message_draft",
+      "operation_id": "microsoft_graph_create_draft"
+    }
+  ],
+  "version": "response_case_tool_catalog_v0"
+}

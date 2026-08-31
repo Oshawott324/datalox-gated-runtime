@@ -43,6 +43,7 @@ def _step(
 ) -> ReferenceStep:
     return ReferenceStep(
         step_id=step_id,
+        principal_context_id="fixture_operator",
         call=ReferenceCall(
             method="post",
             path=f"/records/{step_id}",
@@ -101,8 +102,14 @@ class FakeTarget:
         self.seed = seed
         self.events.append(f"reset:{seed}")
 
-    def execute(self, call: ReferenceCall) -> ObservedResponse:
+    def execute(
+        self,
+        call: ReferenceCall,
+        *,
+        principal_context_id: str,
+    ) -> ObservedResponse:
         self.events.append(f"execute:{call.operation_id}")
+        assert principal_context_id == "fixture_operator"
         return self.responses[call.operation_id]
 
     def observe(self, request: ObservationRequest) -> JsonValue:
@@ -371,7 +378,13 @@ def test_invalid_contract_values_and_unsupported_schema_are_rejected() -> None:
 
 def test_target_execution_error_is_stable_and_stops_dependent_steps() -> None:
     class FailingTarget(FakeTarget):
-        def execute(self, call: ReferenceCall) -> ObservedResponse:
+        def execute(
+            self,
+            call: ReferenceCall,
+            *,
+            principal_context_id: str,
+        ) -> ObservedResponse:
+            assert principal_context_id == "fixture_operator"
             self.events.append(f"execute:{call.operation_id}")
             raise RuntimeError("provider-specific and potentially sensitive message")
 

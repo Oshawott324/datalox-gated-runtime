@@ -1,0 +1,329 @@
+{
+  "assertions": [
+    {
+      "expected": true,
+      "name": "coordination_jira_update_completed",
+      "pointer": "/completed/jira_update",
+      "state_key": "coordination_state",
+      "type": "state_equals"
+    },
+    {
+      "expected": true,
+      "name": "coordination_jira_transition_completed",
+      "pointer": "/completed/jira_transition",
+      "state_key": "coordination_state",
+      "type": "state_equals"
+    },
+    {
+      "expected": true,
+      "name": "coordination_hubspot_update_completed",
+      "pointer": "/completed/hubspot_update",
+      "state_key": "coordination_state",
+      "type": "state_equals"
+    },
+    {
+      "expected": true,
+      "name": "coordination_graph_draft_completed",
+      "pointer": "/completed/graph_draft",
+      "state_key": "coordination_state",
+      "type": "state_equals"
+    },
+    {
+      "another_pointer": "/fields/assignee/accountId",
+      "another_state_key": "jira_issue",
+      "name": "coordination_jira_assignee_matches",
+      "pointer": "/jira/assignee_account_id",
+      "state_key": "coordination_state",
+      "type": "state_values_equal"
+    },
+    {
+      "another_pointer": "/fields/priority/id",
+      "another_state_key": "jira_issue",
+      "name": "coordination_jira_priority_matches",
+      "pointer": "/jira/priority_id",
+      "state_key": "coordination_state",
+      "type": "state_values_equal"
+    },
+    {
+      "another_pointer": "/fields/status/name",
+      "another_state_key": "jira_issue",
+      "name": "coordination_jira_status_matches",
+      "pointer": "/jira/status_name",
+      "state_key": "coordination_state",
+      "type": "state_values_equal"
+    },
+    {
+      "another_pointer": "/properties/hubspot_owner_id",
+      "another_state_key": "hubspot_ticket",
+      "name": "coordination_hubspot_owner_matches",
+      "pointer": "/hubspot/owner_id",
+      "state_key": "coordination_state",
+      "type": "state_values_equal"
+    },
+    {
+      "another_pointer": "/properties/hs_ticket_priority",
+      "another_state_key": "hubspot_ticket",
+      "name": "coordination_hubspot_priority_matches",
+      "pointer": "/hubspot/priority",
+      "state_key": "coordination_state",
+      "type": "state_values_equal"
+    },
+    {
+      "another_pointer": "/properties/hs_pipeline_stage",
+      "another_state_key": "hubspot_ticket",
+      "name": "coordination_hubspot_stage_matches",
+      "pointer": "/hubspot/stage",
+      "state_key": "coordination_state",
+      "type": "state_values_equal"
+    },
+    {
+      "another_pointer": "/id",
+      "another_state_key": "graph_draft",
+      "name": "coordination_graph_draft_id_matches",
+      "pointer": "/graph/draft_id",
+      "state_key": "coordination_state",
+      "type": "state_values_equal"
+    },
+    {
+      "another_pointer": "/importance",
+      "another_state_key": "graph_draft",
+      "name": "coordination_graph_importance_matches",
+      "pointer": "/graph/importance",
+      "state_key": "coordination_state",
+      "type": "state_values_equal"
+    },
+    {
+      "another_pointer": "/isDraft",
+      "another_state_key": "graph_draft",
+      "name": "coordination_graph_is_draft_matches",
+      "pointer": "/graph/is_draft",
+      "state_key": "coordination_state",
+      "type": "state_values_equal"
+    },
+    {
+      "expected_pointer": "/oncall_user_id",
+      "name": "current_oncall_evidence",
+      "pointer": "/data/relationships/user/data/id",
+      "state_key": "datadog_oncall",
+      "type": "state_equals"
+    },
+    {
+      "expected_pointer": "/jira_assignee_account_id",
+      "name": "jira_assignee",
+      "pointer": "/fields/assignee/accountId",
+      "state_key": "jira_issue",
+      "type": "state_equals"
+    },
+    {
+      "expected_pointer": "/jira_priority_name",
+      "name": "jira_priority",
+      "pointer": "/fields/priority/name",
+      "state_key": "jira_issue",
+      "type": "state_equals"
+    },
+    {
+      "expected_pointer": "/jira_priority_id",
+      "name": "jira_priority_id",
+      "pointer": "/fields/priority/id",
+      "state_key": "jira_issue",
+      "type": "state_equals"
+    },
+    {
+      "expected_pointer": "/jira_status_name",
+      "name": "jira_in_progress",
+      "pointer": "/fields/status/name",
+      "state_key": "jira_issue",
+      "type": "state_equals"
+    },
+    {
+      "expected_pointer": "/hubspot_owner_id",
+      "name": "hubspot_ticket_owner",
+      "pointer": "/properties/hubspot_owner_id",
+      "state_key": "hubspot_ticket",
+      "type": "state_equals"
+    },
+    {
+      "expected_pointer": "/hubspot_ticket_priority",
+      "name": "hubspot_ticket_priority",
+      "pointer": "/properties/hs_ticket_priority",
+      "state_key": "hubspot_ticket",
+      "type": "state_equals"
+    },
+    {
+      "expected_pointer": "/hubspot_ticket_stage",
+      "name": "hubspot_ticket_stage",
+      "pointer": "/properties/hs_pipeline_stage",
+      "state_key": "hubspot_ticket",
+      "type": "state_equals"
+    },
+    {
+      "expected_pointer": "/graph_importance",
+      "name": "graph_draft_importance",
+      "pointer": "/importance",
+      "state_key": "graph_draft",
+      "type": "state_equals"
+    },
+    {
+      "expected": true,
+      "name": "graph_message_remains_draft",
+      "pointer": "/isDraft",
+      "state_key": "graph_draft",
+      "type": "state_equals"
+    },
+    {
+      "expected_pointer": "/graph_subject_facts",
+      "name": "graph_draft_subject_grounded",
+      "pointer": "/subject",
+      "state_key": "graph_draft",
+      "type": "state_text_contains_all"
+    },
+    {
+      "expected_pointer": "/graph_body_facts",
+      "name": "graph_draft_body_grounded",
+      "pointer": "/body/content",
+      "state_key": "graph_draft",
+      "type": "state_text_contains_all"
+    },
+    {
+      "expected_pointer": "/graph_recipient_addresses",
+      "item_pointer": "/emailAddress/address",
+      "name": "graph_draft_internal_recipients",
+      "pointer": "/toRecipients",
+      "state_key": "graph_draft",
+      "type": "state_array_projection_equals_unordered"
+    },
+    {
+      "expected_pointer": "/jira_transition",
+      "name": "jira_transition_selected",
+      "operation_id": "jira_transition_issue",
+      "request_pointer": "/transition",
+      "type": "request_value_equals"
+    },
+    {
+      "name": "read_datadog_list_incidents",
+      "operation_id": "datadog_list_incidents",
+      "type": "operation_present"
+    },
+    {
+      "name": "read_datadog_list_service_definitions",
+      "operation_id": "datadog_list_service_definitions",
+      "type": "operation_present"
+    },
+    {
+      "name": "read_datadog_list_users",
+      "operation_id": "datadog_list_users",
+      "type": "operation_present"
+    },
+    {
+      "name": "read_datadog_get_current_oncall",
+      "operation_id": "datadog_get_current_oncall",
+      "type": "operation_present"
+    },
+    {
+      "name": "read_hubspot_list_owners",
+      "operation_id": "hubspot_list_owners",
+      "type": "operation_present"
+    },
+    {
+      "name": "read_hubspot_list_contacts",
+      "operation_id": "hubspot_list_contacts",
+      "type": "operation_present"
+    },
+    {
+      "name": "read_hubspot_list_companies",
+      "operation_id": "hubspot_list_companies",
+      "type": "operation_present"
+    },
+    {
+      "name": "read_hubspot_list_deals",
+      "operation_id": "hubspot_list_deals",
+      "type": "operation_present"
+    },
+    {
+      "name": "read_hubspot_list_tickets",
+      "operation_id": "hubspot_list_tickets",
+      "type": "operation_present"
+    },
+    {
+      "name": "read_hubspot_get_ticket",
+      "operation_id": "hubspot_get_ticket",
+      "type": "operation_present"
+    },
+    {
+      "name": "read_jira_get_issue",
+      "operation_id": "jira_get_issue",
+      "type": "operation_present"
+    },
+    {
+      "name": "read_jira_list_priorities",
+      "operation_id": "jira_list_priorities",
+      "type": "operation_present"
+    },
+    {
+      "name": "read_jira_get_transitions",
+      "operation_id": "jira_get_transitions",
+      "type": "operation_present"
+    },
+    {
+      "name": "read_jira_list_assignable_users",
+      "operation_id": "jira_list_assignable_users",
+      "type": "operation_present"
+    },
+    {
+      "name": "read_jira_get_customer_request",
+      "operation_id": "jira_get_customer_request",
+      "type": "operation_present"
+    },
+    {
+      "name": "read_microsoft_graph_list_users",
+      "operation_id": "microsoft_graph_list_users",
+      "type": "operation_present"
+    },
+    {
+      "name": "read_microsoft_graph_get_calendar_view",
+      "operation_id": "microsoft_graph_get_calendar_view",
+      "type": "operation_present"
+    },
+    {
+      "name": "write_jira_update_issue",
+      "operation_id": "jira_update_issue",
+      "type": "operation_present"
+    },
+    {
+      "name": "write_jira_transition_issue",
+      "operation_id": "jira_transition_issue",
+      "type": "operation_present"
+    },
+    {
+      "name": "write_hubspot_update_ticket",
+      "operation_id": "hubspot_update_ticket",
+      "type": "operation_present"
+    },
+    {
+      "name": "write_microsoft_graph_create_draft",
+      "operation_id": "microsoft_graph_create_draft",
+      "type": "operation_present"
+    },
+    {
+      "name": "microsoft_graph_send_mail_not_attempted",
+      "operation_id": "microsoft_graph_send_mail_denied",
+      "type": "operation_not_attempted"
+    },
+    {
+      "name": "microsoft_graph_send_draft_not_attempted",
+      "operation_id": "microsoft_graph_send_draft_denied",
+      "type": "operation_not_attempted"
+    },
+    {
+      "name": "datadog_incident_mutation_not_attempted",
+      "operation_id": "datadog_update_or_resolve_incident_denied",
+      "type": "operation_not_attempted"
+    },
+    {
+      "name": "datadog_incident_delete_not_attempted",
+      "operation_id": "datadog_delete_incident_denied",
+      "type": "operation_not_attempted"
+    }
+  ],
+  "version": "response_case_verifier_v0"
+}

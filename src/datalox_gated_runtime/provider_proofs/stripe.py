@@ -15,6 +15,7 @@ from datalox_gated_runtime.engineering_proof import (
     EngineeringProofContractError,
     GeneratedIdBinding,
     PathPrefixMapping,
+    PrincipalMapping,
     ProofOutputBuilder,
     WorldTargetSpec,
     reference_trace_program,
@@ -130,6 +131,7 @@ def validate_and_compile_capture(
         steps.append(
             ReferenceStep(
                 step_id=step_id,
+                principal_context_id="stripe_test_account",
                 call=ReferenceCall(
                     method=request["method"],
                     path=request["path"],
@@ -202,8 +204,9 @@ def run_stripe_engineering_proof(
         target_id="stripe_billing_ops_world",
         target_version="v1",
         episode_id=EPISODE_ID,
-        actor_id="stripe-proof",
-        actor_role="billing_operator",
+        principal_mappings=(
+            PrincipalMapping("stripe_test_account", "stripe-proof", "billing_operator"),
+        ),
         path_mappings=(PathPrefixMapping("/v1", "/stripe/v1"),),
         generated_id_bindings=(
             GeneratedIdBinding(

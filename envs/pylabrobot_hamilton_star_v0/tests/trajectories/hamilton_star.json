@@ -1,0 +1,253 @@
+{
+  "trajectories": [
+    {
+      "episode_id": "pylabrobot-hamilton-star-transfer-001",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-hamilton-star-transfer",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "auditor-001",
+          "actor_role": "auditor",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "system.get"
+        },
+        {
+          "actor_id": "operator-001",
+          "actor_role": "lab_operator",
+          "arguments": {
+            "containers": [
+              {
+                "max_volume_ul": 360,
+                "name": "source_well",
+                "volume_ul": 200
+              },
+              {
+                "max_volume_ul": 360,
+                "name": "target_well",
+                "volume_ul": 0
+              }
+            ],
+            "num_channels": 8,
+            "tip_spots": [
+              {
+                "has_tip": true,
+                "max_volume_ul": 1065,
+                "name": "tips_tipspot_A1"
+              }
+            ],
+            "waste_names": [
+              "trash"
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "system.setup"
+        },
+        {
+          "actor_id": "auditor-001",
+          "actor_role": "auditor",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "tips.get"
+        },
+        {
+          "actor_id": "auditor-001",
+          "actor_role": "auditor",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "liquids.get"
+        },
+        {
+          "actor_id": "operator-001",
+          "actor_role": "lab_operator",
+          "arguments": {
+            "operations": [
+              {
+                "channel": 0,
+                "offset": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                },
+                "tip_spot": "tips_tipspot_A1"
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "tips.pick_up"
+        },
+        {
+          "actor_id": "operator-001",
+          "actor_role": "lab_operator",
+          "arguments": {
+            "operations": [
+              {
+                "blow_out_air_volume": null,
+                "channel": 0,
+                "container": "source_well",
+                "flow_rate": null,
+                "liquid_height": null,
+                "offset": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                },
+                "volume_ul": 100
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "liquids.aspirate"
+        },
+        {
+          "actor_id": "operator-001",
+          "actor_role": "lab_operator",
+          "arguments": {
+            "operations": [
+              {
+                "blow_out_air_volume": null,
+                "channel": 0,
+                "container": "target_well",
+                "flow_rate": null,
+                "liquid_height": null,
+                "offset": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                },
+                "volume_ul": 100
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "liquids.dispense"
+        },
+        {
+          "actor_id": "operator-001",
+          "actor_role": "lab_operator",
+          "arguments": {
+            "operations": [
+              {
+                "channel": 0,
+                "destination": "tips_tipspot_A1",
+                "destination_kind": "tip_spot",
+                "offset": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "tips.drop"
+        },
+        {
+          "actor_id": "operator-001",
+          "actor_role": "lab_operator",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "system.stop"
+        }
+      ]
+    },
+    {
+      "episode_id": "pylabrobot-hamilton-star-transfer-001",
+      "expected": {
+        "failure_codes": [
+          "transfer_completed",
+          "handler_stopped",
+          "all_operations_exercised",
+          "no_denied_operations"
+        ],
+        "passed": false
+      },
+      "id": "negative-aspirate-without-tip",
+      "kind": "negative",
+      "steps": [
+        {
+          "actor_id": "operator-001",
+          "actor_role": "lab_operator",
+          "arguments": {
+            "containers": [
+              {
+                "max_volume_ul": 360,
+                "name": "source_well",
+                "volume_ul": 200
+              },
+              {
+                "max_volume_ul": 360,
+                "name": "target_well",
+                "volume_ul": 0
+              }
+            ],
+            "num_channels": 8,
+            "tip_spots": [
+              {
+                "has_tip": true,
+                "max_volume_ul": 1065,
+                "name": "tips_tipspot_A1"
+              }
+            ],
+            "waste_names": [
+              "trash"
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "system.setup"
+        },
+        {
+          "actor_id": "operator-001",
+          "actor_role": "lab_operator",
+          "arguments": {
+            "operations": [
+              {
+                "blow_out_air_volume": null,
+                "channel": 0,
+                "container": "source_well",
+                "flow_rate": null,
+                "liquid_height": null,
+                "offset": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                },
+                "volume_ul": 10
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "liquids.aspirate"
+        }
+      ]
+    },
+    {
+      "episode_id": "pylabrobot-hamilton-star-transfer-001",
+      "expected": {
+        "matched": true
+      },
+      "http_step": {
+        "actor_id": "auditor-http",
+        "actor_role": "auditor",
+        "body": null,
+        "method": "GET",
+        "path": "/v1/liquid-handler",
+        "query": {},
+        "surface": "http"
+      },
+      "id": "parity-initial-liquid-handler-state",
+      "kind": "parity",
+      "mcp_step": {
+        "actor_id": "auditor-mcp",
+        "actor_role": "auditor",
+        "arguments": {},
+        "surface": "mcp",
+        "tool_name": "system.get"
+      }
+    }
+  ]
+}

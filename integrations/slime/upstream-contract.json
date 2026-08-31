@@ -1,0 +1,11 @@
+{
+  "commit": "a067ce6face6dfee297f219c470c406b8a5025f1",
+  "files": {
+    "slime/agent/trajectory.py": "sha256:6dbb7bec446d81fa0542a4c954d458b4a11edab6776b45a63bc33bca08dd0469",
+    "slime/rollout/fully_async_rollout.py": "sha256:43abaaea6f47b2ef7700dcc353da84d7af28d06a98c421da14a2f9dbd0027178",
+    "slime/rollout/rm_hub/__init__.py": "sha256:bbfcb71820abbb44b2b8946726a31b2d7bc54b27e36f52c38e8b6422808507bc",
+    "slime/rollout/sglang_rollout.py": "sha256:59a4e34b2f257fba540cf26782c9b84e7633f3437ea41787d3c02fba920e3c7c",
+    "slime/utils/types.py": "sha256:0e8aca6bc49dcba30975a5a325e210cd450fbb25b3c0c79c107a27986692816b"
+  },
+  "schema_version": "datalox_slime_upstream_contract_v1"
+}

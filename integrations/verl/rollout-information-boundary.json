@@ -1,0 +1,25 @@
+{
+  "schema_version": "datalox_rollout_information_boundary_v1",
+  "integration_id": "verl",
+  "task_plane": {
+    "owner": "consumer",
+    "agent_visible": true,
+    "availability": "before_interaction",
+    "contents": ["task_objectives", "agent_visible_constraints"],
+    "carrier": "consumer dataset prompt rendered as raw_prompt"
+  },
+  "observation_plane": {
+    "owner": "consumer_environment_and_provider_runtime",
+    "agent_visible": true,
+    "availability": "after_causal_environment_interaction",
+    "contents": ["provider_responses", "environment_anomalies"],
+    "carrier": "ToolAgentLoop function-tool result after a model-selected call"
+  },
+  "evaluation_plane": {
+    "owner": "consumer",
+    "agent_visible": false,
+    "availability": "trusted_generation_or_evaluation_only",
+    "contents": ["evaluation_ground_truth", "oracle_state", "verifier_inputs"],
+    "carrier": "consumer reward and verifier code with controller-only finalized rollout evidence"
+  }
+}

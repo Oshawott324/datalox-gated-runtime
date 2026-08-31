@@ -1,27 +1,17 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from typing import Any, Protocol
+from typing import Any
 from uuid import uuid4
 
 from datalox_gated_runtime.ledger import SessionLedger
-from datalox_gated_runtime.mcp_capture import McpCaptureStore, McpReplayStore
+from datalox_gated_runtime.mcp_capture import McpReplayStore
 from datalox_gated_runtime.models import (
     McpDecision,
     McpGateConfig,
     McpGateResponse,
-    McpResponseCase,
     McpToolCall,
 )
-
-
-class McpUpstreamClient(Protocol):
-    async def call_tool(
-        self,
-        upstream_name: str,
-        upstream_tool_name: str,
-        arguments: dict[str, Any],
-    ) -> dict[str, Any]: ...
 
 
 class McpGatedRuntime:
@@ -30,17 +20,9 @@ class McpGatedRuntime:
         *,
         config: McpGateConfig,
         ledger: SessionLedger | None = None,
-        upstream_client: McpUpstreamClient | None = None,
-        capture_store: McpCaptureStore | None = None,
-        allow_live: bool = False,
-        input_schemas: dict[str, dict[str, Any]] | None = None,
     ) -> None:
         self.config = config
         self.ledger = ledger or SessionLedger()
-        self.upstream_client = upstream_client
-        self.capture_store = capture_store
-        self.allow_live = allow_live
-        self.input_schemas = input_schemas if input_schemas is not None else {}
         self.replay_store = McpReplayStore(config.generated.response_cases)
 
     async def handle(self, call: McpToolCall) -> McpGateResponse:
@@ -180,83 +162,13 @@ class McpGatedRuntime:
         upstream_tool_name: str,
         arguments: dict[str, Any],
     ) -> McpGateResponse:
-        if not self.allow_live:
-            return self._record_deny(
-                tool_name=tool_name,
-                upstream_name=upstream_name,
-                upstream_tool_name=upstream_tool_name,
-                arguments=arguments,
-                reason_code="mcp_live_disabled",
-                message="MCP live capture is disabled for this session.",
-            )
-
-        if self.upstream_client is None:
-            return self._record_deny(
-                tool_name=tool_name,
-                upstream_name=upstream_name,
-                upstream_tool_name=upstream_tool_name,
-                arguments=arguments,
-                reason_code="mcp_upstream_unavailable",
-                message="MCP live capture requires an upstream client.",
-            )
-
-        if upstream_name not in self.config.upstreams:
-            return self._record_deny(
-                tool_name=tool_name,
-                upstream_name=upstream_name,
-                upstream_tool_name=upstream_tool_name,
-                arguments=arguments,
-                reason_code="mcp_upstream_unavailable",
-                message="MCP live capture requires a declared upstream.",
-            )
-
-        try:
-            result = await self.upstream_client.call_tool(
-                upstream_name,
-                upstream_tool_name,
-                deepcopy(arguments),
-            )
-        except Exception:  # noqa: BLE001
-            return self._record_deny(
-                tool_name=tool_name,
-                upstream_name=upstream_name,
-                upstream_tool_name=upstream_tool_name,
-                arguments=arguments,
-                reason_code="mcp_upstream_unavailable",
-                message="MCP upstream tool call failed.",
-            )
-
-        response_case_id = f"mcp_cap_{uuid4().hex}"
-        response_case = McpResponseCase(
-            case_id=response_case_id,
-            tool_name=tool_name,
-            arguments=deepcopy(arguments),
-            result=deepcopy(result),
-            evidence_ref=self.config.live[tool_name].evidence_ref,
-            input_schema=deepcopy(self.input_schemas.get(tool_name)),
-        )
-        if self.capture_store is not None:
-            self.capture_store.append(response_case)
-
-        decision = McpDecision(
-            kind="live",
-            reason_code="mcp_live_captured",
-            message="MCP tool call captured from live upstream.",
-        )
-        event = self.ledger.record_mcp(
+        return self._record_deny(
             tool_name=tool_name,
             upstream_name=upstream_name,
             upstream_tool_name=upstream_tool_name,
             arguments=arguments,
-            decision=decision,
-            result=result,
-            response_case_id=response_case_id,
-        )
-        return McpGateResponse(
-            result=deepcopy(result),
-            decision=decision,
-            event_id=event.event_id,
-            response_case_id=response_case_id,
+            reason_code="provider_access_forbidden",
+            message="Evaluated-agent execution cannot call an MCP provider upstream.",
         )
 
     def _record_deny(

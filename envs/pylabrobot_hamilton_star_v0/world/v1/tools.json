@@ -1,0 +1,525 @@
+{
+  "tools": [
+    {
+      "description": "GET /v1/liquid-handler against isolated PyLabRobot-backed Hamilton STAR state.",
+      "id": "system.get",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "invoke_roles": [
+        "lab_operator",
+        "auditor"
+      ],
+      "list_roles": [
+        "lab_operator",
+        "auditor"
+      ],
+      "operation_family": "lifecycle",
+      "source_refs": [
+        "pylabrobot_0_2_1_official"
+      ]
+    },
+    {
+      "description": "POST /v1/liquid-handler/setup against isolated PyLabRobot-backed Hamilton STAR state.",
+      "id": "system.setup",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "containers": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "max_volume_ul": {
+                  "exclusiveMinimum": 0,
+                  "type": "number"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "volume_ul": {
+                  "minimum": 0,
+                  "type": "number"
+                }
+              },
+              "required": [
+                "name",
+                "volume_ul",
+                "max_volume_ul"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "num_channels": {
+            "const": 8,
+            "type": "integer"
+          },
+          "tip_spots": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "has_tip": {
+                  "type": "boolean"
+                },
+                "max_volume_ul": {
+                  "exclusiveMinimum": 0,
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "has_tip",
+                "max_volume_ul"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "waste_names": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "num_channels",
+          "tip_spots",
+          "containers",
+          "waste_names"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "lab_operator"
+      ],
+      "list_roles": [
+        "lab_operator",
+        "auditor"
+      ],
+      "operation_family": "lifecycle",
+      "source_refs": [
+        "pylabrobot_0_2_1_official",
+        "pylabrobot_chatterbox_reference_20260810"
+      ]
+    },
+    {
+      "description": "POST /v1/liquid-handler/stop against isolated PyLabRobot-backed Hamilton STAR state.",
+      "id": "system.stop",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "invoke_roles": [
+        "lab_operator"
+      ],
+      "list_roles": [
+        "lab_operator",
+        "auditor"
+      ],
+      "operation_family": "lifecycle",
+      "source_refs": [
+        "pylabrobot_0_2_1_official",
+        "pylabrobot_chatterbox_reference_20260810"
+      ]
+    },
+    {
+      "description": "GET /v1/liquid-handler/tips against isolated PyLabRobot-backed Hamilton STAR state.",
+      "id": "tips.get",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "invoke_roles": [
+        "lab_operator",
+        "auditor"
+      ],
+      "list_roles": [
+        "lab_operator",
+        "auditor"
+      ],
+      "operation_family": "tip_handling",
+      "source_refs": [
+        "pylabrobot_0_2_1_official"
+      ]
+    },
+    {
+      "description": "POST /v1/liquid-handler/commands/pick-up-tips against isolated PyLabRobot-backed Hamilton STAR state.",
+      "id": "tips.pick_up",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "operations": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "channel": {
+                  "maximum": 7,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "offset": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "x": {
+                      "type": "number"
+                    },
+                    "y": {
+                      "type": "number"
+                    },
+                    "z": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "x",
+                    "y",
+                    "z"
+                  ],
+                  "type": "object"
+                },
+                "tip_spot": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "channel",
+                "tip_spot",
+                "offset"
+              ],
+              "type": "object"
+            },
+            "maxItems": 8,
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "operations"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "lab_operator"
+      ],
+      "list_roles": [
+        "lab_operator",
+        "auditor"
+      ],
+      "operation_family": "tip_handling",
+      "source_refs": [
+        "pylabrobot_0_2_1_official",
+        "pylabrobot_chatterbox_reference_20260810"
+      ]
+    },
+    {
+      "description": "POST /v1/liquid-handler/commands/drop-tips against isolated PyLabRobot-backed Hamilton STAR state.",
+      "id": "tips.drop",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "operations": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "channel": {
+                  "maximum": 7,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "destination": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "destination_kind": {
+                  "enum": [
+                    "tip_spot",
+                    "waste"
+                  ],
+                  "type": "string"
+                },
+                "offset": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "x": {
+                      "type": "number"
+                    },
+                    "y": {
+                      "type": "number"
+                    },
+                    "z": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "x",
+                    "y",
+                    "z"
+                  ],
+                  "type": "object"
+                }
+              },
+              "required": [
+                "channel",
+                "destination",
+                "destination_kind",
+                "offset"
+              ],
+              "type": "object"
+            },
+            "maxItems": 8,
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "operations"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "lab_operator"
+      ],
+      "list_roles": [
+        "lab_operator",
+        "auditor"
+      ],
+      "operation_family": "tip_handling",
+      "source_refs": [
+        "pylabrobot_0_2_1_official",
+        "pylabrobot_chatterbox_reference_20260810"
+      ]
+    },
+    {
+      "description": "GET /v1/liquid-handler/liquids against isolated PyLabRobot-backed Hamilton STAR state.",
+      "id": "liquids.get",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "invoke_roles": [
+        "lab_operator",
+        "auditor"
+      ],
+      "list_roles": [
+        "lab_operator",
+        "auditor"
+      ],
+      "operation_family": "liquid_handling",
+      "source_refs": [
+        "pylabrobot_0_2_1_official"
+      ]
+    },
+    {
+      "description": "POST /v1/liquid-handler/commands/aspirate against isolated PyLabRobot-backed Hamilton STAR state.",
+      "id": "liquids.aspirate",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "operations": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "blow_out_air_volume": {
+                  "minimum": 0,
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "channel": {
+                  "maximum": 7,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "container": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "flow_rate": {
+                  "exclusiveMinimum": 0,
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "liquid_height": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "offset": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "x": {
+                      "type": "number"
+                    },
+                    "y": {
+                      "type": "number"
+                    },
+                    "z": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "x",
+                    "y",
+                    "z"
+                  ],
+                  "type": "object"
+                },
+                "volume_ul": {
+                  "exclusiveMinimum": 0,
+                  "type": "number"
+                }
+              },
+              "required": [
+                "channel",
+                "container",
+                "volume_ul",
+                "flow_rate",
+                "liquid_height",
+                "blow_out_air_volume",
+                "offset"
+              ],
+              "type": "object"
+            },
+            "maxItems": 8,
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "operations"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "lab_operator"
+      ],
+      "list_roles": [
+        "lab_operator",
+        "auditor"
+      ],
+      "operation_family": "liquid_handling",
+      "source_refs": [
+        "pylabrobot_0_2_1_official",
+        "pylabrobot_chatterbox_reference_20260810"
+      ]
+    },
+    {
+      "description": "POST /v1/liquid-handler/commands/dispense against isolated PyLabRobot-backed Hamilton STAR state.",
+      "id": "liquids.dispense",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "operations": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "blow_out_air_volume": {
+                  "minimum": 0,
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "channel": {
+                  "maximum": 7,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "container": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "flow_rate": {
+                  "exclusiveMinimum": 0,
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "liquid_height": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "offset": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "x": {
+                      "type": "number"
+                    },
+                    "y": {
+                      "type": "number"
+                    },
+                    "z": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "x",
+                    "y",
+                    "z"
+                  ],
+                  "type": "object"
+                },
+                "volume_ul": {
+                  "exclusiveMinimum": 0,
+                  "type": "number"
+                }
+              },
+              "required": [
+                "channel",
+                "container",
+                "volume_ul",
+                "flow_rate",
+                "liquid_height",
+                "blow_out_air_volume",
+                "offset"
+              ],
+              "type": "object"
+            },
+            "maxItems": 8,
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "operations"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "lab_operator"
+      ],
+      "list_roles": [
+        "lab_operator",
+        "auditor"
+      ],
+      "operation_family": "liquid_handling",
+      "source_refs": [
+        "pylabrobot_0_2_1_official",
+        "pylabrobot_chatterbox_reference_20260810"
+      ]
+    }
+  ]
+}

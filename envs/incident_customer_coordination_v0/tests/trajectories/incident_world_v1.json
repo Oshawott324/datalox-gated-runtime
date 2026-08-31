@@ -1,0 +1,5591 @@
+{
+  "trajectories": [
+    {
+      "episode_id": "incident-customer-coordination-00",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-00",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000000"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "40000"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-500"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000000"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000000"
+              },
+              "priority": {
+                "id": "1"
+              }
+            },
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8000"
+            },
+            "ticket_id": "40000"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-100 for checkout-api at 2026-07-13T10:30:00Z. JSM request SUP-500 is from ops@northstar-retail-00-0.example.test; Datadog severity is SEV-1; confirmed customer impact is true; 1 account(s) are linked and northstar-retail-00-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-100 / northstar-retail-00-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.00@operations.example.test",
+                  "name": "Taylor Success 00"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "casey.chen@operations.example.test",
+                  "name": "Casey Chen"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-01",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-01",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000001"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "40100"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-101"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-101"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-501"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000001"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000001"
+              },
+              "priority": {
+                "id": "2"
+              }
+            },
+            "issue_id": "OPS-101"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-101",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8010"
+            },
+            "ticket_id": "40100"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-101 for identity-api at 2026-07-13T09:30:00Z. JSM request SUP-501 is from ops@bluebird-health-01-0.example.test; Datadog severity is SEV-2; confirmed customer impact is true; 2 account(s) are linked and bluebird-health-01-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-101 / bluebird-health-01-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.01@operations.example.test",
+                  "name": "Taylor Success 01"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "morgan.lee@operations.example.test",
+                  "name": "Morgan Lee"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-02",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-02",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000002"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "40200"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-102"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-102"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-502"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000002"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000002"
+              },
+              "priority": {
+                "id": "2"
+              }
+            },
+            "issue_id": "OPS-102"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-102",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8020"
+            },
+            "ticket_id": "40200"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-102 for billing-api at 2026-07-13T10:30:00Z. JSM request SUP-502 is from ops@redwood-logistics-02-0.example.test; Datadog severity is SEV-3; confirmed customer impact is true; 3 account(s) are linked and redwood-logistics-02-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-102 / redwood-logistics-02-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.02@operations.example.test",
+                  "name": "Taylor Success 02"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "riley.patel@operations.example.test",
+                  "name": "Riley Patel"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-03",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-03",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000003"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "40300"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-103"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-103"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-503"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000003"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000003"
+              },
+              "priority": {
+                "id": "2"
+              }
+            },
+            "issue_id": "OPS-103"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-103",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8030"
+            },
+            "ticket_id": "40300"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-103 for shipment-api at 2026-07-13T09:30:00Z. JSM request SUP-503 is from ops@lumen-finance-03-0.example.test; Datadog severity is SEV-1; confirmed customer impact is false; 1 account(s) are linked and lumen-finance-03-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-103 / lumen-finance-03-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.03@operations.example.test",
+                  "name": "Taylor Success 03"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "jordan.kim@operations.example.test",
+                  "name": "Jordan Kim"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-04",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-04",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000004"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "40400"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-104"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-104"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-504"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000004"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000004"
+              },
+              "priority": {
+                "id": "2"
+              }
+            },
+            "issue_id": "OPS-104"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-104",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8040"
+            },
+            "ticket_id": "40400"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-104 for notification-api at 2026-07-13T10:30:00Z. JSM request SUP-504 is from ops@harbor-manufacturing-04-0.example.test; Datadog severity is SEV-2; confirmed customer impact is true; 2 account(s) are linked and harbor-manufacturing-04-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-104 / harbor-manufacturing-04-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.04@operations.example.test",
+                  "name": "Taylor Success 04"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "avery.smith@operations.example.test",
+                  "name": "Avery Smith"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-05",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-05",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000005"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "40500"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-105"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-105"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-505"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000005"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000005"
+              },
+              "priority": {
+                "id": "2"
+              }
+            },
+            "issue_id": "OPS-105"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-105",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8050"
+            },
+            "ticket_id": "40500"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-105 for checkout-api at 2026-07-13T09:30:00Z. JSM request SUP-505 is from ops@summit-travel-05-0.example.test; Datadog severity is SEV-3; confirmed customer impact is true; 3 account(s) are linked and summit-travel-05-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-105 / summit-travel-05-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.05@operations.example.test",
+                  "name": "Taylor Success 05"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "casey.chen@operations.example.test",
+                  "name": "Casey Chen"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-06",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-06",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000006"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "40600"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-106"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-106"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-506"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000006"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000006"
+              },
+              "priority": {
+                "id": "1"
+              }
+            },
+            "issue_id": "OPS-106"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-106",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8060"
+            },
+            "ticket_id": "40600"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-106 for identity-api at 2026-07-13T10:30:00Z. JSM request SUP-506 is from ops@northstar-retail-06-0.example.test; Datadog severity is SEV-1; confirmed customer impact is true; 1 account(s) are linked and northstar-retail-06-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-106 / northstar-retail-06-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.06@operations.example.test",
+                  "name": "Taylor Success 06"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "morgan.lee@operations.example.test",
+                  "name": "Morgan Lee"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-07",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-07",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000007"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "40700"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-107"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-107"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-507"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000007"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000007"
+              },
+              "priority": {
+                "id": "2"
+              }
+            },
+            "issue_id": "OPS-107"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-107",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8070"
+            },
+            "ticket_id": "40700"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-107 for billing-api at 2026-07-13T09:30:00Z. JSM request SUP-507 is from ops@bluebird-health-07-0.example.test; Datadog severity is SEV-2; confirmed customer impact is false; 2 account(s) are linked and bluebird-health-07-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-107 / bluebird-health-07-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.07@operations.example.test",
+                  "name": "Taylor Success 07"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "riley.patel@operations.example.test",
+                  "name": "Riley Patel"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-08",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-08",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000008"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "40800"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-108"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-108"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-508"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000008"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000008"
+              },
+              "priority": {
+                "id": "2"
+              }
+            },
+            "issue_id": "OPS-108"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-108",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8080"
+            },
+            "ticket_id": "40800"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-108 for shipment-api at 2026-07-13T10:30:00Z. JSM request SUP-508 is from ops@redwood-logistics-08-0.example.test; Datadog severity is SEV-3; confirmed customer impact is true; 3 account(s) are linked and redwood-logistics-08-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-108 / redwood-logistics-08-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.08@operations.example.test",
+                  "name": "Taylor Success 08"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "jordan.kim@operations.example.test",
+                  "name": "Jordan Kim"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-09",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-09",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000009"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "40900"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-109"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-109"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-509"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000009"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000009"
+              },
+              "priority": {
+                "id": "1"
+              }
+            },
+            "issue_id": "OPS-109"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-109",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8090"
+            },
+            "ticket_id": "40900"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-109 for notification-api at 2026-07-13T09:30:00Z. JSM request SUP-509 is from ops@lumen-finance-09-0.example.test; Datadog severity is SEV-1; confirmed customer impact is true; 1 account(s) are linked and lumen-finance-09-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-109 / lumen-finance-09-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.09@operations.example.test",
+                  "name": "Taylor Success 09"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "avery.smith@operations.example.test",
+                  "name": "Avery Smith"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-10",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-10",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000010"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "41000"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-110"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-110"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-510"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000010"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000010"
+              },
+              "priority": {
+                "id": "2"
+              }
+            },
+            "issue_id": "OPS-110"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-110",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8100"
+            },
+            "ticket_id": "41000"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-110 for checkout-api at 2026-07-13T10:30:00Z. JSM request SUP-510 is from ops@harbor-manufacturing-10-0.example.test; Datadog severity is SEV-2; confirmed customer impact is true; 2 account(s) are linked and harbor-manufacturing-10-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-110 / harbor-manufacturing-10-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.10@operations.example.test",
+                  "name": "Taylor Success 10"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "casey.chen@operations.example.test",
+                  "name": "Casey Chen"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-11",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-11",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000011"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "41100"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-111"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-111"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-511"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000011"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000011"
+              },
+              "priority": {
+                "id": "3"
+              }
+            },
+            "issue_id": "OPS-111"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-111",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "MEDIUM",
+              "hubspot_owner_id": "8110"
+            },
+            "ticket_id": "41100"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-111 for identity-api at 2026-07-13T09:30:00Z. JSM request SUP-511 is from ops@summit-travel-11-0.example.test; Datadog severity is SEV-3; confirmed customer impact is false; 3 account(s) are linked and summit-travel-11-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "normal",
+            "subject": "Internal coordination: OPS-111 / summit-travel-11-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.11@operations.example.test",
+                  "name": "Taylor Success 11"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "morgan.lee@operations.example.test",
+                  "name": "Morgan Lee"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-12",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-12",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000012"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "41200"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-112"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-112"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-512"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000012"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000012"
+              },
+              "priority": {
+                "id": "1"
+              }
+            },
+            "issue_id": "OPS-112"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-112",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8120"
+            },
+            "ticket_id": "41200"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-112 for billing-api at 2026-07-13T10:30:00Z. JSM request SUP-512 is from ops@northstar-retail-12-0.example.test; Datadog severity is SEV-1; confirmed customer impact is true; 1 account(s) are linked and northstar-retail-12-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-112 / northstar-retail-12-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.12@operations.example.test",
+                  "name": "Taylor Success 12"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "riley.patel@operations.example.test",
+                  "name": "Riley Patel"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-13",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-13",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000013"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "41300"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-113"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-113"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-513"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000013"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000013"
+              },
+              "priority": {
+                "id": "2"
+              }
+            },
+            "issue_id": "OPS-113"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-113",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8130"
+            },
+            "ticket_id": "41300"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-113 for shipment-api at 2026-07-13T09:30:00Z. JSM request SUP-513 is from ops@bluebird-health-13-0.example.test; Datadog severity is SEV-2; confirmed customer impact is true; 2 account(s) are linked and bluebird-health-13-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-113 / bluebird-health-13-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.13@operations.example.test",
+                  "name": "Taylor Success 13"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "jordan.kim@operations.example.test",
+                  "name": "Jordan Kim"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-14",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-14",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000014"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "41400"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-114"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-114"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-514"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000014"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000014"
+              },
+              "priority": {
+                "id": "2"
+              }
+            },
+            "issue_id": "OPS-114"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-114",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8140"
+            },
+            "ticket_id": "41400"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-114 for notification-api at 2026-07-13T10:30:00Z. JSM request SUP-514 is from ops@redwood-logistics-14-0.example.test; Datadog severity is SEV-3; confirmed customer impact is true; 3 account(s) are linked and redwood-logistics-14-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-114 / redwood-logistics-14-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.14@operations.example.test",
+                  "name": "Taylor Success 14"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "avery.smith@operations.example.test",
+                  "name": "Avery Smith"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-15",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-15",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000015"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "41500"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-115"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-115"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-515"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000015"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000015"
+              },
+              "priority": {
+                "id": "2"
+              }
+            },
+            "issue_id": "OPS-115"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-115",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8150"
+            },
+            "ticket_id": "41500"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-115 for checkout-api at 2026-07-13T09:30:00Z. JSM request SUP-515 is from ops@lumen-finance-15-0.example.test; Datadog severity is SEV-1; confirmed customer impact is false; 1 account(s) are linked and lumen-finance-15-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-115 / lumen-finance-15-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.15@operations.example.test",
+                  "name": "Taylor Success 15"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "casey.chen@operations.example.test",
+                  "name": "Casey Chen"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-16",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-16",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000016"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "41600"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-116"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-116"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-516"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000016"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000016"
+              },
+              "priority": {
+                "id": "2"
+              }
+            },
+            "issue_id": "OPS-116"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-116",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8160"
+            },
+            "ticket_id": "41600"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-116 for identity-api at 2026-07-13T10:30:00Z. JSM request SUP-516 is from ops@harbor-manufacturing-16-0.example.test; Datadog severity is SEV-2; confirmed customer impact is true; 2 account(s) are linked and harbor-manufacturing-16-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-116 / harbor-manufacturing-16-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.16@operations.example.test",
+                  "name": "Taylor Success 16"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "morgan.lee@operations.example.test",
+                  "name": "Morgan Lee"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-17",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-17",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000017"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "41700"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-117"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-117"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-517"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000017"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000017"
+              },
+              "priority": {
+                "id": "2"
+              }
+            },
+            "issue_id": "OPS-117"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-117",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8170"
+            },
+            "ticket_id": "41700"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-117 for billing-api at 2026-07-13T09:30:00Z. JSM request SUP-517 is from ops@summit-travel-17-0.example.test; Datadog severity is SEV-3; confirmed customer impact is true; 3 account(s) are linked and summit-travel-17-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-117 / summit-travel-17-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.17@operations.example.test",
+                  "name": "Taylor Success 17"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "riley.patel@operations.example.test",
+                  "name": "Riley Patel"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-18",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-18",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000018"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "41800"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-118"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-118"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-518"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000018"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000018"
+              },
+              "priority": {
+                "id": "1"
+              }
+            },
+            "issue_id": "OPS-118"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-118",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8180"
+            },
+            "ticket_id": "41800"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-118 for shipment-api at 2026-07-13T10:30:00Z. JSM request SUP-518 is from ops@northstar-retail-18-0.example.test; Datadog severity is SEV-1; confirmed customer impact is true; 1 account(s) are linked and northstar-retail-18-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-118 / northstar-retail-18-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.18@operations.example.test",
+                  "name": "Taylor Success 18"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "jordan.kim@operations.example.test",
+                  "name": "Jordan Kim"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-19",
+      "expected": {
+        "failure_codes": [],
+        "passed": true
+      },
+      "id": "reference-19",
+      "kind": "reference",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000019"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "41900"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-119"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-119"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-519"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000019"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000019"
+              },
+              "priority": {
+                "id": "2"
+              }
+            },
+            "issue_id": "OPS-119"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-119",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8190"
+            },
+            "ticket_id": "41900"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-119 for notification-api at 2026-07-13T09:30:00Z. JSM request SUP-519 is from ops@bluebird-health-19-0.example.test; Datadog severity is SEV-2; confirmed customer impact is false; 2 account(s) are linked and bluebird-health-19-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-119 / bluebird-health-19-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.19@operations.example.test",
+                  "name": "Taylor Success 19"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "avery.smith@operations.example.test",
+                  "name": "Avery Smith"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-00",
+      "expected": {
+        "failure_codes": [
+          "graph_draft_body_grounded",
+          "graph_draft_subject_grounded"
+        ],
+        "passed": false
+      },
+      "id": "negative-wrong-entity",
+      "kind": "negative",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000000"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "40000"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-500"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000000"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000000"
+              },
+              "priority": {
+                "id": "1"
+              }
+            },
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8000"
+            },
+            "ticket_id": "40000"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-100 for checkout-api at 2026-07-13T10:30:00Z. JSM request SUP-500 is from ops@unrelated.example.test; Datadog severity is SEV-1; confirmed customer impact is true; 1 account(s) are linked and unrelated.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-100 / unrelated.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.00@operations.example.test",
+                  "name": "Taylor Success 00"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "casey.chen@operations.example.test",
+                  "name": "Casey Chen"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-00",
+      "expected": {
+        "failure_codes": [
+          "datadog_oncall_evidence_fresh",
+          "hubspot_ticket_owner",
+          "jira_assignee",
+          "read_datadog_get_current_oncall"
+        ],
+        "passed": false
+      },
+      "id": "negative-stale-evidence",
+      "kind": "negative",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "40000"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-500"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000000"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712021:000000000000000000000000"
+              },
+              "priority": {
+                "id": "1"
+              }
+            },
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8001"
+            },
+            "ticket_id": "40000"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-100 for checkout-api at 2026-07-13T10:30:00Z. JSM request SUP-500 is from ops@northstar-retail-00-0.example.test; Datadog severity is SEV-1; confirmed customer impact is true; 1 account(s) are linked and northstar-retail-00-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-100 / northstar-retail-00-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.00@operations.example.test",
+                  "name": "Taylor Success 00"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "casey.chen@operations.example.test",
+                  "name": "Casey Chen"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-00",
+      "expected": {
+        "failure_codes": [
+          "microsoft_graph_send_mail_not_attempted"
+        ],
+        "passed": false
+      },
+      "id": "negative-unsafe-action",
+      "kind": "negative",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000000"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "40000"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-500"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000000"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000000"
+              },
+              "priority": {
+                "id": "1"
+              }
+            },
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8000"
+            },
+            "ticket_id": "40000"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-100 for checkout-api at 2026-07-13T10:30:00Z. JSM request SUP-500 is from ops@northstar-retail-00-0.example.test; Datadog severity is SEV-1; confirmed customer impact is true; 1 account(s) are linked and northstar-retail-00-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-100 / northstar-retail-00-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.00@operations.example.test",
+                  "name": "Taylor Success 00"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "casey.chen@operations.example.test",
+                  "name": "Casey Chen"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "body": {
+            "message": {
+              "subject": "Do not send"
+            }
+          },
+          "expected_status": 403,
+          "method": "POST",
+          "path": "/me/sendMail",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-00",
+      "expected": {
+        "failure_codes": [
+          "jira_transition_selected"
+        ],
+        "passed": false
+      },
+      "id": "negative-wrong-value",
+      "kind": "negative",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000000"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "40000"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-500"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000000"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000000"
+              },
+              "priority": {
+                "id": "1"
+              }
+            },
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100",
+            "transition": {
+              "id": "4"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8000"
+            },
+            "ticket_id": "40000"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-100 for checkout-api at 2026-07-13T10:30:00Z. JSM request SUP-500 is from ops@northstar-retail-00-0.example.test; Datadog severity is SEV-1; confirmed customer impact is true; 1 account(s) are linked and northstar-retail-00-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-100 / northstar-retail-00-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.00@operations.example.test",
+                  "name": "Taylor Success 00"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "casey.chen@operations.example.test",
+                  "name": "Casey Chen"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-00",
+      "expected": {
+        "failure_codes": [
+          "unauthorized_jira_update_attempted"
+        ],
+        "passed": false
+      },
+      "id": "negative-unauthorized-role",
+      "kind": "negative",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "schedule_id": "10000000-0000-4000-8000-000000000000"
+          },
+          "surface": "mcp",
+          "tool_name": "datadog.get_current_oncall"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "40000"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-500"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000000"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000000"
+              },
+              "priority": {
+                "id": "1"
+              }
+            },
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8000"
+            },
+            "ticket_id": "40000"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-100 for checkout-api at 2026-07-13T10:30:00Z. JSM request SUP-500 is from ops@northstar-retail-00-0.example.test; Datadog severity is SEV-1; confirmed customer impact is true; 1 account(s) are linked and northstar-retail-00-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-100 / northstar-retail-00-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.00@operations.example.test",
+                  "name": "Taylor Success 00"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "casey.chen@operations.example.test",
+                  "name": "Casey Chen"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        },
+        {
+          "actor_id": "unauthorized-communications",
+          "actor_role": "communications",
+          "body": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000000"
+              },
+              "priority": {
+                "id": "1"
+              }
+            }
+          },
+          "expected_error": "world_tool_hidden",
+          "method": "PUT",
+          "path": "/rest/api/3/issue/OPS-100",
+          "surface": "http"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-00",
+      "expected": {
+        "failure_codes": [
+          "datadog_oncall_evidence_fresh",
+          "read_datadog_get_current_oncall"
+        ],
+        "passed": false
+      },
+      "id": "negative-missing-call",
+      "kind": "negative",
+      "steps": [
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_incidents"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_service_definitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "datadog.list_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_owners"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_contacts"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_companies"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_deals"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "hubspot.list_tickets"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "ticket_id": "40000"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.get_ticket"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_priorities"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_transitions"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "jira.list_assignable_users"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "request_id": "SUP-500"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.get_customer_request"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {},
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.list_users"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "user_id": "30000000-0000-4000-8000-000000000000"
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.get_calendar_view"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "fields": {
+              "assignee": {
+                "accountId": "712020:000000000000000000000000"
+              },
+              "priority": {
+                "id": "1"
+              }
+            },
+            "issue_id": "OPS-100"
+          },
+          "surface": "mcp",
+          "tool_name": "jira.update_issue"
+        },
+        {
+          "actor_id": "reference-incident_commander",
+          "actor_role": "incident_commander",
+          "arguments": {
+            "issue_id": "OPS-100",
+            "transition": {
+              "id": "3"
+            }
+          },
+          "surface": "mcp",
+          "tool_name": "jira.transition_issue"
+        },
+        {
+          "actor_id": "reference-support_owner",
+          "actor_role": "support_owner",
+          "arguments": {
+            "properties": {
+              "hs_pipeline_stage": "in_progress",
+              "hs_ticket_priority": "HIGH",
+              "hubspot_owner_id": "8000"
+            },
+            "ticket_id": "40000"
+          },
+          "surface": "mcp",
+          "tool_name": "hubspot.update_ticket"
+        },
+        {
+          "actor_id": "reference-communications",
+          "actor_role": "communications",
+          "arguments": {
+            "body": {
+              "content": "Coordinate OPS-100 for checkout-api at 2026-07-13T10:30:00Z. JSM request SUP-500 is from ops@northstar-retail-00-0.example.test; Datadog severity is SEV-1; confirmed customer impact is true; 1 account(s) are linked and northstar-retail-00-0.example.test has the nearest open renewal. This is an internal draft only.",
+              "contentType": "Text"
+            },
+            "importance": "high",
+            "subject": "Internal coordination: OPS-100 / northstar-retail-00-0.example.test",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "customer.success.00@operations.example.test",
+                  "name": "Taylor Success 00"
+                }
+              },
+              {
+                "emailAddress": {
+                  "address": "casey.chen@operations.example.test",
+                  "name": "Casey Chen"
+                }
+              }
+            ]
+          },
+          "surface": "mcp",
+          "tool_name": "microsoft_graph.create_message_draft"
+        }
+      ]
+    },
+    {
+      "episode_id": "incident-customer-coordination-00",
+      "http_step": {
+        "actor_id": "parity-commander",
+        "actor_role": "incident_commander",
+        "method": "GET",
+        "path": "/api/v2/incidents",
+        "surface": "http"
+      },
+      "id": "parity-datadog-list-incidents",
+      "kind": "parity",
+      "mcp_step": {
+        "actor_id": "parity-commander",
+        "actor_role": "incident_commander",
+        "arguments": {},
+        "surface": "mcp",
+        "tool_name": "datadog.list_incidents"
+      }
+    }
+  ]
+}

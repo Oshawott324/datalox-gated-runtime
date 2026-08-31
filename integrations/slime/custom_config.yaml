@@ -1,0 +1,4 @@
+datalox_pool_socket_path: /run/datalox/rollout-pool.sock
+datalox_pool_token_path: /run/datalox/rollout-pool.sock.token
+datalox_task_image: datalox-slime-provider-call:example
+datalox_evidence_sidecars_root: /var/lib/datalox/slime-provider-evidence

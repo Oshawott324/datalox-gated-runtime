@@ -1,0 +1,8 @@
+{
+  "instructions": "Investigate the selected incident across all four providers and complete only the grounded shadow-write workflow.",
+  "success_criteria": [
+    "The selected episode's hidden verifier passes."
+  ],
+  "task_id": "incident_customer_coordination_v0",
+  "title": "Coordinate an incident and customer response"
+}

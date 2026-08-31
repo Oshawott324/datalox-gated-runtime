@@ -24,7 +24,10 @@ from datalox_gated_runtime.behavior_harvest.engines.v3.contracts import (  # noq
 )
 from datalox_gated_runtime.engineering_proof import (  # noqa: E402
     PathPrefixMapping,
+    PrincipalBoundTraceTarget,
+    PrincipalMapping,
     WorldTargetSpec,
+    principal_bindings_from_recipe_steps,
 )
 from datalox_gated_runtime.engineering_proof.world_target import (  # noqa: E402
     WorldBundleTraceTarget,
@@ -39,7 +42,7 @@ def _digest(path: Path) -> str:
 class OpentronsWorldTraceTarget(WorldBundleTraceTarget):
     """Map provider multipart upload semantics to the local tool projection."""
 
-    def execute(self, call: ReferenceCall):
+    def execute(self, call: ReferenceCall, *, principal_context_id: str):
         body = call.body
         if (
             call.operation_id == "protocol.create"
@@ -71,7 +74,7 @@ class OpentronsWorldTraceTarget(WorldBundleTraceTarget):
                 headers=call.headers,
                 operation_id=call.operation_id,
             )
-        return super().execute(call)
+        return super().execute(call, principal_context_id=principal_context_id)
 
 
 def _target() -> WorldBundleTraceTarget:
@@ -81,8 +84,9 @@ def _target() -> WorldBundleTraceTarget:
             target_id="opentrons_virtual_lifecycle_local_world",
             target_version="1.0.0",
             episode_id="opentrons-virtual-lifecycle-001",
-            actor_id="opentrons-differential",
-            actor_role="lab_operator",
+            principal_mappings=(
+                PrincipalMapping("simulator", "opentrons-differential", "lab_operator"),
+            ),
             path_mappings=(PathPrefixMapping("/", "/"),),
         ),
     )
@@ -103,8 +107,15 @@ def compute_report() -> dict[str, Any]:
         capture = ROOT / program["capture_path"]
         target = _target()
         try:
+            recipe_contract = v3.load_recipe(
+                recipe,
+                expected_sha256=_digest(recipe),
+            ).value
             report = v3.run_compiled_behavior_trace(
-                target=target,
+                target=PrincipalBoundTraceTarget(
+                    target=target,
+                    bindings=principal_bindings_from_recipe_steps(recipe_contract.steps),
+                ),
                 capture_path=capture,
                 expected_capture_sha256=program["sha256"],
                 connector_path=connector,

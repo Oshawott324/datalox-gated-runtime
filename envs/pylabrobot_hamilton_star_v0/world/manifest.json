@@ -1,0 +1,35 @@
+{
+  "bundle_version": "1.0.0",
+  "content_hashes": {
+    "evidence/reference_execution.json": "sha256:e6acf2ca2f5997ea5e995aa3f07f8eed760a7897355fa6cd853eff6ec12087ea",
+    "gate_config.json": "sha256:2fcc3bc2d54eef51c3fcf6cb5d6ef4c424d48a3766ab96ab8f5176f1c0ca276d",
+    "provider_core_coverage.json": "sha256:596620c7f3f125fef723a1b660359cf6a47cb8949bc98593d2619893168d9270",
+    "task.json": "sha256:1715d802714bfb4b3072c8015e3110759b2cb7400fc77d22f4d5bb2bdf066a44",
+    "tests/trajectories/hamilton_star.json": "sha256:e73431bbe3e4733a05e53cbca2b08aa76f7dcf788b3891f6fcc56cf2039e3a3f",
+    "world/v1/construction.json": "sha256:42844439f5a460e999caab473b738d58fa1c25be82c73c1f35a23152cb54e1fe",
+    "world/v1/contract.py": "sha256:5f7ab9075e8db00334776a68d6e5adc666fb81b43609e7e58406ec3ed568d787",
+    "world/v1/episodes.jsonl": "sha256:d79352ad07cc53aa2fff94839efca49fe223e5189f03b59929c494e703dc76e8",
+    "world/v1/implementation.py": "sha256:e6c7cf2431101ed7b89ee137aca76fd1184384f51cf6c5e7def25174b1cd243c",
+    "world/v1/roles.json": "sha256:48c193efd1d487b4566c0e063c9cf53246a8e5ba3d804ab33587f71030571d87",
+    "world/v1/sources.json": "sha256:e26851b9a9fa4730217329997c60e9d3d8aca0b2e562f6a8be72a0a182a60866",
+    "world/v1/tools.json": "sha256:c1425ff40d804342e65db388e81fb8778d05032236ae6937275a10387daf16c9",
+    "world/v1/verifier.json": "sha256:eeb07bcab2af49100d1271de4d25fc558ed9d8f5e4ba19c67f65a65243632766"
+  },
+  "default_actor_role": "lab_operator",
+  "episodes_path": "world/v1/episodes.jsonl",
+  "implementation": "world/v1/implementation.py:create_world",
+  "required_runtime_capabilities": [
+    "actors",
+    "role_scoped_tools",
+    "transactions"
+  ],
+  "roles_path": "world/v1/roles.json",
+  "schema_version": "datalox_world_bundle_v1",
+  "sources_path": "world/v1/sources.json",
+  "tools_path": "world/v1/tools.json",
+  "trajectory_paths": [
+    "tests/trajectories/hamilton_star.json"
+  ],
+  "verifier_path": "world/v1/verifier.json",
+  "world_id": "pylabrobot_hamilton_star_v0"
+}

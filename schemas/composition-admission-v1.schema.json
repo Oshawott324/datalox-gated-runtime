@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/composition-admission-v1.schema.json",
+  "title": "Datalox Composition Admission v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "admitted", "task_free", "pack_id", "pack_version",
+    "composition_pack_sha256", "composition_operation_claims_sha256", "admitted_at",
+    "distribution_label", "time_scope", "provider_profiles", "evidence_sources", "grounded_claims",
+    "required_coverage", "functional_reset", "behavior_probes"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_composition_admission_v1"},
+    "admitted": {"const": true},
+    "task_free": {"const": true},
+    "pack_id": {"$ref": "#/$defs/identifier"},
+    "pack_version": {"$ref": "#/$defs/identifier"},
+    "composition_pack_sha256": {"$ref": "#/$defs/sha256"},
+    "composition_operation_claims_sha256": {"$ref": "#/$defs/sha256"},
+    "admitted_at": {"$ref": "#/$defs/timestamp"},
+    "distribution_label": {"enum": ["public", "restricted", "private"]},
+    "time_scope": {"const": "delivery_scheduler_only_v1"},
+    "provider_profiles": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/providerProfile"}},
+    "evidence_sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence"}},
+    "grounded_claims": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/groundedClaim"}},
+    "required_coverage": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/coverage"}},
+    "functional_reset": {"$ref": "#/$defs/functionalReset"},
+    "behavior_probes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/probeResult"}}
+  },
+  "$defs": {
+    "identifier": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,6})?Z$"
+    },
+    "providerProfile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["provider_id", "profile_id", "release_manifest_sha256", "provider_runtime_sha256", "provider_admission_sha256", "operation_contract_sha256"],
+      "properties": {
+        "provider_id": {"$ref": "#/$defs/identifier"}, "profile_id": {"$ref": "#/$defs/identifier"},
+        "release_manifest_sha256": {"$ref": "#/$defs/sha256"}, "provider_runtime_sha256": {"$ref": "#/$defs/sha256"},
+        "provider_admission_sha256": {"$ref": "#/$defs/sha256"}, "operation_contract_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["evidence_id", "artifact_path", "artifact_sha256", "grounding_level", "observed_at", "valid_through", "distribution_label", "rights_basis", "current_at_admission"],
+      "properties": {
+        "evidence_id": {"$ref": "#/$defs/identifier"}, "artifact_path": {"type": "string", "minLength": 1}, "artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "grounding_level": {"type": "string", "minLength": 1}, "observed_at": {"$ref": "#/$defs/timestamp"},
+        "valid_through": {"$ref": "#/$defs/timestamp"}, "distribution_label": {"enum": ["public", "restricted", "private"]},
+        "rights_basis": {"type": "string", "minLength": 1}, "current_at_admission": {"const": true}
+      }
+    },
+    "grounding": {
+      "type": "object", "additionalProperties": false, "required": ["level", "evidence_refs"],
+      "properties": {"level": {"type": "string", "minLength": 1}, "evidence_refs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/identifier"}}}
+    },
+    "rights": {
+      "type": "object", "additionalProperties": false, "required": ["distribution_label", "behavior_distribution_basis"],
+      "properties": {"distribution_label": {"enum": ["public", "restricted", "private"]}, "behavior_distribution_basis": {"type": "string", "minLength": 1}}
+    },
+    "groundedClaim": {
+      "type": "object", "additionalProperties": false, "required": ["claim_kind", "claim_id", "grounding", "rights"],
+      "properties": {"claim_kind": {"enum": ["source_contract", "delivery_edge", "compensation"]}, "claim_id": {"$ref": "#/$defs/identifier"}, "grounding": {"$ref": "#/$defs/grounding"}, "rights": {"$ref": "#/$defs/rights"}}
+    },
+    "coverage": {
+      "type": "object", "additionalProperties": false, "required": ["subject_kind", "subject_id", "behavior"],
+      "properties": {"subject_kind": {"enum": ["source_contract", "delivery_edge", "compensation"]}, "subject_id": {"$ref": "#/$defs/identifier"}, "behavior": {"$ref": "#/$defs/identifier"}}
+    },
+    "functionalReset": {
+      "type": "object", "additionalProperties": false,
+      "required": ["passed", "first_run_sha256", "second_run_sha256", "reset_result_sha256", "baseline_evidence_sha256"],
+      "properties": {"passed": {"const": true}, "first_run_sha256": {"$ref": "#/$defs/sha256"}, "second_run_sha256": {"$ref": "#/$defs/sha256"}, "reset_result_sha256": {"$ref": "#/$defs/sha256"}, "baseline_evidence_sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "stepResult": {
+      "type": "object", "additionalProperties": false,
+      "required": ["step_id", "action", "covers", "assertions_passed", "first_result_sha256", "second_result_sha256", "first_evidence_sha256", "second_evidence_sha256"],
+      "properties": {
+        "step_id": {"$ref": "#/$defs/identifier"}, "action": {"enum": ["agent_http", "controller_advance", "controller_drain"]},
+        "covers": {"type": "array", "items": {"$ref": "#/$defs/coverage"}},
+        "assertions_passed": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/identifier"}},
+        "first_result_sha256": {"$ref": "#/$defs/sha256"}, "second_result_sha256": {"$ref": "#/$defs/sha256"},
+        "first_evidence_sha256": {"$ref": "#/$defs/sha256"}, "second_evidence_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "probeResult": {
+      "type": "object", "additionalProperties": false, "required": ["probe_id", "steps"],
+      "properties": {"probe_id": {"$ref": "#/$defs/identifier"}, "steps": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/stepResult"}}}
+    }
+  }
+}

@@ -1,0 +1,497 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/session-event-export-v1.schema.json",
+  "title": "Datalox provider-session event and delivery evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "episode_seed",
+    "initial_time",
+    "logical_time",
+    "source_events",
+    "deliveries",
+    "post_outcome_effects",
+    "state_digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_session_event_export_v1"},
+    "episode_seed": {"$ref": "#/$defs/identifier"},
+    "initial_time": {"$ref": "#/$defs/timestamp"},
+    "logical_time": {"$ref": "#/$defs/timestamp"},
+    "source_events": {
+      "type": "array",
+      "maxItems": 4096,
+      "items": {"$ref": "#/$defs/source_event"}
+    },
+    "deliveries": {
+      "type": "array",
+      "maxItems": 8192,
+      "items": {"$ref": "#/$defs/delivery"}
+    },
+    "post_outcome_effects": {
+      "type": "array",
+      "maxItems": 16384,
+      "items": {"$ref": "#/$defs/post_outcome_effect"}
+    },
+    "state_digest": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/@-]{0,127}$"
+    },
+    "generated_id": {
+      "type": "string",
+      "pattern": "^(evt|dlv|efx)_[0-9a-f]{32}$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "json_object": {"type": "object"},
+    "correlations": {
+      "type": "object",
+      "maxProperties": 32,
+      "propertyNames": {"$ref": "#/$defs/identifier"},
+      "additionalProperties": {"$ref": "#/$defs/identifier"}
+    },
+    "source_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_event_id",
+        "source_provider_id",
+        "provider_event_id",
+        "event_type",
+        "payload",
+        "correlation_ids",
+        "idempotency_key",
+        "sequence",
+        "recorded_at",
+        "content_digest"
+      ],
+      "properties": {
+        "source_event_id": {"$ref": "#/$defs/generated_id"},
+        "source_provider_id": {"$ref": "#/$defs/identifier"},
+        "provider_event_id": {"$ref": "#/$defs/identifier"},
+        "event_type": {"$ref": "#/$defs/identifier"},
+        "payload": {"$ref": "#/$defs/json_object"},
+        "correlation_ids": {"$ref": "#/$defs/correlations"},
+        "idempotency_key": {
+          "oneOf": [{"$ref": "#/$defs/identifier"}, {"type": "null"}]
+        },
+        "sequence": {"type": "integer", "minimum": 0},
+        "recorded_at": {"$ref": "#/$defs/timestamp"},
+        "content_digest": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "attempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attempt_number",
+        "available_at",
+        "started_at",
+        "finished_at",
+        "outcome",
+        "receipt",
+        "status_code",
+        "error_code",
+        "error_message",
+        "retry_delay_seconds"
+      ],
+      "properties": {
+        "attempt_number": {"type": "integer", "minimum": 1},
+        "available_at": {"$ref": "#/$defs/timestamp"},
+        "started_at": {"$ref": "#/$defs/timestamp"},
+        "finished_at": {
+          "oneOf": [{"$ref": "#/$defs/timestamp"}, {"type": "null"}]
+        },
+        "outcome": {
+          "enum": [
+            "in_flight",
+            "delivered",
+            "retryable_failure",
+            "terminal_failure",
+            "unknown_completion"
+          ]
+        },
+        "receipt": {
+          "oneOf": [{"$ref": "#/$defs/json_object"}, {"type": "null"}]
+        },
+        "status_code": {
+          "type": ["integer", "null"],
+          "minimum": 100,
+          "maximum": 599
+        },
+        "error_code": {
+          "oneOf": [{"$ref": "#/$defs/identifier"}, {"type": "null"}]
+        },
+        "error_message": {"type": ["string", "null"], "maxLength": 4096},
+        "retry_delay_seconds": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "maximum": 2592000
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"outcome": {"const": "in_flight"}}},
+          "then": {
+            "properties": {
+              "finished_at": {"type": "null"},
+              "receipt": {"type": "null"},
+              "status_code": {"type": "null"},
+              "error_code": {"type": "null"},
+              "error_message": {"type": "null"},
+              "retry_delay_seconds": {"type": "null"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "outcome": {
+                "enum": [
+                  "delivered",
+                  "retryable_failure",
+                  "terminal_failure",
+                  "unknown_completion"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "finished_at": {"$ref": "#/$defs/timestamp"},
+              "receipt": {"$ref": "#/$defs/json_object"}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"outcome": {"const": "delivered"}}},
+          "then": {
+            "properties": {
+              "error_code": {"type": "null"},
+              "error_message": {"type": "null"},
+              "retry_delay_seconds": {"type": "null"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "outcome": {
+                "enum": ["retryable_failure", "terminal_failure", "unknown_completion"]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "error_code": {"$ref": "#/$defs/identifier"},
+              "error_message": {"type": "string", "minLength": 1, "maxLength": 4096}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "outcome": {"enum": ["terminal_failure", "unknown_completion"]}
+            }
+          },
+          "then": {"properties": {"retry_delay_seconds": {"type": "null"}}}
+        }
+      ]
+    },
+    "resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attempt_number",
+        "resolved_at",
+        "outcome",
+        "receipt",
+        "status_code",
+        "error_code",
+        "error_message",
+        "retry_delay_seconds"
+      ],
+      "properties": {
+        "attempt_number": {"type": "integer", "minimum": 1},
+        "resolved_at": {"$ref": "#/$defs/timestamp"},
+        "outcome": {"enum": ["delivered", "retryable_failure", "terminal_failure"]},
+        "receipt": {"$ref": "#/$defs/json_object"},
+        "status_code": {
+          "type": ["integer", "null"],
+          "minimum": 100,
+          "maximum": 599
+        },
+        "error_code": {
+          "oneOf": [{"$ref": "#/$defs/identifier"}, {"type": "null"}]
+        },
+        "error_message": {"type": ["string", "null"], "maxLength": 4096},
+        "retry_delay_seconds": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "maximum": 2592000
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"outcome": {"const": "delivered"}}},
+          "then": {
+            "properties": {
+              "error_code": {"type": "null"},
+              "error_message": {"type": "null"},
+              "retry_delay_seconds": {"type": "null"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "outcome": {"enum": ["retryable_failure", "terminal_failure"]}
+            }
+          },
+          "then": {
+            "properties": {
+              "error_code": {"$ref": "#/$defs/identifier"},
+              "error_message": {"type": "string", "minLength": 1, "maxLength": 4096}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"outcome": {"const": "terminal_failure"}}},
+          "then": {"properties": {"retry_delay_seconds": {"type": "null"}}}
+        }
+      ]
+    },
+    "post_outcome_effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effect_id",
+        "origin_delivery_id",
+        "origin_attempt_number",
+        "origin_kind",
+        "effect_kind",
+        "payload",
+        "content_digest",
+        "sequence",
+        "created_at",
+        "state",
+        "applied_at"
+      ],
+      "properties": {
+        "effect_id": {"$ref": "#/$defs/generated_id"},
+        "origin_delivery_id": {
+          "type": "string",
+          "pattern": "^dlv_[0-9a-f]{32}$"
+        },
+        "origin_attempt_number": {"type": "integer", "minimum": 1},
+        "origin_kind": {"enum": ["attempt", "resolution"]},
+        "effect_kind": {
+          "enum": ["source_fanout", "existing_source_delivery"]
+        },
+        "payload": {"type": "object"},
+        "content_digest": {"$ref": "#/$defs/digest"},
+        "sequence": {"type": "integer", "minimum": 0},
+        "created_at": {"$ref": "#/$defs/timestamp"},
+        "state": {"enum": ["pending", "applied"]},
+        "applied_at": {
+          "oneOf": [{"$ref": "#/$defs/timestamp"}, {"type": "null"}]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"const": "pending"}}},
+          "then": {"properties": {"applied_at": {"type": "null"}}}
+        },
+        {
+          "if": {"properties": {"state": {"const": "applied"}}},
+          "then": {"properties": {"applied_at": {"$ref": "#/$defs/timestamp"}}}
+        }
+      ]
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "delivery_id",
+        "edge_id",
+        "ordering_key",
+        "source_event_id",
+        "target_provider_id",
+        "target_operation_id",
+        "target_principal_context_id",
+        "request",
+        "correlation_ids",
+        "idempotency_key",
+        "retry_delays_seconds",
+        "sequence",
+        "enqueued_at",
+        "initial_available_at",
+        "available_at",
+        "state",
+        "content_digest",
+        "attempts",
+        "resolutions"
+      ],
+      "properties": {
+        "delivery_id": {"$ref": "#/$defs/generated_id"},
+        "edge_id": {"$ref": "#/$defs/identifier"},
+        "ordering_key": {"$ref": "#/$defs/identifier"},
+        "source_event_id": {"$ref": "#/$defs/generated_id"},
+        "target_provider_id": {"$ref": "#/$defs/identifier"},
+        "target_operation_id": {"$ref": "#/$defs/identifier"},
+        "target_principal_context_id": {"$ref": "#/$defs/identifier"},
+        "request": {"$ref": "#/$defs/json_object"},
+        "correlation_ids": {"$ref": "#/$defs/correlations"},
+        "idempotency_key": {
+          "oneOf": [{"$ref": "#/$defs/identifier"}, {"type": "null"}]
+        },
+        "retry_delays_seconds": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {"type": "integer", "minimum": 1, "maximum": 2592000}
+        },
+        "sequence": {"type": "integer", "minimum": 0},
+        "enqueued_at": {"$ref": "#/$defs/timestamp"},
+        "initial_available_at": {"$ref": "#/$defs/timestamp"},
+        "available_at": {"$ref": "#/$defs/timestamp"},
+        "state": {
+          "enum": [
+            "queued",
+            "retry_scheduled",
+            "in_flight",
+            "delivered",
+            "terminal_failure",
+            "unknown_completion"
+          ]
+        },
+        "content_digest": {"$ref": "#/$defs/digest"},
+        "attempts": {
+          "type": "array",
+          "maxItems": 33,
+          "items": {"$ref": "#/$defs/attempt"}
+        },
+        "resolutions": {
+          "type": "array",
+          "maxItems": 33,
+          "items": {"$ref": "#/$defs/resolution"}
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"const": "queued"}}},
+          "then": {
+            "properties": {
+              "attempts": {"maxItems": 0},
+              "resolutions": {"maxItems": 0}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"state": {"const": "in_flight"}}},
+          "then": {
+            "properties": {
+              "attempts": {
+                "contains": {
+                  "type": "object",
+                  "properties": {"outcome": {"const": "in_flight"}},
+                  "required": ["outcome"]
+                },
+                "minContains": 1,
+                "maxContains": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "enum": [
+                  "queued",
+                  "retry_scheduled",
+                  "delivered",
+                  "terminal_failure",
+                  "unknown_completion"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "attempts": {
+                "not": {
+                  "contains": {
+                    "type": "object",
+                    "properties": {"outcome": {"const": "in_flight"}},
+                    "required": ["outcome"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {"properties": {"state": {"const": "retry_scheduled"}}},
+          "then": {"properties": {"attempts": {"minItems": 1}}}
+        },
+        {
+          "if": {"properties": {"state": {"const": "unknown_completion"}}},
+          "then": {
+            "properties": {
+              "attempts": {
+                "contains": {
+                  "type": "object",
+                  "properties": {"outcome": {"const": "unknown_completion"}},
+                  "required": ["outcome"]
+                },
+                "minContains": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {"properties": {"state": {"const": "delivered"}}},
+          "then": {
+            "anyOf": [
+              {
+                "properties": {
+                  "attempts": {
+                    "contains": {
+                      "type": "object",
+                      "properties": {"outcome": {"const": "delivered"}},
+                      "required": ["outcome"]
+                    },
+                    "minContains": 1
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "resolutions": {
+                    "contains": {
+                      "type": "object",
+                      "properties": {"outcome": {"const": "delivered"}},
+                      "required": ["outcome"]
+                    },
+                    "minContains": 1
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

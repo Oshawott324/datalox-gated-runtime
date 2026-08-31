@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/provider-identity-v1.schema.json",
+  "title": "Datalox provider-native identity policy",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "mode", "actor_id", "actor_role"],
+      "properties": {
+        "schema_version": {"const": "datalox_provider_identity_v1"},
+        "mode": {"const": "fixed"},
+        "actor_id": {"$ref": "#/$defs/identifier"},
+        "actor_role": {"$ref": "#/$defs/identifier"}
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "mode", "principals", "missing_identity", "invalid_identity"],
+      "properties": {
+        "schema_version": {"const": "datalox_provider_identity_v1"},
+        "mode": {"const": "credential_map"},
+        "principals": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["principal_context_id", "actor_id", "actor_role", "credentials"],
+            "properties": {
+              "principal_context_id": {"$ref": "#/$defs/identifier"},
+              "actor_id": {"$ref": "#/$defs/identifier"},
+              "actor_role": {"$ref": "#/$defs/identifier"},
+              "credentials": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["location", "name", "value_sha256"],
+                  "properties": {
+                    "location": {"enum": ["header", "query", "cookie"]},
+                    "name": {
+                      "type": "string",
+                      "pattern": "^[!#$%&'*+.^_`|~0-9A-Za-z-]+$"
+                    },
+                    "value_sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "missing_identity": {"$ref": "#/$defs/error_response"},
+        "invalid_identity": {"$ref": "#/$defs/error_response"}
+      }
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "error_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status_code", "body", "headers"],
+      "properties": {
+        "status_code": {"type": "integer", "minimum": 400, "maximum": 499},
+        "body": {},
+        "headers": {"type": "object", "additionalProperties": {"type": "string"}}
+      }
+    }
+  }
+}

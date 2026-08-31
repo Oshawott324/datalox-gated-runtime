@@ -21,6 +21,17 @@ from datalox_gated_runtime.behavior_harvest import (  # noqa: E402
     compile_reference_trace,
     current_engine_identity,
     load_connector,
+    run_compiled_behavior_trace,
+)
+from datalox_gated_runtime.engineering_proof import (  # noqa: E402
+    PathPrefixMapping,
+    PrincipalBoundTraceTarget,
+    PrincipalMapping,
+    StateRecordOverride,
+    StaticValueMapping,
+    WorldBundleTraceTarget,
+    WorldTargetSpec,
+    principal_bindings_from_recipe_steps,
 )
 
 GENERIC_OPERATIONS = {
@@ -36,6 +47,53 @@ GENERIC_OPERATIONS = {
     "stock_delete_physical_inventory": "stock.delete_physical_inventory",
     "stock_update_physical_inventory": "stock.update_physical_inventory",
 }
+WORLD = ROOT / "envs/openlmis_supply_chain_v0"
+EPISODE_ID = "openlmis-supply-chain-001"
+PROVIDER_ADMIN_USER_ID = "a337ec45-31a0-4f2b-9b2e-a105c4b669bb"
+WORLD_ADMIN_USER_ID = "00000000-0000-4000-8000-000000000001"
+
+
+def _principal_mappings(name: str) -> tuple[PrincipalMapping, ...]:
+    administrator_role = (
+        "program_authorizer" if name == "requisition_authorize" else "administrator"
+    )
+    srmanager_role = "stock_manager" if name.startswith("stock_") else "facility_clerk"
+    return (
+        PrincipalMapping("administrator", "openlmis-administrator", administrator_role),
+        PrincipalMapping("srmanager2", "openlmis-srmanager2", srmanager_role),
+        PrincipalMapping("psupervisor", "openlmis-psupervisor", "program_approver"),
+    )
+
+
+def _world_target_spec(name: str) -> WorldTargetSpec:
+    static_mappings: tuple[StaticValueMapping, ...] = ()
+    state_overrides: tuple[StateRecordOverride, ...] = ()
+    if name == "notification_update_contact":
+        static_mappings = (StaticValueMapping(PROVIDER_ADMIN_USER_ID, WORLD_ADMIN_USER_ID),)
+        state_overrides = (
+            StateRecordOverride(
+                collection="contact_details",
+                record_id=WORLD_ADMIN_USER_ID,
+                value={
+                    "allowNotify": True,
+                    "emailDetails": {
+                        "email": "administrator@openlmis.org",
+                        "emailVerified": True,
+                    },
+                    "phoneNumber": None,
+                    "referenceDataUserId": WORLD_ADMIN_USER_ID,
+                },
+            ),
+        )
+    return WorldTargetSpec(
+        target_id="openlmis_supply_chain_local_world",
+        target_version="1.0.0",
+        episode_id=EPISODE_ID,
+        principal_mappings=_principal_mappings(name),
+        path_mappings=(PathPrefixMapping("/", "/"),),
+        static_value_mappings=static_mappings,
+        state_record_overrides=state_overrides,
+    )
 
 
 def _digest_bytes(value: bytes) -> str:
@@ -112,6 +170,26 @@ def _generic_rows() -> list[dict[str, Any]]:
             step.operation_id == operation_id for step in trace.steps
         ):
             raise RuntimeError(f"capture does not contain its selected operation: {name}")
+        target = WorldBundleTraceTarget(env_dir=WORLD, spec=_world_target_spec(name))
+        try:
+            report = run_compiled_behavior_trace(
+                target=PrincipalBoundTraceTarget(
+                    target=target,
+                    bindings=principal_bindings_from_recipe_steps(trace.recipe.steps),
+                ),
+                capture_path=capture_path,
+                expected_capture_sha256=_digest(capture_path),
+                connector_path=connector_path,
+                expected_connector_sha256=connector_digest,
+                recipe_path=recipe_path,
+                expected_recipe_sha256=capture["recipe_sha256"],
+                expected_engine=current_engine_identity(),
+                sensitive_values=_sentinel_secrets(connector_path),
+                static_input_paths=static_paths,
+                expected_static_input_sha256=static_digests,
+            )
+        finally:
+            target.close()
         rows.append(
             {
                 "operation_id": operation_id,
@@ -124,13 +202,8 @@ def _generic_rows() -> list[dict[str, Any]]:
                 "recipe_sha256": capture["recipe_sha256"],
                 "compiled_step_count": len(trace.steps),
                 "differential": {
-                    "status": "differential_not_executable",
-                    "reason_code": "per_step_actor_mapping_unavailable",
-                    "reason": (
-                        "WorldBundleTraceTarget configures one actor for a trace, while this "
-                        "provider trace contains multiple auth contexts. No exact actor mapping "
-                        "is representable without changing the existing neutral target contract."
-                    ),
+                    "status": "passed" if report.passed else "executed_mismatch",
+                    "report": report.to_dict(),
                 },
             }
         )
@@ -341,8 +414,8 @@ def compute_inventory() -> dict[str, Any]:
         "classification_counts": dict(sorted(counts.items())),
         "claim_boundary": (
             "Generic reloadability, exact direct provider observation, and executable local "
-            "differential equivalence are separate claims. No operation currently claims the "
-            "last one."
+            "differential equivalence are separate claims. Per-step principals are executed; "
+            "only rows with a passed differential claim exact behavior equivalence."
         ),
         "state_reset": _state_reset(),
         "functional_reset_equivalence": {
@@ -380,7 +453,8 @@ def main() -> int:
         return 1
     print(
         "OpenLMIS retained evidence valid: "
-        f"{value['classification_counts']} (20 selected writes; differential not claimed)."
+        f"{value['classification_counts']} "
+        "(20 selected writes; 11 differentials executed; 1 exact pass)."
     )
     return 0
 

@@ -12,17 +12,10 @@ from mcp.server.fastmcp import FastMCP
 from mcp.server.stdio import stdio_server
 from mcp.server.transport_security import TransportSecuritySettings
 
-from datalox_gated_runtime.capture import (
-    CaptureStore,
-    LiveCaptureClient,
-    validate_live_capture_prefixes,
-)
 from datalox_gated_runtime.config import load_gate_config
 from datalox_gated_runtime.ledger import SessionLedger
-from datalox_gated_runtime.mcp_capture import McpCaptureStore
-from datalox_gated_runtime.mcp_registry import McpToolRegistry, McpToolSchemaClient
+from datalox_gated_runtime.mcp_registry import McpToolRegistry
 from datalox_gated_runtime.mcp_runtime import McpGatedRuntime
-from datalox_gated_runtime.mcp_upstream import StdioMcpUpstreamClient
 from datalox_gated_runtime.models import CallRequest
 from datalox_gated_runtime.policy import GatePolicy
 from datalox_gated_runtime.runtime import GatedRuntime
@@ -122,14 +115,10 @@ def build_server(
 def build_low_level_server(
     run_dir: Path,
     *,
-    allow_live: bool = False,
-    upstream_client: McpToolSchemaClient | None = None,
     actor_context: ActorContext | None = None,
 ) -> Server:
     server, _ = _build_low_level_components(
         run_dir,
-        allow_live=allow_live,
-        upstream_client=upstream_client,
         actor_context=actor_context,
     )
     return server
@@ -138,7 +127,6 @@ def build_low_level_server(
 def run_mcp(
     run_dir: Path,
     *,
-    allow_live: bool = False,
     actor_context: ActorContext | None = None,
 ) -> None:
     config = load_gate_config(run_dir / "gate_config.json")
@@ -148,7 +136,6 @@ def run_mcp(
     asyncio.run(
         _run_low_level_mcp(
             run_dir,
-            allow_live=allow_live,
             actor_context=actor_context,
         )
     )
@@ -157,23 +144,12 @@ def run_mcp(
 def _build_low_level_components(
     run_dir: Path,
     *,
-    allow_live: bool = False,
-    upstream_client: McpToolSchemaClient | None = None,
     actor_context: ActorContext | None = None,
 ) -> tuple[Server, McpToolRegistry]:
     config = load_gate_config(run_dir / "gate_config.json")
     if config.mcp is None:
         raise ValueError("mcp block is required for low-level MCP server")
 
-    upstream_client = upstream_client or StdioMcpUpstreamClient(config.mcp.upstreams)
-    capture_client = None
-    capture_store = None
-    if allow_live and config.policy is not None and config.policy.live_capture:
-        if config.live is None:
-            raise ValueError("--allow-live requires live.upstreams in gate_config.json")
-        validate_live_capture_prefixes(config.policy, config.live)
-        capture_client = LiveCaptureClient(config.live)
-        capture_store = CaptureStore(run_dir / "captures.jsonl")
     ledger = SessionLedger(path=run_dir / "ledger.jsonl")
     world_backend = create_world_backend(
         run_dir=run_dir,
@@ -181,27 +157,21 @@ def _build_low_level_components(
         actor_context=actor_context,
     )
     http_runtime = GatedRuntime(
-        policy=GatePolicy.from_config(config.policy, allow_live=allow_live),
+        policy=GatePolicy.from_config(config.policy),
         response_cases=config.response_cases,
         ledger=ledger,
-        capture_client=capture_client,
-        capture_store=capture_store,
         world_backend=world_backend,
     )
     input_schemas: dict[str, dict[str, Any]] = {}
     mcp_runtime = McpGatedRuntime(
         config=config.mcp,
         ledger=ledger,
-        upstream_client=upstream_client,
-        capture_store=McpCaptureStore(run_dir / "mcp_captures.jsonl"),
-        allow_live=allow_live,
-        input_schemas=input_schemas,
     )
     registry = McpToolRegistry(
         run_dir=run_dir,
         config=config.mcp,
         mcp_runtime=mcp_runtime,
-        upstream_client=upstream_client,
+        upstream_client=None,
         http_runtime=http_runtime,
         input_schemas=input_schemas,
         world_backend=world_backend,
@@ -223,12 +193,10 @@ def _build_low_level_components(
 async def _run_low_level_mcp(
     run_dir: Path,
     *,
-    allow_live: bool = False,
     actor_context: ActorContext | None = None,
 ) -> None:
     server, registry = _build_low_level_components(
         run_dir,
-        allow_live=allow_live,
         actor_context=actor_context,
     )
     await registry.snapshot_declared_tool_schemas()

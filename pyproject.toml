@@ -5,13 +5,13 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "datalox-gated-runtime"
 version = "0.1.0"
-description = "Call-path gating runtime for replayable, verifiable agent tool use."
+description = "Transparent, stateful provider API interception for isolated AI-agent execution."
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [{ name = "Datalox" }]
 license = "Apache-2.0"
 license-files = ["LICENSE"]
-keywords = ["agents", "api", "evaluation", "mcp", "replay", "sandbox"]
+keywords = ["agents", "api", "interception", "simulation", "replay", "sandbox"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Console",
@@ -24,6 +24,7 @@ classifiers = [
   "Topic :: Software Development :: Testing",
 ]
 dependencies = [
+  "cryptography>=45",
   "fastapi>=0.115",
   "httpx>=0.27",
   "mcp>=1.27.0,<2",
@@ -31,10 +32,14 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+hamilton = [
+  "pylabrobot==0.2.1",
+]
 dev = [
   "build>=1.2",
   "httpx>=0.27",
   "pip-audit==2.10.1",
+  "pylabrobot==0.2.1",
   "pytest>=8.0",
   "ruff>=0.5",
 ]
@@ -50,6 +55,9 @@ datalox-gate = "datalox_gated_runtime.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+"datalox_gated_runtime.harness_adapters" = ["*.patch"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

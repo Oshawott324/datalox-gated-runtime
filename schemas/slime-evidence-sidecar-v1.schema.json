@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/slime-evidence-sidecar-v1.schema.json",
+  "title": "Datalox THUDM/slime provider evidence sidecar v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "identity_key",
+    "uid",
+    "session_id",
+    "environment_seed",
+    "lease_id",
+    "initial_provider_fingerprint",
+    "artifact_directory",
+    "consumer_exit_codes"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_slime_evidence_sidecar_v1"},
+    "identity_key": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "uid": {"type": "string", "minLength": 1, "maxLength": 256},
+    "session_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "environment_seed": {"type": "integer", "minimum": 0},
+    "lease_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "initial_provider_fingerprint": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "artifact_directory": {"type": "string", "pattern": "^/"},
+    "consumer_exit_codes": {
+      "type": "array",
+      "items": {"type": "integer", "minimum": 0, "maximum": 255}
+    }
+  }
+}

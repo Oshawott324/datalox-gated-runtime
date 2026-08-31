@@ -5,6 +5,7 @@ import httpx
 import pytest
 from fastapi.testclient import TestClient
 
+from datalox_gated_runtime.authoring_runtime import AuthoringGatedRuntime
 from datalox_gated_runtime.capture import (
     CaptureStore,
     LiveCaptureClient,
@@ -61,7 +62,7 @@ def test_live_get_is_captured(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -
         allow_live=True,
     )
     capture_store = CaptureStore(tmp_path / "captures.jsonl")
-    runtime = GatedRuntime(
+    runtime = AuthoringGatedRuntime(
         policy=policy,
         capture_client=LiveCaptureClient(
             LiveGateConfig(
@@ -115,7 +116,7 @@ def test_live_get_forwards_and_captures_repeated_query_values(tmp_path: Path) ->
         upstream_requests.append(request)
         return httpx.Response(200, json={"count": 2})
 
-    runtime = GatedRuntime(
+    runtime = AuthoringGatedRuntime(
         policy=GatePolicy.from_config(
             PolicyConfig(live_capture=[RouteRule(path_prefix="/records/", method="GET")]),
             allow_live=True,
@@ -160,7 +161,7 @@ def test_live_capture_preserves_upstream_trailing_slash(tmp_path: Path) -> None:
         upstream_requests.append(request)
         return httpx.Response(200, json={"ok": True})
 
-    runtime = GatedRuntime(
+    runtime = AuthoringGatedRuntime(
         policy=GatePolicy.from_config(
             PolicyConfig(
                 live_capture=[
@@ -203,7 +204,7 @@ def test_unknown_upstream_segment_returns_structured_error(tmp_path: Path) -> No
         PolicyConfig(live_capture=[RouteRule(path_prefix="/gitlab/", method="GET")]),
         allow_live=True,
     )
-    runtime = GatedRuntime(
+    runtime = AuthoringGatedRuntime(
         policy=policy,
         capture_client=LiveCaptureClient(
             LiveGateConfig(upstreams={"github": LiveUpstream(base_url="https://api.github.test")}),
@@ -215,7 +216,7 @@ def test_unknown_upstream_segment_returns_structured_error(tmp_path: Path) -> No
     response = runtime.handle(CallRequest(method="GET", path="/gitlab/projects/1"))
 
     assert response.status_code == 502
-    assert response.decision.kind == "live_capture"
+    assert response.decision.kind == "deny"
     assert response.body["error"]["code"] == "live_upstream_not_configured"
     assert not (tmp_path / "captures.jsonl").exists()
 
@@ -225,7 +226,7 @@ def test_live_invalid_json_response_records_structured_error(tmp_path: Path) -> 
         PolicyConfig(live_capture=[RouteRule(path_prefix="/github/", method="GET")]),
         allow_live=True,
     )
-    runtime = GatedRuntime(
+    runtime = AuthoringGatedRuntime(
         policy=policy,
         capture_client=LiveCaptureClient(
             LiveGateConfig(upstreams={"github": LiveUpstream(base_url="https://api.github.test")}),
@@ -243,11 +244,11 @@ def test_live_invalid_json_response_records_structured_error(tmp_path: Path) -> 
     response = runtime.handle(CallRequest(method="GET", path="/github/repos/o/r"))
 
     assert response.status_code == 502
-    assert response.decision.kind == "live_capture"
+    assert response.decision.kind == "deny"
     assert response.body["error"]["code"] == "live_upstream_invalid_response"
     assert len(runtime.ledger.events) == 1
     event = runtime.ledger.events[0]
-    assert event.decision.kind == "live_capture"
+    assert event.decision.kind == "deny"
     assert event.response_status_code == 502
     assert event.response_body == response.body
     assert not (tmp_path / "captures.jsonl").exists()
@@ -262,7 +263,7 @@ def test_live_capture_store_failure_records_structured_error() -> None:
         PolicyConfig(live_capture=[RouteRule(path_prefix="/github/", method="GET")]),
         allow_live=True,
     )
-    runtime = GatedRuntime(
+    runtime = AuthoringGatedRuntime(
         policy=policy,
         capture_client=LiveCaptureClient(
             LiveGateConfig(upstreams={"github": LiveUpstream(base_url="https://api.github.test")}),
@@ -280,11 +281,11 @@ def test_live_capture_store_failure_records_structured_error() -> None:
     response = runtime.handle(CallRequest(method="GET", path="/github/repos/o/r"))
 
     assert response.status_code == 502
-    assert response.decision.kind == "live_capture"
+    assert response.decision.kind == "deny"
     assert response.body["error"]["code"] == "live_capture_store_failed"
     assert len(runtime.ledger.events) == 1
     event = runtime.ledger.events[0]
-    assert event.decision.kind == "live_capture"
+    assert event.decision.kind == "deny"
     assert event.response_status_code == 502
     assert event.response_body == response.body
 
@@ -298,9 +299,9 @@ def test_live_decision_without_client_is_structured_error() -> None:
 
     response = runtime.handle(CallRequest(method="GET", path="/github/repos/o/r"))
 
-    assert response.status_code == 502
-    assert response.decision.kind == "live_capture"
-    assert response.body["error"]["code"] == "live_capture_unavailable"
+    assert response.status_code == 403
+    assert response.decision.kind == "deny"
+    assert response.body["error"]["code"] == "provider_access_forbidden"
 
 
 def test_allow_live_false_does_not_capture(tmp_path: Path) -> None:
@@ -311,7 +312,7 @@ def test_allow_live_false_does_not_capture(tmp_path: Path) -> None:
         PolicyConfig(live_capture=[RouteRule(path_prefix="/github/", method="GET")]),
         allow_live=False,
     )
-    runtime = GatedRuntime(
+    runtime = AuthoringGatedRuntime(
         policy=policy,
         capture_client=LiveCaptureClient(
             LiveGateConfig(upstreams={"github": LiveUpstream(base_url="https://api.github.test")}),
@@ -327,17 +328,17 @@ def test_allow_live_false_does_not_capture(tmp_path: Path) -> None:
     assert not (tmp_path / "captures.jsonl").exists()
 
 
-def test_http_create_app_requires_live_config_when_allow_live(tmp_path: Path) -> None:
+def test_execution_http_app_has_no_live_provider_option(tmp_path: Path) -> None:
     _write_gate_config(
         tmp_path,
         _base_config(policy={"live_capture": [{"path_prefix": "/github/"}]}),
     )
 
-    with pytest.raises(ValueError, match=r"--allow-live requires live\.upstreams"):
+    with pytest.raises(TypeError, match="unexpected keyword argument 'allow_live'"):
         create_app(tmp_path, allow_live=True)
 
 
-def test_http_create_app_rejects_unmapped_live_prefix_at_startup(tmp_path: Path) -> None:
+def test_execution_http_app_ignores_authoring_config_and_stays_offline(tmp_path: Path) -> None:
     _write_gate_config(
         tmp_path,
         _base_config(
@@ -346,40 +347,20 @@ def test_http_create_app_rejects_unmapped_live_prefix_at_startup(tmp_path: Path)
         ),
     )
 
-    with pytest.raises(ValueError, match=r"unmapped live_capture prefix.*gitlab"):
-        create_app(tmp_path, allow_live=True)
-
-
-def test_health_reports_live_flag(tmp_path: Path) -> None:
-    _write_gate_config(
-        tmp_path,
-        _base_config(
-            policy={"live_capture": [{"path_prefix": "/github/"}]},
-            live={"upstreams": {"github": {"base_url": "https://api.github.test"}}},
-        ),
-    )
-
-    with TestClient(create_app(tmp_path, allow_live=True)) as client:
-        live_response = client.get("/_datalox/health")
     with TestClient(create_app(tmp_path)) as client:
-        normal_response = client.get("/_datalox/health")
+        response = client.get("/gitlab/projects/1")
 
-    assert live_response.status_code == 200
-    assert live_response.json()["live"] is True
-    assert normal_response.status_code == 200
-    assert normal_response.json()["live"] is False
+    assert response.status_code == 403
+    assert response.json()["error"]["code"] == "provider_access_forbidden"
 
 
-def test_serve_threads_allow_live_to_create_app(
+def test_serve_constructs_provider_offline_app(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     observed: dict[str, object] = {}
 
-    def fake_create_app(
-        run_dir: Path, *, allow_live: bool = False, server_token: str | None = None
-    ):
+    def fake_create_app(run_dir: Path, *, server_token: str | None = None):
         observed["run_dir"] = run_dir
-        observed["allow_live"] = allow_live
         observed["server_token"] = server_token
         return object()
 
@@ -395,14 +376,12 @@ def test_serve_threads_allow_live_to_create_app(
 
     class Args:
         run = str(tmp_path)
-        allow_live = True
         server_token = "server-token"
         host = "127.0.0.1"
         port = 8765
 
     assert _serve(Args()) == 0
     assert observed["run_dir"] == tmp_path
-    assert observed["allow_live"] is True
     assert observed["server_token"] == "server-token"
     assert observed["host"] == "127.0.0.1"
     assert observed["port"] == 8765
@@ -638,7 +617,7 @@ def test_live_capture_injects_auth_profile_query_without_persisting_secret(
         )
     )
     assert config.live is not None
-    runtime = GatedRuntime(
+    runtime = AuthoringGatedRuntime(
         policy=GatePolicy.from_config(
             PolicyConfig(live_capture=[RouteRule(path_prefix="/example/", method="GET")]),
             allow_live=True,
@@ -693,7 +672,7 @@ def test_live_capture_blocks_auth_profile_query_collision(
         )
     )
     assert config.live is not None
-    runtime = GatedRuntime(
+    runtime = AuthoringGatedRuntime(
         policy=GatePolicy.from_config(
             PolicyConfig(live_capture=[RouteRule(path_prefix="/example/", method="GET")]),
             allow_live=True,
@@ -757,7 +736,7 @@ def test_live_capture_forwards_only_configured_auth_headers(
         PolicyConfig(live_capture=[RouteRule(path_prefix="/alpaca/", method="GET")]),
         allow_live=True,
     )
-    runtime = GatedRuntime(
+    runtime = AuthoringGatedRuntime(
         policy=policy,
         capture_client=LiveCaptureClient(
             LiveGateConfig(
@@ -817,7 +796,7 @@ def test_live_capture_forwards_static_headers_without_agent_overrides(
         PolicyConfig(live_capture=[RouteRule(path_prefix="/opentrons/", method="GET")]),
         allow_live=True,
     )
-    runtime = GatedRuntime(
+    runtime = AuthoringGatedRuntime(
         policy=policy,
         capture_client=LiveCaptureClient(
             LiveGateConfig(

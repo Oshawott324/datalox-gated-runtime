@@ -32,6 +32,7 @@ def build() -> dict[str, Any]:
         old = previous_rows[operation_id]
         classification = retained["classification"]
         complete = classification == "generic_reloadable_complete"
+        differential_status = retained["differential"]["status"]
         row = {
             "operation_id": operation_id,
             "family": old["family"],
@@ -47,9 +48,9 @@ def build() -> dict[str, Any]:
             "differential": retained["differential"],
             "reason": (
                 "The exact retained generic capture reloads and compiles offline through the "
-                "existing behavior-harvest compiler. Local-world differential equivalence is "
-                "not executable because the neutral world target cannot represent per-step "
-                "provider actors."
+                "existing behavior-harvest compiler. The provider-neutral target executes its "
+                "declared per-step principals; exact equivalence is claimed only when the "
+                f"retained differential status is passed (actual: {differential_status})."
                 if complete
                 else "The provider write, provider-native outcome, and resulting state were "
                 "observed directly, but safe response headers/content type were not retained; "
@@ -80,6 +81,11 @@ def build() -> dict[str, Any]:
             row["fresh_reset_observation"] = failures[operation_id]
         rows.append(row)
     counts = inventory["classification_counts"]
+    differential_pass_count = sum(
+        row["differential"].get("status") == "passed"
+        for row in inventory["operations"]
+        if row["classification"] == "generic_reloadable_complete"
+    )
     return {
         "schema_id": "datalox_openlmis_behavior_program_coverage_v2",
         "environment_id": "openlmis_supply_chain_v0",
@@ -89,7 +95,7 @@ def build() -> dict[str, Any]:
         "provider_observed_write_count": len(rows),
         "provider_observed_complete_program_count": counts["generic_reloadable_complete"],
         "provider_observed_partial_write_count": counts["direct_observed_partial"],
-        "differential_pass_count": 0,
+        "differential_pass_count": differential_pass_count,
         "classification_counts": counts,
         "classification_contract": {
             "generic_reloadable_complete": (
@@ -105,9 +111,9 @@ def build() -> dict[str, Any]:
                 "proved no observable mutation. This does not invalidate an earlier successful "
                 "provider observation."
             ),
-            "differential_not_executable": (
-                "The existing provider-neutral target cannot faithfully execute the retained "
-                "trace; no bespoke provider runner is substituted."
+            "executed_mismatch": (
+                "The provider-neutral target executed the retained trace, including explicit "
+                "per-step principals, but exact provider/world comparison found mismatches."
             ),
         },
         "claim_boundary": inventory["claim_boundary"],
@@ -120,7 +126,7 @@ def build() -> dict[str, Any]:
             "ready_for_complete_capture": False,
             "missing_write_observation_count": 0,
             "missing_complete_program_count": counts["direct_observed_partial"],
-            "local_differential_ready_count": 0,
+            "local_differential_ready_count": differential_pass_count,
         },
         "operations": rows,
     }

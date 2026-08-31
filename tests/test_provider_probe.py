@@ -25,7 +25,6 @@ from datalox_gated_runtime.provider_probe import (
     rollup_probe_reports,
 )
 
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CLI_TIMEOUT_SECONDS = 60
 
@@ -732,12 +731,18 @@ def _write_report(path: Path, payload: dict[str, Any]) -> None:
 
 def _run_cli(args: list[str], *, env: dict[str, str]) -> subprocess.CompletedProcess[str]:
     command = [sys.executable, "-m", "datalox_gated_runtime.cli", *args]
+    subprocess_env = dict(env)
+    for variable in ("NO_PROXY", "no_proxy"):
+        entries = [item for item in subprocess_env.get(variable, "").split(",") if item]
+        if "127.0.0.1" not in entries:
+            entries.append("127.0.0.1")
+        subprocess_env[variable] = ",".join(entries)
     try:
         return subprocess.run(
             command,
             check=False,
             cwd=REPO_ROOT,
-            env=env,
+            env=subprocess_env,
             text=True,
             capture_output=True,
             timeout=CLI_TIMEOUT_SECONDS,
@@ -764,15 +769,16 @@ def _timeout_output(output: str | bytes | None) -> str:
 
 def _wait_for_provider_health(provider: FakeProvider) -> None:
     deadline = time.time() + 10
-    while time.time() < deadline:
-        if not provider.thread.is_alive():
-            raise AssertionError("fake provider exited before health check passed")
-        try:
-            response = httpx.get(f"{provider.base_url}/_health", timeout=0.5)
-            if response.status_code == 200:
-                return
-        except httpx.HTTPError:
-            time.sleep(0.05)
+    with httpx.Client(trust_env=False) as client:
+        while time.time() < deadline:
+            if not provider.thread.is_alive():
+                raise AssertionError("fake provider exited before health check passed")
+            try:
+                response = client.get(f"{provider.base_url}/_health", timeout=0.5)
+                if response.status_code == 200:
+                    return
+            except httpx.HTTPError:
+                time.sleep(0.05)
     raise AssertionError("fake provider did not become healthy")
 
 

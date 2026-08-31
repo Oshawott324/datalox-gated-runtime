@@ -19,7 +19,6 @@ import pytest
 import uvicorn
 from fastapi import FastAPI, Request
 
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CLI_TIMEOUT_SECONDS = 60
 
@@ -38,92 +37,35 @@ class FakeUpstream:
             raise AssertionError("fake upstream did not stop")
 
 
-def test_capture_promote_verify_and_replay_flywheel_through_processes(tmp_path: Path) -> None:
+def test_execution_session_cannot_capture_from_declared_live_provider(tmp_path: Path) -> None:
     with _fake_upstream() as upstream:
         examples_dir = tmp_path / "examples"
         _write_live_example(examples_dir, upstream.base_url)
 
-        capture_run = tmp_path / "capture-run"
-        capture_env = _examples_env(examples_dir, token="test-token")
+        run_dir = tmp_path / "execution-run"
+        execution_env = _examples_env(examples_dir, token="test-token")
         started = _start_session(
             example="lab_live",
-            out_dir=capture_run,
-            env=capture_env,
-            allow_live=True,
+            out_dir=run_dir,
+            env=execution_env,
         )
         try:
-            _drive_lab_sequence(started["http_base_url"], expected_read_decision="live_capture")
+            with httpx.Client(
+                base_url=started["http_base_url"], timeout=5.0, trust_env=False
+            ) as client:
+                for path in (
+                    "/labstep/experiments/exp_live",
+                    "/labstep/results/result_live",
+                ):
+                    response = client.get(path)
+                    assert response.status_code == 403
+                    assert response.json()["error"]["code"] == "provider_access_forbidden"
         finally:
-            _stop_session(capture_run, env=capture_env)
+            _stop_session(run_dir, env=execution_env)
 
-        finalized = _run_cli(
-            ["session", "finalize", "--run", str(capture_run), "--json"],
-            env=capture_env,
-        )
-        assert finalized.returncode == 0, finalized.stderr
-        assert json.loads(finalized.stdout)["passed"] is True
-
-        promoted_dir = examples_dir / "lab_live_promoted"
-        promoted = _run_cli(
-            [
-                "session",
-                "promote",
-                "--run",
-                str(capture_run),
-                "--out",
-                str(promoted_dir),
-                "--json",
-            ],
-            env=capture_env,
-        )
-        assert promoted.returncode == 0, promoted.stderr
-        assert json.loads(promoted.stdout)["response_case_count"] == 2
-        promoted_config = json.loads(
-            (promoted_dir / "gate_config.json").read_text(encoding="utf-8")
-        )
-        assert "live" not in promoted_config
-        assert promoted_config["policy"]["live_capture"] == []
-        _assert_no_secret_in_tree(promoted_dir, "test-token")
-
-        verified = _run_cli(
-            ["env", "verify-replay", "--env", str(promoted_dir), "--json"],
-            env=_examples_env(examples_dir),
-        )
-        assert verified.returncode == 0, verified.stderr
-        assert json.loads(verified.stdout)["fidelity_passed"] is True
-
-        replay_run = tmp_path / "replay-run"
-        replay_env = _examples_env(examples_dir)
-        replay_started = _start_session(
-            example="lab_live_promoted",
-            out_dir=replay_run,
-            env=replay_env,
-            allow_live=False,
-        )
-        requests_after_capture = list(upstream.requests)
-        try:
-            _drive_lab_sequence(replay_started["http_base_url"], expected_read_decision="replay")
-        finally:
-            _stop_session(replay_run, env=replay_env)
-
-        replay_finalized = _run_cli(
-            ["session", "finalize", "--run", str(replay_run), "--json"],
-            env=replay_env,
-        )
-        assert replay_finalized.returncode == 0, replay_finalized.stderr
-        assert json.loads(replay_finalized.stdout)["passed"] is True
-
-        assert upstream.requests == requests_after_capture
-        assert [request["path"] for request in upstream.requests] == [
-            "/experiments/exp_live",
-            "/results/result_live",
-        ]
-        assert {request["authorization"] for request in upstream.requests} == {
-            "Bearer test-token",
-        }
-        assert _ledger_decisions(replay_run).isdisjoint({"live_capture"})
-        _assert_no_secret_in_tree(capture_run, "test-token")
-        _assert_no_secret_in_tree(replay_run, "test-token")
+        assert upstream.requests == []
+        assert _ledger_decisions(run_dir) == {"deny"}
+        _assert_no_secret_in_tree(run_dir, "test-token")
 
 
 def test_negative_capture_run_does_not_hit_upstream_and_cannot_promote(tmp_path: Path) -> None:
@@ -137,10 +79,11 @@ def test_negative_capture_run_does_not_hit_upstream_and_cannot_promote(tmp_path:
             example="lab_live",
             out_dir=capture_run,
             env=capture_env,
-            allow_live=True,
         )
         try:
-            with httpx.Client(base_url=started["http_base_url"], timeout=5.0) as client:
+            with httpx.Client(
+                base_url=started["http_base_url"], timeout=5.0, trust_env=False
+            ) as client:
                 denied = client.post("/labstep/hardware/arm-move", json={"target": "A1"})
                 assert denied.status_code == 403
                 assert denied.json()["error"]["code"] == "hardware_action_denied"
@@ -183,7 +126,7 @@ def test_negative_capture_run_does_not_hit_upstream_and_cannot_promote(tmp_path:
 
 def test_fake_upstream_records_unexpected_non_health_requests() -> None:
     with _fake_upstream() as upstream:
-        with httpx.Client(base_url=upstream.base_url, timeout=5.0) as client:
+        with httpx.Client(base_url=upstream.base_url, timeout=5.0, trust_env=False) as client:
             health = client.get("/_health")
             unexpected = client.get(
                 "/unexpected-route",
@@ -437,11 +380,8 @@ def _start_session(
     example: str,
     out_dir: Path,
     env: dict[str, str],
-    allow_live: bool,
 ) -> dict[str, Any]:
     args = ["session", "start", "--example", example, "--out", str(out_dir), "--json"]
-    if allow_live:
-        args.append("--allow-live")
     result = _run_cli(args, env=env)
     assert result.returncode == 0, result.stderr or result.stdout
     payload = json.loads(result.stdout)
@@ -520,7 +460,7 @@ def _wait_for_upstream_health(upstream: FakeUpstream) -> None:
         if not upstream.thread.is_alive():
             raise AssertionError("fake upstream exited before health check passed")
         try:
-            response = httpx.get(f"{upstream.base_url}/_health", timeout=0.5)
+            response = httpx.get(f"{upstream.base_url}/_health", timeout=0.5, trust_env=False)
             if response.status_code == 200:
                 return
         except httpx.HTTPError:

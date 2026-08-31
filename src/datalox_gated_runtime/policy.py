@@ -44,7 +44,7 @@ class GatePolicy:
         shadow_write: list[RouteRule] | None = None,
         live_capture: list[RouteRule] | None = None,
         config_owned: bool = False,
-        allow_live: bool = False,
+        allow_live: bool | None = None,
     ) -> None:
         self._rules = rules or []
         self._deny = deny or []
@@ -77,7 +77,12 @@ class GatePolicy:
         )
 
     @classmethod
-    def from_config(cls, policy: PolicyConfig | None, *, allow_live: bool = False) -> GatePolicy:
+    def from_config(
+        cls,
+        policy: PolicyConfig | None,
+        *,
+        allow_live: bool | None = None,
+    ) -> GatePolicy:
         if policy is None:
             return cls.default()
         return cls(
@@ -119,12 +124,19 @@ class GatePolicy:
                 reason_code="captured_response_replayed",
                 message="Returned a captured response case.",
             )
-        if method == "GET" and self._allow_live and _any_rule_matches(self._live_capture, request):
-            return GateDecision(
-                kind="live_capture",
-                reason_code="live_capture_allowed",
-                message="Call may be captured from the live provider.",
-            )
+        if method == "GET" and _any_rule_matches(self._live_capture, request):
+            if self._allow_live is True:
+                return GateDecision(
+                    kind="live_capture",
+                    reason_code="live_capture_allowed",
+                    message="Call may be captured from the live provider.",
+                )
+            if self._allow_live is None:
+                return GateDecision(
+                    kind="deny",
+                    reason_code="provider_access_forbidden",
+                    message="Evaluated-agent execution cannot contact a provider.",
+                )
         if method in {"POST", "PUT", "PATCH", "DELETE"}:
             if self._config_owned:
                 if _any_rule_matches(self._shadow_write, request):

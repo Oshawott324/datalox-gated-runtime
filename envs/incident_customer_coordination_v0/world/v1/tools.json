@@ -1,0 +1,591 @@
+{
+  "tools": [
+    {
+      "description": "List Datadog incidents.",
+      "id": "datadog.list_incidents",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander",
+        "support_owner",
+        "communications"
+      ],
+      "list_roles": [
+        "incident_commander",
+        "support_owner",
+        "communications"
+      ],
+      "operation_family": "incident_investigation",
+      "source_refs": [
+        "datadog_v2_openapi"
+      ]
+    },
+    {
+      "description": "List Datadog service definitions.",
+      "id": "datadog.list_service_definitions",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander",
+        "support_owner",
+        "communications"
+      ],
+      "list_roles": [
+        "incident_commander",
+        "support_owner",
+        "communications"
+      ],
+      "operation_family": "incident_investigation",
+      "source_refs": [
+        "datadog_v2_openapi"
+      ]
+    },
+    {
+      "description": "List Datadog users.",
+      "id": "datadog.list_users",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander",
+        "support_owner",
+        "communications"
+      ],
+      "list_roles": [
+        "incident_commander",
+        "support_owner",
+        "communications"
+      ],
+      "operation_family": "incident_investigation",
+      "source_refs": [
+        "datadog_v2_openapi"
+      ]
+    },
+    {
+      "description": "Read the current shift for a Datadog on-call schedule.",
+      "id": "datadog.get_current_oncall",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "schedule_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "schedule_id"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander",
+        "support_owner",
+        "communications"
+      ],
+      "list_roles": [
+        "incident_commander",
+        "support_owner",
+        "communications"
+      ],
+      "operation_family": "incident_investigation",
+      "source_refs": [
+        "datadog_v2_openapi"
+      ]
+    },
+    {
+      "description": "List HubSpot owners.",
+      "id": "hubspot.list_owners",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander",
+        "support_owner"
+      ],
+      "list_roles": [
+        "incident_commander",
+        "support_owner"
+      ],
+      "operation_family": "customer_coordination",
+      "source_refs": [
+        "hubspot_owners_openapi"
+      ]
+    },
+    {
+      "description": "List HubSpot contacts.",
+      "id": "hubspot.list_contacts",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander",
+        "support_owner"
+      ],
+      "list_roles": [
+        "incident_commander",
+        "support_owner"
+      ],
+      "operation_family": "customer_coordination",
+      "source_refs": [
+        "hubspot_contacts_openapi"
+      ]
+    },
+    {
+      "description": "List HubSpot companies.",
+      "id": "hubspot.list_companies",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander",
+        "support_owner"
+      ],
+      "list_roles": [
+        "incident_commander",
+        "support_owner"
+      ],
+      "operation_family": "customer_coordination",
+      "source_refs": [
+        "hubspot_companies_openapi"
+      ]
+    },
+    {
+      "description": "List HubSpot deals.",
+      "id": "hubspot.list_deals",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander",
+        "support_owner"
+      ],
+      "list_roles": [
+        "incident_commander",
+        "support_owner"
+      ],
+      "operation_family": "customer_coordination",
+      "source_refs": [
+        "hubspot_deals_openapi"
+      ]
+    },
+    {
+      "description": "List HubSpot tickets.",
+      "id": "hubspot.list_tickets",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander",
+        "support_owner"
+      ],
+      "list_roles": [
+        "incident_commander",
+        "support_owner"
+      ],
+      "operation_family": "customer_coordination",
+      "source_refs": [
+        "hubspot_tickets_openapi"
+      ]
+    },
+    {
+      "description": "Read one HubSpot ticket.",
+      "id": "hubspot.get_ticket",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander",
+        "support_owner"
+      ],
+      "list_roles": [
+        "incident_commander",
+        "support_owner"
+      ],
+      "operation_family": "customer_coordination",
+      "source_refs": [
+        "hubspot_tickets_openapi"
+      ]
+    },
+    {
+      "description": "Read one Jira engineering issue.",
+      "id": "jira.get_issue",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_id"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander"
+      ],
+      "list_roles": [
+        "incident_commander"
+      ],
+      "operation_family": "engineering_coordination",
+      "source_refs": [
+        "jira_issue_docs"
+      ]
+    },
+    {
+      "description": "List Jira priorities and their provider IDs.",
+      "id": "jira.list_priorities",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander"
+      ],
+      "list_roles": [
+        "incident_commander"
+      ],
+      "operation_family": "engineering_coordination",
+      "source_refs": [
+        "jira_priority_docs"
+      ]
+    },
+    {
+      "description": "List the transitions currently available for a Jira issue.",
+      "id": "jira.get_transitions",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_id"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander"
+      ],
+      "list_roles": [
+        "incident_commander"
+      ],
+      "operation_family": "engineering_coordination",
+      "source_refs": [
+        "jira_transition_docs"
+      ]
+    },
+    {
+      "description": "List users assignable to the OPS Jira project.",
+      "id": "jira.list_assignable_users",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander"
+      ],
+      "list_roles": [
+        "incident_commander"
+      ],
+      "operation_family": "engineering_coordination",
+      "source_refs": [
+        "jira_user_search_docs"
+      ]
+    },
+    {
+      "description": "Read one Jira Service Management customer request.",
+      "id": "jira.get_customer_request",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander",
+        "support_owner"
+      ],
+      "list_roles": [
+        "incident_commander",
+        "support_owner"
+      ],
+      "operation_family": "customer_coordination",
+      "source_refs": [
+        "jira_jsm_request_docs"
+      ]
+    },
+    {
+      "description": "List internal Microsoft Graph users.",
+      "id": "microsoft_graph.list_users",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander",
+        "communications"
+      ],
+      "list_roles": [
+        "incident_commander",
+        "communications"
+      ],
+      "operation_family": "internal_communications",
+      "source_refs": [
+        "graph_user_list_docs"
+      ]
+    },
+    {
+      "description": "Read an internal user's calendar view for the coordination window.",
+      "id": "microsoft_graph.get_calendar_view",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander",
+        "communications"
+      ],
+      "list_roles": [
+        "incident_commander",
+        "communications"
+      ],
+      "operation_family": "internal_communications",
+      "source_refs": [
+        "graph_calendar_view_docs"
+      ]
+    },
+    {
+      "description": "Read a Microsoft Graph message draft.",
+      "id": "microsoft_graph.get_draft",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "message_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message_id"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander",
+        "communications"
+      ],
+      "list_roles": [
+        "incident_commander",
+        "communications"
+      ],
+      "operation_family": "internal_communications",
+      "source_refs": [
+        "graph_message_draft_docs"
+      ]
+    },
+    {
+      "description": "Update Jira issue fields using the official PUT issue contract.",
+      "id": "jira.update_issue",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "fields": {
+            "additionalProperties": false,
+            "properties": {
+              "assignee": {
+                "additionalProperties": false,
+                "properties": {
+                  "accountId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "accountId"
+                ],
+                "type": "object"
+              },
+              "priority": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "assignee",
+              "priority"
+            ],
+            "type": "object"
+          },
+          "issue_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_id",
+          "fields"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander"
+      ],
+      "list_roles": [
+        "incident_commander"
+      ],
+      "operation_family": "engineering_coordination",
+      "source_refs": [
+        "jira_issue_docs"
+      ]
+    },
+    {
+      "description": "Transition a Jira issue using the official POST transitions contract.",
+      "id": "jira.transition_issue",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "transition": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "issue_id",
+          "transition"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "incident_commander"
+      ],
+      "list_roles": [
+        "incident_commander"
+      ],
+      "operation_family": "engineering_coordination",
+      "source_refs": [
+        "jira_issue_docs",
+        "jira_transition_docs"
+      ]
+    },
+    {
+      "description": "Partially update a HubSpot ticket using its properties object.",
+      "id": "hubspot.update_ticket",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "properties": {
+            "type": "object"
+          },
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id",
+          "properties"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "support_owner"
+      ],
+      "list_roles": [
+        "support_owner"
+      ],
+      "operation_family": "customer_coordination",
+      "source_refs": [
+        "hubspot_tickets_openapi"
+      ]
+    },
+    {
+      "description": "Create a Microsoft Graph message draft without sending it.",
+      "id": "microsoft_graph.create_message_draft",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "type": "object"
+          },
+          "importance": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "toRecipients": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "subject",
+          "body",
+          "toRecipients",
+          "importance"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "communications"
+      ],
+      "list_roles": [
+        "communications"
+      ],
+      "operation_family": "internal_communications",
+      "source_refs": [
+        "graph_message_draft_docs"
+      ]
+    }
+  ]
+}

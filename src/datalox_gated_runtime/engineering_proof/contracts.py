@@ -5,8 +5,9 @@ from dataclasses import dataclass
 from typing import Any, Protocol
 
 from datalox_gated_runtime.reference import ConformanceReport, SequenceTarget
+from datalox_gated_runtime.reference.contracts import JsonValue, freeze_json, thaw_json
 
-WORLD_TARGET_SPEC_SCHEMA = "datalox_world_target_spec_v1"
+WORLD_TARGET_SPEC_SCHEMA = "datalox_world_target_spec_v2"
 DIFFERENTIAL_PROGRAM_SPEC_SCHEMA = "datalox_differential_program_spec_v1"
 ENGINEERING_PROOF_SCHEMA = "datalox_engineering_proof_v1"
 
@@ -191,6 +192,120 @@ class OperationMapping:
 
 
 @dataclass(frozen=True)
+class PrincipalMapping:
+    principal_context_id: str
+    actor_id: str
+    actor_role: str
+
+    def __post_init__(self) -> None:
+        for field_name in ("principal_context_id", "actor_id", "actor_role"):
+            object.__setattr__(
+                self,
+                field_name,
+                _identifier(getattr(self, field_name), path=f"principal_mapping.{field_name}"),
+            )
+
+    def to_dict(self) -> dict[str, str]:
+        return {
+            "principal_context_id": self.principal_context_id,
+            "actor_id": self.actor_id,
+            "actor_role": self.actor_role,
+        }
+
+    @classmethod
+    def from_dict(cls, value: Any) -> PrincipalMapping:
+        raw = _object(value, path="principal_mapping")
+        _shape(
+            raw,
+            required=frozenset({"principal_context_id", "actor_id", "actor_role"}),
+            path="principal_mapping",
+        )
+        return cls(
+            principal_context_id=raw["principal_context_id"],
+            actor_id=raw["actor_id"],
+            actor_role=raw["actor_role"],
+        )
+
+
+@dataclass(frozen=True)
+class StaticValueMapping:
+    """Declare equivalent fixed fixture identifiers across provider and world state."""
+
+    reference_value: str
+    world_value: str
+
+    def __post_init__(self) -> None:
+        for field_name in ("reference_value", "world_value"):
+            object.__setattr__(
+                self,
+                field_name,
+                _string(getattr(self, field_name), path=f"static_value_mapping.{field_name}"),
+            )
+
+    def to_dict(self) -> dict[str, str]:
+        return {
+            "reference_value": self.reference_value,
+            "world_value": self.world_value,
+        }
+
+    @classmethod
+    def from_dict(cls, value: Any) -> StaticValueMapping:
+        raw = _object(value, path="static_value_mapping")
+        _shape(
+            raw,
+            required=frozenset({"reference_value", "world_value"}),
+            path="static_value_mapping",
+        )
+        return cls(
+            reference_value=raw["reference_value"],
+            world_value=raw["world_value"],
+        )
+
+
+@dataclass(frozen=True)
+class StateRecordOverride:
+    """Align one target seed record with an observed provider precondition."""
+
+    collection: str
+    record_id: str
+    value: JsonValue
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self,
+            "collection",
+            _identifier(self.collection, path="state_record_override.collection"),
+        )
+        object.__setattr__(
+            self,
+            "record_id",
+            _string(self.record_id, path="state_record_override.record_id"),
+        )
+        object.__setattr__(self, "value", freeze_json(self.value))
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "collection": self.collection,
+            "record_id": self.record_id,
+            "value": thaw_json(self.value),
+        }
+
+    @classmethod
+    def from_dict(cls, value: Any) -> StateRecordOverride:
+        raw = _object(value, path="state_record_override")
+        _shape(
+            raw,
+            required=frozenset({"collection", "record_id", "value"}),
+            path="state_record_override",
+        )
+        return cls(
+            collection=raw["collection"],
+            record_id=raw["record_id"],
+            value=raw["value"],
+        )
+
+
+@dataclass(frozen=True)
 class GeneratedIdBinding:
     binding_id: str
     producer_operation_id: str
@@ -246,9 +361,10 @@ class WorldTargetSpec:
     target_id: str
     target_version: str
     episode_id: str
-    actor_id: str
-    actor_role: str
+    principal_mappings: tuple[PrincipalMapping, ...]
     path_mappings: tuple[PathPrefixMapping, ...]
+    static_value_mappings: tuple[StaticValueMapping, ...] = ()
+    state_record_overrides: tuple[StateRecordOverride, ...] = ()
     operation_mappings: tuple[OperationMapping, ...] = ()
     generated_id_bindings: tuple[GeneratedIdBinding, ...] = ()
     schema_version: str = WORLD_TARGET_SPEC_SCHEMA
@@ -258,7 +374,7 @@ class WorldTargetSpec:
             raise EngineeringProofContractError(
                 f"unsupported world target schema: {self.schema_version}"
             )
-        for field_name in ("target_id", "episode_id", "actor_id", "actor_role"):
+        for field_name in ("target_id", "episode_id"):
             object.__setattr__(
                 self,
                 field_name,
@@ -270,7 +386,10 @@ class WorldTargetSpec:
             _string(self.target_version, path="world_target.target_version"),
         )
         path_mappings = tuple(self.path_mappings)
+        principal_mappings = tuple(self.principal_mappings)
         operation_mappings = tuple(self.operation_mappings)
+        static_value_mappings = tuple(self.static_value_mappings)
+        state_record_overrides = tuple(self.state_record_overrides)
         generated_id_bindings = tuple(self.generated_id_bindings)
         if not path_mappings or not all(
             isinstance(item, PathPrefixMapping) for item in path_mappings
@@ -278,9 +397,23 @@ class WorldTargetSpec:
             raise EngineeringProofContractError(
                 "world_target.path_mappings must contain path-prefix mappings"
             )
+        if not principal_mappings or not all(
+            isinstance(item, PrincipalMapping) for item in principal_mappings
+        ):
+            raise EngineeringProofContractError(
+                "world_target.principal_mappings must contain principal mappings"
+            )
         if not all(isinstance(item, OperationMapping) for item in operation_mappings):
             raise EngineeringProofContractError(
                 "world_target.operation_mappings contains an invalid mapping"
+            )
+        if not all(isinstance(item, StaticValueMapping) for item in static_value_mappings):
+            raise EngineeringProofContractError(
+                "world_target.static_value_mappings contains an invalid mapping"
+            )
+        if not all(isinstance(item, StateRecordOverride) for item in state_record_overrides):
+            raise EngineeringProofContractError(
+                "world_target.state_record_overrides contains an invalid override"
             )
         if not all(isinstance(item, GeneratedIdBinding) for item in generated_id_bindings):
             raise EngineeringProofContractError(
@@ -302,6 +435,24 @@ class WorldTargetSpec:
             raise EngineeringProofContractError(
                 "world_target.generated_id_bindings contains duplicate binding ids"
             )
+        principal_context_ids = [item.principal_context_id for item in principal_mappings]
+        if len(principal_context_ids) != len(set(principal_context_ids)):
+            raise EngineeringProofContractError(
+                "world_target.principal_mappings contains duplicate principal contexts"
+            )
+        reference_values = [item.reference_value for item in static_value_mappings]
+        world_values = [item.world_value for item in static_value_mappings]
+        if len(reference_values) != len(set(reference_values)) or len(world_values) != len(
+            set(world_values)
+        ):
+            raise EngineeringProofContractError(
+                "world_target.static_value_mappings must be one-to-one"
+            )
+        state_keys = [(item.collection, item.record_id) for item in state_record_overrides]
+        if len(state_keys) != len(set(state_keys)):
+            raise EngineeringProofContractError(
+                "world_target.state_record_overrides contains duplicate records"
+            )
         if operation_mappings:
             missing = sorted(
                 {
@@ -316,6 +467,9 @@ class WorldTargetSpec:
                     + ", ".join(missing)
                 )
         object.__setattr__(self, "path_mappings", path_mappings)
+        object.__setattr__(self, "principal_mappings", principal_mappings)
+        object.__setattr__(self, "static_value_mappings", static_value_mappings)
+        object.__setattr__(self, "state_record_overrides", state_record_overrides)
         object.__setattr__(self, "operation_mappings", operation_mappings)
         object.__setattr__(self, "generated_id_bindings", generated_id_bindings)
 
@@ -325,9 +479,10 @@ class WorldTargetSpec:
             "target_id": self.target_id,
             "target_version": self.target_version,
             "episode_id": self.episode_id,
-            "actor_id": self.actor_id,
-            "actor_role": self.actor_role,
+            "principal_mappings": [item.to_dict() for item in self.principal_mappings],
             "path_mappings": [item.to_dict() for item in self.path_mappings],
+            "static_value_mappings": [item.to_dict() for item in self.static_value_mappings],
+            "state_record_overrides": [item.to_dict() for item in self.state_record_overrides],
             "operation_mappings": [item.to_dict() for item in self.operation_mappings],
             "generated_id_bindings": [item.to_dict() for item in self.generated_id_bindings],
         }
@@ -343,9 +498,10 @@ class WorldTargetSpec:
                     "target_id",
                     "target_version",
                     "episode_id",
-                    "actor_id",
-                    "actor_role",
+                    "principal_mappings",
                     "path_mappings",
+                    "static_value_mappings",
+                    "state_record_overrides",
                     "operation_mappings",
                     "generated_id_bindings",
                 }
@@ -357,11 +513,30 @@ class WorldTargetSpec:
             target_id=raw["target_id"],
             target_version=raw["target_version"],
             episode_id=raw["episode_id"],
-            actor_id=raw["actor_id"],
-            actor_role=raw["actor_role"],
+            principal_mappings=tuple(
+                PrincipalMapping.from_dict(item)
+                for item in _array(
+                    raw["principal_mappings"],
+                    path="world_target.principal_mappings",
+                )
+            ),
             path_mappings=tuple(
                 PathPrefixMapping.from_dict(item)
                 for item in _array(raw["path_mappings"], path="world_target.path_mappings")
+            ),
+            static_value_mappings=tuple(
+                StaticValueMapping.from_dict(item)
+                for item in _array(
+                    raw["static_value_mappings"],
+                    path="world_target.static_value_mappings",
+                )
+            ),
+            state_record_overrides=tuple(
+                StateRecordOverride.from_dict(item)
+                for item in _array(
+                    raw["state_record_overrides"],
+                    path="world_target.state_record_overrides",
+                )
             ),
             operation_mappings=tuple(
                 OperationMapping.from_dict(item)

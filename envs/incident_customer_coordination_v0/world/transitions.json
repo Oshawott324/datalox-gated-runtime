@@ -1,0 +1,313 @@
+{
+  "operations": [
+    {
+      "disposition": "mutate",
+      "effects": [
+        {
+          "operator": "set_from_request",
+          "request_pointer": "/fields",
+          "state_key": "jira_update_request",
+          "target": "/fields"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/fields/assignee/accountId",
+          "source_state_key": "jira_update_request",
+          "state_key": "jira_issue",
+          "target": "/fields/assignee/accountId"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/fields/priority/id",
+          "source_state_key": "jira_update_request",
+          "state_key": "jira_issue",
+          "target": "/fields/priority/id"
+        },
+        {
+          "match_pointer": "/id",
+          "operator": "set_from_state_lookup",
+          "request_pointer": "/fields/priority/id",
+          "source_pointer": "",
+          "source_state_key": "jira_priorities",
+          "state_key": "jira_issue",
+          "target": "/fields/priority/name",
+          "value_pointer": "/name"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/fields/assignee/accountId",
+          "source_state_key": "jira_issue",
+          "state_key": "coordination_state",
+          "target": "/jira/assignee_account_id"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/fields/priority/id",
+          "source_state_key": "jira_issue",
+          "state_key": "coordination_state",
+          "target": "/jira/priority_id"
+        },
+        {
+          "operator": "set_literal",
+          "state_key": "coordination_state",
+          "target": "/completed/jira_update",
+          "value": true
+        }
+      ],
+      "operation_id": "jira_update_issue"
+    },
+    {
+      "disposition": "mutate",
+      "effects": [
+        {
+          "operator": "set_from_request",
+          "request_pointer": "/transition",
+          "state_key": "jira_transition_request",
+          "target": "/transition"
+        },
+        {
+          "operator": "set_literal",
+          "state_key": "jira_issue",
+          "target": "/fields/status/id",
+          "value": "3"
+        },
+        {
+          "operator": "set_literal",
+          "state_key": "jira_issue",
+          "target": "/fields/status/name",
+          "value": "In Progress"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/fields/status/name",
+          "source_state_key": "jira_issue",
+          "state_key": "coordination_state",
+          "target": "/jira/status_name"
+        },
+        {
+          "operator": "set_literal",
+          "state_key": "coordination_state",
+          "target": "/completed/jira_transition",
+          "value": true
+        }
+      ],
+      "operation_id": "jira_transition_issue"
+    },
+    {
+      "disposition": "mutate",
+      "effects": [
+        {
+          "operator": "set_from_request",
+          "request_pointer": "/properties",
+          "state_key": "hubspot_ticket_update_request",
+          "target": "/properties"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/properties/hs_pipeline_stage",
+          "source_state_key": "hubspot_ticket_update_request",
+          "state_key": "hubspot_ticket",
+          "target": "/properties/hs_pipeline_stage"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/properties/hs_ticket_priority",
+          "source_state_key": "hubspot_ticket_update_request",
+          "state_key": "hubspot_ticket",
+          "target": "/properties/hs_ticket_priority"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/properties/hubspot_owner_id",
+          "source_state_key": "hubspot_ticket_update_request",
+          "state_key": "hubspot_ticket",
+          "target": "/properties/hubspot_owner_id"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/properties/hubspot_owner_id",
+          "source_state_key": "hubspot_ticket",
+          "state_key": "coordination_state",
+          "target": "/hubspot/owner_id"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/properties/hs_ticket_priority",
+          "source_state_key": "hubspot_ticket",
+          "state_key": "coordination_state",
+          "target": "/hubspot/priority"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/properties/hs_pipeline_stage",
+          "source_state_key": "hubspot_ticket",
+          "state_key": "coordination_state",
+          "target": "/hubspot/stage"
+        },
+        {
+          "operator": "set_literal",
+          "state_key": "coordination_state",
+          "target": "/completed/hubspot_update",
+          "value": true
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/properties/hs_pipeline_stage",
+          "source_state_key": "hubspot_ticket_update_request",
+          "state_key": "hubspot_ticket_update_response",
+          "target": "/properties/hs_pipeline_stage"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/properties/hs_ticket_priority",
+          "source_state_key": "hubspot_ticket_update_request",
+          "state_key": "hubspot_ticket_update_response",
+          "target": "/properties/hs_ticket_priority"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/properties/hubspot_owner_id",
+          "source_state_key": "hubspot_ticket_update_request",
+          "state_key": "hubspot_ticket_update_response",
+          "target": "/properties/hubspot_owner_id"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/properties/hs_pipeline_stage",
+          "source_state_key": "hubspot_ticket_update_request",
+          "state_key": "hubspot_tickets",
+          "target": "/results/0/properties/hs_pipeline_stage"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/properties/hs_ticket_priority",
+          "source_state_key": "hubspot_ticket_update_request",
+          "state_key": "hubspot_tickets",
+          "target": "/results/0/properties/hs_ticket_priority"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/properties/hubspot_owner_id",
+          "source_state_key": "hubspot_ticket_update_request",
+          "state_key": "hubspot_tickets",
+          "target": "/results/0/properties/hubspot_owner_id"
+        }
+      ],
+      "operation_id": "hubspot_update_ticket"
+    },
+    {
+      "disposition": "mutate",
+      "effects": [
+        {
+          "operator": "set_from_request",
+          "request_pointer": "/subject",
+          "state_key": "graph_draft_request",
+          "target": "/subject"
+        },
+        {
+          "operator": "set_from_request",
+          "request_pointer": "/body",
+          "state_key": "graph_draft_request",
+          "target": "/body"
+        },
+        {
+          "operator": "set_from_request",
+          "request_pointer": "/toRecipients",
+          "state_key": "graph_draft_request",
+          "target": "/toRecipients"
+        },
+        {
+          "operator": "set_from_request",
+          "request_pointer": "/importance",
+          "state_key": "graph_draft_request",
+          "target": "/importance"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/subject",
+          "source_state_key": "graph_draft_request",
+          "state_key": "graph_draft",
+          "target": "/subject"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/body",
+          "source_state_key": "graph_draft_request",
+          "state_key": "graph_draft",
+          "target": "/body"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/toRecipients",
+          "source_state_key": "graph_draft_request",
+          "state_key": "graph_draft",
+          "target": "/toRecipients"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/importance",
+          "source_state_key": "graph_draft_request",
+          "state_key": "graph_draft",
+          "target": "/importance"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/id",
+          "source_state_key": "graph_draft",
+          "state_key": "coordination_state",
+          "target": "/graph/draft_id"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/importance",
+          "source_state_key": "graph_draft",
+          "state_key": "coordination_state",
+          "target": "/graph/importance"
+        },
+        {
+          "operator": "copy_state",
+          "source_pointer": "/isDraft",
+          "source_state_key": "graph_draft",
+          "state_key": "coordination_state",
+          "target": "/graph/is_draft"
+        },
+        {
+          "operator": "set_literal",
+          "state_key": "coordination_state",
+          "target": "/completed/graph_draft",
+          "value": true
+        }
+      ],
+      "operation_id": "microsoft_graph_create_draft"
+    },
+    {
+      "disposition": "deny",
+      "effects": [],
+      "message": "External message sending is denied in this environment.",
+      "operation_id": "microsoft_graph_send_mail_denied",
+      "reason_code": "external_send_denied"
+    },
+    {
+      "disposition": "deny",
+      "effects": [],
+      "message": "Sending a Microsoft Graph draft is denied in this environment.",
+      "operation_id": "microsoft_graph_send_draft_denied",
+      "reason_code": "external_send_denied"
+    },
+    {
+      "disposition": "deny",
+      "effects": [],
+      "message": "Datadog incident mutation and resolution are denied.",
+      "operation_id": "datadog_update_or_resolve_incident_denied",
+      "reason_code": "incident_mutation_denied"
+    },
+    {
+      "disposition": "deny",
+      "effects": [],
+      "message": "Datadog incident deletion is denied.",
+      "operation_id": "datadog_delete_incident_denied",
+      "reason_code": "incident_mutation_denied"
+    }
+  ],
+  "version": "response_case_transitions_v0"
+}

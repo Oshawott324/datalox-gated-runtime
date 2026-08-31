@@ -1,0 +1,116 @@
+{
+  "sources": [
+    {
+      "classification": "official_schema_instantiated",
+      "locator": "/paths/~1api~1v2~1incidents; /paths/~1api~1v2~1services~1definitions; /paths/~1api~1v2~1users; /paths/~1api~1v2~1on-call~1schedules~1{schedule_id}~1on-call; /paths/~1api~1v2~1incidents~1{incident_id}",
+      "notes": "Retrieved 2026-07-13. Provider bodies instantiate cited response schemas; PATCH and DELETE are deny-only.",
+      "source_id": "datadog_v2_openapi",
+      "url": "https://github.com/DataDog/datadog-api-client-python/blob/9ec36317e0bc105b627a388a0f622928a9c1c3c8/.generator/schemas/v2/openapi.yaml"
+    },
+    {
+      "classification": "official_schema_instantiated",
+      "locator": "#/paths/~1crm~1owners~12026-03/get/responses/200; #/components/schemas/PublicOwner",
+      "notes": "Retrieved 2026-07-13. Owner values are coherently synthesized from the official schema.",
+      "source_id": "hubspot_owners_openapi",
+      "url": "https://github.com/HubSpot/HubSpot-public-api-spec-collection/blob/cbe42d0c762de0dafbde5ce69e12957e574ca2f8/PublicApiSpecs/CRM/Crm%20Owners/Rollouts/146888/2026-03/crmOwners.json"
+    },
+    {
+      "classification": "official_schema_instantiated",
+      "locator": "#/paths/~1crm~1objects~12026-03~1contacts/get/responses/200; #/components/schemas/SimplePublicObjectWithAssociations",
+      "notes": "Retrieved 2026-07-13. Contact and association values are fixture-authored schema instances.",
+      "source_id": "hubspot_contacts_openapi",
+      "url": "https://github.com/HubSpot/HubSpot-public-api-spec-collection/blob/cbe42d0c762de0dafbde5ce69e12957e574ca2f8/PublicApiSpecs/CRM/Contacts/Rollouts/424/2026-03/contacts.json"
+    },
+    {
+      "classification": "official_schema_instantiated",
+      "locator": "#/paths/~1crm~1objects~12026-03~1companies/get/responses/200; #/components/schemas/SimplePublicObjectWithAssociations",
+      "notes": "Retrieved 2026-07-13. Company and association values are fixture-authored schema instances.",
+      "source_id": "hubspot_companies_openapi",
+      "url": "https://github.com/HubSpot/HubSpot-public-api-spec-collection/blob/cbe42d0c762de0dafbde5ce69e12957e574ca2f8/PublicApiSpecs/CRM/Companies/Rollouts/424/2026-03/companies.json"
+    },
+    {
+      "classification": "official_schema_instantiated",
+      "locator": "#/paths/~1crm~1objects~12026-03~10-3/get/responses/200; #/components/schemas/SimplePublicObjectWithAssociations",
+      "notes": "Retrieved 2026-07-13. Open renewal deal values are fixture-authored schema instances.",
+      "source_id": "hubspot_deals_openapi",
+      "url": "https://github.com/HubSpot/HubSpot-public-api-spec-collection/blob/cbe42d0c762de0dafbde5ce69e12957e574ca2f8/PublicApiSpecs/CRM/Deals/Rollouts/424/2026-03/deals.json"
+    },
+    {
+      "classification": "official_schema_instantiated",
+      "locator": "#/paths/~1crm~1objects~12026-03~1tickets/get/responses/200; #/paths/~1crm~1objects~12026-03~1tickets~1{ticketId}/get; #/paths/~1crm~1objects~12026-03~1tickets~1{ticketId}/patch; #/components/schemas/SimplePublicObjectInput",
+      "notes": "Retrieved 2026-07-13. PATCH uses properties and returns a SimplePublicObject with status 200.",
+      "source_id": "hubspot_tickets_openapi",
+      "url": "https://github.com/HubSpot/HubSpot-public-api-spec-collection/blob/cbe42d0c762de0dafbde5ce69e12957e574ca2f8/PublicApiSpecs/CRM/Tickets/Rollouts/424/2026-03/tickets.json"
+    },
+    {
+      "classification": "official_schema_instantiated",
+      "locator": "GET and PUT /rest/api/3/issue/{issueIdOrKey}; POST /rest/api/3/issue/{issueIdOrKey}/transitions; Edit issue and Transition issue request/response sections",
+      "notes": "Retrieved 2026-07-13. The official issue example writes assignee.accountId and priority.id without priority.name; PUT fields update and POST transition use documented 204 responses.",
+      "source_id": "jira_issue_docs",
+      "url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/"
+    },
+    {
+      "classification": "official_schema_instantiated",
+      "locator": "GET /rest/api/3/issue/{issueIdOrKey}/transitions; Get transitions; 200 transitions response",
+      "notes": "Retrieved 2026-07-13. Available transition records expose the transition ID and target status.",
+      "source_id": "jira_transition_docs",
+      "url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/"
+    },
+    {
+      "classification": "official_schema_instantiated",
+      "locator": "GET /rest/api/3/priority; Get priorities; 200 array<Priority> response",
+      "notes": "Retrieved 2026-07-13. Priority records expose provider IDs and names used by issue updates.",
+      "source_id": "jira_priority_docs",
+      "url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-priorities/"
+    },
+    {
+      "classification": "official_schema_instantiated",
+      "locator": "GET /rest/api/3/user/assignable/search; Find users assignable to projects; 200 array<User> response",
+      "notes": "Retrieved 2026-07-13. Assignable user records connect email identity to Jira accountId.",
+      "source_id": "jira_user_search_docs",
+      "url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-user-search/"
+    },
+    {
+      "classification": "official_schema_instantiated",
+      "locator": "GET /rest/servicedeskapi/request/{issueIdOrKey}; Get customer request by id or key; 200 CustomerRequestDTO example",
+      "notes": "Retrieved 2026-07-13. Customer request values instantiate fields shown in the official response example.",
+      "source_id": "jira_jsm_request_docs",
+      "url": "https://developer.atlassian.com/cloud/jira/service-desk/rest/api-group-request/"
+    },
+    {
+      "classification": "official_schema_instantiated",
+      "locator": "Examples > Example 1: Get all users > Response",
+      "notes": "Retrieved 2026-07-13. Internal directory user bodies use documented user fields and types.",
+      "source_id": "graph_user_list_docs",
+      "url": "https://github.com/microsoftgraph/microsoft-graph-docs-contrib/blob/0b9104fac0621887d68ba6af9e367744c0cf58c0/api-reference/v1.0/api/user-list.md"
+    },
+    {
+      "classification": "official_schema_instantiated",
+      "locator": "GET /users/{id|userPrincipalName}/calendarView; startDateTime and endDateTime query parameters; 200 event collection response",
+      "notes": "Retrieved 2026-07-13. Calendar values are fixture-authored event schema instances.",
+      "source_id": "graph_calendar_view_docs",
+      "url": "https://github.com/microsoftgraph/microsoft-graph-docs-contrib/blob/0b9104fac0621887d68ba6af9e367744c0cf58c0/api-reference/v1.0/api/user-list-calendarview.md"
+    },
+    {
+      "classification": "official_schema_instantiated",
+      "locator": "POST /me/messages; Example 1 create JSON draft request and 201 message response",
+      "notes": "Retrieved 2026-07-13. The shadow write creates a draft and never sends it.",
+      "source_id": "graph_message_draft_docs",
+      "url": "https://github.com/microsoftgraph/microsoft-graph-docs-contrib/blob/0b9104fac0621887d68ba6af9e367744c0cf58c0/api-reference/v1.0/api/user-post-messages.md"
+    },
+    {
+      "classification": "official_schema_instantiated",
+      "locator": "POST /me/sendMail; JSON request body; 202 empty response",
+      "notes": "Retrieved 2026-07-13. The official external-send operation is declared only as an HTTP denial route.",
+      "source_id": "graph_sendmail_docs",
+      "url": "https://github.com/microsoftgraph/microsoft-graph-docs-contrib/blob/0b9104fac0621887d68ba6af9e367744c0cf58c0/api-reference/v1.0/api/user-sendmail.md"
+    },
+    {
+      "classification": "fixture_authored",
+      "locator": "scripts/worlds/build_incident_customer_coordination.py",
+      "notes": "Generated deterministically on 2026-07-13; no live provider calls, credentials, or observed tenant values.",
+      "source_id": "composite_fixture_authoring"
+    }
+  ],
+  "version": "response_case_sources_v0"
+}

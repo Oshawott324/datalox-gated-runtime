@@ -1,0 +1,33 @@
+{
+  "assertions": [
+    {
+      "failure_code": "transfer_completed",
+      "type": "implementation_check"
+    },
+    {
+      "failure_code": "tip_returned",
+      "type": "implementation_check"
+    },
+    {
+      "failure_code": "handler_stopped",
+      "type": "implementation_check"
+    },
+    {
+      "failure_code": "all_operations_exercised",
+      "type": "implementation_check"
+    },
+    {
+      "failure_code": "no_denied_operations",
+      "type": "implementation_check"
+    }
+  ],
+  "reward_atoms": [
+    "transfer_completed",
+    "tip_returned",
+    "handler_stopped",
+    "all_operations_exercised",
+    "no_denied_operations"
+  ],
+  "schema_version": "pylabrobot_hamilton_star_verifier_v1",
+  "semantic_rubrics": []
+}

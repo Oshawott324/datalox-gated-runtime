@@ -5,12 +5,13 @@ import hashlib
 import json
 import math
 import os
+import re
 import shutil
 import socket
 import sys
 import tempfile
 from collections.abc import Mapping
-from contextlib import asynccontextmanager
+from contextlib import AsyncExitStack, asynccontextmanager
 from pathlib import Path, PurePosixPath
 
 from fastapi import FastAPI
@@ -29,6 +30,10 @@ from datalox_gated_runtime.world_package.contracts import (
     WorldPackageError,
 )
 from datalox_gated_runtime.world_v1.backend import installed_world_bundle_ref
+from datalox_gated_runtime.world_v1.contracts import ActorContext
+
+_ACTORS_ENV = "DATALOX_WORLD_PACKAGE_ACTORS"
+_ACTOR_PATH_COMPONENT = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]*$")
 
 
 def create_packaged_world_app(
@@ -59,20 +64,40 @@ def create_packaged_world_app(
         allowed_hosts=_allowed_hosts(environment),
         allowed_origins=_csv(environment.get("DATALOX_ALLOWED_ORIGINS", "")),
     )
-    server = build_server(
+    default_server = build_server(
         target_run,
         transport_security=transport_security,
         include_session_manifest_tool=False,
         host="0.0.0.0",
         port=_positive_int(environment, "DATALOX_PORT", default=WORLD_PACKAGE_PORT),
     )
-    if not isinstance(server, FastMCP):
+    if not isinstance(default_server, FastMCP):
         raise WorldPackageError("packaged worlds must expose the FastMCP world surface")
-    mcp_app = server.streamable_http_app()
+    actor_servers: list[tuple[ActorContext, FastMCP]] = []
+    for actor in _configured_actors(environment):
+        server = build_server(
+            target_run,
+            actor_context=actor,
+            transport_security=transport_security,
+            include_session_manifest_tool=False,
+            host="0.0.0.0",
+            port=_positive_int(environment, "DATALOX_PORT", default=WORLD_PACKAGE_PORT),
+        )
+        if not isinstance(server, FastMCP):
+            raise WorldPackageError("packaged actor endpoints must expose FastMCP")
+        actor_servers.append((actor, server))
+
+    default_mcp_app = default_server.streamable_http_app()
+    actor_mcp_apps = [(actor, server.streamable_http_app()) for actor, server in actor_servers]
 
     @asynccontextmanager
     async def lifespan(_: FastAPI):
-        async with mcp_app.router.lifespan_context(mcp_app):
+        async with AsyncExitStack() as stack:
+            await stack.enter_async_context(
+                default_mcp_app.router.lifespan_context(default_mcp_app)
+            )
+            for _, mcp_app in actor_mcp_apps:
+                await stack.enter_async_context(mcp_app.router.lifespan_context(mcp_app))
             yield
 
     app = FastAPI(
@@ -92,8 +117,41 @@ def create_packaged_world_app(
             "live_mode": False,
         }
 
-    app.mount("/", mcp_app)
+    for actor, mcp_app in actor_mcp_apps:
+        app.mount(f"/actors/{actor.role}", mcp_app)
+    app.mount("/", default_mcp_app)
     return app
+
+
+def _configured_actors(environment: Mapping[str, str]) -> tuple[ActorContext, ...]:
+    raw = environment.get(_ACTORS_ENV)
+    if raw is None or not raw.strip():
+        return ()
+    try:
+        payload = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise WorldPackageError(f"{_ACTORS_ENV} must be valid JSON") from exc
+    if not isinstance(payload, list) or not payload:
+        raise WorldPackageError(f"{_ACTORS_ENV} must be a non-empty JSON array")
+
+    actors: list[ActorContext] = []
+    seen_roles: set[str] = set()
+    for index, item in enumerate(payload):
+        if not isinstance(item, dict) or set(item) != {"actor_id", "role"}:
+            raise WorldPackageError(
+                f"{_ACTORS_ENV}[{index}] must contain exactly actor_id and role"
+            )
+        actor_id = item["actor_id"]
+        role = item["role"]
+        if not isinstance(actor_id, str) or not actor_id.strip():
+            raise WorldPackageError(f"{_ACTORS_ENV}[{index}].actor_id must be non-empty")
+        if not isinstance(role, str) or not _ACTOR_PATH_COMPONENT.fullmatch(role):
+            raise WorldPackageError(f"{_ACTORS_ENV}[{index}].role must be a URL-safe role id")
+        if role in seen_roles:
+            raise WorldPackageError(f"{_ACTORS_ENV} contains duplicate role {role!r}")
+        seen_roles.add(role)
+        actors.append(ActorContext(actor_id=actor_id, role=role))
+    return tuple(actors)
 
 
 def finalize_packaged_world(

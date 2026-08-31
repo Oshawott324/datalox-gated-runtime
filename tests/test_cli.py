@@ -5,7 +5,7 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from datalox_gated_runtime.cli import _build_parser, _serve
+from datalox_gated_runtime.cli import _build_parser
 from datalox_gated_runtime.http_server import create_app
 from datalox_gated_runtime.session import create_session
 
@@ -214,34 +214,20 @@ def test_serve_parser_defaults_host(tmp_path: Path) -> None:
     assert args.port == 8765
 
 
-def test_serve_allow_live_preflight_error_returns_clean_error(
-    tmp_path: Path,
-    capsys,
-) -> None:
-    (tmp_path / "gate_config.json").write_text(
-        json.dumps(
-            {
-                "config_id": "cli_live_preflight_test",
-                "response_cases": [],
-                "audit_rules": [],
-                "policy": {"live_capture": [{"path_prefix": "/github/"}]},
-            }
-        ),
-        encoding="utf-8",
+def test_serve_parser_rejects_runtime_live_provider_flag(tmp_path: Path) -> None:
+    result = _run_cli(
+        [
+            "serve",
+            "--run",
+            str(tmp_path),
+            "--port",
+            "8765",
+            "--allow-live",
+        ]
     )
 
-    class Args:
-        run = str(tmp_path)
-        allow_live = True
-        server_token = None
-        host = "127.0.0.1"
-        port = 8765
-
-    assert _serve(Args()) == 1
-    captured = capsys.readouterr()
-    assert captured.err.startswith("error:")
-    assert "--allow-live requires live.upstreams" in captured.err
-    assert "Traceback" not in captured.err
+    assert result.returncode == 2
+    assert "unrecognized arguments: --allow-live" in result.stderr
 
 
 def test_session_auth_preflight_reports_missing_live_auth_env(tmp_path: Path) -> None:

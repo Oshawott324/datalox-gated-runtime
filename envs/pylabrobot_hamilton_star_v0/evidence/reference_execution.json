@@ -1,0 +1,42 @@
+{
+  "backend": "pylabrobot.liquid_handling.backends.LiquidHandlerChatterboxBackend",
+  "executed_at": "2026-08-10T00:00:00+00:00",
+  "grounding_boundary": "Device-free PyLabRobot reference behavior only; no Hamilton hardware observation.",
+  "observations": [
+    {
+      "operation": "setup",
+      "outcome": "success",
+      "state_effect": "LiquidHandler setup becomes finished; repeated setup raises RuntimeError."
+    },
+    {
+      "operation": "pick_up_tips",
+      "outcome": "success_and_native_failures",
+      "state_effect": "Tip leaves its TipSpot and mounts channel 0; a second pickup on that channel raises HasTipError."
+    },
+    {
+      "operation": "aspirate",
+      "outcome": "success_and_native_failures",
+      "state_effect": "100 uL moves from source to the mounted tip; no-tip and source-underflow requests raise NoTipError and TooLittleLiquidError."
+    },
+    {
+      "operation": "dispense",
+      "outcome": "success_and_native_failures",
+      "state_effect": "100 uL moves from the mounted tip to target; tip-underflow and container-overflow requests raise TooLittleLiquidError and TooLittleVolumeError."
+    },
+    {
+      "operation": "drop_tips",
+      "outcome": "success_and_native_failures",
+      "state_effect": "return_tips restores the origin TipSpot and clears channel 0; an occupied destination raises HasTipError and a repeated return raises RuntimeError."
+    },
+    {
+      "operation": "stop",
+      "outcome": "success",
+      "state_effect": "LiquidHandler setup becomes unfinished; repeated stop raises RuntimeError."
+    }
+  ],
+  "package": "pylabrobot",
+  "package_version": "0.2.1",
+  "python_version": "3.12.5",
+  "schema_version": "datalox_reference_execution_v1",
+  "source_commit": "c8c9dcbcf4124ed078f4a8b4b21ec83474d7b7b1"
+}

@@ -1,0 +1,425 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/composition-pack-v1.schema.json",
+  "title": "Authored Datalox Composition Pack v1",
+  "description": "A non-admitted, provider-mediated hidden-causal-edge contract. Agent-mediated coordination is outside this artifact.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "claim_status",
+    "pack_id",
+    "pack_version",
+    "distribution_label",
+    "time_scope",
+    "providers",
+    "evidence_sources",
+    "source_event_contracts",
+    "delivery_edges"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_composition_pack_v1"},
+    "claim_status": {"const": "authored_not_admitted"},
+    "pack_id": {"$ref": "#/$defs/identifier"},
+    "pack_version": {"$ref": "#/$defs/identifier"},
+    "distribution_label": {"$ref": "#/$defs/distributionLabel"},
+    "time_scope": {"const": "delivery_scheduler_only_v1"},
+    "providers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/providerBinding"}
+    },
+    "evidence_sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/evidenceSource"}
+    },
+    "source_event_contracts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/sourceEventContract"}
+    },
+    "delivery_edges": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/deliveryEdge"}
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "distributionLabel": {
+      "enum": ["public", "restricted", "private"]
+    },
+    "groundingLevel": {
+      "type": "string",
+      "pattern": "^G[0-4](?:_[A-Z0-9]+)*$"
+    },
+    "providerBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_id",
+        "release_manifest_sha256",
+        "operation_contract_sha256"
+      ],
+      "properties": {
+        "provider_id": {"$ref": "#/$defs/identifier"},
+        "release_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "operation_contract_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "evidenceSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "artifact_path",
+        "artifact_sha256",
+        "grounding_level",
+        "observed_at",
+        "valid_through",
+        "distribution_label",
+        "rights_basis"
+      ],
+      "properties": {
+        "evidence_id": {"$ref": "#/$defs/identifier"},
+        "artifact_path": {"type": "string", "minLength": 1},
+        "artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "grounding_level": {"$ref": "#/$defs/groundingLevel"},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "valid_through": {"type": "string", "format": "date-time"},
+        "distribution_label": {"$ref": "#/$defs/distributionLabel"},
+        "rights_basis": {"type": "string", "minLength": 1}
+      }
+    },
+    "grounding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "evidence_refs"],
+      "properties": {
+        "level": {"$ref": "#/$defs/groundingLevel"},
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/identifier"}
+        }
+      }
+    },
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["distribution_label", "behavior_distribution_basis"],
+      "properties": {
+        "distribution_label": {"$ref": "#/$defs/distributionLabel"},
+        "behavior_distribution_basis": {"type": "string", "minLength": 1}
+      }
+    },
+    "jsonPointer": {
+      "type": "string",
+      "pattern": "^(?:/(?:[^~/]|~[01])*)*$"
+    },
+    "template": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": {"const": "literal"},
+            "value": {}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "context", "pointer"],
+          "properties": {
+            "kind": {"const": "select"},
+            "context": {
+              "description": "request={scheme,authority,method,path,query,headers,body}; response={status_code,decision_kind,headers,body}; provider_state=opaque post-operation state exported by the selected provider module; source_event={source_event_id,source_provider_id,provider_event_id,event_type,payload,correlation_ids,idempotency_key,sequence,recorded_at}; delivery_outcome={delivery_id,edge_id,source_event_id,target_provider_id,target_operation_id,attempt_number,kind,status_code,receipt,error_code,error_message}",
+              "enum": ["request", "response", "provider_state", "source_event", "delivery_outcome"]
+            },
+            "pointer": {"$ref": "#/$defs/jsonPointer"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "fields"],
+          "properties": {
+            "kind": {"const": "object"},
+            "fields": {
+              "type": "object",
+              "additionalProperties": {"$ref": "#/$defs/template"}
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "items"],
+          "properties": {
+            "kind": {"const": "array"},
+            "items": {
+              "type": "array",
+              "items": {"$ref": "#/$defs/template"}
+            }
+          }
+        }
+      ]
+    },
+    "templateMap": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/template"}
+    },
+    "acceptedOutcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status_code", "decision_kind"],
+      "properties": {
+        "status_code": {"type": "integer", "minimum": 100, "maximum": 599},
+        "decision_kind": {
+          "enum": ["replay", "shadow_read", "shadow_write", "deny", "miss"]
+        }
+      }
+    },
+    "sourceMatchPredicate": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["context", "pointer", "operator", "expected_exists"],
+          "properties": {
+            "context": {"enum": ["request", "response", "provider_state"]},
+            "pointer": {"$ref": "#/$defs/jsonPointer"},
+            "operator": {"const": "exists"},
+            "expected_exists": {"type": "boolean"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["context", "pointer", "operator", "expected_value"],
+          "properties": {
+            "context": {"enum": ["request", "response", "provider_state"]},
+            "pointer": {"$ref": "#/$defs/jsonPointer"},
+            "operator": {"const": "equals"},
+            "expected_value": {}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["context", "pointer", "operator", "expected_type"],
+          "properties": {
+            "context": {"enum": ["request", "response", "provider_state"]},
+            "pointer": {"$ref": "#/$defs/jsonPointer"},
+            "operator": {"const": "type"},
+            "expected_type": {"enum": ["object", "array", "string", "number", "integer", "boolean", "null"]}
+          }
+        }
+      ]
+    },
+    "sourceEventContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_contract_id",
+        "provider_id",
+        "source_operation_id",
+        "event_type",
+        "accepted_outcomes",
+        "match",
+        "provider_event_id",
+        "payload",
+        "correlations",
+        "grounding",
+        "rights"
+      ],
+      "properties": {
+        "source_contract_id": {"$ref": "#/$defs/identifier"},
+        "provider_id": {"$ref": "#/$defs/identifier"},
+        "source_operation_id": {"$ref": "#/$defs/identifier"},
+        "event_type": {"$ref": "#/$defs/identifier"},
+        "accepted_outcomes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/acceptedOutcome"}
+        },
+        "match": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {"$ref": "#/$defs/sourceMatchPredicate"}
+        },
+        "provider_event_id": {"$ref": "#/$defs/template"},
+        "payload": {"$ref": "#/$defs/template"},
+        "correlations": {
+          "allOf": [
+            {"$ref": "#/$defs/templateMap"},
+            {"minProperties": 1}
+          ]
+        },
+        "grounding": {"$ref": "#/$defs/grounding"},
+        "rights": {"$ref": "#/$defs/rights"}
+      }
+    },
+    "requestTemplate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path_params", "query", "headers", "body"],
+      "properties": {
+        "path_params": {"$ref": "#/$defs/templateMap"},
+        "query": {"$ref": "#/$defs/templateMap"},
+        "headers": {
+          "allOf": [
+            {"$ref": "#/$defs/templateMap"},
+            {
+              "propertyNames": {
+                "not": {
+                  "pattern": "^(?:(?:[Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn]|[Pp][Rr][Oo][Xx][Yy]-[Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn]|[Cc][Oo][Oo][Kk][Ii][Ee]|[Ss][Ee][Tt]-[Cc][Oo][Oo][Kk][Ii][Ee]|[Xx]-[Aa][Pp][Ii]-[Kk][Ee][Yy]|[Aa][Pp][Ii]-[Kk][Ee][Yy])$|[Xx]-[Dd][Aa][Tt][Aa][Ll][Oo][Xx]-)"
+                }
+              }
+            }
+          ]
+        },
+        "body": {"$ref": "#/$defs/template"}
+      }
+    },
+    "statusArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "integer", "minimum": 100, "maximum": 599}
+    },
+    "compensation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "compensation_id",
+        "triggers",
+        "target_provider_id",
+        "target_operation_id",
+        "principal_context_id",
+        "request",
+        "logical_delay_seconds",
+        "idempotency_key",
+        "ordering_key",
+        "correlations",
+        "delivered_statuses",
+        "default_outcome",
+        "grounding",
+        "rights"
+      ],
+      "properties": {
+        "compensation_id": {"$ref": "#/$defs/identifier"},
+        "triggers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["retry_exhausted", "terminal_failure"]}
+        },
+        "target_provider_id": {"$ref": "#/$defs/identifier"},
+        "target_operation_id": {"$ref": "#/$defs/identifier"},
+        "principal_context_id": {"$ref": "#/$defs/identifier"},
+        "request": {"$ref": "#/$defs/requestTemplate"},
+        "logical_delay_seconds": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2592000
+        },
+        "idempotency_key": {"$ref": "#/$defs/template"},
+        "ordering_key": {"$ref": "#/$defs/template"},
+        "correlations": {
+          "allOf": [
+            {"$ref": "#/$defs/templateMap"},
+            {"minProperties": 1}
+          ]
+        },
+        "delivered_statuses": {
+          "allOf": [
+            {"$ref": "#/$defs/statusArray"},
+            {"minItems": 1}
+          ]
+        },
+        "default_outcome": {"const": "terminal_failure"},
+        "grounding": {"$ref": "#/$defs/grounding"},
+        "rights": {"$ref": "#/$defs/rights"}
+      }
+    },
+    "deliveryEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "edge_id",
+        "source_contract_id",
+        "target_provider_id",
+        "target_operation_id",
+        "principal_context_id",
+        "request",
+        "logical_delay_seconds",
+        "retry_delays_seconds",
+        "idempotency_key",
+        "ordering_key",
+        "correlations",
+        "delivered_statuses",
+        "retryable_statuses",
+        "default_outcome",
+        "compensation",
+        "grounding",
+        "rights"
+      ],
+      "properties": {
+        "edge_id": {"$ref": "#/$defs/identifier"},
+        "source_contract_id": {"$ref": "#/$defs/identifier"},
+        "target_provider_id": {"$ref": "#/$defs/identifier"},
+        "target_operation_id": {"$ref": "#/$defs/identifier"},
+        "principal_context_id": {"$ref": "#/$defs/identifier"},
+        "request": {"$ref": "#/$defs/requestTemplate"},
+        "logical_delay_seconds": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2592000
+        },
+        "retry_delays_seconds": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {"type": "integer", "minimum": 1, "maximum": 2592000}
+        },
+        "idempotency_key": {"$ref": "#/$defs/template"},
+        "ordering_key": {"$ref": "#/$defs/template"},
+        "correlations": {
+          "allOf": [
+            {"$ref": "#/$defs/templateMap"},
+            {"minProperties": 1}
+          ]
+        },
+        "delivered_statuses": {
+          "allOf": [
+            {"$ref": "#/$defs/statusArray"},
+            {"minItems": 1}
+          ]
+        },
+        "retryable_statuses": {"$ref": "#/$defs/statusArray"},
+        "default_outcome": {"const": "terminal_failure"},
+        "compensation": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/compensation"}
+          ]
+        },
+        "grounding": {"$ref": "#/$defs/grounding"},
+        "rights": {"$ref": "#/$defs/rights"}
+      }
+    }
+  }
+}

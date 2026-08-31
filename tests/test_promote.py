@@ -6,13 +6,13 @@ from pathlib import Path
 import httpx
 import pytest
 
+from datalox_gated_runtime.authoring_runtime import AuthoringGatedRuntime
 from datalox_gated_runtime.capture import CaptureStore, LiveCaptureClient
 from datalox_gated_runtime.config import load_gate_config
 from datalox_gated_runtime.ledger import SessionLedger
 from datalox_gated_runtime.models import CallRequest
 from datalox_gated_runtime.policy import GatePolicy
 from datalox_gated_runtime.promote import promote_session
-from datalox_gated_runtime.runtime import GatedRuntime
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -88,7 +88,7 @@ def _build_capture_run(
             body = {"path": request.url.path}
         return httpx.Response(200, json=body, headers={"content-type": "application/json"})
 
-    runtime = GatedRuntime(
+    runtime = AuthoringGatedRuntime(
         policy=GatePolicy.from_config(config.policy, allow_live=True),
         capture_client=LiveCaptureClient(config.live, transport=httpx.MockTransport(handler)),
         capture_store=CaptureStore(run_dir / "captures.jsonl"),

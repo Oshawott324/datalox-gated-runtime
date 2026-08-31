@@ -2,24 +2,33 @@
 
 # Datalox Gated Runtime
 
-### Stateful, resettable, verifiable API worlds for tool-using agents
+### Provider-grounded API behavior on the agent's normal call path
 
-**Run long agent workflows against provider-shaped systems without giving the
-evaluated agent live provider write access.**
+**Let an agent call the provider's real URL while an isolated Datalox runtime
+returns stateful simulated behavior without contacting that provider.**
 
 [Product thesis](docs/what-we-are-building.md) ·
 [Provider packs](docs/provider-packs.md) ·
+[Provider foundry](docs/provider-foundry.md) ·
+[Transparent interception](docs/transparent-interception.md) ·
+[Rollout information boundary](docs/rollout-information-boundary.md) ·
 [Behavior grounding](docs/provider-behavior-grounding.md) ·
 [Behavior harvest](docs/provider-behavior-grounding.md#current-specialized-harvest-wave) ·
-[Portable packages](docs/world-packages.md) ·
-[Harness integrations](integrations/) ·
-[World admission](docs/world-admission-rubric.md)
+[Container injection](docs/transparent-interception.md#export-container-injection) ·
+[veRL / GRPO](docs/verl-grpo-rollouts.md) ·
+[THUDM/slime](docs/slime-rollouts.md) ·
+[Runtime schema](schemas/provider-runtime-v2.schema.json) ·
+[Identity schema](schemas/provider-identity-v1.schema.json)
 
 </div>
 
-> Datalox sits between an agent and its tools. It decides what every call does,
-> mutates resettable local state, records the execution, and verifies the final
-> workflow.
+> The user owns the task, world, agent, verifier, and reward. Datalox supplies
+> resettable provider behavior underneath the API URLs their agent already uses.
+
+During a rollout, the agent starts with the task objective and visible
+constraints. Provider responses and environment anomalies appear only after
+the causal interaction that reveals them. Evaluation ground truth remains in
+trusted generator, oracle, and verifier code.
 
 Most tool benchmarks ask whether a model can answer a question or complete one
 API call. Real work is longer. It crosses roles and systems, creates related
@@ -27,25 +36,25 @@ objects, waits for asynchronous jobs, encounters conflicts, and leaves durable
 state behind. A plausible final message does not prove that the workflow was
 correct.
 
-Datalox provides the execution substrate for testing that work.
+Datalox provides the provider-behavior substrate for testing that work.
 
 ```text
-task
-  -> agent calls HTTP or MCP tools normally
-  -> Datalox gates every call
-  -> replayed reads and local writes change resettable world state
+user-owned world/task/verifier
+  -> agent calls https://api.provider.example normally
+  -> isolated DNS/TLS routes that authority to Datalox
+  -> provider-native credentials select a declared simulated principal
+  -> Datalox returns provider-shaped reads, writes, failures, and state changes
   -> the ledger records decisions, responses, and side effects
-  -> hidden verifiers judge the final state and workflow evidence
-  -> the run becomes replayable evidence
+  -> the user's harness judges the run
 ```
 
 ## What Datalox is—and is not
 
 | Datalox is | Datalox is not |
 | --- | --- |
-| An open runtime for provider-shaped, stateful API environments | A proxy for unrestricted production API access |
-| A way to compose reusable API building blocks into resettable worlds | A directory of disconnected mocked endpoints |
-| A verifier and evidence layer for complete agent workflows | An agent framework, planner, memory system, or model router |
+| An open runtime for provider-shaped, stateful API behavior | A proxy for production API access |
+| A way to inject reusable provider behavior into user-owned worlds | A directory of disconnected mocked endpoints |
+| A call-path, state, and evidence layer for agent workflows | A world, task, verifier, agent, or model framework |
 | A sandbox-first path for learning provider behavior | A claim that documentation examples reproduce production behavior |
 | Infrastructure that benchmarks can run on | One benchmark or one vertical application |
 
@@ -53,12 +62,24 @@ The vocabulary is deliberate:
 
 - **Fuel** is a reusable gated provider/API building block: operation contracts,
   behavior recipes, transitions, verifier atoms, provenance, and known gaps.
-- **A world** composes fuel into a stateful environment with roles, tasks,
-  reset, dynamics, and hidden verification.
-- **A benchmark** consumes worlds to evaluate agents.
+- **A world** is owned by the consumer and composes fuel with its tasks,
+  dynamics, verifier, and reward.
+- **A benchmark** is a downstream consumer-owned evaluation.
 
-Fuel is not a benchmark. A provider pack is not automatically a complete world.
-World admission is not automatically proof of provider equivalence.
+Fuel is not a benchmark. Datalox reference worlds are integration fixtures, not
+the primary product. World admission is not automatically proof of provider
+equivalence.
+
+Fuel has two explicit composition levels:
+
+- A **Provider Set** co-hosts independently admitted provider releases. The
+  evaluated agent may read one provider and explicitly call another.
+- An admitted **Composition Pack** supplies observed provider-mediated behavior
+  such as webhooks, transforms, delays, retries, ordering, idempotency, partial
+  failure, and compensation. Merely placing providers together never creates
+  those hidden causal edges.
+
+See [Provider Foundry and Composition Contract](docs/provider-foundry.md).
 
 ## Provider-shaped surfaces already represented
 
@@ -103,6 +124,9 @@ declaration or grounding contract that can be inspected in this repository.
     <td align="center" width="120"><a href="probes/clinical_trials_gov.json"><img src="docs/assets/provider-tiles/clinical-trials.svg" width="40" alt="ClinicalTrials.gov"/><br/><sub><b>ClinicalTrials.gov</b></sub><br/><sub>Clinical research</sub></a></td>
     <td align="center" width="120"><a href="probes/rcsb_pdb.json"><img src="docs/assets/provider-tiles/rcsb-pdb.svg" width="40" alt="RCSB PDB"/><br/><sub><b>RCSB PDB</b></sub><br/><sub>Structural biology</sub></a></td>
     <td align="center" width="120"><a href="probes/opentrons_local.json"><img src="docs/assets/provider-tiles/opentrons.svg" width="40" alt="Opentrons"/><br/><sub><b>Opentrons</b></sub><br/><sub>Lab automation</sub></a></td>
+    <td align="center" width="120"><a href="docs/pylabrobot-hamilton-star-provider.md"><img src="docs/assets/provider-tiles/hamilton-star.svg" width="40" alt="Hamilton STAR"/><br/><sub><b>Hamilton STAR</b></sub><br/><sub>Core-complete dry-run</sub></a></td>
+  </tr>
+  <tr>
     <td align="center" width="120"><a href="probes/nasa_cmr.json"><img src="https://cdn.simpleicons.org/nasa/E03C31" width="40" alt="NASA CMR"/><br/><sub><b>NASA CMR</b></sub><br/><sub>Earth science</sub></a></td>
   </tr>
 </table>
@@ -129,10 +153,10 @@ The Apache-2.0 release contains:
 
 - the HTTP and MCP gating runtime;
 - policy, replay, shadow-state, denial, ledger, and audit primitives;
-- versioned provider-pack, behavior-recipe, and world-bundle contracts;
+- versioned provider-pack, behavior-recipe, and provider-runtime contracts;
 - validators, compilers, admission checks, and verifier composition;
 - public probe declarations and capture utilities;
-- a fully synthetic, stateful commerce reference world; and
+- synthetic reference fixtures for interoperability and regression; and
 - a deterministic public-source builder and release gate.
 
 Raw provider responses, credentials, tenant identifiers, sandbox transcripts,
@@ -152,15 +176,20 @@ The runtime makes one explicit decision:
 | `replay` | Return a declared captured or synthetic response case. |
 | `shadow_read` | Read provider-shaped data from resettable local state. |
 | `shadow_write` | Apply a deterministic local transition and record its side effects. |
-| `live_capture` | Perform an explicitly approved live `GET` and capture its response. |
 | `deny` | Reject an unsafe or unsupported call with an agent-readable error. |
 | `miss` | Record an unknown call so the environment can be extended deliberately. |
 
-Live provider writes are intentionally inexpressible in the runtime. Approved
-sandbox writes belong to a separate, manually authorized behavior-authoring
-process against an exact test account.
+All live provider access is inexpressible in evaluated-agent execution.
+Approved sandbox reads and writes belong to a separate, manually authorized
+behavior-authoring process against an exact test account.
 
-## Try a complete world offline
+For stateful packs, identity is also provider-shaped. A fixed single-principal
+policy or an explicit mapping from provider-native credential commitments to
+declared roles lives in the runtime bundle. Agent requests containing internal
+`x-datalox-*` control headers are rejected; credentials are consumed at
+the boundary and excluded from behavior evidence.
+
+## Verify the transparent runtime offline
 
 Requirements: Python 3.11 or newer. No provider account, API key, network
 connection, or model is required.
@@ -171,27 +200,29 @@ cd datalox-gated-runtime
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e '.[dev]'
-python scripts/demo/offline-world-smoke.py
+python -m pytest -q \
+  tests/test_interception_tls.py \
+  tests/test_provider_runtime_bundle.py \
+  tests/test_interception_deployment.py
 ```
 
-The demo does more than ping an endpoint. It:
+These checks exercise the actual provider-runtime entry point. They:
 
-1. creates a fresh commerce-operations world;
-2. discovers role-scoped provider-shaped tools;
-3. reads initial state;
-4. performs a multi-step workflow containing real local mutations;
-5. verifies the final state and workflow evidence;
-6. destroys and resets the world;
-7. proves equivalent capabilities, observations, and initial state; and
-8. replays the workflow and proves an equivalent final export.
+1. compile a task-free behavior bundle from existing stateful behavior;
+2. start a real TLS listener for an exact provider authority;
+3. call the unchanged `https://provider-authority/...` URL;
+4. perform a local write and read the resulting state;
+5. export and reset through a controller-only Unix socket;
+6. prove that the agent cannot reach control paths or read controller secrets;
+7. generate Docker and Kubernetes injection artifacts; and
+8. keep the provider runtime free of tasks, verifiers, rewards, and upstream clients.
 
-It exits nonzero if mutation, verification, functional reset, or replay
-equivalence fails.
+For the full build and injection commands, see
+[Transparent Interception](docs/transparent-interception.md#compile-a-provider-runtime).
 
 ## Use a world from an existing agent framework
 
-The repository includes self-contained examples for two existing evaluation
-surfaces:
+The repository also contains two self-contained framework examples:
 
 - [Harbor incident coordination](integrations/harbor/incident_customer_coordination_v0/)
   is an ordinary Harbor task with role-scoped MCP tools and a separate hidden
@@ -205,7 +236,50 @@ with source-grounded provider shapes to test the framework integration
 boundary, not to claim live-provider behavioral fidelity. See
 [Harness Integrations](integrations/) for the shared research question.
 
-## Build a provider-grounded world
+## Use provider packs in veRL / GRPO
+
+Current veRL users can keep their normal V1 `ToolAgentLoop`, function tools,
+dataset, rewards, and GRPO command. Datalox wraps each `(uid, session_id)`
+rollout sibling with a private reset provider state and workspace. Provider
+tools still call the exact provider HTTPS URL; a trusted node-local pool runs
+those calls inside the sibling's internal Docker network.
+
+```bash
+datalox-gate rollout provider-set \
+  --bundle /opt/datalox/providers/provider-a \
+  --out /opt/datalox/rollout-providers.json
+
+datalox-gate rollout pool-serve \
+  --provider-set /opt/datalox/rollout-providers.json \
+  --runtime-image datalox-gated-runtime:local \
+  --task-image datalox-verl-provider-call:example \
+  --capacity 64 \
+  --artifacts-root /var/lib/datalox/rollouts \
+  --socket /run/datalox/rollout-pool.sock
+```
+
+For admitted behavior across multiple providers, use
+`rollout pool-serve-composition` with a registry-backed Provider Set v2,
+Composition Pack, composition admission, fixed episode seed, and fixed initial
+delivery-scheduler time. It serves the same pool socket, so the veRL agent-loop
+YAML, function tools, GRPO launch command, and `AgentLoopOutput` do not change.
+The model and dataset cannot choose those operator-owned composition inputs.
+
+The adapter returns veRL's original `AgentLoopOutput` object unchanged. See the
+checked [veRL and GRPO rollout integration](docs/verl-grpo-rollouts.md) for the
+agent-loop YAML, `@function_tool` example, task image, dataset fields, launch
+fragment, isolation contract, and verification commands.
+
+Current THUDM/slime users can keep the normal
+`--custom-generate-function-path`, `--custom-rm-path`, and
+`--custom-config-path` workflow. One provider-state lease surrounds the user's
+original custom-generation call; `Sample` or `list[Sample]` outputs and reward
+semantics remain owned by slime and the user. See the checked
+[THUDM/slime integration](docs/slime-rollouts.md) and its boundary-safe provider
+callback, dispatcher image, configuration, and launch fragment under
+[`integrations/slime/`](integrations/slime/).
+
+## Build provider behavior for your world
 
 The default workflow is sandbox-first:
 
@@ -215,8 +289,9 @@ audit official sandbox or disposable reference system
   -> execute reviewed behavior recipes outside the runtime
   -> capture before / write / duplicate / failure / after evidence
   -> compile the evidenced slice into reusable fuel
-  -> compose fuel into a resettable world
-  -> verify state, failures, reset, and known gaps
+  -> compile an authority-bound provider runtime bundle
+  -> inject that bundle into the consumer's isolated world
+  -> let the consumer verify state, failures, reset, and known gaps
 ```
 
 Do not rebuild a provider sandbox merely to increase a provider count. Local
@@ -226,27 +301,47 @@ failures, lower cost, or a distributable partner environment.
 
 Start with [Provider Packs](docs/provider-packs.md), then read
 [Provider Behavior Grounding](docs/provider-behavior-grounding.md) and
-[World Admission Rubric](docs/world-admission-rubric.md).
+[Transparent Interception](docs/transparent-interception.md).
 
 The portable construction path is provider-neutral. Current depth work applies
-the same authoring, compilation, differential, reset, admission, OCI, HUD, and
-Harbor contracts to specialized operational systems instead of treating one
-well-built commercial sandbox as the product. The checked provider-by-provider
+the same authoring, compilation, differential, reset, provider-runtime, and
+container-injection contracts to specialized operational systems instead of
+treating one well-built commercial sandbox as the product. HUD, Harbor,
+OpenEnv, and custom harnesses remain downstream owners of their worlds. The checked provider-by-provider
 status and exact claim boundaries are summarized in
 [Provider Behavior Grounding](docs/provider-behavior-grounding.md#current-specialized-harvest-wave).
+
+For harnesses that consume native MCP servers, the same provider runtime can be
+projected without rewriting provider behavior. The EnvFactory adapter emits its
+native tool, metadata, scenario, and config paths and includes a pinned patch
+for state-isolated pass@k execution. See
+[EnvFactory Provider Adapter](docs/envfactory-provider-projection.md).
 
 ## Repository map
 
 | Path | Purpose |
 | --- | --- |
-| [`src/datalox_gated_runtime/`](src/datalox_gated_runtime/) | Gating, replay, state, ledger, audit, MCP, and world runtime |
+| [`src/datalox_gated_runtime/provider_runtime/`](src/datalox_gated_runtime/provider_runtime/) | Task-free, content-addressed provider behavior bundles and resettable execution |
+| [`src/datalox_gated_runtime/composition/`](src/datalox_gated_runtime/composition/) | Explicit provider-mediated causal edges, delivery-scheduler time, evidence, and admission |
+| [`src/datalox_gated_runtime/sdk_adapters/`](src/datalox_gated_runtime/sdk_adapters/) | Execution-boundary adapters that preserve native SDK calls for providers without an HTTP API |
+| [`src/datalox_gated_runtime/interception/`](src/datalox_gated_runtime/interception/) | Exact-authority TLS data plane, private control plane, and container injection |
+| [`src/datalox_gated_runtime/rollout/`](src/datalox_gated_runtime/rollout/) | Task-free provider sets and isolated concurrent rollout leases |
+| [`integrations/verl/`](integrations/verl/) | Current veRL `ToolAgentLoop`, function-tool, task-image, and GRPO launch example |
+| [`integrations/slime/`](integrations/slime/) | Current THUDM/slime custom-generate, batch-reward, task-image, and launch example |
+| [`docs/rollout-information-boundary.md`](docs/rollout-information-boundary.md) | Task, causal observation, and trusted evaluation separation contract |
+| [`schemas/rollout-information-boundary-v1.schema.json`](schemas/rollout-information-boundary-v1.schema.json) | Machine-readable rollout information-plane declaration |
+| [`src/datalox_gated_runtime/harness_adapters/`](src/datalox_gated_runtime/harness_adapters/) | Downstream harness projections over the same provider behavior runtime |
 | [`src/datalox_gated_runtime/behavior_harvest/`](src/datalox_gated_runtime/behavior_harvest/) | Authoring-only provider behavior capture and compilation contracts |
 | [`envs/commerce_support_ops_v0/`](envs/commerce_support_ops_v0/) | Public synthetic stateful reference world |
-| [`integrations/`](integrations/) | Self-contained Harbor and Mastra evaluation examples |
 | [`probes/`](probes/) | Public provider probe declarations |
-| [`scripts/demo/offline-world-smoke.py`](scripts/demo/offline-world-smoke.py) | Credential-free end-to-end proof |
+| [`scripts/check_provider_runtime_coverage.py`](scripts/check_provider_runtime_coverage.py) | Recompile/reset check for every registered provider asset |
 | [`scripts/providers/`](scripts/providers/) | Manually approved provider/reference authoring and evidence checks |
-| [`docs/world-packages.md`](docs/world-packages.md) | Provider-neutral OCI package, gated endpoint, controller, HUD, and Harbor contract |
+| [`schemas/provider-runtime-v2.schema.json`](schemas/provider-runtime-v2.schema.json) | Current provider-runtime bundle contract |
+| [`schemas/provider-runtime-v1.schema.json`](schemas/provider-runtime-v1.schema.json) | Historical provider-runtime v1 contract |
+| [`schemas/provider-identity-v1.schema.json`](schemas/provider-identity-v1.schema.json) | Provider-native identity-to-role policy contract |
+| [`schemas/provider-release-v1.schema.json`](schemas/provider-release-v1.schema.json) | Immutable OCI Provider Release contract |
+| [`schemas/composition-pack-v1.schema.json`](schemas/composition-pack-v1.schema.json) | Authored provider-mediated composition claim contract |
+| [`docs/world-packages.md`](docs/world-packages.md) | Legacy Datalox-owned world package compatibility path |
 | [`scripts/public_release.py`](scripts/public_release.py) | Deterministic public-source builder and verifier |
 | [`docs/`](docs/) | Product, grounding, admission, security, and data contracts |
 
@@ -274,10 +369,16 @@ test failures, formatting failures, or package-build failures.
 
 ## Current status
 
-Datalox currently proves deterministic gated execution, stateful local worlds,
-functional reset, replayable evidence, and verifier-driven evaluation. It does
-not claim that every represented provider is core-complete or behaviorally
-equivalent to production.
+Datalox currently proves exact-authority TLS interception, zero runtime provider
+clients, task-free provider bundle compilation, stateful local behavior,
+controller-only reset/export, and Docker/Kubernetes injection. All 48 registered
+provider-scoped assets pass compilation and reset under this contract; that does
+not mean all 48 are core-complete, writable, or behaviorally equivalent to the
+provider. The exact structural result is in
+[`docs/reports/provider-runtime-coverage.json`](docs/reports/provider-runtime-coverage.json).
+Public checkouts can validate that report with
+`python scripts/check_provider_runtime_coverage.py --validate-report`; the full
+controlled source superset uses `--check` to recompile every underlying asset.
 
 The project is early. The most valuable contributions are complete behavior
 programs, stronger reset and failure evidence, reusable verifier atoms, and

@@ -1,0 +1,403 @@
+{
+  "core_families": [
+    {
+      "capabilities": [
+        "read",
+        "write"
+      ],
+      "capability_source_refs": {
+        "read": [
+          "pylabrobot_0_2_1_official"
+        ],
+        "write": [
+          "pylabrobot_0_2_1_official"
+        ]
+      },
+      "description": "Device-free LiquidHandler setup, status inspection, and stop for the standard eight-channel backend.",
+      "id": "lifecycle",
+      "implemented_operations": [
+        "system.get",
+        "system.setup",
+        "system.stop"
+      ],
+      "role": "primary",
+      "write_operations": [
+        "system.setup",
+        "system.stop"
+      ]
+    },
+    {
+      "capabilities": [
+        "read",
+        "write"
+      ],
+      "capability_source_refs": {
+        "read": [
+          "pylabrobot_0_2_1_official"
+        ],
+        "write": [
+          "pylabrobot_0_2_1_official"
+        ]
+      },
+      "description": "Eight-channel tip state, pickup, return, and discard with duplicate and invalid-state behavior.",
+      "id": "tip_handling",
+      "implemented_operations": [
+        "tips.get",
+        "tips.pick_up",
+        "tips.drop"
+      ],
+      "role": "primary",
+      "write_operations": [
+        "tips.pick_up",
+        "tips.drop"
+      ]
+    },
+    {
+      "capabilities": [
+        "read",
+        "write"
+      ],
+      "capability_source_refs": {
+        "read": [
+          "pylabrobot_0_2_1_official"
+        ],
+        "write": [
+          "pylabrobot_0_2_1_official"
+        ]
+      },
+      "description": "Container and mounted-tip volume state plus atomic standard-channel aspiration and dispense.",
+      "id": "liquid_handling",
+      "implemented_operations": [
+        "liquids.get",
+        "liquids.aspirate",
+        "liquids.dispense"
+      ],
+      "role": "primary",
+      "write_operations": [
+        "liquids.aspirate",
+        "liquids.dispense"
+      ]
+    }
+  ],
+  "env_id": "pylabrobot_hamilton_star_v0",
+  "exclusions": [
+    {
+      "id": "core_96_head",
+      "primary": false,
+      "reason": "CoRe 96 is optional hardware with separate pickup, aspiration, dispense, and drop operations; it is outside the selected standard eight-channel workflow.",
+      "source_refs": [
+        "pylabrobot_0_2_1_official"
+      ]
+    },
+    {
+      "id": "iswap_resource_movement",
+      "primary": false,
+      "reason": "iSWAP/resource movement is optional adjacent hardware and is not needed for the bounded liquid-transfer workflow.",
+      "source_refs": [
+        "pylabrobot_0_2_1_official"
+      ]
+    },
+    {
+      "id": "auxiliary_instruments_and_non_star_backends",
+      "primary": false,
+      "reason": "Plate readers, pumps, incubators, Opentrons, and other PyLabRobot device backends are separate providers or adjacent instrument families.",
+      "source_refs": [
+        "pylabrobot_0_2_1_official"
+      ]
+    }
+  ],
+  "gaps": [
+    {
+      "blocking": false,
+      "family": "all",
+      "id": "physical_hamilton_hardware_not_observed",
+      "reason": "Provider execution evidence comes from the official device-free PyLabRobot Chatterbox backend, not Hamilton hardware, VENUS, firmware, calibration, timing, collisions, or liquid-class execution.",
+      "source_refs": [
+        "pylabrobot_0_2_1_official",
+        "pylabrobot_chatterbox_reference_20260810"
+      ]
+    },
+    {
+      "blocking": false,
+      "family": "all",
+      "id": "https_is_internal_sdk_projection",
+      "reason": "PyLabRobot has a native Python call surface rather than a provider HTTP authority; the Datalox HTTPS routes are a closed adapter transport used by the execution boundary.",
+      "source_refs": [
+        "pylabrobot_0_2_1_official"
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "effect": "read",
+      "family": "lifecycle",
+      "id": "system.get",
+      "method": "GET",
+      "provider_execution": {
+        "evidence_refs": [],
+        "note": "This is a Datalox projection of official LiquidHandler lifecycle state; no native provider HTTP read is claimed.",
+        "status": "not_observed"
+      },
+      "source_refs": [
+        "pylabrobot_0_2_1_official"
+      ]
+    },
+    {
+      "effect": "write",
+      "family": "lifecycle",
+      "id": "system.setup",
+      "method": "POST",
+      "provider_execution": {
+        "evidence_refs": [
+          "pylabrobot_chatterbox_reference_20260810"
+        ],
+        "note": "Executed through PyLabRobot 0.2.1 LiquidHandlerChatterboxBackend, including repeated-setup failure.",
+        "status": "observed"
+      },
+      "source_refs": [
+        "pylabrobot_0_2_1_official",
+        "pylabrobot_chatterbox_reference_20260810"
+      ]
+    },
+    {
+      "effect": "write",
+      "family": "lifecycle",
+      "id": "system.stop",
+      "method": "POST",
+      "provider_execution": {
+        "evidence_refs": [
+          "pylabrobot_chatterbox_reference_20260810"
+        ],
+        "note": "Executed through PyLabRobot 0.2.1 LiquidHandlerChatterboxBackend, including repeated-stop failure.",
+        "status": "observed"
+      },
+      "source_refs": [
+        "pylabrobot_0_2_1_official",
+        "pylabrobot_chatterbox_reference_20260810"
+      ]
+    },
+    {
+      "effect": "read",
+      "family": "tip_handling",
+      "id": "tips.get",
+      "method": "GET",
+      "provider_execution": {
+        "evidence_refs": [],
+        "note": "This is a Datalox projection of official resource and channel trackers; no native provider HTTP read is claimed.",
+        "status": "not_observed"
+      },
+      "source_refs": [
+        "pylabrobot_0_2_1_official"
+      ]
+    },
+    {
+      "effect": "write",
+      "family": "tip_handling",
+      "id": "tips.pick_up",
+      "method": "POST",
+      "provider_execution": {
+        "evidence_refs": [
+          "pylabrobot_chatterbox_reference_20260810"
+        ],
+        "note": "Executed through the official Chatterbox backend with channel and TipSpot state plus HasTipError behavior.",
+        "status": "observed"
+      },
+      "source_refs": [
+        "pylabrobot_0_2_1_official",
+        "pylabrobot_chatterbox_reference_20260810"
+      ]
+    },
+    {
+      "effect": "write",
+      "family": "tip_handling",
+      "id": "tips.drop",
+      "method": "POST",
+      "provider_execution": {
+        "evidence_refs": [
+          "pylabrobot_chatterbox_reference_20260810"
+        ],
+        "note": "Return/drop behavior was executed through the official Chatterbox backend with occupied-spot and repeated-return failures.",
+        "status": "observed"
+      },
+      "source_refs": [
+        "pylabrobot_0_2_1_official",
+        "pylabrobot_chatterbox_reference_20260810"
+      ]
+    },
+    {
+      "effect": "read",
+      "family": "liquid_handling",
+      "id": "liquids.get",
+      "method": "GET",
+      "provider_execution": {
+        "evidence_refs": [],
+        "note": "This is a Datalox projection of official resource and tip volume trackers; no native provider HTTP read is claimed.",
+        "status": "not_observed"
+      },
+      "source_refs": [
+        "pylabrobot_0_2_1_official"
+      ]
+    },
+    {
+      "effect": "write",
+      "family": "liquid_handling",
+      "id": "liquids.aspirate",
+      "method": "POST",
+      "provider_execution": {
+        "evidence_refs": [
+          "pylabrobot_chatterbox_reference_20260810"
+        ],
+        "note": "Executed through the official Chatterbox backend with source and tip volume changes plus no-tip and underflow failures.",
+        "status": "observed"
+      },
+      "source_refs": [
+        "pylabrobot_0_2_1_official",
+        "pylabrobot_chatterbox_reference_20260810"
+      ]
+    },
+    {
+      "effect": "write",
+      "family": "liquid_handling",
+      "id": "liquids.dispense",
+      "method": "POST",
+      "provider_execution": {
+        "evidence_refs": [
+          "pylabrobot_chatterbox_reference_20260810"
+        ],
+        "note": "Executed through the official Chatterbox backend with tip and target volume changes plus underflow and overflow failures.",
+        "status": "observed"
+      },
+      "source_refs": [
+        "pylabrobot_0_2_1_official",
+        "pylabrobot_chatterbox_reference_20260810"
+      ]
+    }
+  ],
+  "process_assurances": [],
+  "provider_id": "pylabrobot_hamilton_star",
+  "provider_mutability": {
+    "mode": "mutable",
+    "reason": "The official PyLabRobot LiquidHandler contract mutates tip, channel, and volume trackers for standard liquid-handling calls.",
+    "source_refs": [
+      "pylabrobot_0_2_1_official"
+    ]
+  },
+  "schema_version": "datalox_provider_core_coverage_v1",
+  "scope": {
+    "name": "PyLabRobot-backed Hamilton STAR standard eight-channel dry-run",
+    "primary_workflow": "Set up a deck, pick up and return or discard tips, aspirate, dispense, inspect resulting state, and stop without physical hardware.",
+    "source_refs": [
+      "pylabrobot_0_2_1_official"
+    ],
+    "version": "pylabrobot-0.2.1"
+  },
+  "write_assurances": [
+    {
+      "execution_mode": "local_shadow",
+      "implementation_ref": "envs/pylabrobot_hamilton_star_v0/world/v1/implementation.py::_setup",
+      "invalid_duplicate_atomicity_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ],
+      "local_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ],
+      "operation_id": "system.setup",
+      "read_after_write_operations": [
+        "system.get"
+      ],
+      "reset_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ]
+    },
+    {
+      "execution_mode": "local_shadow",
+      "implementation_ref": "envs/pylabrobot_hamilton_star_v0/world/v1/implementation.py::_stop",
+      "invalid_duplicate_atomicity_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ],
+      "local_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ],
+      "operation_id": "system.stop",
+      "read_after_write_operations": [
+        "system.get"
+      ],
+      "reset_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ]
+    },
+    {
+      "execution_mode": "local_shadow",
+      "implementation_ref": "envs/pylabrobot_hamilton_star_v0/world/v1/implementation.py::_pick_up_tips",
+      "invalid_duplicate_atomicity_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ],
+      "local_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ],
+      "operation_id": "tips.pick_up",
+      "read_after_write_operations": [
+        "tips.get"
+      ],
+      "reset_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ]
+    },
+    {
+      "execution_mode": "local_shadow",
+      "implementation_ref": "envs/pylabrobot_hamilton_star_v0/world/v1/implementation.py::_drop_tips",
+      "invalid_duplicate_atomicity_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ],
+      "local_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ],
+      "operation_id": "tips.drop",
+      "read_after_write_operations": [
+        "tips.get"
+      ],
+      "reset_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ]
+    },
+    {
+      "execution_mode": "local_shadow",
+      "implementation_ref": "envs/pylabrobot_hamilton_star_v0/world/v1/implementation.py::_aspirate",
+      "invalid_duplicate_atomicity_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ],
+      "local_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ],
+      "operation_id": "liquids.aspirate",
+      "read_after_write_operations": [
+        "liquids.get"
+      ],
+      "reset_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ]
+    },
+    {
+      "execution_mode": "local_shadow",
+      "implementation_ref": "envs/pylabrobot_hamilton_star_v0/world/v1/implementation.py::_dispense",
+      "invalid_duplicate_atomicity_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ],
+      "local_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ],
+      "operation_id": "liquids.dispense",
+      "read_after_write_operations": [
+        "liquids.get"
+      ],
+      "reset_evidence_refs": [
+        "tests/test_pylabrobot_hamilton_star_world.py::test_every_hamilton_star_write_has_readback_atomic_failure_and_reset"
+      ]
+    }
+  ],
+  "write_families": [
+    "lifecycle",
+    "tip_handling",
+    "liquid_handling"
+  ]
+}

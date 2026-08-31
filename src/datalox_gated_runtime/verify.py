@@ -68,9 +68,7 @@ def verify_replay(env_dir: Path) -> VerifyReplayResult:
             world_backend=world_backend,
         )
         mcp_runtime = (
-            McpGatedRuntime(config=config.mcp, ledger=ledger, allow_live=False)
-            if config.mcp is not None
-            else None
+            McpGatedRuntime(config=config.mcp, ledger=ledger) if config.mcp is not None else None
         )
 
         miss_paths: list[str] = []

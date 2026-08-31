@@ -1,4 +1,9 @@
-# Portable World Packages
+# Legacy Reference World Packages
+
+> This is a compatibility and regression surface, not Datalox's primary
+> delivery unit. New integrations should inject a task-free provider runtime
+> into the consumer's existing Docker or Kubernetes world. HUD, Harbor, and
+> other harnesses keep ownership of the task, agent, verifier, and reward.
 
 A Datalox world package is the provider-neutral delivery unit for one admitted
 world episode. It is an OCI build context, not an agent image and not a second
@@ -12,8 +17,10 @@ admitted world + selected episode + locked runtime
   -> controller-only finalization and verdict
 ```
 
-HUD, Harbor, and future harness integrations are adapters over this package.
-They must not copy or reinterpret the provider behavior model independently.
+The adapters below exercise older Datalox-owned reference fixtures. They remain
+useful tests, but they are not the current contract for integrating provider
+behavior into an external world. That contract is documented in
+[Transparent Interception](transparent-interception.md).
 
 ## Build one package
 
@@ -82,14 +89,15 @@ atomically emits a small verdict bound to:
 An evaluated agent cannot call this command over HTTP or MCP and cannot read the
 verdict before it finishes.
 
-## Plug in an agent
+## Legacy MCP fixture path
 
-Any MCP-capable agent can connect directly to `http://<world-host>:8000/mcp`.
+An MCP-capable agent can connect directly to `http://<world-host>:8000/mcp` for
+this legacy fixture.
 The agent implementation remains outside the world image. This keeps the same
 package usable from a local runner, a custom rollout system, HUD, Harbor, or a
 future harness without rebuilding provider behavior for each one.
 
-Harness exports are convenience wrappers:
+Legacy harness exports are convenience wrappers:
 
 ```bash
 datalox-gate env export-world --env <world> --format hud --out <hud-dir>

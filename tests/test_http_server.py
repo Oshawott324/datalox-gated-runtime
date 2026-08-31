@@ -167,4 +167,4 @@ def test_health_endpoint_reports_config_id(tmp_path: Path) -> None:
         response = client.get("/_datalox/health")
 
     assert response.status_code == 200
-    assert response.json() == {"ok": True, "config_id": "lab_ops_stale_result_v0", "live": False}
+    assert response.json() == {"ok": True, "config_id": "lab_ops_stale_result_v0"}

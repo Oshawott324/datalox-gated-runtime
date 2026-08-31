@@ -1,0 +1,302 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/provider-release-v1.schema.json",
+  "title": "Immutable Datalox provider release configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "provider_id",
+    "release_version",
+    "bundle_version",
+    "authorities",
+    "distribution_label",
+    "operation_claims_sha256",
+    "evidence_sources",
+    "evidence_sources_sha256",
+    "operations",
+    "operation_contract_sha256",
+    "provider_invariants",
+    "provider_invariants_sha256",
+    "receipt_predicates",
+    "receipt_predicates_sha256",
+    "operation_coverage",
+    "profiles"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_provider_release_v1"},
+    "provider_id": {"$ref": "#/$defs/identifier"},
+    "release_version": {"$ref": "#/$defs/version"},
+    "bundle_version": {"type": "string", "minLength": 1},
+    "authorities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "distribution_label": {"$ref": "#/$defs/distributionLabel"},
+    "operation_claims_sha256": {"$ref": "#/$defs/sha256"},
+    "evidence_sources": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/evidenceSource"}
+    },
+    "evidence_sources_sha256": {"$ref": "#/$defs/sha256"},
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/admittedOperation"}
+    },
+    "operation_contract_sha256": {"$ref": "#/$defs/sha256"},
+    "provider_invariants": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/admittedInvariant"}
+    },
+    "provider_invariants_sha256": {"$ref": "#/$defs/sha256"},
+    "receipt_predicates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/admittedPredicate"}
+    },
+    "receipt_predicates_sha256": {"$ref": "#/$defs/sha256"},
+    "operation_coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "read", "write", "behaviors"],
+      "properties": {
+        "total": {"type": "integer", "minimum": 1},
+        "read": {"type": "integer", "minimum": 0},
+        "write": {"type": "integer", "minimum": 0},
+        "behaviors": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["success", "failure", "duplicate", "readback", "async", "pagination"],
+          "properties": {
+            "success": {"type": "integer", "minimum": 0},
+            "failure": {"type": "integer", "minimum": 0},
+            "duplicate": {"type": "integer", "minimum": 0},
+            "readback": {"type": "integer", "minimum": 0},
+            "async": {"type": "integer", "minimum": 0},
+            "pagination": {"type": "integer", "minimum": 0}
+          }
+        }
+      }
+    },
+    "profiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "profile_id",
+          "reset_profile_id",
+          "layer",
+          "provider_runtime_sha256",
+          "provider_admission_sha256",
+          "operation_claims_sha256",
+          "distribution_label"
+        ],
+        "properties": {
+          "profile_id": {"$ref": "#/$defs/identifier"},
+          "reset_profile_id": {"const": "default"},
+          "layer": {"$ref": "#/$defs/descriptor"},
+          "provider_runtime_sha256": {"$ref": "#/$defs/sha256"},
+          "provider_admission_sha256": {"$ref": "#/$defs/sha256"},
+          "operation_claims_sha256": {"$ref": "#/$defs/sha256"},
+          "distribution_label": {"$ref": "#/$defs/distributionLabel"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "distributionLabel": {
+      "enum": ["public", "restricted", "private"]
+    },
+    "descriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mediaType", "digest", "size"],
+      "properties": {
+        "mediaType": {"const": "application/vnd.datalox.provider-release.profile.v1.tar"},
+        "digest": {"$ref": "#/$defs/sha256"},
+        "size": {"type": "integer", "minimum": 1}
+      }
+    },
+    "jsonPointer": {
+      "type": "string",
+      "pattern": "^(?:/(?:[^~/]|~[01])*)*$"
+    },
+    "evidenceSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "origin_artifact_ref",
+        "artifact_sha256",
+        "grounding_level",
+        "observed_at",
+        "valid_through",
+        "distribution_label",
+        "rights_basis"
+      ],
+      "properties": {
+        "evidence_id": {"$ref": "#/$defs/identifier"},
+        "origin_artifact_ref": {"type": "string", "minLength": 1},
+        "artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "grounding_level": {"type": "string", "pattern": "^G[0-4](?:_[A-Z0-9]+)*$"},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "valid_through": {"type": "string", "format": "date-time"},
+        "distribution_label": {"$ref": "#/$defs/distributionLabel"},
+        "rights_basis": {"type": "string", "minLength": 1}
+      }
+    },
+    "admittedOperation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "native_surface",
+        "mutability",
+        "behavior_program",
+        "state_effects",
+        "grounding",
+        "rights",
+        "covered_behaviors"
+      ],
+      "properties": {
+        "operation_id": {"$ref": "#/$defs/identifier"},
+        "native_surface": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "scheme", "authority", "method", "path_template"],
+          "properties": {
+            "type": {"const": "http"},
+            "scheme": {"const": "https"},
+            "authority": {"type": "string", "minLength": 1},
+            "method": {"type": "string", "pattern": "^[A-Z]+$"},
+            "path_template": {"type": "string", "pattern": "^/"}
+          }
+        },
+        "mutability": {"enum": ["read", "write"]},
+        "behavior_program": {"$ref": "#/$defs/identifier"},
+        "state_effects": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/identifier"}
+        },
+        "grounding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["level", "evidence_refs", "grounded"],
+          "properties": {
+            "level": {"type": "string", "pattern": "^G[0-4](?:_[A-Z0-9]+)*$"},
+            "evidence_refs": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {"$ref": "#/$defs/identifier"}
+            },
+            "grounded": {"type": "boolean"}
+          }
+        },
+        "rights": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["distribution_label", "behavior_distribution_basis"],
+          "properties": {
+            "distribution_label": {"$ref": "#/$defs/distributionLabel"},
+            "behavior_distribution_basis": {"type": "string", "minLength": 1}
+          }
+        },
+        "covered_behaviors": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["success", "failure"],
+          "properties": {
+            "success": {"const": true},
+            "failure": {"const": true},
+            "duplicate": {"const": true},
+            "readback": {"const": true},
+            "async": {"const": true},
+            "pagination": {"const": true}
+          },
+          "minProperties": 1
+        }
+      }
+    },
+    "admittedInvariant": {
+      "allOf": [
+        {"$ref": "#/$defs/admittedPredicate"},
+        {
+          "type": "object",
+          "properties": {
+            "source": {"enum": ["provider_state", "call_evidence"]}
+          }
+        }
+      ]
+    },
+    "admittedPredicate": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["predicate_id", "source", "operator", "pointer", "passed"],
+          "properties": {
+            "predicate_id": {"$ref": "#/$defs/identifier"},
+            "source": {"enum": ["response_body", "provider_state", "call_evidence"]},
+            "operator": {"const": "exists"},
+            "pointer": {"$ref": "#/$defs/jsonPointer"},
+            "passed": {"const": true}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["predicate_id", "source", "operator", "pointer", "expected", "passed"],
+          "properties": {
+            "predicate_id": {"$ref": "#/$defs/identifier"},
+            "source": {"enum": ["response_body", "provider_state", "call_evidence"]},
+            "operator": {"const": "equals"},
+            "pointer": {"$ref": "#/$defs/jsonPointer"},
+            "expected": {},
+            "passed": {"const": true}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "predicate_id",
+            "source",
+            "operator",
+            "pointer",
+            "expected_type",
+            "passed"
+          ],
+          "properties": {
+            "predicate_id": {"$ref": "#/$defs/identifier"},
+            "source": {"enum": ["response_body", "provider_state", "call_evidence"]},
+            "operator": {"const": "type"},
+            "pointer": {"$ref": "#/$defs/jsonPointer"},
+            "expected_type": {
+              "enum": ["object", "array", "string", "number", "integer", "boolean", "null"]
+            },
+            "passed": {"const": true}
+          }
+        }
+      ]
+    }
+  }
+}

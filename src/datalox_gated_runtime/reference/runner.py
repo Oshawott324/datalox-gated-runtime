@@ -26,7 +26,12 @@ class SequenceTarget(Protocol):
 
     def reset(self, seed: int) -> None: ...
 
-    def execute(self, call: ReferenceCall) -> ObservedResponse: ...
+    def execute(
+        self,
+        call: ReferenceCall,
+        *,
+        principal_context_id: str,
+    ) -> ObservedResponse: ...
 
     def observe(self, request: ObservationRequest) -> JsonValue: ...
 
@@ -104,7 +109,10 @@ def run_conformance(
 
     for step in trace.steps:
         try:
-            actual_response = target.execute(step.call)
+            actual_response = target.execute(
+                step.call,
+                principal_context_id=step.principal_context_id,
+            )
         except Exception as error:
             mismatches.append(_target_error("target_execution_error", error, step_id=step.step_id))
             break

@@ -6,18 +6,18 @@ from typing import Any
 
 import pytest
 from mcp import types
+from world_v1_helpers import create_valid_bundle
 
 from datalox_gated_runtime.config import load_gate_config
 from datalox_gated_runtime.ledger import SessionLedger
 from datalox_gated_runtime.mcp_registry import McpToolRegistry
 from datalox_gated_runtime.mcp_runtime import McpGatedRuntime
 from datalox_gated_runtime.mcp_server import _build_low_level_components, build_low_level_server
-from datalox_gated_runtime.models import CallRequest, ResponseCase
+from datalox_gated_runtime.models import CallRequest
 from datalox_gated_runtime.world_v1.backend import (
     WorldBundleBackend,
     initialize_world_bundle_session,
 )
-from world_v1_helpers import create_valid_bundle
 
 
 class FakeSchemaUpstream:
@@ -110,6 +110,24 @@ def _write_run(run_dir: Path) -> None:
                             "evidence_ref": "evidence/mcp/github.md#get_issue",
                         }
                     },
+                    "generated": {
+                        "tool_schemas": {
+                            "github.get_issue": {
+                                "description": "Read one GitHub issue.",
+                                "inputSchema": {
+                                    "type": "object",
+                                    "properties": {"number": {"type": "integer"}},
+                                },
+                            },
+                            "github.create_triage_report": {
+                                "description": "Create a local triage report.",
+                                "inputSchema": {
+                                    "type": "object",
+                                    "properties": {"issue_number": {"type": "integer"}},
+                                },
+                            },
+                        }
+                    },
                 },
             },
             indent=2,
@@ -127,7 +145,6 @@ def test_registry_lists_only_declared_non_denied_tools(tmp_path: Path) -> None:
     runtime = McpGatedRuntime(
         config=config.mcp,
         ledger=SessionLedger(),
-        upstream_client=FakeSchemaUpstream(),
     )
     registry = McpToolRegistry(
         run_dir=run_dir,
@@ -165,7 +182,6 @@ def test_registry_direct_denied_call_fails_closed_when_dispatched(tmp_path: Path
     runtime = McpGatedRuntime(
         config=config.mcp,
         ledger=ledger,
-        upstream_client=FakeSchemaUpstream(),
     )
     registry = McpToolRegistry(
         run_dir=run_dir,
@@ -190,7 +206,6 @@ def test_registry_utility_tools_preserved(tmp_path: Path) -> None:
     runtime = McpGatedRuntime(
         config=config.mcp,
         ledger=SessionLedger(),
-        upstream_client=FakeSchemaUpstream(),
     )
     registry = McpToolRegistry(
         run_dir=run_dir,
@@ -365,22 +380,6 @@ def _write_world_run(run_dir: Path) -> None:
     )
 
 
-class FakeHttpLiveCaptureClient:
-    def __init__(self, live) -> None:
-        self.live = live
-
-    def fetch(self, request: CallRequest) -> ResponseCase:
-        return ResponseCase(
-            case_id="cap_http_live_001",
-            method="GET",
-            path=request.path,
-            query=dict(request.query),
-            status_code=200,
-            body={"from": "live", "path": request.path},
-            evidence_ref="live:github:test",
-        )
-
-
 async def _low_level_list_tools(server) -> list[types.Tool]:
     handler = server.request_handlers[types.ListToolsRequest]
     result = await handler(types.ListToolsRequest(method="tools/list"))
@@ -417,32 +416,22 @@ def test_low_level_server_list_tools_hides_deny_and_exposes_declared(tmp_path: P
     descriptions = {tool.name: tool.description for tool in tools}
     assert descriptions["github.get_issue"] == "Read one replayed GitHub issue."
     assert descriptions["github.create_triage_report"] == "Create a shadowed triage report."
-    assert all(descriptions[name] for name in {"get_task", "get_session_manifest", "gate_request"})
+    assert all(descriptions[name] for name in ("get_task", "get_session_manifest", "gate_request"))
 
 
-def test_low_level_components_use_default_stdio_upstream_for_schema_snapshot(
+def test_execution_low_level_components_require_compiled_tool_schemas(
     tmp_path: Path,
-    monkeypatch,
 ) -> None:
     run_dir = tmp_path / "run"
     _write_run(run_dir)
-    seen: dict[str, object] = {}
-
-    class FakeDefaultUpstream(FakeSchemaUpstream):
-        def __init__(self, upstreams: dict[str, object]) -> None:
-            seen["upstreams"] = upstreams
-
-    monkeypatch.setattr(
-        "datalox_gated_runtime.mcp_server.StdioMcpUpstreamClient",
-        FakeDefaultUpstream,
-        raising=False,
-    )
+    config_path = run_dir / "gate_config.json"
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+    del config["mcp"]["generated"]
+    config_path.write_text(json.dumps(config), encoding="utf-8")
     _, registry = _build_low_level_components(run_dir)
 
-    snapshot = asyncio.run(registry.snapshot_declared_tool_schemas())
-
-    assert "github" in seen["upstreams"]
-    assert snapshot["github.get_issue"]["inputSchema"]["properties"]["number"]["type"] == "integer"
+    with pytest.raises(ValueError, match=r"mcp tool schema unavailable: github\."):
+        asyncio.run(registry.snapshot_declared_tool_schemas())
 
 
 def test_low_level_server_call_tool_routes_replay_and_shadow(tmp_path: Path) -> None:
@@ -561,11 +550,11 @@ def test_world_response_digest_event_is_atomic_with_denial_and_rolled_back_on_er
             if event["type"] in {"tool_invocation_denied", "world_response_digest_recorded"}
         ]
         assert denied_events == ["tool_invocation_denied", "world_response_digest_recorded"]
-        denied_digest = [
+        denied_digest = next(
             event
             for event in backend.session.list_events()
             if event["type"] == "world_response_digest_recorded"
-        ][0]
+        )
         assert denied_digest["payload"]["body_sha256"] == _body_digest(denied.body)
 
         def _boom(request, *, actor, session):
@@ -598,17 +587,12 @@ def test_world_response_digest_event_is_atomic_with_denial_and_rolled_back_on_er
         backend.close()
 
 
-def test_low_level_server_gate_request_honors_allow_live_for_http_capture(
+def test_low_level_server_gate_request_denies_http_provider_access(
     tmp_path: Path,
-    monkeypatch,
 ) -> None:
     run_dir = tmp_path / "run"
     _write_http_live_mcp_run(run_dir)
-    monkeypatch.setattr(
-        "datalox_gated_runtime.mcp_server.LiveCaptureClient",
-        FakeHttpLiveCaptureClient,
-    )
-    server = build_low_level_server(run_dir, allow_live=True)
+    server = build_low_level_server(run_dir)
 
     result = asyncio.run(
         _low_level_call_tool(
@@ -619,50 +603,31 @@ def test_low_level_server_gate_request_honors_allow_live_for_http_capture(
     )
 
     assert result.isError is False
-    assert result.structuredContent["decision"]["kind"] == "live_capture"
-    assert result.structuredContent["body"] == {"from": "live", "path": "/github/issues/123"}
-    capture = json.loads((run_dir / "captures.jsonl").read_text(encoding="utf-8"))
-    assert capture["case_id"] == "cap_http_live_001"
+    assert result.structuredContent["decision"]["kind"] == "deny"
+    assert result.structuredContent["body"]["error"]["code"] == "provider_access_forbidden"
+    assert not (run_dir / "captures.jsonl").exists()
     event = json.loads((run_dir / "ledger.jsonl").read_text(encoding="utf-8"))
-    assert event["decision"]["kind"] == "live_capture"
+    assert event["decision"]["reason_code"] == "provider_access_forbidden"
 
 
-def test_low_level_server_live_call_writes_mcp_capture_file(tmp_path: Path) -> None:
+def test_low_level_server_live_mcp_call_is_locally_denied(tmp_path: Path) -> None:
     run_dir = tmp_path / "run"
     _write_run(run_dir)
-    server = build_low_level_server(
-        run_dir,
-        allow_live=True,
-        upstream_client=FakeSchemaUpstream(),
-    )
+    server = build_low_level_server(run_dir)
 
     result = asyncio.run(_low_level_call_tool(server, "github.get_issue", {"number": 123}))
 
-    assert result.isError is False
-    capture_lines = (run_dir / "mcp_captures.jsonl").read_text(encoding="utf-8").splitlines()
-    assert len(capture_lines) == 1
-    capture = json.loads(capture_lines[0])
-    assert capture["tool_name"] == "github.get_issue"
-    assert capture["arguments"] == {"number": 123}
-    assert capture["result"]["structuredContent"]["tool"] == "github.get_issue"
+    assert result.isError is True
+    assert result.structuredContent["error"]["code"] == "provider_access_forbidden"
+    assert not (run_dir / "mcp_captures.jsonl").exists()
 
 
-def test_low_level_server_live_capture_includes_schema_after_list_tools(tmp_path: Path) -> None:
+def test_execution_tool_listing_never_discovers_schema_from_live_upstream(tmp_path: Path) -> None:
     run_dir = tmp_path / "run"
     _write_run(run_dir)
-    server = build_low_level_server(
-        run_dir,
-        allow_live=True,
-        upstream_client=FakeSchemaUpstream(),
-    )
+    server = build_low_level_server(run_dir)
 
     tools = asyncio.run(_low_level_list_tools(server))
-    result = asyncio.run(_low_level_call_tool(server, "github.get_issue", {"number": 123}))
 
     assert "github.get_issue" in {tool.name for tool in tools}
-    assert result.isError is False
-    capture = json.loads((run_dir / "mcp_captures.jsonl").read_text(encoding="utf-8"))
-    assert capture["input_schema"] == {
-        "type": "object",
-        "properties": {"number": {"type": "integer"}},
-    }
+    assert (run_dir / "mcp_tool_schemas.json").exists()

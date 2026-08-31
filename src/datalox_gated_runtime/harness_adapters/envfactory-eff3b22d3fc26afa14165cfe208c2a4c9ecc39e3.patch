@@ -1,0 +1,339 @@
+diff --git a/src/graph/tool_node.py b/src/graph/tool_node.py
+index 62de8d4..8c70bd8 100644
+--- a/src/graph/tool_node.py
++++ b/src/graph/tool_node.py
+@@ -90,13 +90,17 @@ class Tool:
+         if schema is None:
+             return parsed_schema
+
+-        # Get required fields
+-        parsed_schema["required"] = schema.get("required", [])
+-
+-        # Handle missing properties field
++        # Root arrays, primitives, and unions are valid JSON Schema outputs.
++        # Represent them explicitly instead of silently dropping the output.
+         if "properties" not in schema or schema["properties"] is None:
++            for parameter in self._root_parameters(schema, root_schema=schema):
++                parsed_schema["text"] += f"{str(parameter)}\n"
++                parsed_schema["parameters"].append(parameter)
+             return parsed_schema
+
++        # Get required fields for object schemas.
++        parsed_schema["required"] = schema.get("required", [])
++
+         # Parse properties
+         for param_name, param_info in schema["properties"].items():
+             param_type = param_info.get("type", "unknown")
+@@ -151,6 +155,112 @@ class Tool:
+
+         return parsed_schema
+
++    @staticmethod
++    def _root_parameters(schema: dict, *, root_schema: dict) -> list[Parameter]:
++        if "$ref" in schema:
++            reference = schema["$ref"]
++            if not isinstance(reference, str) or not reference.startswith("#/"):
++                raise ValueError(f"Unsupported JSON Schema reference: {reference!r}")
++            resolved = root_schema
++            for token in reference[2:].split("/"):
++                token = token.replace("~1", "/").replace("~0", "~")
++                if not isinstance(resolved, dict) or token not in resolved:
++                    raise ValueError(f"Unresolved JSON Schema reference: {reference}")
++                resolved = resolved[token]
++            if not isinstance(resolved, dict):
++                raise ValueError(f"JSON Schema reference is not an object: {reference}")
++            return Tool._root_parameters(resolved, root_schema=root_schema)
++
++        variants = schema.get("anyOf") or schema.get("oneOf") or schema.get("allOf")
++        if isinstance(variants, list):
++            parameters = []
++            seen = set()
++            for variant in variants:
++                if not isinstance(variant, dict):
++                    continue
++                for parameter in Tool._root_parameters(variant, root_schema=root_schema):
++                    key = (parameter.name, parameter.data_type)
++                    if key in seen:
++                        continue
++                    seen.add(key)
++                    parameters.append(parameter)
++            return parameters
++
++        root_type = schema.get("type", "unknown")
++        if isinstance(root_type, list):
++            return Tool._root_parameters(
++                {
++                    "anyOf": [
++                        {"type": item, "description": schema.get("description", "")}
++                        for item in root_type
++                    ]
++                },
++                root_schema=root_schema,
++            )
++        description = schema.get("description", "")
++        if root_type == "null":
++            return []
++        if root_type == "object":
++            properties = schema.get("properties")
++            if isinstance(properties, dict) and properties:
++                return [
++                    Parameter(
++                        name=name,
++                        description=info.get("description", ""),
++                        data_type=info.get("type", "unknown"),
++                    )
++                    for name, info in properties.items()
++                ]
++            additional = schema.get("additionalProperties")
++            if isinstance(additional, dict):
++                return [
++                    Parameter(
++                        name="$value",
++                        description=additional.get("description", description),
++                        data_type=additional.get("type", "unknown"),
++                    )
++                ]
++            return []
++        if root_type != "array":
++            return [Parameter(name="$result", description=description, data_type=root_type)]
++
++        items = schema.get("items")
++        if not isinstance(items, dict):
++            return [Parameter(name="$item", description=description, data_type="unknown")]
++        if "$ref" in items:
++            parameters = Tool._root_parameters(items, root_schema=root_schema)
++            for parameter in parameters:
++                if parameter.name == "$result":
++                    parameter.name = "$item"
++            return parameters
++        item_variants = items.get("anyOf") or items.get("oneOf")
++        if isinstance(item_variants, list):
++            parameters = Tool._root_parameters(
++                {"anyOf": item_variants},
++                root_schema=root_schema,
++            )
++            for parameter in parameters:
++                if parameter.name == "$result":
++                    parameter.name = "$item"
++            return parameters
++        properties = items.get("properties")
++        if items.get("type") == "object" and isinstance(properties, dict) and properties:
++            return [
++                Parameter(
++                    name=name,
++                    description=info.get("description", ""),
++                    data_type=info.get("type", "unknown"),
++                )
++                for name, info in properties.items()
++            ]
++        return [
++            Parameter(
++                name="$item",
++                description=items.get("description", description),
++                data_type=items.get("type", "unknown"),
++            )
++        ]
++
+     def __repr__(self):
+         return f"Tool({self.name})"
+
+diff --git a/src/manager/mcp_client_manager.py b/src/manager/mcp_client_manager.py
+index 595da26..cfd6a9d 100644
+--- a/src/manager/mcp_client_manager.py
++++ b/src/manager/mcp_client_manager.py
+@@ -40,6 +40,7 @@ class MCPClientManager:
+         self.load_scenario_timeout = float(os.getenv("MCP_LOAD_SCENARIO_TIMEOUT_SECONDS", "120"))
+
+         self.clients: Dict[str, dict] = {}
++        self._client_locks: Dict[str, threading.Lock] = {}
+         self.stateless_clients: Dict[str, Client] = {}
+         self._base_clients: Dict[str, Client] = {}
+         self.server_to_path_mapping: Dict[str, str] = {}
+@@ -65,9 +66,10 @@ class MCPClientManager:
+             return client
+
+     async def _spawn_session(self, server_name: str) -> Client:
+-        """Create a new session client sharing the base transport."""
+-        base = await self._ensure_base_client(server_name)
+-        return base.new()
++        """Create one connected stdio process for an isolated stateful session."""
++        client = Client(self.server_to_path_mapping[server_name])
++        await client._connect()
++        return client
+
+     def init_config(self, config_path, overwrite=False):
+         """Initialize manager from MCP config file."""
+@@ -91,6 +93,7 @@ class MCPClientManager:
+         if overwrite:
+             await self._close_all_clients_async()
+             await self._close_all_base_clients_async()
++            await self._close_all_stateless_clients_async()
+             with self._lock:
+                 self.server_to_path_mapping.clear()
+                 self.tools.clear()
+@@ -131,9 +134,8 @@ class MCPClientManager:
+
+                 if is_stateless:
+                     self.stateless_clients[server_name] = client
+-                else:
+-                    async with self._base_client_lock:
+-                        self._base_clients[server_name] = client
++        if not is_stateless:
++            await client.close()
+
+     def filter_tools(self, servers: Optional[List[str]] = None) -> List[dict]:
+         """Filter tools by allowed server names."""
+@@ -160,7 +162,7 @@ class MCPClientManager:
+     def get_client(self, client_id: str) -> Tuple[Client, bool]:
+         """Get or create a client. Returns (client, is_initialized)."""
+         assert self.is_valid_client_id(client_id), "client_id must use '<server>-<request>' format"
+-        server_name = client_id.split("-", 1)[0]
++        server_name = self._server_name_for_client_id(client_id)
+
+         with self._lock:
+             if client_id in self.clients:
+@@ -170,13 +172,33 @@ class MCPClientManager:
+             if server_name in self.stateless_clients:
+                 return self.stateless_clients[server_name], True
+
+-        client = asyncio.run_coroutine_threadsafe(
+-            self._spawn_session(server_name), self._loop
+-        ).result(timeout=30)
+-
+         with self._lock:
+-            self.clients[client_id] = {"client": client, "status": False}
+-        return client, False
++            client_lock = self._client_locks.setdefault(client_id, threading.Lock())
++        with client_lock:
++            with self._lock:
++                if client_id in self.clients:
++                    info = self.clients[client_id]
++                    return info["client"], info["status"]
++            client = asyncio.run_coroutine_threadsafe(
++                self._spawn_session(server_name), self._loop
++            ).result(timeout=30)
++            with self._lock:
++                self.clients[client_id] = {
++                    "client": client,
++                    "status": False,
++                    "server_name": server_name,
++                }
++            return client, False
++
++    def _server_name_for_client_id(self, client_id: str) -> str:
++        matches = [
++            server_name
++            for server_name in self.server_to_path_mapping
++            if client_id.startswith(f"{server_name}-")
++        ]
++        if not matches:
++            raise ValueError(f"client_id does not identify a configured server: {client_id}")
++        return max(matches, key=len)
+
+     def set_status(self, client_id: str):
+         """Mark a session client as initialized."""
+@@ -194,14 +216,22 @@ class MCPClientManager:
+             self._call_tool_async("load_scenario", {"scenario": scenario}, client, client_id),
+             self._loop,
+         )
+-        result = future.result(timeout=self.load_scenario_timeout)
++        try:
++            result = future.result(timeout=self.load_scenario_timeout)
++        except Exception:
++            self.close_client(client_id=client_id)
++            raise
+         if check:
+             saved = self.call_tool(client_id, "save_scenario", {})
+             try:
+                 if json.loads(saved) == scenario:
+                     self.set_status(client_id)
++                else:
++                    self.close_client(client_id=client_id)
++                    return "Scenario round-trip mismatch"
+             except Exception:
+-                pass
++                self.close_client(client_id=client_id)
++                return "Scenario round-trip mismatch"
+         else:
+             self.set_status(client_id)
+
+@@ -223,6 +253,7 @@ class MCPClientManager:
+         try:
+             return future.result(timeout=30)
+         except TimeoutError:
++            self.close_client(client_id=client_id)
+             return f"{tool_name} timed out after 30 seconds"
+         except ToolError as exc:
+             return f"{tool_name} failed: {exc}"
+@@ -234,7 +265,8 @@ class MCPClientManager:
+-        short_name = tool_name.split("-", 1)[-1]
+         args = json.loads(tool_args) if isinstance(tool_args, str) else tool_args
+
+-        server_name = client_id.split("-", 1)[0]
++        server_name = self._server_name_for_client_id(client_id)
++        prefix = f"{server_name}-"
++        short_name = tool_name[len(prefix):] if tool_name.startswith(prefix) else tool_name
+         is_stateless = server_name in self.stateless_clients
+
+         if is_stateless:
+@@ -269,10 +300,16 @@ class MCPClientManager:
+         return dict(results)
+
+     def close_client(self, client_id: Optional[str] = None, server_name: Optional[str] = None):
+-        """Remove a session from tracking. Actual cleanup is automatic."""
++        """Close and remove a stateful session or stateless server client."""
+         if client_id:
+             with self._lock:
+-                self.clients.pop(client_id, None)
++                info = self.clients.pop(client_id, None)
++            if info:
++                future = asyncio.run_coroutine_threadsafe(
++                    info["client"].close(),
++                    self._loop,
++                )
++                future.result(timeout=10)
+
+         if server_name:
+             future = asyncio.run_coroutine_threadsafe(
+@@ -289,9 +326,24 @@ class MCPClientManager:
+             await client.close()
+
+     async def _close_all_clients_async(self):
+-        """Clear all session tracking."""
++        """Close all isolated stateful sessions."""
+         with self._lock:
++            clients = [info["client"] for info in self.clients.values()]
+             self.clients.clear()
++            self._client_locks.clear()
++        await asyncio.gather(*[client.close() for client in clients], return_exceptions=True)
++
++    async def _close_all_stateless_clients_async(self):
++        with self._lock:
++            clients = list(self.stateless_clients.values())
++            self.stateless_clients.clear()
++        await asyncio.gather(*[client.close() for client in clients], return_exceptions=True)
++
++    async def _close_registered_clients_async(self):
++        await asyncio.gather(
++            self._close_all_base_clients_async(),
++            self._close_all_stateless_clients_async(),
++        )
+
+     async def _close_base_client(self, server_name: str):
+         """Close a base client and remove from pool."""
+@@ -321,12 +373,13 @@ class MCPClientManager:
+         if not self._loop.is_running():
+             return
+
++        self.close_all_clients()
++
+         asyncio.run_coroutine_threadsafe(
+-            self._close_all_base_clients_async(), self._loop
++            self._close_registered_clients_async(),
++            self._loop,
+         ).result(timeout=timeout)
+
+-        self.close_all_clients()
+-
+         self._loop.call_soon_threadsafe(self._loop.stop)
+         self._loop_thread.join(timeout=timeout)

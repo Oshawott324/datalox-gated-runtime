@@ -8,6 +8,8 @@ from pathlib import Path
 from types import UnionType
 from typing import get_args, get_origin
 
+import pytest
+
 from datalox_gated_runtime.cli import _build_parser
 from datalox_gated_runtime.mcp_server import _signature_from_schema, build_server
 from datalox_gated_runtime.session import create_session
@@ -80,14 +82,11 @@ def test_mcp_cli_parser_accepts_run_argument(tmp_path: Path) -> None:
     assert args.run == str(tmp_path)
 
 
-def test_mcp_cli_parser_accepts_allow_live_flag(tmp_path: Path) -> None:
+def test_mcp_cli_parser_rejects_live_provider_flag(tmp_path: Path) -> None:
     parser = _build_parser()
 
-    args = parser.parse_args(["mcp", "--run", str(tmp_path), "--allow-live"])
-
-    assert args.command == "mcp"
-    assert args.run == str(tmp_path)
-    assert args.allow_live is True
+    with pytest.raises(SystemExit):
+        parser.parse_args(["mcp", "--run", str(tmp_path), "--allow-live"])
 
 
 def test_gate_request_returns_replay_response_and_appends_ledger(tmp_path: Path) -> None:

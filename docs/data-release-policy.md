@@ -70,12 +70,19 @@ operator path is provenance for missing data, not durable provider evidence.
 Redaction is not a redistribution license and is not sufficient by itself to
 promote an artifact from restricted to public.
 
-## Harness exports
+The checked Harbor and Mastra integration packages in this public repository
+are explicit public release artifacts. Their generated runtime files remain
+content-hashed package outputs, so source formatting checks exclude those two
+directories while lint, package tests, and the public manifest still cover
+them.
 
-HUD, Harbor, OCI, or other harness projections are packaging operations, not
+## Runtime and harness exports
+
+Provider runtime bundles, Docker/Kubernetes injection artifacts, and legacy
+HUD, Harbor, or OCI world projections are packaging operations, not
 distribution reviews. Runtime-only compilation omits authoring evidence,
-captures, trajectories, and source manifests, but executable state and declared
-runtime data can still be provider-derived. An export therefore inherits the
-most restrictive classification of its source world. Operator-generated
-exports must stay outside the repository and public release unless every
-included artifact is separately cleared and classified.
+captures, tasks, and verifier inputs, but executable state and declared runtime
+data can still be provider-derived. An export therefore inherits the most
+restrictive classification of its source pack. Operator-generated exports must
+stay outside the repository and public release unless every included artifact
+is separately cleared and classified.

@@ -1,0 +1,201 @@
+[
+  {
+    "method": "GET",
+    "path": "/api/v2/incidents"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/services/definitions",
+    "query": {
+      "page[size]": "25"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/users",
+    "query": {
+      "page[size]": "25"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/on-call/schedules/10000000-0000-4000-8000-000000000000/on-call"
+  },
+  {
+    "method": "GET",
+    "path": "/crm/owners/2026-03",
+    "query": {
+      "limit": "100"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/crm/objects/2026-03/contacts",
+    "query": {
+      "associations": "companies,deals,tickets",
+      "limit": "100",
+      "properties": "email,firstname,lastname,hubspot_owner_id"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/crm/objects/2026-03/companies",
+    "query": {
+      "associations": "contacts,deals,tickets",
+      "limit": "100",
+      "properties": "name,domain,hubspot_owner_id"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/crm/objects/2026-03/0-3",
+    "query": {
+      "associations": "contacts,companies,tickets,line_items,quotes",
+      "limit": "100",
+      "properties": "dealname,amount,closedate,dealstage,pipeline,hubspot_owner_id"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/crm/objects/2026-03/tickets",
+    "query": {
+      "associations": "contacts,companies,deals",
+      "limit": "100",
+      "properties": "subject,hs_ticket_priority,hs_pipeline,hs_pipeline_stage,hubspot_owner_id"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/crm/objects/2026-03/tickets/40000",
+    "query": {
+      "associations": "contacts,companies,deals",
+      "properties": "subject,hs_ticket_priority,hs_pipeline,hs_pipeline_stage,hubspot_owner_id"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/rest/api/3/issue/OPS-100",
+    "query": {
+      "expand": "names,schema,renderedFields"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/rest/api/3/priority"
+  },
+  {
+    "method": "GET",
+    "path": "/rest/api/3/issue/OPS-100/transitions"
+  },
+  {
+    "method": "GET",
+    "path": "/rest/api/3/user/assignable/search",
+    "query": {
+      "maxResults": "50",
+      "project": "OPS",
+      "startAt": "0"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/rest/servicedeskapi/request/SUP-500"
+  },
+  {
+    "method": "GET",
+    "path": "/users"
+  },
+  {
+    "method": "GET",
+    "path": "/users/30000000-0000-4000-8000-000000000000/calendarView",
+    "query": {
+      "endDateTime": "2026-07-13T13:00:00Z",
+      "startDateTime": "2026-07-13T09:00:00Z"
+    }
+  },
+  {
+    "body": {
+      "fields": {
+        "assignee": {
+          "accountId": "712020:000000000000000000000000"
+        },
+        "priority": {
+          "id": "1"
+        }
+      }
+    },
+    "method": "PUT",
+    "path": "/rest/api/3/issue/OPS-100"
+  },
+  {
+    "method": "GET",
+    "path": "/rest/api/3/issue/OPS-100",
+    "query": {
+      "expand": "names,schema,renderedFields"
+    }
+  },
+  {
+    "body": {
+      "transition": {
+        "id": "3"
+      }
+    },
+    "method": "POST",
+    "path": "/rest/api/3/issue/OPS-100/transitions"
+  },
+  {
+    "method": "GET",
+    "path": "/rest/api/3/issue/OPS-100",
+    "query": {
+      "expand": "names,schema,renderedFields"
+    }
+  },
+  {
+    "body": {
+      "properties": {
+        "hs_pipeline_stage": "in_progress",
+        "hs_ticket_priority": "HIGH",
+        "hubspot_owner_id": "8000"
+      }
+    },
+    "method": "PATCH",
+    "path": "/crm/objects/2026-03/tickets/40000"
+  },
+  {
+    "method": "GET",
+    "path": "/crm/objects/2026-03/tickets/40000",
+    "query": {
+      "associations": "contacts,companies,deals",
+      "properties": "subject,hs_ticket_priority,hs_pipeline,hs_pipeline_stage,hubspot_owner_id"
+    }
+  },
+  {
+    "body": {
+      "body": {
+        "content": "Coordinate OPS-100 for checkout-api at 2026-07-13T10:30:00Z. JSM request SUP-500 is from ops@northstar-retail-00-0.example.test; Datadog severity is SEV-1; confirmed customer impact is true; 1 account(s) are linked and northstar-retail-00-0.example.test has the nearest open renewal. This is an internal draft only.",
+        "contentType": "Text"
+      },
+      "importance": "high",
+      "subject": "Internal coordination: OPS-100 / northstar-retail-00-0.example.test",
+      "toRecipients": [
+        {
+          "emailAddress": {
+            "address": "customer.success.00@operations.example.test",
+            "name": "Taylor Success 00"
+          }
+        },
+        {
+          "emailAddress": {
+            "address": "casey.chen@operations.example.test",
+            "name": "Casey Chen"
+          }
+        }
+      ]
+    },
+    "method": "POST",
+    "path": "/me/messages"
+  },
+  {
+    "method": "GET",
+    "path": "/me/messages/AAMkAGI-incident-coordination-00"
+  }
+]

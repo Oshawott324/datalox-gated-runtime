@@ -1,0 +1,5 @@
+- name: datalox_tool_agent
+  _target_: datalox_gated_runtime.integrations.verl.DataloxToolAgentLoop
+  pool_socket_path: /run/datalox/rollout-pool.sock
+  pool_token_path: /run/datalox/rollout-pool.sock.token
+  task_image: datalox-verl-provider-call:example

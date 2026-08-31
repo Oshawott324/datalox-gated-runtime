@@ -46,7 +46,7 @@ def test_agent_ready_http_flow(tmp_path: Path) -> None:
     )
     try:
         _wait_for_health(port, server)
-        with httpx.Client(base_url=f"http://127.0.0.1:{port}") as client:
+        with httpx.Client(base_url=f"http://127.0.0.1:{port}", trust_env=False) as client:
             assert client.get("/labstep/experiments/exp_current").status_code == 200
             assert client.get("/instrument/results/result_current").status_code == 200
             assert (
@@ -100,7 +100,11 @@ def _wait_for_health(port: int, server: subprocess.Popen[str]) -> None:
                 f"stderr:\n{stderr}"
             )
         try:
-            response = httpx.get(f"http://127.0.0.1:{port}/_datalox/health", timeout=0.5)
+            response = httpx.get(
+                f"http://127.0.0.1:{port}/_datalox/health",
+                timeout=0.5,
+                trust_env=False,
+            )
             if response.status_code == 200:
                 return
         except httpx.HTTPError:
