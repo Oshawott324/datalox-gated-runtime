@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import fcntl
 import hashlib
 import json
 import os
@@ -13,6 +12,11 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any, Literal
+
+if os.name == "posix":
+    import fcntl
+else:
+    fcntl = None  # type: ignore[assignment]
 
 _SCHEMA_VERSION = "datalox_session_event_export_v1"
 _SQLITE_APPLICATION_ID = 0x444C4556  # DLEV
@@ -338,6 +342,42 @@ def _open_private_lock(path: Path, *, exclusive_create: bool) -> Any:
     return os.fdopen(descriptor, "a+b")
 
 
+def _require_session_event_platform() -> None:
+    if fcntl is None:
+        raise SessionEventError(
+            "session_event_platform_unsupported",
+            "Secure composition event storage currently requires a POSIX host.",
+            {"platform": os.name},
+        )
+
+
+def _acquire_private_lock(handle: Any, *, path: Path) -> bool:
+    _require_session_event_platform()
+    try:
+        fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        return False
+    except OSError as exc:
+        raise SessionEventError(
+            "session_event_claim_lock_failed",
+            "The session claim lock could not be acquired.",
+            {"path": str(path)},
+        ) from exc
+    return True
+
+
+def _release_private_lock(handle: Any, *, path: Path) -> None:
+    _require_session_event_platform()
+    try:
+        fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+    except OSError as exc:
+        raise SessionEventError(
+            "session_event_claim_unlock_failed",
+            "The session claim lock could not be released.",
+            {"path": str(path)},
+        ) from exc
+
+
 class SessionEventEngine:
     """Persistent controller-side event delivery for one isolated provider session.
 
@@ -352,6 +392,7 @@ class SessionEventEngine:
         episode_seed: str,
         initial_time: datetime | str,
     ) -> None:
+        _require_session_event_platform()
         requested_path = Path(database_path).expanduser()
         if not requested_path.is_absolute():
             requested_path = Path.cwd() / requested_path
@@ -386,7 +427,22 @@ class SessionEventEngine:
         _private_directory(lock_dir, field_name="session claim directory")
         self._owner_lock_path = lock_dir / f"{self._owner_id}.lock"
         self._owner_lock = _open_private_lock(self._owner_lock_path, exclusive_create=True)
-        fcntl.flock(self._owner_lock.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        try:
+            acquired_owner_lock = _acquire_private_lock(
+                self._owner_lock, path=self._owner_lock_path
+            )
+        except SessionEventError:
+            self._owner_lock.close()
+            self._owner_lock_path.unlink(missing_ok=True)
+            raise
+        if not acquired_owner_lock:
+            self._owner_lock.close()
+            self._owner_lock_path.unlink(missing_ok=True)
+            raise SessionEventError(
+                "session_event_claim_lock_conflict",
+                "The new session owner lock is already held.",
+                {"path": str(self._owner_lock_path)},
+            )
         self._closed = False
         try:
             self._initialize()
@@ -412,9 +468,11 @@ class SessionEventEngine:
         if self._closed:
             return
         self._closed = True
-        fcntl.flock(self._owner_lock.fileno(), fcntl.LOCK_UN)
-        self._owner_lock.close()
-        self._owner_lock_path.unlink(missing_ok=True)
+        try:
+            _release_private_lock(self._owner_lock, path=self._owner_lock_path)
+        finally:
+            self._owner_lock.close()
+            self._owner_lock_path.unlink(missing_ok=True)
 
     def _connection(self) -> sqlite3.Connection:
         if self._closed:
@@ -654,9 +712,7 @@ class SessionEventEngine:
                     )
                 lock_path = lock_dir / f"{owner}.lock"
                 handle = _open_private_lock(lock_path, exclusive_create=False)
-                try:
-                    fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-                except BlockingIOError:
+                if not _acquire_private_lock(handle, path=lock_path):
                     handle.close()
                     continue
                 acquired.append((handle, lock_path))
@@ -725,9 +781,11 @@ class SessionEventEngine:
         finally:
             connection.close()
             for handle, lock_path in acquired:
-                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
-                handle.close()
-                lock_path.unlink(missing_ok=True)
+                try:
+                    _release_private_lock(handle, path=lock_path)
+                finally:
+                    handle.close()
+                    lock_path.unlink(missing_ok=True)
 
     @property
     def logical_time(self) -> str:

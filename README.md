@@ -194,6 +194,13 @@ the boundary and excluded from behavior evidence.
 Requirements: Python 3.11 or newer. No provider account, API key, network
 connection, or model is required.
 
+Core HTTP/MCP gating and offline world execution are package-smoked on Linux,
+macOS, and Windows. Secure composition event storage, transparent interception
+control sockets, and rollout-pool serving currently require a POSIX host; use a
+Linux container for those execution paths on Windows hosts. Unsupported
+composition storage fails before creating session files with the stable code
+`session_event_platform_unsupported`.
+
 ```bash
 git clone https://github.com/Oshawott324/datalox-gated-runtime.git
 cd datalox-gated-runtime

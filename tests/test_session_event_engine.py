@@ -1,21 +1,24 @@
 from __future__ import annotations
 
-import json
 import hashlib
+import json
 import os
 import stat
+import subprocess
+import sys
 import threading
 from pathlib import Path
 
 import jsonschema
 import pytest
 
+from datalox_gated_runtime.composition import events as event_module
 from datalox_gated_runtime.composition.events import (
-    DeliveryRequest,
-    DeliveryOutcome,
-    ExistingSourceDeliveryRequest,
     MAX_SESSION_EVENT_EXPORT_BYTES,
     MAX_SESSION_STORED_JSON_BYTES,
+    DeliveryOutcome,
+    DeliveryRequest,
+    ExistingSourceDeliveryRequest,
     SessionEventEngine,
     SessionEventError,
     SourceFanoutRequest,
@@ -515,6 +518,52 @@ def test_dead_in_flight_owner_reopens_as_unknown_not_retryable(tmp_path: Path) -
         assert reopened.run_due(lambda _: _delivered()) is None
         resolved = reopened.resolve_unknown(delivery, _delivered("provider-lookup"))
         assert resolved.delivery_state == "delivered"
+
+
+@pytest.mark.skipif(os.name != "posix", reason="secure event storage requires POSIX")
+def test_process_death_releases_owner_lock_and_recovers_claim(tmp_path: Path) -> None:
+    database = tmp_path / "events.sqlite3"
+    with SessionEventEngine(database, episode_seed="episode-0042", initial_time=START) as engine:
+        delivery = _delivery(engine, _source(engine))
+
+    child = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            "\n".join(
+                (
+                    "import os",
+                    "from pathlib import Path",
+                    "from datalox_gated_runtime.composition.events import SessionEventEngine",
+                    f"engine = SessionEventEngine(Path({str(database)!r}), "
+                    f"episode_seed='episode-0042', initial_time={START!r})",
+                    "engine.run_due(lambda _command: os._exit(23))",
+                )
+            ),
+        ],
+        check=False,
+    )
+    assert child.returncode == 23
+
+    with SessionEventEngine(database, episode_seed="episode-0042", initial_time=START) as reopened:
+        record = reopened.export()["deliveries"][0]
+        assert record["delivery_id"] == delivery
+        assert record["state"] == "unknown_completion"
+        assert record["attempts"][0]["error_code"] == "delivery_owner_lost"
+
+
+def test_unsupported_platform_fails_before_creating_storage(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(event_module, "fcntl", None)
+    database = tmp_path / "unsupported" / "events.sqlite3"
+
+    with pytest.raises(SessionEventError) as unsupported:
+        SessionEventEngine(database, episode_seed="episode-0042", initial_time=START)
+
+    assert unsupported.value.code == "session_event_platform_unsupported"
+    assert unsupported.value.details == {"platform": os.name}
+    assert not database.parent.exists()
 
 
 def test_two_live_engines_claim_each_delivery_once(tmp_path: Path) -> None:

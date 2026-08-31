@@ -92,8 +92,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "sha256:a0ca4904920ecca665c7f69fea7bcadd0509086c024c15a6c992fe798e8a6564",
-      "size": 23027
+      "sha256": "sha256:dbde3ddd73935bf57005d25b9f69b704523e5628e651896531af561f9458a66c",
+      "size": 23452
     },
     {
       "path": "SECURITY.md",
@@ -2117,8 +2117,8 @@
     },
     {
       "path": "pyproject.toml",
-      "sha256": "sha256:1139ef7692411827279a27a4bdc33a5b7e3018ff6c0809c8c7bbea4c4d339de2",
-      "size": 1832
+      "sha256": "sha256:b6e69b64919746c70602f6b28cf6f94b69bcb8ee3d647cb04b993fc0892684cc",
+      "size": 1863
     },
     {
       "path": "release/data-classification.json",
@@ -2607,8 +2607,8 @@
     },
     {
       "path": "src/datalox_gated_runtime/composition/events.py",
-      "sha256": "sha256:7bb60adccfaf16722c40b119a155e4e707448748d741128f5bd578c54e99b219",
-      "size": 110576
+      "sha256": "sha256:c6e0ff1a9c955e108b3f457d4c22e6afc91dbb2e06a5fd119bcc06c807b44dfe",
+      "size": 112439
     },
     {
       "path": "src/datalox_gated_runtime/composition/pack.py",
@@ -3662,8 +3662,8 @@
     },
     {
       "path": "tests/test_session_event_engine.py",
-      "sha256": "sha256:076e6a0e4e32960c266c49966c2bbd16c50409fd401f9d40d06ae3741df249ec",
-      "size": 30833
+      "sha256": "sha256:f6409c0a22eee3b735f2d2065de4683cf6b26a5cdceb877ce345346a5659e82d",
+      "size": 32824
     },
     {
       "path": "tests/test_session_lifecycle.py",
@@ -3742,5 +3742,5 @@
     }
   ],
   "schema_version": "datalox_public_source_manifest_v1",
-  "source_revision": "8adcac9975efdecc01fa54c952d5a5e081124201"
+  "source_revision": "171a6579eb29a756b577fad26554913d987c8a5e"
 }
