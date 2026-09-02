@@ -1,0 +1,158 @@
+{
+  "access_class": "self_hosted",
+  "auth_profile": "medusa_fixture",
+  "auth_profiles": {
+    "medusa_fixture": {
+      "inject": [
+        {
+          "env": "MEDUSA_PUBLISHABLE_API_KEY",
+          "in": "header",
+          "name": "x-publishable-api-key",
+          "scheme": ""
+        }
+      ],
+      "kind": "env_static"
+    }
+  },
+  "base_url": "http://127.0.0.1:9000",
+  "probe_requests": [
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "10"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "20"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "30"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "40"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "45"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "50"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "60"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "1",
+        "offset": "0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "100",
+        "offset": "0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "0",
+        "offset": "0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "-1",
+        "offset": "0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "invalid",
+        "offset": "0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "-1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "invalid"
+      }
+    }
+  ],
+  "probe_status": "allowed",
+  "provider_id": "medusa",
+  "rate_budget": {
+    "max_requests": 16,
+    "min_interval_seconds": 0.01
+  },
+  "safe_read_prefixes": [
+    "/store/products"
+  ],
+  "tos_note": "Pinned self-hosted Medusa fixture with 50 self-authored products. This authoring probe observes GET-only Store API offset pagination; authentication is injected from a local fixture key."
+}

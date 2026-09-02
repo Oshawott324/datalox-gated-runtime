@@ -1,0 +1,24 @@
+{
+  "schema_version": "datalox_verifiers_dirty_integration_upstream_contract_v1",
+  "dirty_integration": {
+    "repository": "https://github.com/buildok/dirty-integration",
+    "commit": "38f1c29ce9674e1640dacd23e421c0d4d55e3e97",
+    "license": "MIT",
+    "files": {
+      "dirty_integration/api.py": "sha256:910eeb5d32ce04e6bca29169a8313fa877f55f8cdc1e56490161ad93dda67715",
+      "dirty_integration/env.py": "sha256:22af7a5a4e95eb6e99d8caa53728cf4c6e7e43ea590c06d76aac36689f1be6c2",
+      "dirty_integration/faults.py": "sha256:b02bf86d96b3834e90c9a841fe6b3fa089d8887f10c5b3aa90d58e36b2fda886",
+      "tests/test_solvable.py": "sha256:4a218cd40985042a86a882943b5db54bf6ce00836266820a54c2ab2099be0cf7"
+    }
+  },
+  "verifiers": {
+    "repository": "https://github.com/PrimeIntellect-ai/verifiers",
+    "version": "0.3.1",
+    "surface": "legacy_v0_compatibility",
+    "files": {
+      "verifiers/__init__.py": "sha256:35af6390fed41d22950fc8d7dbdc3ffe90dd6a23c45c352ae8fe1f61520e046f",
+      "verifiers/legacy/envs/stateful_tool_env.py": "sha256:09574e832f530854dfed898435fbb7a99c0d4580b690a5f579ea63d7bb7c4067",
+      "verifiers/legacy/utils/env_utils.py": "sha256:db5244c7bf20cd1ae8fba785f3cb318bda6dde1a607ed4426535b76650171e9f"
+    }
+  }
+}

@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/delivery-intervention-trace-v1.schema.json",
+  "title": "Delivery intervention trace export",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "provider",
+    "admitted_read_operation_ids",
+    "admitted_read_operation_ids_sha256",
+    "policy_id",
+    "policy_version",
+    "policy_sha256",
+    "seed",
+    "enabled",
+    "next_request_index",
+    "terminal_failure",
+    "events"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_delivery_intervention_trace_v1"},
+    "provider": {"$ref": "#/$defs/providerBinding"},
+    "admitted_read_operation_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "admitted_read_operation_ids_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "policy_id": {"type": "string", "minLength": 1},
+    "policy_version": {"type": "string", "minLength": 1},
+    "policy_sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "seed": {"type": "string", "minLength": 1},
+    "enabled": {"type": "boolean"},
+    "next_request_index": {"type": "integer", "minimum": 1},
+    "terminal_failure": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "event_id",
+            "logical_request_index",
+            "stage",
+            "code",
+            "message"
+          ],
+          "properties": {
+            "event_id": {"type": "string", "pattern": "^intv_[0-9a-f]{24}$"},
+            "logical_request_index": {"type": "integer", "minimum": 1},
+            "stage": {
+              "enum": ["policy_decision", "base_dispatch", "post_response", "evidence_write"]
+            },
+            "code": {"type": "string", "minLength": 1},
+            "message": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "event_id",
+          "provider",
+          "admitted_read_operation_ids_sha256",
+          "policy_id",
+          "policy_version",
+          "policy_sha256",
+          "seed",
+          "logical_request_index",
+          "operation_id",
+          "enabled",
+          "decision",
+          "stage",
+          "applied",
+          "outcome",
+          "base",
+          "delivered",
+          "error"
+        ],
+        "properties": {
+          "event_id": {"type": "string", "pattern": "^intv_[0-9a-f]{24}$"},
+          "provider": {"$ref": "#/$defs/providerBinding"},
+          "admitted_read_operation_ids_sha256": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "policy_id": {"type": "string", "minLength": 1},
+          "policy_version": {"type": "string", "minLength": 1},
+          "policy_sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+          "seed": {"type": "string", "minLength": 1},
+          "logical_request_index": {"type": "integer", "minimum": 1},
+          "operation_id": {"type": "string", "minLength": 1},
+          "enabled": {"type": "boolean"},
+          "decision": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "decision_id",
+              "kind",
+              "action",
+              "action_sha256",
+              "source_base"
+            ],
+            "properties": {
+              "decision_id": {"type": ["string", "null"]},
+              "kind": {
+                "enum": ["none", "quota_response", "json_type_drift", "repeat_page"]
+              },
+              "action": {"type": ["object", "null"]},
+              "action_sha256": {
+                "type": ["string", "null"],
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "source_base": {
+                "oneOf": [
+                  {"type": "null"},
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["logical_request_index", "event_id", "response_sha256"],
+                    "properties": {
+                      "logical_request_index": {"type": "integer", "minimum": 1},
+                      "event_id": {"type": "string", "minLength": 1},
+                      "response_sha256": {
+                        "type": "string",
+                        "pattern": "^sha256:[0-9a-f]{64}$"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "stage": {
+            "enum": [
+              "none",
+              "pre_dispatch",
+              "policy_decision",
+              "base_dispatch",
+              "post_response",
+              "evidence_write"
+            ]
+          },
+          "applied": {"type": "boolean"},
+          "outcome": {"enum": ["delivered", "terminal_failure"]},
+          "base": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["invoked", "event_id", "response_sha256"],
+            "properties": {
+              "invoked": {"type": "boolean"},
+              "event_id": {"type": ["string", "null"]},
+              "response_sha256": {"type": ["string", "null"]}
+            }
+          },
+          "delivered": {
+            "oneOf": [
+              {"type": "null"},
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["kind", "response_sha256", "response"],
+                "properties": {
+                  "kind": {"const": "response"},
+                  "response_sha256": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "response": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["status_code", "headers", "body"],
+                    "properties": {
+                      "status_code": {"type": "integer", "minimum": 100, "maximum": 599},
+                      "headers": {
+                        "type": "object",
+                        "additionalProperties": {"type": "string"}
+                      },
+                      "body": {}
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "error": {
+            "oneOf": [
+              {"type": "null"},
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["code", "message"],
+                "properties": {
+                  "code": {"type": "string", "minLength": 1},
+                  "message": {"type": "string", "minLength": 1}
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "providerBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+          "provider_id",
+          "release_version",
+          "profile_id",
+          "bundle_version",
+          "release_config_sha256",
+          "provider_runtime_sha256",
+          "provider_admission_sha256",
+        "operation_contract_sha256"
+      ],
+      "properties": {
+          "provider_id": {"type": "string", "minLength": 1},
+          "release_version": {"type": "string", "minLength": 1},
+          "profile_id": {"type": "string", "minLength": 1},
+          "bundle_version": {"type": "string", "minLength": 1},
+          "release_config_sha256": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "provider_runtime_sha256": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "provider_admission_sha256": {
+            "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+          "operation_contract_sha256": {
+            "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    }
+  }
+}

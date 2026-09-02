@@ -1,0 +1,2103 @@
+{
+  "audit_rules": [],
+  "config_id": "medusa_store_pagination_v0",
+  "metadata": {
+    "fixture_data": "self_authored_synthetic",
+    "grounded_operation": "medusa.store.products.list",
+    "grounding_artifact_sha256": "sha256:baf6fca51d081ef18286d538f6f9aa81114f3f8dee9923bb21840482ef1aa79e",
+    "grounding_level": "G2",
+    "known_gaps": [
+      "Product field values and identifiers are self-authored.",
+      "Only the captured limit/offset query variants are executable.",
+      "Provider auth, headers, raw bytes, writes, rate limits, and production behavior are outside this release."
+    ],
+    "provider": "medusa",
+    "provider_version": "2.16.0",
+    "scope": "bounded_store_products_limit_offset"
+  },
+  "policy": {
+    "deny": [
+      {
+        "message": "This admitted provider release contains only the grounded Store product-list read slice.",
+        "method": "POST",
+        "path_prefix": "/store/products",
+        "reason_code": "medusa_pagination_read_only"
+      },
+      {
+        "message": "This admitted provider release contains only the grounded Store product-list read slice.",
+        "method": "PATCH",
+        "path_prefix": "/store/products",
+        "reason_code": "medusa_pagination_read_only"
+      },
+      {
+        "message": "This admitted provider release contains only the grounded Store product-list read slice.",
+        "method": "DELETE",
+        "path_prefix": "/store/products",
+        "reason_code": "medusa_pagination_read_only"
+      }
+    ],
+    "live_capture": [],
+    "shadow_write": []
+  },
+  "response_cases": [
+    {
+      "body": {
+        "count": 50,
+        "limit": 10,
+        "offset": 0,
+        "products": [
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-002",
+            "id": "prod_datalox_pagination_002",
+            "title": "Datalox Pagination Item 002",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1001,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_002",
+                "sku": "DATALOX-PAGINATION-002",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-015",
+            "id": "prod_datalox_pagination_015",
+            "title": "Datalox Pagination Item 015",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1014,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_015",
+                "sku": "DATALOX-PAGINATION-015",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-001",
+            "id": "prod_datalox_pagination_001",
+            "title": "Datalox Pagination Item 001",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1000,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_001",
+                "sku": "DATALOX-PAGINATION-001",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-007",
+            "id": "prod_datalox_pagination_007",
+            "title": "Datalox Pagination Item 007",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1006,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_007",
+                "sku": "DATALOX-PAGINATION-007",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-006",
+            "id": "prod_datalox_pagination_006",
+            "title": "Datalox Pagination Item 006",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1005,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_006",
+                "sku": "DATALOX-PAGINATION-006",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-008",
+            "id": "prod_datalox_pagination_008",
+            "title": "Datalox Pagination Item 008",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1007,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_008",
+                "sku": "DATALOX-PAGINATION-008",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-020",
+            "id": "prod_datalox_pagination_020",
+            "title": "Datalox Pagination Item 020",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1019,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_020",
+                "sku": "DATALOX-PAGINATION-020",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-021",
+            "id": "prod_datalox_pagination_021",
+            "title": "Datalox Pagination Item 021",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1020,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_021",
+                "sku": "DATALOX-PAGINATION-021",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-012",
+            "id": "prod_datalox_pagination_012",
+            "title": "Datalox Pagination Item 012",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1011,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_012",
+                "sku": "DATALOX-PAGINATION-012",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-003",
+            "id": "prod_datalox_pagination_003",
+            "title": "Datalox Pagination Item 003",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1002,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_003",
+                "sku": "DATALOX-PAGINATION-003",
+                "title": "Standard"
+              }
+            ]
+          }
+        ]
+      },
+      "case_id": "medusa:store.products:list:limit-10:offset-0",
+      "evidence_ref": "medusa-pagination-g2:0",
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "0"
+      },
+      "status_code": 200
+    },
+    {
+      "body": {
+        "count": 50,
+        "limit": 10,
+        "offset": 10,
+        "products": [
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-016",
+            "id": "prod_datalox_pagination_016",
+            "title": "Datalox Pagination Item 016",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1015,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_016",
+                "sku": "DATALOX-PAGINATION-016",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-005",
+            "id": "prod_datalox_pagination_005",
+            "title": "Datalox Pagination Item 005",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1004,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_005",
+                "sku": "DATALOX-PAGINATION-005",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-010",
+            "id": "prod_datalox_pagination_010",
+            "title": "Datalox Pagination Item 010",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1009,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_010",
+                "sku": "DATALOX-PAGINATION-010",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-011",
+            "id": "prod_datalox_pagination_011",
+            "title": "Datalox Pagination Item 011",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1010,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_011",
+                "sku": "DATALOX-PAGINATION-011",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-009",
+            "id": "prod_datalox_pagination_009",
+            "title": "Datalox Pagination Item 009",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1008,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_009",
+                "sku": "DATALOX-PAGINATION-009",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-004",
+            "id": "prod_datalox_pagination_004",
+            "title": "Datalox Pagination Item 004",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1003,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_004",
+                "sku": "DATALOX-PAGINATION-004",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-013",
+            "id": "prod_datalox_pagination_013",
+            "title": "Datalox Pagination Item 013",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1012,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_013",
+                "sku": "DATALOX-PAGINATION-013",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-022",
+            "id": "prod_datalox_pagination_022",
+            "title": "Datalox Pagination Item 022",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1021,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_022",
+                "sku": "DATALOX-PAGINATION-022",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-014",
+            "id": "prod_datalox_pagination_014",
+            "title": "Datalox Pagination Item 014",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1013,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_014",
+                "sku": "DATALOX-PAGINATION-014",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-019",
+            "id": "prod_datalox_pagination_019",
+            "title": "Datalox Pagination Item 019",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1018,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_019",
+                "sku": "DATALOX-PAGINATION-019",
+                "title": "Standard"
+              }
+            ]
+          }
+        ]
+      },
+      "case_id": "medusa:store.products:list:limit-10:offset-10",
+      "evidence_ref": "medusa-pagination-g2:2",
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "10"
+      },
+      "status_code": 200
+    },
+    {
+      "body": {
+        "count": 50,
+        "limit": 10,
+        "offset": 20,
+        "products": [
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-018",
+            "id": "prod_datalox_pagination_018",
+            "title": "Datalox Pagination Item 018",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1017,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_018",
+                "sku": "DATALOX-PAGINATION-018",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-017",
+            "id": "prod_datalox_pagination_017",
+            "title": "Datalox Pagination Item 017",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1016,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_017",
+                "sku": "DATALOX-PAGINATION-017",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-031",
+            "id": "prod_datalox_pagination_031",
+            "title": "Datalox Pagination Item 031",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1030,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_031",
+                "sku": "DATALOX-PAGINATION-031",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-025",
+            "id": "prod_datalox_pagination_025",
+            "title": "Datalox Pagination Item 025",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1024,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_025",
+                "sku": "DATALOX-PAGINATION-025",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-032",
+            "id": "prod_datalox_pagination_032",
+            "title": "Datalox Pagination Item 032",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1031,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_032",
+                "sku": "DATALOX-PAGINATION-032",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-028",
+            "id": "prod_datalox_pagination_028",
+            "title": "Datalox Pagination Item 028",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1027,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_028",
+                "sku": "DATALOX-PAGINATION-028",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-048",
+            "id": "prod_datalox_pagination_048",
+            "title": "Datalox Pagination Item 048",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1047,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_048",
+                "sku": "DATALOX-PAGINATION-048",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-023",
+            "id": "prod_datalox_pagination_023",
+            "title": "Datalox Pagination Item 023",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1022,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_023",
+                "sku": "DATALOX-PAGINATION-023",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-042",
+            "id": "prod_datalox_pagination_042",
+            "title": "Datalox Pagination Item 042",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1041,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_042",
+                "sku": "DATALOX-PAGINATION-042",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-027",
+            "id": "prod_datalox_pagination_027",
+            "title": "Datalox Pagination Item 027",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1026,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_027",
+                "sku": "DATALOX-PAGINATION-027",
+                "title": "Standard"
+              }
+            ]
+          }
+        ]
+      },
+      "case_id": "medusa:store.products:list:limit-10:offset-20",
+      "evidence_ref": "medusa-pagination-g2:3",
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "20"
+      },
+      "status_code": 200
+    },
+    {
+      "body": {
+        "count": 50,
+        "limit": 10,
+        "offset": 30,
+        "products": [
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-047",
+            "id": "prod_datalox_pagination_047",
+            "title": "Datalox Pagination Item 047",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1046,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_047",
+                "sku": "DATALOX-PAGINATION-047",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-030",
+            "id": "prod_datalox_pagination_030",
+            "title": "Datalox Pagination Item 030",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1029,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_030",
+                "sku": "DATALOX-PAGINATION-030",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-049",
+            "id": "prod_datalox_pagination_049",
+            "title": "Datalox Pagination Item 049",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1048,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_049",
+                "sku": "DATALOX-PAGINATION-049",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-035",
+            "id": "prod_datalox_pagination_035",
+            "title": "Datalox Pagination Item 035",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1034,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_035",
+                "sku": "DATALOX-PAGINATION-035",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-041",
+            "id": "prod_datalox_pagination_041",
+            "title": "Datalox Pagination Item 041",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1040,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_041",
+                "sku": "DATALOX-PAGINATION-041",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-026",
+            "id": "prod_datalox_pagination_026",
+            "title": "Datalox Pagination Item 026",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1025,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_026",
+                "sku": "DATALOX-PAGINATION-026",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-024",
+            "id": "prod_datalox_pagination_024",
+            "title": "Datalox Pagination Item 024",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1023,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_024",
+                "sku": "DATALOX-PAGINATION-024",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-043",
+            "id": "prod_datalox_pagination_043",
+            "title": "Datalox Pagination Item 043",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1042,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_043",
+                "sku": "DATALOX-PAGINATION-043",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-034",
+            "id": "prod_datalox_pagination_034",
+            "title": "Datalox Pagination Item 034",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1033,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_034",
+                "sku": "DATALOX-PAGINATION-034",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-045",
+            "id": "prod_datalox_pagination_045",
+            "title": "Datalox Pagination Item 045",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1044,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_045",
+                "sku": "DATALOX-PAGINATION-045",
+                "title": "Standard"
+              }
+            ]
+          }
+        ]
+      },
+      "case_id": "medusa:store.products:list:limit-10:offset-30",
+      "evidence_ref": "medusa-pagination-g2:4",
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "30"
+      },
+      "status_code": 200
+    },
+    {
+      "body": {
+        "count": 50,
+        "limit": 10,
+        "offset": 40,
+        "products": [
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-044",
+            "id": "prod_datalox_pagination_044",
+            "title": "Datalox Pagination Item 044",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1043,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_044",
+                "sku": "DATALOX-PAGINATION-044",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-046",
+            "id": "prod_datalox_pagination_046",
+            "title": "Datalox Pagination Item 046",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1045,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_046",
+                "sku": "DATALOX-PAGINATION-046",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-033",
+            "id": "prod_datalox_pagination_033",
+            "title": "Datalox Pagination Item 033",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1032,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_033",
+                "sku": "DATALOX-PAGINATION-033",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-038",
+            "id": "prod_datalox_pagination_038",
+            "title": "Datalox Pagination Item 038",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1037,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_038",
+                "sku": "DATALOX-PAGINATION-038",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-037",
+            "id": "prod_datalox_pagination_037",
+            "title": "Datalox Pagination Item 037",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1036,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_037",
+                "sku": "DATALOX-PAGINATION-037",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-050",
+            "id": "prod_datalox_pagination_050",
+            "title": "Datalox Pagination Item 050",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1049,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_050",
+                "sku": "DATALOX-PAGINATION-050",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-029",
+            "id": "prod_datalox_pagination_029",
+            "title": "Datalox Pagination Item 029",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1028,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_029",
+                "sku": "DATALOX-PAGINATION-029",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-036",
+            "id": "prod_datalox_pagination_036",
+            "title": "Datalox Pagination Item 036",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1035,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_036",
+                "sku": "DATALOX-PAGINATION-036",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-039",
+            "id": "prod_datalox_pagination_039",
+            "title": "Datalox Pagination Item 039",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1038,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_039",
+                "sku": "DATALOX-PAGINATION-039",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-040",
+            "id": "prod_datalox_pagination_040",
+            "title": "Datalox Pagination Item 040",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1039,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_040",
+                "sku": "DATALOX-PAGINATION-040",
+                "title": "Standard"
+              }
+            ]
+          }
+        ]
+      },
+      "case_id": "medusa:store.products:list:limit-10:offset-40",
+      "evidence_ref": "medusa-pagination-g2:5",
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "40"
+      },
+      "status_code": 200
+    },
+    {
+      "body": {
+        "count": 50,
+        "limit": 10,
+        "offset": 45,
+        "products": [
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-050",
+            "id": "prod_datalox_pagination_050",
+            "title": "Datalox Pagination Item 050",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1049,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_050",
+                "sku": "DATALOX-PAGINATION-050",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-029",
+            "id": "prod_datalox_pagination_029",
+            "title": "Datalox Pagination Item 029",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1028,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_029",
+                "sku": "DATALOX-PAGINATION-029",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-036",
+            "id": "prod_datalox_pagination_036",
+            "title": "Datalox Pagination Item 036",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1035,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_036",
+                "sku": "DATALOX-PAGINATION-036",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-039",
+            "id": "prod_datalox_pagination_039",
+            "title": "Datalox Pagination Item 039",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1038,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_039",
+                "sku": "DATALOX-PAGINATION-039",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-040",
+            "id": "prod_datalox_pagination_040",
+            "title": "Datalox Pagination Item 040",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1039,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_040",
+                "sku": "DATALOX-PAGINATION-040",
+                "title": "Standard"
+              }
+            ]
+          }
+        ]
+      },
+      "case_id": "medusa:store.products:list:limit-10:offset-45",
+      "evidence_ref": "medusa-pagination-g2:6",
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "45"
+      },
+      "status_code": 200
+    },
+    {
+      "body": {
+        "count": 50,
+        "limit": 10,
+        "offset": 50,
+        "products": []
+      },
+      "case_id": "medusa:store.products:list:limit-10:offset-50",
+      "evidence_ref": "medusa-pagination-g2:7",
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "50"
+      },
+      "status_code": 200
+    },
+    {
+      "body": {
+        "count": 50,
+        "limit": 10,
+        "offset": 60,
+        "products": []
+      },
+      "case_id": "medusa:store.products:list:limit-10:offset-60",
+      "evidence_ref": "medusa-pagination-g2:8",
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "60"
+      },
+      "status_code": 200
+    },
+    {
+      "body": {
+        "count": 50,
+        "limit": 1,
+        "offset": 0,
+        "products": [
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-002",
+            "id": "prod_datalox_pagination_002",
+            "title": "Datalox Pagination Item 002",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1001,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_002",
+                "sku": "DATALOX-PAGINATION-002",
+                "title": "Standard"
+              }
+            ]
+          }
+        ]
+      },
+      "case_id": "medusa:store.products:list:limit-1:offset-0",
+      "evidence_ref": "medusa-pagination-g2:9",
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "1",
+        "offset": "0"
+      },
+      "status_code": 200
+    },
+    {
+      "body": {
+        "count": 50,
+        "limit": 100,
+        "offset": 0,
+        "products": [
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-002",
+            "id": "prod_datalox_pagination_002",
+            "title": "Datalox Pagination Item 002",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1001,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_002",
+                "sku": "DATALOX-PAGINATION-002",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-015",
+            "id": "prod_datalox_pagination_015",
+            "title": "Datalox Pagination Item 015",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1014,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_015",
+                "sku": "DATALOX-PAGINATION-015",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-001",
+            "id": "prod_datalox_pagination_001",
+            "title": "Datalox Pagination Item 001",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1000,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_001",
+                "sku": "DATALOX-PAGINATION-001",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-007",
+            "id": "prod_datalox_pagination_007",
+            "title": "Datalox Pagination Item 007",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1006,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_007",
+                "sku": "DATALOX-PAGINATION-007",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-006",
+            "id": "prod_datalox_pagination_006",
+            "title": "Datalox Pagination Item 006",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1005,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_006",
+                "sku": "DATALOX-PAGINATION-006",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-008",
+            "id": "prod_datalox_pagination_008",
+            "title": "Datalox Pagination Item 008",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1007,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_008",
+                "sku": "DATALOX-PAGINATION-008",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-020",
+            "id": "prod_datalox_pagination_020",
+            "title": "Datalox Pagination Item 020",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1019,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_020",
+                "sku": "DATALOX-PAGINATION-020",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-021",
+            "id": "prod_datalox_pagination_021",
+            "title": "Datalox Pagination Item 021",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1020,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_021",
+                "sku": "DATALOX-PAGINATION-021",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-012",
+            "id": "prod_datalox_pagination_012",
+            "title": "Datalox Pagination Item 012",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1011,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_012",
+                "sku": "DATALOX-PAGINATION-012",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-003",
+            "id": "prod_datalox_pagination_003",
+            "title": "Datalox Pagination Item 003",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1002,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_003",
+                "sku": "DATALOX-PAGINATION-003",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-016",
+            "id": "prod_datalox_pagination_016",
+            "title": "Datalox Pagination Item 016",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1015,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_016",
+                "sku": "DATALOX-PAGINATION-016",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-005",
+            "id": "prod_datalox_pagination_005",
+            "title": "Datalox Pagination Item 005",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1004,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_005",
+                "sku": "DATALOX-PAGINATION-005",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-010",
+            "id": "prod_datalox_pagination_010",
+            "title": "Datalox Pagination Item 010",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1009,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_010",
+                "sku": "DATALOX-PAGINATION-010",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-011",
+            "id": "prod_datalox_pagination_011",
+            "title": "Datalox Pagination Item 011",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1010,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_011",
+                "sku": "DATALOX-PAGINATION-011",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-009",
+            "id": "prod_datalox_pagination_009",
+            "title": "Datalox Pagination Item 009",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1008,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_009",
+                "sku": "DATALOX-PAGINATION-009",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-004",
+            "id": "prod_datalox_pagination_004",
+            "title": "Datalox Pagination Item 004",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1003,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_004",
+                "sku": "DATALOX-PAGINATION-004",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-013",
+            "id": "prod_datalox_pagination_013",
+            "title": "Datalox Pagination Item 013",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1012,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_013",
+                "sku": "DATALOX-PAGINATION-013",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-022",
+            "id": "prod_datalox_pagination_022",
+            "title": "Datalox Pagination Item 022",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1021,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_022",
+                "sku": "DATALOX-PAGINATION-022",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-014",
+            "id": "prod_datalox_pagination_014",
+            "title": "Datalox Pagination Item 014",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1013,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_014",
+                "sku": "DATALOX-PAGINATION-014",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-019",
+            "id": "prod_datalox_pagination_019",
+            "title": "Datalox Pagination Item 019",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1018,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_019",
+                "sku": "DATALOX-PAGINATION-019",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-018",
+            "id": "prod_datalox_pagination_018",
+            "title": "Datalox Pagination Item 018",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1017,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_018",
+                "sku": "DATALOX-PAGINATION-018",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-017",
+            "id": "prod_datalox_pagination_017",
+            "title": "Datalox Pagination Item 017",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1016,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_017",
+                "sku": "DATALOX-PAGINATION-017",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-031",
+            "id": "prod_datalox_pagination_031",
+            "title": "Datalox Pagination Item 031",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1030,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_031",
+                "sku": "DATALOX-PAGINATION-031",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-025",
+            "id": "prod_datalox_pagination_025",
+            "title": "Datalox Pagination Item 025",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1024,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_025",
+                "sku": "DATALOX-PAGINATION-025",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-032",
+            "id": "prod_datalox_pagination_032",
+            "title": "Datalox Pagination Item 032",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1031,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_032",
+                "sku": "DATALOX-PAGINATION-032",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-028",
+            "id": "prod_datalox_pagination_028",
+            "title": "Datalox Pagination Item 028",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1027,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_028",
+                "sku": "DATALOX-PAGINATION-028",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-048",
+            "id": "prod_datalox_pagination_048",
+            "title": "Datalox Pagination Item 048",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1047,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_048",
+                "sku": "DATALOX-PAGINATION-048",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-023",
+            "id": "prod_datalox_pagination_023",
+            "title": "Datalox Pagination Item 023",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1022,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_023",
+                "sku": "DATALOX-PAGINATION-023",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-042",
+            "id": "prod_datalox_pagination_042",
+            "title": "Datalox Pagination Item 042",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1041,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_042",
+                "sku": "DATALOX-PAGINATION-042",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-027",
+            "id": "prod_datalox_pagination_027",
+            "title": "Datalox Pagination Item 027",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1026,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_027",
+                "sku": "DATALOX-PAGINATION-027",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-047",
+            "id": "prod_datalox_pagination_047",
+            "title": "Datalox Pagination Item 047",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1046,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_047",
+                "sku": "DATALOX-PAGINATION-047",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-030",
+            "id": "prod_datalox_pagination_030",
+            "title": "Datalox Pagination Item 030",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1029,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_030",
+                "sku": "DATALOX-PAGINATION-030",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-049",
+            "id": "prod_datalox_pagination_049",
+            "title": "Datalox Pagination Item 049",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1048,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_049",
+                "sku": "DATALOX-PAGINATION-049",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-035",
+            "id": "prod_datalox_pagination_035",
+            "title": "Datalox Pagination Item 035",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1034,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_035",
+                "sku": "DATALOX-PAGINATION-035",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-041",
+            "id": "prod_datalox_pagination_041",
+            "title": "Datalox Pagination Item 041",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1040,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_041",
+                "sku": "DATALOX-PAGINATION-041",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-026",
+            "id": "prod_datalox_pagination_026",
+            "title": "Datalox Pagination Item 026",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1025,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_026",
+                "sku": "DATALOX-PAGINATION-026",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-024",
+            "id": "prod_datalox_pagination_024",
+            "title": "Datalox Pagination Item 024",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1023,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_024",
+                "sku": "DATALOX-PAGINATION-024",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-043",
+            "id": "prod_datalox_pagination_043",
+            "title": "Datalox Pagination Item 043",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1042,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_043",
+                "sku": "DATALOX-PAGINATION-043",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-034",
+            "id": "prod_datalox_pagination_034",
+            "title": "Datalox Pagination Item 034",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1033,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_034",
+                "sku": "DATALOX-PAGINATION-034",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-045",
+            "id": "prod_datalox_pagination_045",
+            "title": "Datalox Pagination Item 045",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1044,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_045",
+                "sku": "DATALOX-PAGINATION-045",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-044",
+            "id": "prod_datalox_pagination_044",
+            "title": "Datalox Pagination Item 044",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1043,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_044",
+                "sku": "DATALOX-PAGINATION-044",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-046",
+            "id": "prod_datalox_pagination_046",
+            "title": "Datalox Pagination Item 046",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1045,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_046",
+                "sku": "DATALOX-PAGINATION-046",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-033",
+            "id": "prod_datalox_pagination_033",
+            "title": "Datalox Pagination Item 033",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1032,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_033",
+                "sku": "DATALOX-PAGINATION-033",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-038",
+            "id": "prod_datalox_pagination_038",
+            "title": "Datalox Pagination Item 038",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1037,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_038",
+                "sku": "DATALOX-PAGINATION-038",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-037",
+            "id": "prod_datalox_pagination_037",
+            "title": "Datalox Pagination Item 037",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1036,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_037",
+                "sku": "DATALOX-PAGINATION-037",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-050",
+            "id": "prod_datalox_pagination_050",
+            "title": "Datalox Pagination Item 050",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1049,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_050",
+                "sku": "DATALOX-PAGINATION-050",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-029",
+            "id": "prod_datalox_pagination_029",
+            "title": "Datalox Pagination Item 029",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1028,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_029",
+                "sku": "DATALOX-PAGINATION-029",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-036",
+            "id": "prod_datalox_pagination_036",
+            "title": "Datalox Pagination Item 036",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1035,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_036",
+                "sku": "DATALOX-PAGINATION-036",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-039",
+            "id": "prod_datalox_pagination_039",
+            "title": "Datalox Pagination Item 039",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1038,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_039",
+                "sku": "DATALOX-PAGINATION-039",
+                "title": "Standard"
+              }
+            ]
+          },
+          {
+            "description": "Self-authored synthetic product for a bounded Medusa pagination fixture.",
+            "handle": "datalox-pagination-item-040",
+            "id": "prod_datalox_pagination_040",
+            "title": "Datalox Pagination Item 040",
+            "variants": [
+              {
+                "calculated_price": {
+                  "calculated_amount": 1039,
+                  "currency_code": "usd"
+                },
+                "id": "variant_datalox_pagination_040",
+                "sku": "DATALOX-PAGINATION-040",
+                "title": "Standard"
+              }
+            ]
+          }
+        ]
+      },
+      "case_id": "medusa:store.products:list:limit-100:offset-0",
+      "evidence_ref": "medusa-pagination-g2:10",
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "100",
+        "offset": "0"
+      },
+      "status_code": 200
+    },
+    {
+      "body": {
+        "count": 50,
+        "limit": 0,
+        "offset": 0,
+        "products": []
+      },
+      "case_id": "medusa:store.products:list:limit-0:offset-0",
+      "evidence_ref": "medusa-pagination-g2:11",
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "0",
+        "offset": "0"
+      },
+      "status_code": 200
+    },
+    {
+      "body": {
+        "code": "unknown_error",
+        "message": "The pagination parameter is outside this fixture's supported range.",
+        "type": "unknown_error"
+      },
+      "case_id": "medusa:store.products:list:limit--1:offset-0",
+      "evidence_ref": "medusa-pagination-g2:12",
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "-1",
+        "offset": "0"
+      },
+      "status_code": 500
+    },
+    {
+      "body": {
+        "message": "Invalid pagination parameter.",
+        "type": "invalid_data"
+      },
+      "case_id": "medusa:store.products:list:limit-invalid:offset-0",
+      "evidence_ref": "medusa-pagination-g2:13",
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "invalid",
+        "offset": "0"
+      },
+      "status_code": 400
+    },
+    {
+      "body": {
+        "code": "unknown_error",
+        "message": "The pagination parameter is outside this fixture's supported range.",
+        "type": "unknown_error"
+      },
+      "case_id": "medusa:store.products:list:limit-10:offset--1",
+      "evidence_ref": "medusa-pagination-g2:14",
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "-1"
+      },
+      "status_code": 500
+    },
+    {
+      "body": {
+        "message": "Invalid pagination parameter.",
+        "type": "invalid_data"
+      },
+      "case_id": "medusa:store.products:list:limit-10:offset-invalid",
+      "evidence_ref": "medusa-pagination-g2:15",
+      "method": "GET",
+      "path": "/store/products",
+      "query": {
+        "limit": "10",
+        "offset": "invalid"
+      },
+      "status_code": 400
+    }
+  ]
+}

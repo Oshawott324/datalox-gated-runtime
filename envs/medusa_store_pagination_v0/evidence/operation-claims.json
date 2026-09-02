@@ -1,0 +1,255 @@
+{
+  "behavior_probes": [
+    {
+      "probe_id": "medusa_store_products_pagination",
+      "reset_profile": "default",
+      "steps": [
+        {
+          "covers": [
+            {
+              "behavior": "success",
+              "operation_id": "medusa.store.products.list"
+            }
+          ],
+          "expected_decision_kind": "replay",
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.products.list",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {},
+            "method": "GET",
+            "path": "/store/products",
+            "query": {
+              "limit": "10",
+              "offset": "0"
+            },
+            "scheme": "https"
+          },
+          "step_id": "first_page"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "duplicate",
+              "operation_id": "medusa.store.products.list"
+            }
+          ],
+          "expected_decision_kind": "replay",
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.products.list",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {},
+            "method": "GET",
+            "path": "/store/products",
+            "query": {
+              "limit": "10",
+              "offset": "0"
+            },
+            "scheme": "https"
+          },
+          "step_id": "identical_repeat"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "pagination",
+              "operation_id": "medusa.store.products.list"
+            }
+          ],
+          "expected_decision_kind": "replay",
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.products.list",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {},
+            "method": "GET",
+            "path": "/store/products",
+            "query": {
+              "limit": "10",
+              "offset": "20"
+            },
+            "scheme": "https"
+          },
+          "step_id": "middle_page"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "pagination",
+              "operation_id": "medusa.store.products.list"
+            }
+          ],
+          "expected_decision_kind": "replay",
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.products.list",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {},
+            "method": "GET",
+            "path": "/store/products",
+            "query": {
+              "limit": "10",
+              "offset": "45"
+            },
+            "scheme": "https"
+          },
+          "step_id": "terminal_partial_page"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "pagination",
+              "operation_id": "medusa.store.products.list"
+            }
+          ],
+          "expected_decision_kind": "replay",
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.products.list",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {},
+            "method": "GET",
+            "path": "/store/products",
+            "query": {
+              "limit": "10",
+              "offset": "60"
+            },
+            "scheme": "https"
+          },
+          "step_id": "beyond_terminal_page"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "failure",
+              "operation_id": "medusa.store.products.list"
+            }
+          ],
+          "expected_decision_kind": "replay",
+          "expected_status_code": 400,
+          "operation_id": "medusa.store.products.list",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {},
+            "method": "GET",
+            "path": "/store/products",
+            "query": {
+              "limit": "invalid",
+              "offset": "0"
+            },
+            "scheme": "https"
+          },
+          "step_id": "invalid_limit"
+        }
+      ]
+    }
+  ],
+  "bundle_version": "2.16.0-pagination-v0",
+  "evidence_sources": [
+    {
+      "artifact_ref": "observations.json",
+      "artifact_sha256": "sha256:baf6fca51d081ef18286d538f6f9aa81114f3f8dee9923bb21840482ef1aa79e",
+      "distribution_label": "public",
+      "evidence_id": "medusa_pagination_g2",
+      "grounding_level": "G2_SELF_HOSTED_REFERENCE",
+      "observed_at": "2026-09-01T12:24:33Z",
+      "rights_basis": "Self-authored factual measurement summary from a locally deployed MIT-licensed Medusa 2.16.0 reference system; it contains no provider payload bytes, response text, credentials, or provider-generated identifiers.",
+      "valid_through": "2027-09-01T12:24:33Z"
+    }
+  ],
+  "operations": [
+    {
+      "behavior_program": "medusa_store_products_limit_offset",
+      "covered_behaviors": [
+        "success",
+        "failure",
+        "duplicate",
+        "pagination"
+      ],
+      "grounding": {
+        "evidence_refs": [
+          "medusa_pagination_g2"
+        ],
+        "level": "G2_SELF_HOSTED_REFERENCE"
+      },
+      "mutability": "read",
+      "native_surface": {
+        "authority": "api.medusa.local",
+        "method": "GET",
+        "path_template": "/store/products",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "medusa.store.products.list",
+      "rights": {
+        "behavior_distribution_basis": "Runtime values and response text are self-authored. Pagination semantics are factual measurements from an MIT-licensed reference deployment, recorded without provider payload bytes or identifiers.",
+        "distribution_label": "public"
+      },
+      "state_effects": []
+    }
+  ],
+  "provider_id": "medusa",
+  "provider_invariants": [
+    {
+      "expected": "gate_config_v1",
+      "operator": "equals",
+      "pointer": "/protocol",
+      "predicate_id": "runtime_protocol_is_gate_config_v1",
+      "source": "provider_state"
+    }
+  ],
+  "receipt_predicates": [
+    {
+      "expected_type": "object",
+      "operator": "type",
+      "pointer": "",
+      "predicate_id": "response_is_object",
+      "source": "response_body"
+    },
+    {
+      "expected_type": "array",
+      "operator": "type",
+      "pointer": "/events",
+      "predicate_id": "call_was_recorded",
+      "source": "call_evidence"
+    }
+  ],
+  "reset_profiles": [
+    {
+      "kind": "compiled_seed",
+      "profile_id": "default"
+    }
+  ],
+  "schema_version": "datalox_provider_operation_claims_v1"
+}

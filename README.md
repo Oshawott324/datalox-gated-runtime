@@ -11,6 +11,7 @@ returns stateful simulated behavior without contacting that provider.**
 [Provider packs](docs/provider-packs.md) ·
 [Provider foundry](docs/provider-foundry.md) ·
 [Transparent interception](docs/transparent-interception.md) ·
+[Delivery interventions](docs/delivery-interventions.md) ·
 [Rollout information boundary](docs/rollout-information-boundary.md) ·
 [Behavior grounding](docs/provider-behavior-grounding.md) ·
 [Behavior harvest](docs/provider-behavior-grounding.md#current-specialized-harvest-wave) ·
@@ -188,6 +189,13 @@ policy or an explicit mapping from provider-native credential commitments to
 declared roles lives in the runtime bundle. Agent requests containing internal
 `x-datalox-*` control headers are rejected; credentials are consumed at
 the boundary and excluded from behavior evidence.
+
+For controlled robustness experiments, a consumer may add a switchable seeded
+[delivery intervention](docs/delivery-interventions.md) after an admitted
+provider response. The provider ledger remains the grounded base record; a
+separate trace records the counterfactual or applied intervention and the exact
+observation delivered to the agent. Datalox applies the consumer-owned policy
+without choosing its distribution, retrying, or normalizing its output.
 
 ## Verify the transparent runtime offline
 

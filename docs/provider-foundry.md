@@ -22,6 +22,11 @@ The user still owns the task, agent, world-level verifier, reward, and training
 loop. Datalox owns the provider-shaped behavior, reset boundary, causal
 delivery machinery, and trustworthy provider/composition evidence.
 
+Consumer-owned adversarial delivery policy is a separate optional layer after
+provider execution. It can alter what the agent receives for an experiment, but
+it cannot change the Provider Release's grounding or admission. See
+[`Delivery Interventions`](delivery-interventions.md).
+
 For rollout consumers, those owned components remain separated by the
 [`rollout information boundary`](rollout-information-boundary.md): the agent
 starts with objectives and visible constraints, the environment reveals

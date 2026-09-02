@@ -92,8 +92,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "sha256:dbde3ddd73935bf57005d25b9f69b704523e5628e651896531af561f9458a66c",
-      "size": 23452
+      "sha256": "sha256:44ad66ad5ad0f85b24acb7bcd3d655a4cdca095edb8052928dc3816a7ac9b2c8",
+      "size": 23970
     },
     {
       "path": "SECURITY.md",
@@ -156,6 +156,11 @@
       "size": 3765
     },
     {
+      "path": "docs/delivery-interventions.md",
+      "sha256": "sha256:bc51f23b48ce46c6f1095534802d0d1d311f7f352a25ca191331de86ed47b07f",
+      "size": 5209
+    },
+    {
       "path": "docs/envfactory-provider-projection.md",
       "sha256": "sha256:06fca1a16faaa794ea03c97b5d660341b1e162eb235814762e374bbd5def5928",
       "size": 4901
@@ -177,8 +182,8 @@
     },
     {
       "path": "docs/provider-foundry.md",
-      "sha256": "sha256:16c0228138f425c75b19d96618022c332d98530bde57a1dd7fbb482006f84a88",
-      "size": 8010
+      "sha256": "sha256:de891cef70e2a6e2ccb6e2b24d3ae720c47710e80820759b10d3c20e7df31a77",
+      "size": 8292
     },
     {
       "path": "docs/provider-packs.md",
@@ -197,8 +202,8 @@
     },
     {
       "path": "docs/reports/provider-runtime-coverage.json",
-      "sha256": "sha256:1fe7809b5ab393ac62640331886a87d9b9adb43def4eb7f9b784b7f635c6b564",
-      "size": 14705
+      "sha256": "sha256:80b1a501d3688eb46c988d1b624424872c20b63eb2aea1186c7e58a2184132d7",
+      "size": 14994
     },
     {
       "path": "docs/rollout-information-boundary.md",
@@ -217,8 +222,13 @@
     },
     {
       "path": "docs/transparent-interception.md",
-      "sha256": "sha256:26cc37711233f5120a53d3e87ebd7462d87e8bc0dd727b54e7e4bd29f359fa88",
-      "size": 11885
+      "sha256": "sha256:c7f81b6e056704dec200cb04c3c1f4c6bbaba217b57f0f151df3bd2c1800b10e",
+      "size": 12434
+    },
+    {
+      "path": "docs/verifiers-dirty-integration.md",
+      "sha256": "sha256:0faab8c0bc5a462f1ede4e092c9637fd717d44bef125d73abd6a654990bfe5e5",
+      "size": 4748
     },
     {
       "path": "docs/verl-grpo-rollouts.md",
@@ -404,6 +414,71 @@
       "path": "envs/incident_customer_coordination_v0/world_admission.json",
       "sha256": "sha256:d3b8a7702b16aa8c3b3291ea90594a1b1466962a6b1c721b36d29375afacc51b",
       "size": 11863
+    },
+    {
+      "path": "envs/medusa_store_pagination_v0/evidence/observations.json",
+      "sha256": "sha256:baf6fca51d081ef18286d538f6f9aa81114f3f8dee9923bb21840482ef1aa79e",
+      "size": 14981
+    },
+    {
+      "path": "envs/medusa_store_pagination_v0/evidence/operation-claims.json",
+      "sha256": "sha256:2fd8f41dbc3bdc2b6b6c34e3e47a20def674224ce85363aa78f0d7e6d75b4de7",
+      "size": 7451
+    },
+    {
+      "path": "envs/medusa_store_pagination_v0/evidence/provenance.json",
+      "sha256": "sha256:74087ce3c315fc267d9268f7ded2f344a127a90784463b1b804743df4eceaae8",
+      "size": 2985
+    },
+    {
+      "path": "envs/medusa_store_pagination_v0/gate_config.json",
+      "sha256": "sha256:101b8ba6a62ed1d7f6c8b7e8ea802fd6919e5cf5d5423f2152d9778b3eb63a69",
+      "size": 75287
+    },
+    {
+      "path": "envs/medusa_store_pagination_v0/provider-admission.json",
+      "sha256": "sha256:2f63dc62a258933a2b8f6658285c4501c6b6066eb1df25d13c53942def6e96ca",
+      "size": 3177
+    },
+    {
+      "path": "envs/medusa_store_pagination_v0/provider-release/blobs/sha256/1be0512e786332e78fcb8679f8f94f6254d8fafed0f0e285e76bb0347466d79d",
+      "sha256": "sha256:1be0512e786332e78fcb8679f8f94f6254d8fafed0f0e285e76bb0347466d79d",
+      "size": 3247
+    },
+    {
+      "path": "envs/medusa_store_pagination_v0/provider-release/blobs/sha256/727c7b04ebc16d24a2f30a6f898a36369d625a3382fe41478bf9881143f80239",
+      "sha256": "sha256:727c7b04ebc16d24a2f30a6f898a36369d625a3382fe41478bf9881143f80239",
+      "size": 92160
+    },
+    {
+      "path": "envs/medusa_store_pagination_v0/provider-release/blobs/sha256/d565982dbb8221c1fd9923fb9537330a992f5d77b49fcef51640aa85bfea4a3e",
+      "sha256": "sha256:d565982dbb8221c1fd9923fb9537330a992f5d77b49fcef51640aa85bfea4a3e",
+      "size": 492
+    },
+    {
+      "path": "envs/medusa_store_pagination_v0/provider-release/index.json",
+      "sha256": "sha256:b3bc543545aa7b9eb43bae698b2eff5e0d816a661eb0876fb12b34408ecd3c8f",
+      "size": 411
+    },
+    {
+      "path": "envs/medusa_store_pagination_v0/provider-release/oci-layout",
+      "sha256": "sha256:18f0797eab35a4597c1e9624aa4f15fd91f6254e5538c1e0d193b2a95dd4acc6",
+      "size": 30
+    },
+    {
+      "path": "envs/medusa_store_pagination_v0/provider-runtime/gate-config.json",
+      "sha256": "sha256:101b8ba6a62ed1d7f6c8b7e8ea802fd6919e5cf5d5423f2152d9778b3eb63a69",
+      "size": 75287
+    },
+    {
+      "path": "envs/medusa_store_pagination_v0/provider-runtime/provider-runtime.json",
+      "sha256": "sha256:713abef6c838e3d2c607da1ea98ad91dac67e608aba8d2d3bd59e02e934ef72f",
+      "size": 555
+    },
+    {
+      "path": "envs/medusa_store_pagination_v0/provider-runtime/source.json",
+      "sha256": "sha256:599a35de5c2aef621d886a5d2f75fe53ca266d73cc19ee6a625df4c93dea63ba",
+      "size": 907
     },
     {
       "path": "envs/pylabrobot_hamilton_star_v0/evidence/reference_execution.json",
@@ -1861,6 +1936,76 @@
       "size": 693
     },
     {
+      "path": "integrations/verifiers_dirty_integration/README.md",
+      "sha256": "sha256:1b243c5951f3507b0266391cfb54acdaa747eea0f7bcdfe884ef188e97616d2a",
+      "size": 3651
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/THIRD_PARTY_NOTICES.md",
+      "sha256": "sha256:d2b8116fe727a81080ab26d2805ebe47cf5eea245e82325a6f6013e99699617f",
+      "size": 1521
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/__init__.py",
+      "sha256": "sha256:b31d53c7916e984b28e617aa3cc346e66115680cad2c2eca75cbb7f2960b234b",
+      "size": 418
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/contract.py",
+      "sha256": "sha256:13e3e2970c64d6b8b0cb2dd7ab9697e6e66f9f6258130c1c9cfa6423518db84a",
+      "size": 1232
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/environment.py",
+      "sha256": "sha256:c58337225b813e855314a9eda7efee2c8507af16dbaedadd494c8e3cf9cfb55f",
+      "size": 8579
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/episode.py",
+      "sha256": "sha256:7e796d203e752c57a820316af343703a08dda3c6a6092e5c955f58870f01b8ae",
+      "size": 10104
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/paired.py",
+      "sha256": "sha256:e8d5d693e6119b2ed24a9ca2ed59071848ec8a5d0c5bde4a7896415e9619c7d1",
+      "size": 11167
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/policy.py",
+      "sha256": "sha256:99fda3ff5fb3cd691a8c7ec06bb39205b484d0c02cc12af00bcc9efcbca2a107",
+      "size": 5548
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/reference.py",
+      "sha256": "sha256:88f3fead2e7ea4f6c12b431403af644694aa6c56e6ead18ee5e04cc7706fffba",
+      "size": 4985
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/scoring.py",
+      "sha256": "sha256:7bd76513e919aec382bbb527a2dcf15e134a3287b7bdf19acb349ff26a9f0b7c",
+      "size": 4026
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/pyproject.toml",
+      "sha256": "sha256:2c0bdf7ce08663a6c22cc5e8c6885f05b5f85b4e1da17bafc6fd2e52f83eb999",
+      "size": 658
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/rollout-information-boundary.json",
+      "sha256": "sha256:3f3f4b1651bf296bd19201284f7a884bd27ba58db0857a7631e59194eeb4978b",
+      "size": 1105
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/upstream-contract.json",
+      "sha256": "sha256:8f6e9a557f8444a6890cc8df56fdba8271101119dcb5aa9cf25422715d169124",
+      "size": 1245
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/uv.lock",
+      "sha256": "sha256:bf1bcc6f6a1c466550a0b476daf7582dbb4ca506c791ba8e427efc910a453d4c",
+      "size": 788014
+    },
+    {
       "path": "integrations/verl/Dockerfile.task",
       "sha256": "sha256:6caddcac1eb9f299ed22f2b34d7074065b9f27073fc81c4b7a58297842e1c6d7",
       "size": 290
@@ -2001,6 +2146,11 @@
       "size": 3247
     },
     {
+      "path": "probes/medusa_pagination.json",
+      "sha256": "sha256:a920bedbd9a2c5a6b9ff01c823cc692259099f0facad87a6ccadcf44685cbac1",
+      "size": 3042
+    },
+    {
       "path": "probes/microsoft_graph.json",
       "sha256": "sha256:907ed4a8189fb1c261db860633119103dc6ba83af5f17f6b62f0af668e56e697",
       "size": 14214
@@ -2112,8 +2262,8 @@
     },
     {
       "path": "product-contract.json",
-      "sha256": "sha256:1d0240e411548077176c1a313f7de56ad52f06000e70ab1ee9d0dd27112c1a31",
-      "size": 1749
+      "sha256": "sha256:6313ace51cf378e7dc01200114ed1fe3d0ce6fa1645b65f517176ae2d2125df2",
+      "size": 1905
     },
     {
       "path": "pyproject.toml",
@@ -2122,13 +2272,13 @@
     },
     {
       "path": "release/data-classification.json",
-      "sha256": "sha256:e1786089e216e03b20167ea12c20bf6c33de4e6964bcd86b5e1e491979a217e7",
-      "size": 35390
+      "sha256": "sha256:affd4874654bad205d682406cc5cdfb7e87208e43b5fc6760b41cb43e1a323c5",
+      "size": 45161
     },
     {
       "path": "release/public-release.json",
-      "sha256": "sha256:4401bcad8fed275492ceac720c4ee3681e1939cab0e2eb47d565ecf7e6401d70",
-      "size": 5822
+      "sha256": "sha256:52df0d6a7ab3264910633b99e47fa7bc42f32dc3901a7e579816b218d04269c7",
+      "size": 7842
     },
     {
       "path": "schemas/composition-admission-v1.schema.json",
@@ -2149,6 +2299,16 @@
       "path": "schemas/composition-session-export-v1.schema.json",
       "sha256": "sha256:e880c42b1dec53e72acc63b0fc89563cfb4a304ea1b041bbde325b5055ec3a96",
       "size": 5004
+    },
+    {
+      "path": "schemas/delivery-intervention-trace-v1.schema.json",
+      "sha256": "sha256:a082f7789d7be5986207f0f2dccffdce3470d521b79bb70e98eebb2921092dce",
+      "size": 8284
+    },
+    {
+      "path": "schemas/delivery-intervention-v1.schema.json",
+      "sha256": "sha256:14fe02bcd8db50bcbd75943c658779e937748af0bf0449cdf63ff6520269d842",
+      "size": 3995
     },
     {
       "path": "schemas/provider-admission-v1.schema.json",
@@ -2246,6 +2406,11 @@
       "size": 2187
     },
     {
+      "path": "scripts/fixtures/medusa-seed-datalox.ts",
+      "sha256": "sha256:0827b5b2c8f98578a2054f015dcfded4f3310cf5ef19654fe7d357451952c12f",
+      "size": 8985
+    },
+    {
       "path": "scripts/providers/build-gs1-epcis-behavior-evidence.py",
       "sha256": "sha256:2273f59af1023901eb24f9279244c7353e135fe7d783ab98b2c5383f7488cf1d",
       "size": 28023
@@ -2254,6 +2419,16 @@
       "path": "scripts/providers/build-gs1-epcis-empty-snapshot.py",
       "sha256": "sha256:56dc5815708ac35e5a26d34732417befce50e52db81ba5d99de7dbc2afb46688",
       "size": 16867
+    },
+    {
+      "path": "scripts/providers/build-medusa-pagination-release.py",
+      "sha256": "sha256:a53a7a63fb20852c375daa58a1464613c1e4291dac81dab5f0e997bb7f871bd6",
+      "size": 9003
+    },
+    {
+      "path": "scripts/providers/build-medusa-pagination-runtime.py",
+      "sha256": "sha256:994f2364cc20131961d6f19a2e2840173722d95b46afffb431693219bf935a7a",
+      "size": 6265
     },
     {
       "path": "scripts/providers/build-openlmis-behavior-coverage.py",
@@ -2381,6 +2556,11 @@
       "size": 5932
     },
     {
+      "path": "scripts/providers/check-medusa-pagination-evidence.py",
+      "sha256": "sha256:0d8829a96d2352356d57f3930afbd324fb766ef52ab203c0886653807d5c9118",
+      "size": 11442
+    },
+    {
       "path": "scripts/providers/check-openlmis-authoring-readiness.py",
       "sha256": "sha256:b187ae21c5959f72640b4e27fd6b5e63a09aa78f4a954791849ce991be1a53fe",
       "size": 14157
@@ -2459,6 +2639,11 @@
       "path": "scripts/providers/run-stripe-engineering-proof.py",
       "sha256": "sha256:172aac6f73befad1cdf7faf12b56ca344050fae4e0138db522684cd759cce8eb",
       "size": 2069
+    },
+    {
+      "path": "scripts/providers/sanitize-medusa-pagination-evidence.py",
+      "sha256": "sha256:71d5026cd69fcc11d5c69cdb1cd51e672b47370a4668270cca4756342ae0e9eb",
+      "size": 5830
     },
     {
       "path": "scripts/providers/sentry-sandbox.sh",
@@ -2737,8 +2922,8 @@
     },
     {
       "path": "src/datalox_gated_runtime/interception/__init__.py",
-      "sha256": "sha256:15993087645cb30a83530b97093321aa237f79a53dcd199e3d461d9420382815",
-      "size": 276
+      "sha256": "sha256:c38ac2dbcb5272c6d9a4dcf1e87e909eff5219ee965a7951316a82ef74c6b49a",
+      "size": 810
     },
     {
       "path": "src/datalox_gated_runtime/interception/certificates.py",
@@ -2767,8 +2952,13 @@
     },
     {
       "path": "src/datalox_gated_runtime/interception/gateway.py",
-      "sha256": "sha256:35ce048f0220c57af2343f6d6654e7edfce877923a198ff94d15f7b67722e778",
-      "size": 9039
+      "sha256": "sha256:80ed97bf771f1bbb5ba24e1f6e42c4e8c9206fe4964df69175af936b3443dd19",
+      "size": 17146
+    },
+    {
+      "path": "src/datalox_gated_runtime/interception/interventions.py",
+      "sha256": "sha256:4a31fed84cd001af28665526500160cea43509e6d2489fea9c7ca31a6e4b80b5",
+      "size": 43336
     },
     {
       "path": "src/datalox_gated_runtime/interception/server.py",
@@ -3381,6 +3571,11 @@
       "size": 10925
     },
     {
+      "path": "tests/test_delivery_interventions.py",
+      "sha256": "sha256:c070706b33c96e7dc8c3b40a6df30d9e6ca72a3934dd301d1b5518540f1827af",
+      "size": 23477
+    },
+    {
       "path": "tests/test_execution_provider_offline.py",
       "sha256": "sha256:d8e8ab6954d0b0ec660428b1eae60c95380883985252b2e9c2028854543f4904",
       "size": 2287
@@ -3501,6 +3696,11 @@
       "size": 6120
     },
     {
+      "path": "tests/test_medusa_pagination_provider.py",
+      "sha256": "sha256:ced7ebad0e8244d6dab42dd6e873969c7201336d97c150ca823247089e9ead04",
+      "size": 6879
+    },
+    {
       "path": "tests/test_microsoft_graph_provider.py",
       "sha256": "sha256:7797753708562431c26cadabcb23ffd9cce5949e07393a732cc244656b28ea6b",
       "size": 11598
@@ -3557,7 +3757,7 @@
     },
     {
       "path": "tests/test_provider_runtime_coverage.py",
-      "sha256": "sha256:e13e85b3c7fb72995a956e5b4fc767ce1c452a1e1218c02ba337f6755eb1d929",
+      "sha256": "sha256:5f27d1624641d8675ebd8ada980631d3b7b4c5dc6863e4dc13a3cb68ac01541f",
       "size": 564
     },
     {
@@ -3622,8 +3822,8 @@
     },
     {
       "path": "tests/test_rollout_information_boundary.py",
-      "sha256": "sha256:9c8ff96c18d32bf1e415ad6ce3aa7d32f87d5cbc0066a05dd867c4763e63cdf2",
-      "size": 8034
+      "sha256": "sha256:17a94a12dba3783e15a9c7920eea4895c68fadbc3fe0004be6292fe761f5b9c0",
+      "size": 8179
     },
     {
       "path": "tests/test_rollout_pool.py",
@@ -3696,6 +3896,11 @@
       "size": 11805
     },
     {
+      "path": "tests/test_verifiers_dirty_integration.py",
+      "sha256": "sha256:cb1c9bc520552f3308186ab3f9cbd4ea96cd9752a584de6e8eb3c707bf194d84",
+      "size": 15114
+    },
+    {
       "path": "tests/test_verl_integration.py",
       "sha256": "sha256:24a2bb3ced2e7066297b3ba3065d36cb33d576599cbe4a9ec552482691967a20",
       "size": 20596
@@ -3747,5 +3952,5 @@
     }
   ],
   "schema_version": "datalox_public_source_manifest_v1",
-  "source_revision": "c2a2a459807bb7ad47376d2d90df5a2a9c836232"
+  "source_revision": "b35feac7873f5ad7158741d847fa6bf80850cbe7"
 }

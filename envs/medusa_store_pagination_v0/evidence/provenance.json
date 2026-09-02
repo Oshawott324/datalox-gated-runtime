@@ -1,0 +1,74 @@
+{
+  "captured_at": "2026-09-01T12:24:33Z",
+  "distribution": "public",
+  "fixture": {
+    "data_origin": "self_authored_synthetic",
+    "product_count": 50,
+    "reset_boundary": "fresh_postgresql_database_and_fresh_medusa_fixture_seed"
+  },
+  "grounding_level": "G2",
+  "known_gaps": [
+    "Response headers, raw body bytes, provider-generated IDs, and provider response text are not retained by the v0 generic GET probe evidence lane.",
+    "Missing and invalid publishable-key behavior was not sampled in this lane.",
+    "Only GET /store/products limit/offset behavior is claimed.",
+    "No write, concurrency, async, rate-limit, or production Medusa behavior is claimed."
+  ],
+  "provider": "medusa",
+  "provider_packages": [
+    {
+      "integrity": "sha512-2wDt+TaAHNCAto3D9aygl87pfgkRBWmYhaFjrvBuGY/bQRIe2jf3GN2Q/DhST+3PLUSxTziMRNHmWRdz7+Iutg==",
+      "license": "MIT",
+      "name": "@medusajs/medusa",
+      "version": "2.16.0"
+    },
+    {
+      "integrity": "sha512-cp+tzwqvu9QnZol5S6z73xUrmX+Ea8FLuUuIY4Bom/kKq7h2XSouyxWOklE4ScckrZjGtNjrHPbooUi5Fn2o2g==",
+      "license": "MIT",
+      "name": "@medusajs/framework",
+      "version": "2.16.0"
+    }
+  ],
+  "provider_version": "2.16.0",
+  "reference_database": {
+    "image": "public.ecr.aws/docker/library/postgres:16-alpine",
+    "repo_digest": "sha256:20edbde7749f822887a1a022ad526fde0a47d6b2be9a8364433605cf65099416"
+  },
+  "schema_version": "datalox_medusa_pagination_evidence_v1",
+  "redistribution_basis": "Self-authored factual measurement summary from an MIT-licensed Medusa 2.16.0 reference deployment. It contains no provider payload bytes, response text, credentials, or provider-generated identifiers.",
+  "scope": {
+    "authoring_gate_path": "/medusa/store/products",
+    "operation": "GET /store/products",
+    "observations": [
+      "first_page",
+      "middle_pages",
+      "terminal_partial_page",
+      "terminal_empty_page",
+      "beyond_terminal_page",
+      "identical_repeat",
+      "limit_zero_boundary",
+      "invalid_limit",
+      "invalid_offset"
+    ],
+    "pagination": "limit_offset",
+    "path_projection": "The pinned probe runner prefixes the provider ID to form the authoring gate path; the pinned live-capture client strips that first segment before requesting the upstream path.",
+    "upstream_path": "/store/products"
+  },
+  "static_inputs": [
+    {
+      "path": "scripts/fixtures/medusa-seed-datalox.ts",
+      "sha256": "sha256:0827b5b2c8f98578a2054f015dcfded4f3310cf5ef19654fe7d357451952c12f"
+    },
+    {
+      "path": "probes/medusa_pagination.json",
+      "sha256": "sha256:a920bedbd9a2c5a6b9ff01c823cc692259099f0facad87a6ccadcf44685cbac1"
+    },
+    {
+      "path": "src/datalox_gated_runtime/capture.py",
+      "sha256": "sha256:8612022ce74b8b2e47e8f62d8fcb1d4d6d79b7afa6e6c68072453d86a2e8b71f"
+    },
+    {
+      "path": "src/datalox_gated_runtime/provider_probe.py",
+      "sha256": "sha256:5ba3afcf9b1226e4f8dd4d03aff4e3cdf4db7767ab1c072676e7055d74d9218f"
+    }
+  ]
+}

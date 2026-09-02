@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "datalox-dirty-integration"
+version = "0.1.0"
+description = "A downstream Verifiers fixture for paired Datalox delivery-intervention runs."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+dependencies = [
+  "datalox-gated-runtime==0.1.0",
+  "datasets>=2.14.0",
+  "verifiers==0.3.1",
+]
+
+[project.scripts]
+datalox-dirty-pair = "datalox_dirty_integration.paired:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["datalox_dirty_integration*"]
+
+[tool.uv.sources]
+datalox-gated-runtime = { path = "../..", editable = true }

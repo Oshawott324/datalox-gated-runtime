@@ -1,0 +1,96 @@
+{
+  "admitted": true,
+  "behavior_probes": [
+    {
+      "first_run_sha256": "sha256:2fbaedd01719b761fd44eb5441a7fe1ad4c8c5e0c59041ecfa3639bb7c77aeff",
+      "probe_id": "medusa_store_products_pagination",
+      "second_run_sha256": "sha256:2fbaedd01719b761fd44eb5441a7fe1ad4c8c5e0c59041ecfa3639bb7c77aeff",
+      "step_count": 6
+    }
+  ],
+  "bundle_version": "2.16.0-pagination-v0",
+  "evidence_sources": [
+    {
+      "artifact_ref": "observations.json",
+      "artifact_sha256": "sha256:baf6fca51d081ef18286d538f6f9aa81114f3f8dee9923bb21840482ef1aa79e",
+      "distribution_label": "public",
+      "evidence_id": "medusa_pagination_g2",
+      "grounding_level": "G2_SELF_HOSTED_REFERENCE",
+      "observed_at": "2026-09-01T12:24:33Z",
+      "rights_basis": "Self-authored factual measurement summary from a locally deployed MIT-licensed Medusa 2.16.0 reference system; it contains no provider payload bytes, response text, credentials, or provider-generated identifiers.",
+      "valid_through": "2027-09-01T12:24:33Z"
+    }
+  ],
+  "operation_claims_sha256": "sha256:2fd8f41dbc3bdc2b6b6c34e3e47a20def674224ce85363aa78f0d7e6d75b4de7",
+  "operations": [
+    {
+      "behavior_program": "medusa_store_products_limit_offset",
+      "covered_behaviors": {
+        "duplicate": true,
+        "failure": true,
+        "pagination": true,
+        "success": true
+      },
+      "grounding": {
+        "evidence_refs": [
+          "medusa_pagination_g2"
+        ],
+        "grounded": true,
+        "level": "G2_SELF_HOSTED_REFERENCE"
+      },
+      "mutability": "read",
+      "native_surface": {
+        "authority": "api.medusa.local",
+        "method": "GET",
+        "path_template": "/store/products",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "medusa.store.products.list",
+      "rights": {
+        "behavior_distribution_basis": "Runtime values and response text are self-authored. Pagination semantics are factual measurements from an MIT-licensed reference deployment, recorded without provider payload bytes or identifiers.",
+        "distribution_label": "public"
+      },
+      "state_effects": []
+    }
+  ],
+  "provider_id": "medusa",
+  "provider_invariants": [
+    {
+      "expected": "gate_config_v1",
+      "operator": "equals",
+      "passed": true,
+      "pointer": "/protocol",
+      "predicate_id": "runtime_protocol_is_gate_config_v1",
+      "source": "provider_state"
+    }
+  ],
+  "provider_runtime_sha256": "sha256:713abef6c838e3d2c607da1ea98ad91dac67e608aba8d2d3bd59e02e934ef72f",
+  "receipt_predicates": [
+    {
+      "expected_type": "object",
+      "operator": "type",
+      "passed": true,
+      "pointer": "",
+      "predicate_id": "response_is_object",
+      "source": "response_body"
+    },
+    {
+      "expected_type": "array",
+      "operator": "type",
+      "passed": true,
+      "pointer": "/events",
+      "predicate_id": "call_was_recorded",
+      "source": "call_evidence"
+    }
+  ],
+  "reset_profiles": [
+    {
+      "functional_equivalence_passed": true,
+      "kind": "compiled_seed",
+      "profile_id": "default"
+    }
+  ],
+  "schema_version": "datalox_provider_admission_v1",
+  "task_free": true
+}

@@ -1,0 +1,501 @@
+{
+  "capture_path_projection": {
+    "gate_path_template": "/{provider_id}{upstream_path}",
+    "probe_config_path": "probes/medusa_pagination.json",
+    "probe_config_sha256": "sha256:a920bedbd9a2c5a6b9ff01c823cc692259099f0facad87a6ccadcf44685cbac1",
+    "provider_id": "medusa",
+    "upstream_path_source": "probe_requests[*].path",
+    "upstream_projection": "strip_first_gate_path_segment_v1"
+  },
+  "capture_transport": "datalox_get_probe_v0",
+  "grounding_level": "G2",
+  "observations": [
+    {
+      "canonical_body_sha256": "sha256:1610b9a8727d6338ae01ff786c514c5b1c5677cb7721f7306975e796cdc2f897",
+      "gate_path": "/medusa/store/products",
+      "method": "GET",
+      "query": {
+        "limit": "10",
+        "offset": "0"
+      },
+      "request_index": 0,
+      "response": {
+        "count": 50,
+        "limit": 10,
+        "offset": 0,
+        "product_handles": [
+          "datalox-pagination-item-002",
+          "datalox-pagination-item-015",
+          "datalox-pagination-item-001",
+          "datalox-pagination-item-007",
+          "datalox-pagination-item-006",
+          "datalox-pagination-item-008",
+          "datalox-pagination-item-020",
+          "datalox-pagination-item-021",
+          "datalox-pagination-item-012",
+          "datalox-pagination-item-003"
+        ],
+        "top_level_fields": [
+          "products",
+          "count",
+          "offset",
+          "limit"
+        ]
+      },
+      "status_code": 200,
+      "upstream_path": "/store/products"
+    },
+    {
+      "canonical_body_sha256": "sha256:1610b9a8727d6338ae01ff786c514c5b1c5677cb7721f7306975e796cdc2f897",
+      "gate_path": "/medusa/store/products",
+      "method": "GET",
+      "query": {
+        "limit": "10",
+        "offset": "0"
+      },
+      "request_index": 1,
+      "response": {
+        "count": 50,
+        "limit": 10,
+        "offset": 0,
+        "product_handles": [
+          "datalox-pagination-item-002",
+          "datalox-pagination-item-015",
+          "datalox-pagination-item-001",
+          "datalox-pagination-item-007",
+          "datalox-pagination-item-006",
+          "datalox-pagination-item-008",
+          "datalox-pagination-item-020",
+          "datalox-pagination-item-021",
+          "datalox-pagination-item-012",
+          "datalox-pagination-item-003"
+        ],
+        "top_level_fields": [
+          "products",
+          "count",
+          "offset",
+          "limit"
+        ]
+      },
+      "status_code": 200,
+      "upstream_path": "/store/products"
+    },
+    {
+      "canonical_body_sha256": "sha256:28b45f8defa83ab9b3f49523b0c33da758ef2191baab6a57961d1a7f9f14b863",
+      "gate_path": "/medusa/store/products",
+      "method": "GET",
+      "query": {
+        "limit": "10",
+        "offset": "10"
+      },
+      "request_index": 2,
+      "response": {
+        "count": 50,
+        "limit": 10,
+        "offset": 10,
+        "product_handles": [
+          "datalox-pagination-item-016",
+          "datalox-pagination-item-005",
+          "datalox-pagination-item-010",
+          "datalox-pagination-item-011",
+          "datalox-pagination-item-009",
+          "datalox-pagination-item-004",
+          "datalox-pagination-item-013",
+          "datalox-pagination-item-022",
+          "datalox-pagination-item-014",
+          "datalox-pagination-item-019"
+        ],
+        "top_level_fields": [
+          "products",
+          "count",
+          "offset",
+          "limit"
+        ]
+      },
+      "status_code": 200,
+      "upstream_path": "/store/products"
+    },
+    {
+      "canonical_body_sha256": "sha256:fc21d1600a2ec8b0704705b53dbcbfdd41642cda9156da5d0620138b2b4cbeb6",
+      "gate_path": "/medusa/store/products",
+      "method": "GET",
+      "query": {
+        "limit": "10",
+        "offset": "20"
+      },
+      "request_index": 3,
+      "response": {
+        "count": 50,
+        "limit": 10,
+        "offset": 20,
+        "product_handles": [
+          "datalox-pagination-item-018",
+          "datalox-pagination-item-017",
+          "datalox-pagination-item-031",
+          "datalox-pagination-item-025",
+          "datalox-pagination-item-032",
+          "datalox-pagination-item-028",
+          "datalox-pagination-item-048",
+          "datalox-pagination-item-023",
+          "datalox-pagination-item-042",
+          "datalox-pagination-item-027"
+        ],
+        "top_level_fields": [
+          "products",
+          "count",
+          "offset",
+          "limit"
+        ]
+      },
+      "status_code": 200,
+      "upstream_path": "/store/products"
+    },
+    {
+      "canonical_body_sha256": "sha256:fc4dd5fdbe96e5fa4f9bddaf79b36d2d70738bb9ab6430022667eefdb42263a3",
+      "gate_path": "/medusa/store/products",
+      "method": "GET",
+      "query": {
+        "limit": "10",
+        "offset": "30"
+      },
+      "request_index": 4,
+      "response": {
+        "count": 50,
+        "limit": 10,
+        "offset": 30,
+        "product_handles": [
+          "datalox-pagination-item-047",
+          "datalox-pagination-item-030",
+          "datalox-pagination-item-049",
+          "datalox-pagination-item-035",
+          "datalox-pagination-item-041",
+          "datalox-pagination-item-026",
+          "datalox-pagination-item-024",
+          "datalox-pagination-item-043",
+          "datalox-pagination-item-034",
+          "datalox-pagination-item-045"
+        ],
+        "top_level_fields": [
+          "products",
+          "count",
+          "offset",
+          "limit"
+        ]
+      },
+      "status_code": 200,
+      "upstream_path": "/store/products"
+    },
+    {
+      "canonical_body_sha256": "sha256:ce6baecaba3c3f0de986fa3517016e4b1b489e9a17170a6beae5facfcf11a431",
+      "gate_path": "/medusa/store/products",
+      "method": "GET",
+      "query": {
+        "limit": "10",
+        "offset": "40"
+      },
+      "request_index": 5,
+      "response": {
+        "count": 50,
+        "limit": 10,
+        "offset": 40,
+        "product_handles": [
+          "datalox-pagination-item-044",
+          "datalox-pagination-item-046",
+          "datalox-pagination-item-033",
+          "datalox-pagination-item-038",
+          "datalox-pagination-item-037",
+          "datalox-pagination-item-050",
+          "datalox-pagination-item-029",
+          "datalox-pagination-item-036",
+          "datalox-pagination-item-039",
+          "datalox-pagination-item-040"
+        ],
+        "top_level_fields": [
+          "products",
+          "count",
+          "offset",
+          "limit"
+        ]
+      },
+      "status_code": 200,
+      "upstream_path": "/store/products"
+    },
+    {
+      "canonical_body_sha256": "sha256:968e114ebbd28e2ef0fcf662acd4ac1f807135febce8e8da797aaeec50baa523",
+      "gate_path": "/medusa/store/products",
+      "method": "GET",
+      "query": {
+        "limit": "10",
+        "offset": "45"
+      },
+      "request_index": 6,
+      "response": {
+        "count": 50,
+        "limit": 10,
+        "offset": 45,
+        "product_handles": [
+          "datalox-pagination-item-050",
+          "datalox-pagination-item-029",
+          "datalox-pagination-item-036",
+          "datalox-pagination-item-039",
+          "datalox-pagination-item-040"
+        ],
+        "top_level_fields": [
+          "products",
+          "count",
+          "offset",
+          "limit"
+        ]
+      },
+      "status_code": 200,
+      "upstream_path": "/store/products"
+    },
+    {
+      "canonical_body_sha256": "sha256:515d3e82b9fe6b1954659aaa8364fba5b881ef5ffcd1f4ecbfaed42a0b2ed5c6",
+      "gate_path": "/medusa/store/products",
+      "method": "GET",
+      "query": {
+        "limit": "10",
+        "offset": "50"
+      },
+      "request_index": 7,
+      "response": {
+        "count": 50,
+        "limit": 10,
+        "offset": 50,
+        "product_handles": [],
+        "top_level_fields": [
+          "products",
+          "count",
+          "offset",
+          "limit"
+        ]
+      },
+      "status_code": 200,
+      "upstream_path": "/store/products"
+    },
+    {
+      "canonical_body_sha256": "sha256:e30b78c1852f84d875627479590b7e0f01062735d83d4a49e55dab2445a6b020",
+      "gate_path": "/medusa/store/products",
+      "method": "GET",
+      "query": {
+        "limit": "10",
+        "offset": "60"
+      },
+      "request_index": 8,
+      "response": {
+        "count": 50,
+        "limit": 10,
+        "offset": 60,
+        "product_handles": [],
+        "top_level_fields": [
+          "products",
+          "count",
+          "offset",
+          "limit"
+        ]
+      },
+      "status_code": 200,
+      "upstream_path": "/store/products"
+    },
+    {
+      "canonical_body_sha256": "sha256:a8a5459b9422ba1925eae167e41c4efabc443494f9cf9ec38d967ed1453a342d",
+      "gate_path": "/medusa/store/products",
+      "method": "GET",
+      "query": {
+        "limit": "1",
+        "offset": "0"
+      },
+      "request_index": 9,
+      "response": {
+        "count": 50,
+        "limit": 1,
+        "offset": 0,
+        "product_handles": [
+          "datalox-pagination-item-002"
+        ],
+        "top_level_fields": [
+          "products",
+          "count",
+          "offset",
+          "limit"
+        ]
+      },
+      "status_code": 200,
+      "upstream_path": "/store/products"
+    },
+    {
+      "canonical_body_sha256": "sha256:516c8d240482b05944a31847f1d914b7906100deb56f155d74088cd49fd7baa2",
+      "gate_path": "/medusa/store/products",
+      "method": "GET",
+      "query": {
+        "limit": "100",
+        "offset": "0"
+      },
+      "request_index": 10,
+      "response": {
+        "count": 50,
+        "limit": 100,
+        "offset": 0,
+        "product_handles": [
+          "datalox-pagination-item-002",
+          "datalox-pagination-item-015",
+          "datalox-pagination-item-001",
+          "datalox-pagination-item-007",
+          "datalox-pagination-item-006",
+          "datalox-pagination-item-008",
+          "datalox-pagination-item-020",
+          "datalox-pagination-item-021",
+          "datalox-pagination-item-012",
+          "datalox-pagination-item-003",
+          "datalox-pagination-item-016",
+          "datalox-pagination-item-005",
+          "datalox-pagination-item-010",
+          "datalox-pagination-item-011",
+          "datalox-pagination-item-009",
+          "datalox-pagination-item-004",
+          "datalox-pagination-item-013",
+          "datalox-pagination-item-022",
+          "datalox-pagination-item-014",
+          "datalox-pagination-item-019",
+          "datalox-pagination-item-018",
+          "datalox-pagination-item-017",
+          "datalox-pagination-item-031",
+          "datalox-pagination-item-025",
+          "datalox-pagination-item-032",
+          "datalox-pagination-item-028",
+          "datalox-pagination-item-048",
+          "datalox-pagination-item-023",
+          "datalox-pagination-item-042",
+          "datalox-pagination-item-027",
+          "datalox-pagination-item-047",
+          "datalox-pagination-item-030",
+          "datalox-pagination-item-049",
+          "datalox-pagination-item-035",
+          "datalox-pagination-item-041",
+          "datalox-pagination-item-026",
+          "datalox-pagination-item-024",
+          "datalox-pagination-item-043",
+          "datalox-pagination-item-034",
+          "datalox-pagination-item-045",
+          "datalox-pagination-item-044",
+          "datalox-pagination-item-046",
+          "datalox-pagination-item-033",
+          "datalox-pagination-item-038",
+          "datalox-pagination-item-037",
+          "datalox-pagination-item-050",
+          "datalox-pagination-item-029",
+          "datalox-pagination-item-036",
+          "datalox-pagination-item-039",
+          "datalox-pagination-item-040"
+        ],
+        "top_level_fields": [
+          "products",
+          "count",
+          "offset",
+          "limit"
+        ]
+      },
+      "status_code": 200,
+      "upstream_path": "/store/products"
+    },
+    {
+      "canonical_body_sha256": "sha256:0d6bb16a3eed5bf432a37bb910ae2378ba588c009b7f0135a22e470661a3b0ea",
+      "gate_path": "/medusa/store/products",
+      "method": "GET",
+      "query": {
+        "limit": "0",
+        "offset": "0"
+      },
+      "request_index": 11,
+      "response": {
+        "count": 50,
+        "limit": 0,
+        "offset": 0,
+        "product_handles": [],
+        "top_level_fields": [
+          "products",
+          "count",
+          "offset",
+          "limit"
+        ]
+      },
+      "status_code": 200,
+      "upstream_path": "/store/products"
+    },
+    {
+      "canonical_body_sha256": "sha256:4e684952db4d1641022f3b6b40618e9f3f3488811a0a3885543ea449a022b1ca",
+      "gate_path": "/medusa/store/products",
+      "method": "GET",
+      "query": {
+        "limit": "-1",
+        "offset": "0"
+      },
+      "request_index": 12,
+      "response": {
+        "code": "unknown_error",
+        "message_present": true,
+        "message_sha256": "sha256:efac422f3271e7dd121d302a5bf15f64411929912c64a5907a25cb2073c54aa5",
+        "type": "unknown_error"
+      },
+      "status_code": 500,
+      "upstream_path": "/store/products"
+    },
+    {
+      "canonical_body_sha256": "sha256:cc47c98353618e57a56ab662df57f88f7dc3b731a4e2907943b8fe675965bf89",
+      "gate_path": "/medusa/store/products",
+      "method": "GET",
+      "query": {
+        "limit": "invalid",
+        "offset": "0"
+      },
+      "request_index": 13,
+      "response": {
+        "message_present": true,
+        "message_sha256": "sha256:9adccb335c9b02e341ce6448698ff930649f3ae6297d028e6a58f892bac778e7",
+        "type": "invalid_data"
+      },
+      "status_code": 400,
+      "upstream_path": "/store/products"
+    },
+    {
+      "canonical_body_sha256": "sha256:4e684952db4d1641022f3b6b40618e9f3f3488811a0a3885543ea449a022b1ca",
+      "gate_path": "/medusa/store/products",
+      "method": "GET",
+      "query": {
+        "limit": "10",
+        "offset": "-1"
+      },
+      "request_index": 14,
+      "response": {
+        "code": "unknown_error",
+        "message_present": true,
+        "message_sha256": "sha256:efac422f3271e7dd121d302a5bf15f64411929912c64a5907a25cb2073c54aa5",
+        "type": "unknown_error"
+      },
+      "status_code": 500,
+      "upstream_path": "/store/products"
+    },
+    {
+      "canonical_body_sha256": "sha256:ee689c9e41fce9700a11d436fa1cc00feca898089b49bd4b790f24b7754d22b6",
+      "gate_path": "/medusa/store/products",
+      "method": "GET",
+      "query": {
+        "limit": "10",
+        "offset": "invalid"
+      },
+      "request_index": 15,
+      "response": {
+        "message_present": true,
+        "message_sha256": "sha256:6566556f7ecb8e9e37da218a38013449bbe539d0111fc1a2748fab335a819e92",
+        "type": "invalid_data"
+      },
+      "status_code": 400,
+      "upstream_path": "/store/products"
+    }
+  ],
+  "payload_policy": "provider-generated IDs and response text removed; self-authored product handles and factual measurements retained",
+  "provider": "medusa",
+  "provider_version": "2.16.0",
+  "schema_version": "datalox_medusa_pagination_observations_v2"
+}

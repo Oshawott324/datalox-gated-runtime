@@ -57,6 +57,15 @@ The data plane returns provider-shaped responses. Datalox decisions, event IDs,
 state exports, reset controls, health details, and finalization stay on the
 trusted control plane and are not injected into successful provider responses.
 
+A consumer may place a controller-fixed
+[delivery intervention](delivery-interventions.md) after an admitted provider
+runtime. Provider behavior and its ledger remain the base truth. The consumer's
+seeded intervention decision and the exact observation delivered to the agent
+are recorded in a separate trace and never presented as provider grounding.
+With intervention mode `off`, the same counterfactual decision is recorded while
+the base response is returned unchanged. The agent cannot select the policy,
+seed, mode, or logical request index.
+
 Identity follows the provider-shaped request, not an agent-selected Datalox
 role. Each stateful runtime bundle contains an `identity.json` policy. A fixed
 policy is sufficient for a single-principal fixture. A multi-principal pack
@@ -257,8 +266,8 @@ In the full source superset,
 registered provider-scoped asset one by one. In the public source tree,
 `python scripts/check_provider_runtime_coverage.py --validate-report` validates
 the released report without requiring the controlled provider corpus. The
-report currently records 48 of 48 provider assets passing task-free compilation
-and reset: 18 stateful `world_v1_adapter` sources and 30 `gate_config_v1`
+report currently records 49 of 49 provider assets passing task-free compilation
+and reset: 18 stateful `world_v1_adapter` sources and 31 `gate_config_v1`
 sources. The two cross-provider reference worlds are excluded because they are
 consumer-side compositions. See
 [`docs/reports/provider-runtime-coverage.json`](reports/provider-runtime-coverage.json).

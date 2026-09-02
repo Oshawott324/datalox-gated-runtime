@@ -172,6 +172,16 @@
       "task_assets_present": false
     },
     {
+      "behavior_protocol": "gate_config_v1",
+      "env_id": "medusa_store_pagination_v0",
+      "operation_count": 15,
+      "provider_id": "medusa",
+      "reset_passed": true,
+      "source_kind": "gate_config",
+      "status": "passed",
+      "task_assets_present": false
+    },
+    {
       "behavior_protocol": "world_v1_adapter",
       "env_id": "msc_geomet_public_v0",
       "operation_count": 14,
@@ -496,10 +506,10 @@
   "scope": "registered actual-provider environments",
   "summary": {
     "excluded_composite_count": 2,
-    "gate_config_count": 30,
-    "passed_count": 48,
-    "provider_count": 48,
-    "registered_environment_count": 50,
+    "gate_config_count": 31,
+    "passed_count": 49,
+    "provider_count": 49,
+    "registered_environment_count": 51,
     "world_v1_count": 18
   }
 }

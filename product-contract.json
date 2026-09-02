@@ -7,6 +7,8 @@
   "composition_source_matching": "finite_declared_outcome_predicates_fail_closed",
   "composition_time": "delivery_scheduler_only_v1",
   "deployment_unit": "task_free_provider_runtime_bundle",
+  "delivery_intervention_attribution": "separate_from_provider_grounding",
+  "delivery_intervention_ownership": "consumer_policy_trusted_controller_fixed",
   "execution_provider_egress": "forbidden",
   "harness_role": "downstream_consumer",
   "live_provider_access": "authoring_only",

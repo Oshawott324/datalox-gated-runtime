@@ -42,9 +42,14 @@ def test_every_checked_rollout_adapter_declares_the_three_information_planes() -
     rollout_directories = {
         path.parent for path in (ROOT / "integrations").glob("*/launch_fragment.sh")
     }
+    rollout_directories.add(ROOT / "integrations" / "verifiers_dirty_integration")
     manifests = sorted((ROOT / "integrations").glob("*/rollout-information-boundary.json"))
     assert {path.parent for path in manifests} == rollout_directories
-    assert {path.parent.name for path in manifests} == {"slime", "verl"}
+    assert {path.parent.name for path in manifests} == {
+        "slime",
+        "verl",
+        "verifiers_dirty_integration",
+    }
 
     for path in manifests:
         value = _json(path)

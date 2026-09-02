@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/delivery-intervention-v1.schema.json",
+  "title": "Controller-owned delivery intervention configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "provider_id",
+    "mode",
+    "seed",
+    "policy",
+    "policy_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_delivery_intervention_v1"},
+    "provider_id": {"$ref": "#/$defs/identifier"},
+    "mode": {"enum": ["off", "on"]},
+    "seed": {"type": "string", "minLength": 1, "maxLength": 256},
+    "policy": {"$ref": "#/$defs/policy"},
+    "policy_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "jsonValue": {
+      "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
+    },
+    "jsonPointer": {
+      "type": "string",
+      "pattern": "^(?:/(?:[^~/]|~[01])*)*$"
+    },
+    "jsonType": {
+      "enum": ["array", "boolean", "integer", "null", "number", "object", "string"]
+    },
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status_code", "headers", "body"],
+      "properties": {
+        "status_code": {"const": 429},
+        "headers": {
+          "type": "object",
+          "additionalProperties": {"type": "string"}
+        },
+        "body": {"$ref": "#/$defs/jsonValue"}
+      }
+    },
+    "quotaResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "response"],
+      "properties": {
+        "kind": {"const": "quota_response"},
+        "response": {"$ref": "#/$defs/response"}
+      }
+    },
+    "jsonTypeDrift": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "pointer", "from_type", "to_type", "value"],
+      "properties": {
+        "kind": {"const": "json_type_drift"},
+        "pointer": {"$ref": "#/$defs/jsonPointer"},
+        "from_type": {"$ref": "#/$defs/jsonType"},
+        "to_type": {"$ref": "#/$defs/jsonType"},
+        "value": {"$ref": "#/$defs/jsonValue"}
+      }
+    },
+    "repeatPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "source_request_index"],
+      "properties": {
+        "kind": {"const": "repeat_page"},
+        "source_request_index": {"type": "integer", "minimum": 1}
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision_id", "request_index", "operation_id", "action"],
+      "properties": {
+        "decision_id": {"$ref": "#/$defs/identifier"},
+        "request_index": {"type": "integer", "minimum": 1},
+        "operation_id": {"$ref": "#/$defs/identifier"},
+        "action": {
+          "oneOf": [
+            {"$ref": "#/$defs/quotaResponse"},
+            {"$ref": "#/$defs/jsonTypeDrift"},
+            {"$ref": "#/$defs/repeatPage"}
+          ]
+        }
+      }
+    },
+    "schedule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seed", "decisions"],
+      "properties": {
+        "seed": {"type": "string", "minLength": 1, "maxLength": 256},
+        "decisions": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/decision"}
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "policy_id", "policy_version", "schedules"],
+      "properties": {
+        "schema_version": {"const": "datalox_delivery_intervention_policy_v1"},
+        "policy_id": {"$ref": "#/$defs/identifier"},
+        "policy_version": {"$ref": "#/$defs/identifier"},
+        "schedules": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/schedule"}
+        }
+      }
+    }
+  }
+}

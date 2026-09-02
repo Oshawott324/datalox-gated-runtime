@@ -1,0 +1,20 @@
+{
+  "schema_version": "datalox_provider_runtime_source_v1",
+  "source_config_id": "medusa_store_pagination_v0",
+  "source_gate_config_sha256": "sha256:101b8ba6a62ed1d7f6c8b7e8ea802fd6919e5cf5d5423f2152d9778b3eb63a69",
+  "source_kind": "gate_config",
+  "source_metadata": {
+    "fixture_data": "self_authored_synthetic",
+    "grounded_operation": "medusa.store.products.list",
+    "grounding_artifact_sha256": "sha256:baf6fca51d081ef18286d538f6f9aa81114f3f8dee9923bb21840482ef1aa79e",
+    "grounding_level": "G2",
+    "known_gaps": [
+      "Product field values and identifiers are self-authored.",
+      "Only the captured limit/offset query variants are executable.",
+      "Provider auth, headers, raw bytes, writes, rate limits, and production behavior are outside this release."
+    ],
+    "provider": "medusa",
+    "provider_version": "2.16.0",
+    "scope": "bounded_store_products_limit_offset"
+  }
+}

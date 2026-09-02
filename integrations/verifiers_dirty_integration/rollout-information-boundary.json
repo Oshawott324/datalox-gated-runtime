@@ -1,0 +1,25 @@
+{
+  "schema_version": "datalox_rollout_information_boundary_v1",
+  "integration_id": "verifiers_dirty_integration",
+  "task_plane": {
+    "owner": "consumer",
+    "agent_visible": true,
+    "availability": "before_interaction",
+    "contents": ["task_objectives", "agent_visible_constraints"],
+    "carrier": "Verifiers dataset question containing the collection objective and visible API constraints"
+  },
+  "observation_plane": {
+    "owner": "consumer_environment_and_provider_runtime",
+    "agent_visible": true,
+    "availability": "after_causal_environment_interaction",
+    "contents": ["provider_responses", "environment_anomalies"],
+    "carrier": "StatefulToolEnv tool result produced only after list_products is called"
+  },
+  "evaluation_plane": {
+    "owner": "consumer",
+    "agent_visible": false,
+    "availability": "trusted_generation_or_evaluation_only",
+    "contents": ["evaluation_ground_truth", "oracle_state", "verifier_inputs"],
+    "carrier": "consumer reward functions reading scalar results cached in an environment-private map after the rollout-local episode is closed"
+  }
+}

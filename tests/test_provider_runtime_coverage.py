@@ -18,4 +18,4 @@ def test_public_provider_runtime_report_is_structurally_valid() -> None:
         check=False,
     )
     assert completed.returncode == 0, completed.stdout + completed.stderr
-    assert "48 provider assets" in completed.stdout
+    assert "49 provider assets" in completed.stdout

@@ -1,0 +1,18 @@
+{
+  "authorities": [
+    "api.medusa.local"
+  ],
+  "behavior": {
+    "config_path": "gate-config.json",
+    "protocol": "gate_config_v1"
+  },
+  "bundle_version": "2.16.0-pagination-v0",
+  "content_hashes": {
+    "gate-config.json": "sha256:101b8ba6a62ed1d7f6c8b7e8ea802fd6919e5cf5d5423f2152d9778b3eb63a69",
+    "source.json": "sha256:599a35de5c2aef621d886a5d2f75fe53ca266d73cc19ee6a625df4c93dea63ba"
+  },
+  "provider_id": "medusa",
+  "schema_version": "datalox_provider_runtime_v2",
+  "source_path": "source.json",
+  "wire_protocol": "standard_http_v1"
+}
