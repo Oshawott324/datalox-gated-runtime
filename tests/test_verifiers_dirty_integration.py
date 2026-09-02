@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import importlib.util
 import json
 import sys
@@ -235,11 +236,23 @@ def test_task_plane_contains_no_intervention_hints_or_evaluation_truth() -> None
         assert product["title"] not in TASK_INSTRUCTIONS
 
 
+def test_public_handoff_leads_with_a_real_verifiers_rollout() -> None:
+    readme = (INTEGRATION_ROOT / "README.md").read_text(encoding="utf-8")
+    live_position = readme.index("vf-eval datalox-dirty-integration")
+    calibration_position = readme.index("datalox-dirty-pair")
+
+    assert live_position < calibration_position
+    assert "There is no reference solver or predetermined offset sequence" in readme
+    assert "not a model rollout and must not be reported as one" in readme
+
+
 @pytest.mark.skipif(
     importlib.util.find_spec("verifiers") is None,
     reason="Verifiers 0.3.1 is installed by the downstream integration package",
 )
-def test_verifiers_client_never_receives_private_provider_or_evaluation_objects() -> None:
+def test_verifiers_client_never_receives_private_provider_or_evaluation_objects(
+    tmp_path: Path,
+) -> None:
     import verifiers as vf
 
     from datalox_gated_runtime.interception.interventions import DeliveryInterventionSession
@@ -302,6 +315,7 @@ def test_verifiers_client_never_receives_private_provider_or_evaluation_objects(
             profile="hostile",
             intervention_enabled=True,
             intervention_seed="controller-private-seed",
+            evidence_dir=tmp_path / "recording-evidence",
             num_tasks=1,
         )
         client = RecordingClient()
@@ -331,6 +345,8 @@ def test_verifiers_client_never_receives_private_provider_or_evaluation_objects(
                 "evaluationoracle",
                 "provider_config",
                 "prod_datalox_pagination_",
+                "evidence_dir",
+                str(tmp_path).lower(),
             ):
                 assert marker not in rendered
 
@@ -339,6 +355,7 @@ def test_verifiers_client_never_receives_private_provider_or_evaluation_objects(
             profile="hostile",
             intervention_enabled=True,
             intervention_seed="controller-private-error-seed",
+            evidence_dir=tmp_path / "error-evidence",
             num_tasks=1,
         )
         failing_client = ErrorClient()
@@ -350,6 +367,183 @@ def test_verifiers_client_never_receives_private_provider_or_evaluation_objects(
         assert failed_state["trajectory_id"] in failing_environment._score_cache
         await failing_environment.rubric.cleanup(failed_state)
         assert failing_environment._score_cache == {}
+
+    asyncio.run(run())
+
+
+@pytest.mark.skipif(
+    importlib.util.find_spec("verifiers") is None,
+    reason="Verifiers 0.3.1 is installed by the downstream integration package",
+)
+def test_model_client_selects_operations_from_observations_and_exports_evidence(
+    tmp_path: Path,
+) -> None:
+    import verifiers as vf
+
+    class ObservationDrivenClient(vf.Client):
+        def __init__(self) -> None:
+            super().__init__(object())
+            self.rows: dict[str, dict[str, str]] = {}
+            self.reported_counts: dict[str, int] = {}
+            self.selected_calls: list[dict[str, Any]] = []
+
+        async def get_response(self, **kwargs: Any) -> Any:
+            prompt = kwargs["prompt"]
+            state = kwargs["state"]
+            trajectory_id = state["trajectory_id"]
+            tools = {tool.name for tool in kwargs["tools"]}
+            assert tools == {"list_products", "submit_products"}
+            last = prompt[-1]
+            if last.role == "user":
+                return self._tool_response(kwargs["model"], "list_products", {"offset": 0})
+            if last.role != "tool" or not isinstance(last.content, str):
+                return self._stop_response(kwargs["model"])
+
+            observation = json.loads(last.content)
+            if observation == {"received": True}:
+                return self._stop_response(kwargs["model"])
+            assert observation["status_code"] == 200
+            body = observation["body"]
+            rows = self.rows.setdefault(trajectory_id, {})
+            for product in body["products"]:
+                rows[product["id"]] = product["title"]
+            self.reported_counts[trajectory_id] = int(body["count"])
+            if body["products"]:
+                return self._tool_response(
+                    kwargs["model"],
+                    "list_products",
+                    {"offset": body["offset"] + body["limit"]},
+                )
+            products = [
+                {"id": product_id, "title": rows[product_id]} for product_id in sorted(rows)
+            ]
+            return self._tool_response(
+                kwargs["model"],
+                "submit_products",
+                {
+                    "products_json": json.dumps(products),
+                    "reported_count": self.reported_counts[trajectory_id],
+                },
+            )
+
+        def _tool_response(self, model: str, name: str, arguments: dict[str, Any]) -> Any:
+            self.selected_calls.append({"name": name, "arguments": arguments})
+            return vf.Response(
+                id=f"observation-driven-{len(self.selected_calls)}",
+                created=0,
+                model=model,
+                usage=vf.Usage(
+                    prompt_tokens=1,
+                    reasoning_tokens=0,
+                    completion_tokens=1,
+                    total_tokens=2,
+                ),
+                message=vf.ResponseMessage(
+                    role="assistant",
+                    content=None,
+                    tool_calls=[
+                        vf.ToolCall(
+                            id=f"tool-{len(self.selected_calls)}",
+                            name=name,
+                            arguments=json.dumps(arguments),
+                        )
+                    ],
+                    finish_reason="tool_calls",
+                    is_truncated=False,
+                    tokens=None,
+                ),
+            )
+
+        @staticmethod
+        def _stop_response(model: str) -> Any:
+            return vf.Response(
+                id="observation-driven-stop",
+                created=0,
+                model=model,
+                usage=vf.Usage(
+                    prompt_tokens=1,
+                    reasoning_tokens=0,
+                    completion_tokens=1,
+                    total_tokens=2,
+                ),
+                message=vf.ResponseMessage(
+                    role="assistant",
+                    content="Submitted.",
+                    tool_calls=None,
+                    finish_reason="stop",
+                    is_truncated=False,
+                    tokens=None,
+                ),
+            )
+
+        def setup_client(self, config: Any) -> Any:
+            raise AssertionError("observation-driven client does not use a client config")
+
+        async def to_native_tool(self, tool: Any) -> Any:
+            raise AssertionError("get_response is implemented directly")
+
+        async def to_native_prompt(self, messages: Any) -> Any:
+            raise AssertionError("get_response is implemented directly")
+
+        async def get_native_response(self, *args: Any, **kwargs: Any) -> Any:
+            raise AssertionError("get_response is implemented directly")
+
+        async def raise_from_native_response(self, response: Any) -> None:
+            raise AssertionError("get_response is implemented directly")
+
+        async def from_native_response(self, response: Any) -> Any:
+            raise AssertionError("get_response is implemented directly")
+
+        async def close(self) -> None:
+            return None
+
+    async def run() -> None:
+        evidence_dir = tmp_path / "evidence"
+        environment = vf.load_environment(
+            "datalox-dirty-integration",
+            profile="clean",
+            intervention_enabled=True,
+            intervention_seed="7",
+            evidence_dir=evidence_dir,
+            num_tasks=1,
+        )
+        client = ObservationDrivenClient()
+        state = await environment.rollout(
+            environment.dataset[0], client, "observation-driven-model"
+        )
+        await environment.rubric.score_rollout(state)
+
+        assert state["error"] is None
+        assert state["metrics"]["reward_task_correctness"] == 1.0
+        assert client.selected_calls[0] == {"name": "list_products", "arguments": {"offset": 0}}
+        assert client.selected_calls[-1]["name"] == "submit_products"
+        assert len([call for call in client.selected_calls if call["name"] == "list_products"]) == 6
+
+        rollout_dirs = [path for path in evidence_dir.iterdir() if path.is_dir()]
+        assert len(rollout_dirs) == 1
+        rollout_dir = rollout_dirs[0]
+        manifest = json.loads((rollout_dir / "manifest.json").read_text(encoding="utf-8"))
+        delivered = json.loads(
+            (rollout_dir / "delivered-observations.json").read_text(encoding="utf-8")
+        )
+        verification = json.loads((rollout_dir / "verification.json").read_text(encoding="utf-8"))
+        expected_trajectory_digest = (
+            "sha256:" + hashlib.sha256(state["trajectory_id"].encode("utf-8")).hexdigest()
+        )
+        assert manifest["trajectory_id_sha256"] == expected_trajectory_digest
+        assert manifest["intervention"]["enabled"] is True
+        assert manifest["profile"] == "clean"
+        assert len(delivered["calls"]) == 6
+        assert verification == {
+            "schema_version": "datalox_verifiers_rollout_evidence_v1",
+            "request_discipline": 1.0,
+            "task_correctness": 1.0,
+        }
+        for name, expected_digest in manifest["artifacts"].items():
+            actual = "sha256:" + hashlib.sha256((rollout_dir / name).read_bytes()).hexdigest()
+            assert actual == expected_digest
+
+        await environment.rubric.cleanup(state)
 
     asyncio.run(run())
 

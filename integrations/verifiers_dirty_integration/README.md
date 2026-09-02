@@ -1,4 +1,4 @@
-# Datalox paired intervention fixture for Verifiers
+# Datalox model-rollout intervention fixture for Verifiers
 
 This is a downstream experiment fixture for Serhii Nazarov's
 [`dirty-integration`](https://github.com/buildok/dirty-integration). It keeps
@@ -26,16 +26,86 @@ on = vf.load_environment(
 
 The task rows contain only agent-visible instructions. The profile, mode, and
 seed remain operator arguments on the environment and never enter the client-visible
-Verifiers state.
+Verifiers state. The model chooses every tool name and argument during the
+rollout; the environment defines the available operation surface, not an action
+sequence.
 
 The consumer package owns the task, seeded policy, model loop, oracle, and two
 reward components. Datalox owns the admitted base-provider execution and exact
 delivery of the consumer's intervention decision.
 
-## Run the paired experiment
+## Run a real model rollout
 
-From the repository root, one command installs the two editable packages in an
-isolated uv environment and writes both sides of the experiment:
+Use the normal Verifiers evaluator. Set these to an inference provider and model
+available in your existing Verifiers setup:
+
+```bash
+export INFERENCE_PROVIDER=prime
+export MODEL=your-provider/your-model
+```
+
+Then run one intervention-on rollout:
+
+```bash
+uv run \
+  --project integrations/verifiers_dirty_integration \
+  vf-eval datalox-dirty-integration \
+  --provider "$INFERENCE_PROVIDER" \
+  --model "$MODEL" \
+  --env-args '{"profile":"hostile","intervention_enabled":true,"intervention_seed":"7","num_tasks":1,"evidence_dir":"/tmp/datalox-serhii/live-on/evidence"}' \
+  --num-examples 1 \
+  --rollouts-per-example 1 \
+  --max-concurrent 1 \
+  --temperature 0 \
+  --max-retries 0 \
+  --output-dir /tmp/datalox-serhii/live-on/verifiers \
+  --save-results \
+  --disable-tui
+```
+
+The causal path is the ordinary Verifiers agent loop:
+
+```text
+task -> model-selected tool call -> provider observation -> later model-selected call
+```
+
+There is no reference solver or predetermined offset sequence in this path.
+The Verifiers result directory records the model conversation and tool calls.
+The controller-only evidence directory records the admitted provider execution,
+intervention decisions, delivered observations, and scores under one hashed
+rollout directory.
+
+Run the comparison side by changing only `intervention_enabled` and the two
+output paths:
+
+```bash
+uv run \
+  --project integrations/verifiers_dirty_integration \
+  vf-eval datalox-dirty-integration \
+  --provider "$INFERENCE_PROVIDER" \
+  --model "$MODEL" \
+  --env-args '{"profile":"hostile","intervention_enabled":false,"intervention_seed":"7","num_tasks":1,"evidence_dir":"/tmp/datalox-serhii/live-off/evidence"}' \
+  --num-examples 1 \
+  --rollouts-per-example 1 \
+  --max-concurrent 1 \
+  --temperature 0 \
+  --max-retries 0 \
+  --output-dir /tmp/datalox-serhii/live-off/verifiers \
+  --save-results \
+  --disable-tui
+```
+
+These are independent model rollouts over identical task, provider release,
+initial provider state, intervention policy, and intervention seed. Temperature
+zero reduces inference variation but does not make every hosted model backend
+bitwise deterministic. Treat model-output reproducibility as a separate control
+from the deterministic provider and intervention schedules.
+
+## Run the model-free calibration pair
+
+The following command runs a deliberately scripted reference client. It proves
+solvability, switch mechanics, trace separation, and reward calibration. It is
+not a model rollout and must not be reported as one:
 
 ```bash
 uv run \
@@ -46,7 +116,7 @@ uv run \
   --output /tmp/datalox-serhii-pair
 ```
 
-The command binds both sides to the same task digest, immutable OCI provider
+The calibration command binds both sides to the same task digest, immutable OCI provider
 release and profile, provider-state fingerprint, policy digest, and policy seed. Only
 `intervention_enabled` changes.
 

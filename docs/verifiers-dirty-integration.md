@@ -14,9 +14,29 @@ admitted provider-grounded behavior
 It is a downstream fixture. It does not add a task, fault distribution, oracle,
 or reward to the reusable Datalox provider runtime.
 
+## Execution modes
+
+The public handoff uses Verifiers' normal `vf-eval` path. A model receives the
+task and tool schemas, chooses each operation and argument, observes the
+result, and chooses its next action. No operation sequence is supplied by
+Datalox or the downstream environment.
+
+The package also contains a model-free careful client and naive client. They
+exist only to establish solvability, profile calibration, trace integrity, and
+reward separation. `datalox-dirty-pair` runs that calibration client; its
+`agent-trace.json` is a reference-strategy trace and is never evidence of a
+model rollout.
+
+Real model runs write the normal Verifiers result plus controller-only rollout
+evidence when the operator supplies `evidence_dir`. The evidence is published
+atomically under a directory named by the SHA-256 digest of the opaque
+Verifiers trajectory id. It contains the provider export, intervention trace,
+delivered observations, scores, and a digest-binding manifest. Neither the
+evidence path nor its contents enter a later model turn.
+
 ## Controlled pair
 
-Every pair fixes:
+The model-free calibration pair fixes:
 
 - task text;
 - Medusa provider config, runtime, operation-claims, and admission digests;
@@ -25,6 +45,11 @@ Every pair fixes:
 - model-free reference-client implementation.
 
 The controlled variable is `intervention_enabled`.
+
+Independent off/on model rollouts fix the same environment-side inputs, but a
+hosted inference backend may still produce different model samples even at
+temperature zero. Provider/intervention determinism and inference determinism
+are separate claims.
 
 In off mode, the policy executes once per request and its counterfactual
 decision is recorded. The admitted base response is delivered wire-data

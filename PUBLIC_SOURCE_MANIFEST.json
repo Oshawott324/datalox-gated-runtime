@@ -227,8 +227,8 @@
     },
     {
       "path": "docs/verifiers-dirty-integration.md",
-      "sha256": "sha256:0faab8c0bc5a462f1ede4e092c9637fd717d44bef125d73abd6a654990bfe5e5",
-      "size": 4748
+      "sha256": "sha256:ab18b2bcda1087f07d3b56bcc29e278d674df777fb66f3fd53ff309a6e79c753",
+      "size": 6069
     },
     {
       "path": "docs/verl-grpo-rollouts.md",
@@ -1937,8 +1937,8 @@
     },
     {
       "path": "integrations/verifiers_dirty_integration/README.md",
-      "sha256": "sha256:1b243c5951f3507b0266391cfb54acdaa747eea0f7bcdfe884ef188e97616d2a",
-      "size": 3651
+      "sha256": "sha256:a920e36212aac383f707a683d02832b44fa72dac6aae67ec051f8a2a9d8ac463",
+      "size": 6195
     },
     {
       "path": "integrations/verifiers_dirty_integration/THIRD_PARTY_NOTICES.md",
@@ -1957,8 +1957,8 @@
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/environment.py",
-      "sha256": "sha256:c58337225b813e855314a9eda7efee2c8507af16dbaedadd494c8e3cf9cfb55f",
-      "size": 8579
+      "sha256": "sha256:8a3e67d94891b4c1303f3f818d2b28af754c8f2cef28b64c81c9412d152d973d",
+      "size": 13523
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/episode.py",
@@ -1992,8 +1992,8 @@
     },
     {
       "path": "integrations/verifiers_dirty_integration/rollout-information-boundary.json",
-      "sha256": "sha256:3f3f4b1651bf296bd19201284f7a884bd27ba58db0857a7631e59194eeb4978b",
-      "size": 1105
+      "sha256": "sha256:026423dc68b490a3b10b93e3b8018384130b10957824ee8807fe2604a5ae83d5",
+      "size": 1216
     },
     {
       "path": "integrations/verifiers_dirty_integration/upstream-contract.json",
@@ -3897,8 +3897,8 @@
     },
     {
       "path": "tests/test_verifiers_dirty_integration.py",
-      "sha256": "sha256:cb1c9bc520552f3308186ab3f9cbd4ea96cd9752a584de6e8eb3c707bf194d84",
-      "size": 15114
+      "sha256": "sha256:54e5651883e9bab3ff3d1032ca7b48aa4d0ec742fef7f2b9d88f3b7951cb1432",
+      "size": 23122
     },
     {
       "path": "tests/test_verl_integration.py",
@@ -3952,5 +3952,5 @@
     }
   ],
   "schema_version": "datalox_public_source_manifest_v1",
-  "source_revision": "b35feac7873f5ad7158741d847fa6bf80850cbe7"
+  "source_revision": "d2e0fa33cdcbddf7845a392ab951dd93892fec35"
 }

@@ -20,6 +20,6 @@
     "agent_visible": false,
     "availability": "trusted_generation_or_evaluation_only",
     "contents": ["evaluation_ground_truth", "oracle_state", "verifier_inputs"],
-    "carrier": "consumer reward functions reading scalar results cached in an environment-private map after the rollout-local episode is closed"
+    "carrier": "consumer reward functions read scalar results from an environment-private map; optional provider, intervention, observation, and score evidence is atomically written to an operator-selected controller-only directory during rollout cleanup"
   }
 }

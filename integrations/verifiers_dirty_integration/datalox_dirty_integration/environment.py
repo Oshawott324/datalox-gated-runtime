@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
+import os
+import shutil
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -23,6 +27,94 @@ from datalox_dirty_integration.scoring import (
     request_discipline_for_episode,
     task_correctness_for_episode,
 )
+
+ROLLOUT_EVIDENCE_SCHEMA_VERSION = "datalox_verifiers_rollout_evidence_v1"
+
+
+def _canonical_json_bytes(value: Any) -> bytes:
+    return (json.dumps(value, indent=2, sort_keys=True) + "\n").encode("utf-8")
+
+
+def _sha256_bytes(value: bytes) -> str:
+    return f"sha256:{hashlib.sha256(value).hexdigest()}"
+
+
+def _write_rollout_evidence(
+    *,
+    evidence_root: Path,
+    trajectory_id: str,
+    profile: str,
+    intervention_seed: str,
+    intervention_enabled: bool,
+    exported: dict[str, Any],
+    scores: tuple[float, float],
+) -> Path:
+    """Atomically publish controller-only evidence for one completed rollout."""
+
+    trajectory_sha256 = _sha256_bytes(trajectory_id.encode("utf-8"))
+    rollout_dir = evidence_root / f"rollout-{trajectory_sha256.removeprefix('sha256:')}"
+    if rollout_dir.exists():
+        raise FileExistsError(f"rollout evidence already exists: {rollout_dir}")
+    pending = Path(tempfile.mkdtemp(prefix=".pending-rollout-", dir=evidence_root))
+    try:
+        artifacts = {
+            "provider-export.json": exported["provider"],
+            "intervention-trace.json": exported["intervention"],
+            "delivered-observations.json": {
+                "schema_version": ROLLOUT_EVIDENCE_SCHEMA_VERSION,
+                "calls": exported["delivered_calls"],
+            },
+            "verification.json": {
+                "schema_version": ROLLOUT_EVIDENCE_SCHEMA_VERSION,
+                "request_discipline": scores[1],
+                "task_correctness": scores[0],
+            },
+        }
+        artifact_digests: dict[str, str] = {}
+        for name, value in artifacts.items():
+            payload = _canonical_json_bytes(value)
+            artifact_digests[name] = _sha256_bytes(payload)
+            path = pending / name
+            with path.open("xb") as handle:
+                handle.write(payload)
+                handle.flush()
+                os.fsync(handle.fileno())
+
+        manifest = {
+            "schema_version": ROLLOUT_EVIDENCE_SCHEMA_VERSION,
+            "trajectory_id_sha256": trajectory_sha256,
+            "profile": profile,
+            "intervention": {
+                "enabled": intervention_enabled,
+                "seed": intervention_seed,
+                "policy_id": exported["intervention"]["policy_id"],
+                "policy_version": exported["intervention"]["policy_version"],
+                "policy_sha256": exported["intervention"]["policy_sha256"],
+            },
+            "provider": {
+                "release_digest": exported["provider_release_digest"],
+                "release_version": exported["provider_release_version"],
+                "profile_id": exported["provider_profile_id"],
+                "bundle_version": exported["provider_bundle_version"],
+                "initial_state_fingerprint": exported["initial_state_fingerprint"],
+                "config_sha256": exported["provider_config_sha256"],
+                "runtime_sha256": exported["provider_runtime_sha256"],
+                "admission_sha256": exported["provider_admission_sha256"],
+                "operation_claims_sha256": exported["operation_claims_sha256"],
+                "operation_contract_sha256": exported["operation_contract_sha256"],
+            },
+            "artifacts": artifact_digests,
+        }
+        manifest_payload = _canonical_json_bytes(manifest)
+        with (pending / "manifest.json").open("xb") as handle:
+            handle.write(manifest_payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(pending, rollout_dir)
+    except BaseException:
+        shutil.rmtree(pending, ignore_errors=True)
+        raise
+    return rollout_dir
 
 
 def list_products(
@@ -82,6 +174,7 @@ class DataloxDirtyIntegrationEnv(vf.StatefulToolEnv):
         profile: str,
         intervention_seed: str,
         intervention_enabled: bool,
+        evidence_dir: str | Path | None,
         **kwargs: Any,
     ) -> None:
         self.provider_config = provider_config
@@ -94,6 +187,15 @@ class DataloxDirtyIntegrationEnv(vf.StatefulToolEnv):
         self.profile_name = profile
         self._intervention_seed = intervention_seed
         self.intervention_enabled = intervention_enabled
+        if evidence_dir is None:
+            self._evidence_dir = None
+        else:
+            self._evidence_dir = Path(evidence_dir).expanduser().resolve()
+            self._evidence_dir.mkdir(parents=True, exist_ok=True)
+            if not self._evidence_dir.is_dir():
+                raise NotADirectoryError(
+                    f"rollout evidence path is not a directory: {self._evidence_dir}"
+                )
         rubric = vf.Rubric(
             funcs=[self.reward_task_correctness, self.reward_request_discipline],
             weights=[0.8, 0.2],
@@ -143,18 +245,30 @@ class DataloxDirtyIntegrationEnv(vf.StatefulToolEnv):
         resources: object | None = None,
     ) -> None:
         trajectory_id = state.get("trajectory_id")
-        if isinstance(trajectory_id, str):
-            episode = self._episodes.pop(trajectory_id, None)
-            if episode is not None:
-                try:
-                    scores = (
-                        task_correctness_for_episode(episode, self._oracle),
-                        request_discipline_for_episode(episode, self._oracle),
-                    )
-                finally:
-                    episode.close()
-                self._score_cache[trajectory_id] = scores
-        await super().cleanup(state, task=task, resources=resources)
+        try:
+            if isinstance(trajectory_id, str):
+                episode = self._episodes.pop(trajectory_id, None)
+                if episode is not None:
+                    try:
+                        scores = (
+                            task_correctness_for_episode(episode, self._oracle),
+                            request_discipline_for_episode(episode, self._oracle),
+                        )
+                        if self._evidence_dir is not None:
+                            _write_rollout_evidence(
+                                evidence_root=self._evidence_dir,
+                                trajectory_id=trajectory_id,
+                                profile=self.profile_name,
+                                intervention_seed=self._intervention_seed,
+                                intervention_enabled=self.intervention_enabled,
+                                exported=episode.export(),
+                                scores=scores,
+                            )
+                        self._score_cache[trajectory_id] = scores
+                    finally:
+                        episode.close()
+        finally:
+            await super().cleanup(state, task=task, resources=resources)
 
     def reward_task_correctness(self, state: vf.State, **kwargs: Any) -> float:
         del kwargs
@@ -180,6 +294,7 @@ def load_environment(
     profile: str = "realistic",
     intervention_enabled: bool = True,
     intervention_seed: str = "7",
+    evidence_dir: str | Path | None = None,
     num_tasks: int = 12,
     max_turns: int = 30,
     **kwargs: Any,
@@ -220,6 +335,7 @@ def load_environment(
         profile=profile,
         intervention_seed=intervention_seed,
         intervention_enabled=intervention_enabled,
+        evidence_dir=evidence_dir,
         dataset=dataset,
         max_turns=max_turns,
         **kwargs,
