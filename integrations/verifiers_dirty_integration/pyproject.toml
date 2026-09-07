@@ -15,6 +15,9 @@ dependencies = [
   "verifiers==0.3.1",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
 [project.scripts]
 datalox-dirty-pair = "datalox_dirty_integration.paired:main"
 
@@ -24,3 +27,6 @@ include = ["datalox_dirty_integration*"]
 
 [tool.uv.sources]
 datalox-gated-runtime = { path = "../..", editable = true }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
