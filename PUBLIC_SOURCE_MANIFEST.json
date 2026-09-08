@@ -7,8 +7,8 @@
     },
     {
       "path": ".gitattributes",
-      "sha256": "sha256:2f43f7dd3154082bd88b86daf341920d2d76bf933538c697ac5813b2736bc67e",
-      "size": 101
+      "sha256": "sha256:b6b372b663ed06f66aa6304d6a648db1438425e271b65dbff82cac840dd95c82",
+      "size": 292
     },
     {
       "path": ".github/CODEOWNERS",
@@ -37,8 +37,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "sha256": "sha256:0326afab281eec69535050af42380386adc3380bcd10fe2b288511e2d572ae9f",
-      "size": 6039
+      "sha256": "sha256:870eab43531a98a449997e3ae72221538295864d3695e9db51ab8b75df69b226",
+      "size": 6083
     },
     {
       "path": ".github/workflows/release.yml",
@@ -57,8 +57,8 @@
     },
     {
       "path": "AGENTS.md",
-      "sha256": "sha256:404a1f5be37928369b6529af2abaf0a9e1db7f09fce6974404023a0dba1637a6",
-      "size": 5684
+      "sha256": "sha256:23149908fd9251f584bacbf5556524733936c32ebb9ba2b6f1ee850dc8f17260",
+      "size": 6742
     },
     {
       "path": "CHANGELOG.md",
@@ -92,8 +92,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "sha256:44ad66ad5ad0f85b24acb7bcd3d655a4cdca095edb8052928dc3816a7ac9b2c8",
-      "size": 23970
+      "sha256": "sha256:e857c7a3e356d924e0952f0a102c52a6018330402668c3fd9620c928e3edc702",
+      "size": 26529
     },
     {
       "path": "SECURITY.md",
@@ -152,18 +152,23 @@
     },
     {
       "path": "docs/data-release-policy.md",
-      "sha256": "sha256:94d0a99f9b02f867339de85803597992baf26189d4ef8d80ba8b7d353fc3092b",
-      "size": 3765
+      "sha256": "sha256:1a0ca443df1b8042b93465da8c050c29ac6964c39d19b7dbe3075b5f7e4bafb0",
+      "size": 3452
     },
     {
       "path": "docs/delivery-interventions.md",
-      "sha256": "sha256:bc51f23b48ce46c6f1095534802d0d1d311f7f352a25ca191331de86ed47b07f",
-      "size": 5209
+      "sha256": "sha256:c7817c63dcec7dc6438e13997917d3d18f8cfa093b94ebdf5cd460a4a01d5073",
+      "size": 11664
     },
     {
       "path": "docs/envfactory-provider-projection.md",
       "sha256": "sha256:06fca1a16faaa794ea03c97b5d660341b1e162eb235814762e374bbd5def5928",
       "size": 4901
+    },
+    {
+      "path": "docs/medusa-store-cart-provider.md",
+      "sha256": "sha256:b6f178201153fb87debb1ca682c38298792a953892b05eb43b8b96f92e8d887a",
+      "size": 8064
     },
     {
       "path": "docs/product-definition.md",
@@ -172,8 +177,8 @@
     },
     {
       "path": "docs/provider-behavior-grounding.md",
-      "sha256": "sha256:8a32f5f771b39dbb1e29ae8410d49359a04ff2f038ed9eaaa397b4920138c0a7",
-      "size": 12888
+      "sha256": "sha256:19b2a1e87533417bceee8654412b2047149b37949679676a0aafaeb0b63cb845",
+      "size": 14340
     },
     {
       "path": "docs/provider-core-completeness.md",
@@ -181,14 +186,24 @@
       "size": 3953
     },
     {
+      "path": "docs/provider-differential-and-drift.md",
+      "sha256": "sha256:623c0402422510a8902b664d6919be77d9828d0ff982668e52251bf44f5a757b",
+      "size": 11451
+    },
+    {
       "path": "docs/provider-foundry.md",
-      "sha256": "sha256:de891cef70e2a6e2ccb6e2b24d3ae720c47710e80820759b10d3c20e7df31a77",
-      "size": 8292
+      "sha256": "sha256:1a1589dc4e6963c64d031379f52183358621a827edc86a998f9f5df38892fcef",
+      "size": 9765
     },
     {
       "path": "docs/provider-packs.md",
-      "sha256": "sha256:f4d00f20f69eee927ab0e6d0a93dea7e70682f3ac7e1322bc3711797f48e6da9",
-      "size": 5606
+      "sha256": "sha256:63abfc753073d118d78607df8bbb44dd5dd220237c75ce80818249314e963c47",
+      "size": 6546
+    },
+    {
+      "path": "docs/provider-state-profiles.md",
+      "sha256": "sha256:110065da76033ebdc425acfdbdc15abe031776258db881b452491b061f8e97a4",
+      "size": 5684
     },
     {
       "path": "docs/public-release.md",
@@ -222,13 +237,18 @@
     },
     {
       "path": "docs/transparent-interception.md",
-      "sha256": "sha256:c7f81b6e056704dec200cb04c3c1f4c6bbaba217b57f0f151df3bd2c1800b10e",
-      "size": 12434
+      "sha256": "sha256:d91fc868608550248a902d75a35d48562761ef8c006d3a556c082e72ba9e4fa7",
+      "size": 13248
+    },
+    {
+      "path": "docs/uniprot-idmapping-temporal-provider.md",
+      "sha256": "sha256:87bd3aae26a4027e71473b2ee72dd5abc107ed1c2822fba534153078839d479e",
+      "size": 5409
     },
     {
       "path": "docs/verifiers-dirty-integration.md",
-      "sha256": "sha256:ab18b2bcda1087f07d3b56bcc29e278d674df777fb66f3fd53ff309a6e79c753",
-      "size": 6069
+      "sha256": "sha256:b13caa78387fe892f5b5ee106fa1ae550dae2262ebd68538e12adfa228696f4e",
+      "size": 7555
     },
     {
       "path": "docs/verl-grpo-rollouts.md",
@@ -237,8 +257,8 @@
     },
     {
       "path": "docs/what-we-are-building.md",
-      "sha256": "sha256:63540c6d7b3d25bfa42993f3e88ab67280825786825049bd932c44cb5aa2b789",
-      "size": 7534
+      "sha256": "sha256:0e6f187ba6868aef351bb1274ffdceab25c58535e89588c26cb592ce362e26d8",
+      "size": 8520
     },
     {
       "path": "docs/world-admission-rubric.md",
@@ -416,6 +436,151 @@
       "size": 11863
     },
     {
+      "path": "envs/medusa_store_cart_v0/evidence/differential-report.json",
+      "sha256": "sha256:df6e7be511bf68ed3b0c149114a42835a61e7c82ddff8a65314ec0723ce0d467",
+      "size": 4940
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/evidence/grounding-report.json",
+      "sha256": "sha256:ca5d98703cc463b4104e1b54d509bcddd9aedb0480106592b4754f26d4199227",
+      "size": 681
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/evidence/observations.json",
+      "sha256": "sha256:ce00055f67b9698f77d6ecedbd2fd5fbc37f7622a9d47193140879e4ca1713cd",
+      "size": 6913
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/evidence/operation-claims.json",
+      "sha256": "sha256:8989404d6141e582672f514821985ff2e7bcc6e3ae1a82d95976cf2798286173",
+      "size": 29176
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/evidence/provenance.json",
+      "sha256": "sha256:c6030a60c118259b5aaa829e24ffa623bc2cddd991301ce3618dfd65947f99a0",
+      "size": 2269
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/identity-policy.json",
+      "sha256": "sha256:0bcbee31abc9387e2847917f3bd609fd18d3b9ec623ff213f42fbdcc950e723f",
+      "size": 830
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/provider-admission.json",
+      "sha256": "sha256:f6f9807945160d13056f8973a4bf61e5224390b8e2785bfd2150bd075be9a6d6",
+      "size": 8888
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/provider-release/blobs/sha256/1778e4db9fa5f8ca0ff0878e4f992dfcbb3f26dd50866c3a78200998aa0f5249",
+      "sha256": "sha256:1778e4db9fa5f8ca0ff0878e4f992dfcbb3f26dd50866c3a78200998aa0f5249",
+      "size": 7485
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/provider-release/blobs/sha256/19e8f978bbf64f73da17a8d1b343be1c584bf8a688b334339f36ea7c90f6a4d3",
+      "sha256": "sha256:19e8f978bbf64f73da17a8d1b343be1c584bf8a688b334339f36ea7c90f6a4d3",
+      "size": 492
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/provider-release/blobs/sha256/86e352c25189dc295c51580a7a4613b3db99e47ea8dc9f69d2990ebe32d15e10",
+      "sha256": "sha256:86e352c25189dc295c51580a7a4613b3db99e47ea8dc9f69d2990ebe32d15e10",
+      "size": 51200
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/provider-release/index.json",
+      "sha256": "sha256:6b2bc2bc55fbf3c912bf1678d2d8e39630e94cc858dc0a5c4e185d9825497f37",
+      "size": 411
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/provider-release/oci-layout",
+      "sha256": "sha256:18f0797eab35a4597c1e9624aa4f15fd91f6254e5538c1e0d193b2a95dd4acc6",
+      "size": 30
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/provider-runtime/identity.json",
+      "sha256": "sha256:0bcbee31abc9387e2847917f3bd609fd18d3b9ec623ff213f42fbdcc950e723f",
+      "size": 830
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/provider-runtime/provider-runtime.json",
+      "sha256": "sha256:d79f37fcc02ec579cf919c1a4cb08897af8d974214dc620a8810e138abb2e79f",
+      "size": 1380
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/provider-runtime/roles.json",
+      "sha256": "sha256:a7eb4374cc17a7f88b8b51d175a4ef93f541819e7cf132a09bbd07468ccfc271",
+      "size": 164
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/provider-runtime/runtime/world/v1/contract.py",
+      "sha256": "sha256:2b230f09b0cf052d14637c216799b17b616f19ba7a26c82ffa39811746bb72dc",
+      "size": 3344
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/provider-runtime/runtime/world/v1/implementation.py",
+      "sha256": "sha256:8007ca5e1aed30b648a8cdf52d2a7e926c20535faabdf7e1c412c598dd443e34",
+      "size": 17201
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/provider-runtime/seed.json",
+      "sha256": "sha256:7f14d86770ed0327d889d3957a9b671dc6194f3410cc67ec545a1147814e932f",
+      "size": 274
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/provider-runtime/source.json",
+      "sha256": "sha256:13f3e067d4a1cd23400ba2425e2117864c6f5e0fbbd2b95d424bf2aa3f8d4c46",
+      "size": 2114
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/provider-runtime/tools.json",
+      "sha256": "sha256:c842d648d8bbf3273d46b92f4f9ca096810472cc86c34e8d971a9ce4c3dcff7f",
+      "size": 4608
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/source-world/world/manifest.json",
+      "sha256": "sha256:aec6955ac0e251d038499afc63472a9260c73c2af3417695a0649af5bfde8cfd",
+      "size": 1441
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/source-world/world/v1/construction.json",
+      "sha256": "sha256:e9bb668e2960b9b64fea7785079d49ec4fbc4598bce3724e04c458889d7fcb6d",
+      "size": 451
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/source-world/world/v1/contract.py",
+      "sha256": "sha256:2b230f09b0cf052d14637c216799b17b616f19ba7a26c82ffa39811746bb72dc",
+      "size": 3344
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/source-world/world/v1/episodes.jsonl",
+      "sha256": "sha256:81141436cc9eb155fb1c0f9d2f05b56bfa5d926914a3840707d3b5b934e45c4a",
+      "size": 678
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/source-world/world/v1/implementation.py",
+      "sha256": "sha256:8007ca5e1aed30b648a8cdf52d2a7e926c20535faabdf7e1c412c598dd443e34",
+      "size": 17201
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/source-world/world/v1/roles.json",
+      "sha256": "sha256:a7eb4374cc17a7f88b8b51d175a4ef93f541819e7cf132a09bbd07468ccfc271",
+      "size": 164
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/source-world/world/v1/sources.json",
+      "sha256": "sha256:565b2ee4c94950a66db35ee9b6c1967fb006351fbff929ff6b9ddbd7e69c01b2",
+      "size": 1709
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/source-world/world/v1/tools.json",
+      "sha256": "sha256:b1f9c118c866ce18ccb38aa8a976130b80b9d839bf367215cd6ee07acf1975bd",
+      "size": 3130
+    },
+    {
+      "path": "envs/medusa_store_cart_v0/source-world/world/v1/verifier.json",
+      "sha256": "sha256:541f90b4d98430263bccdf260bcecb994de1d2255d31eb499ac9c9c7db7f85df",
+      "size": 418
+    },
+    {
       "path": "envs/medusa_store_pagination_v0/evidence/observations.json",
       "sha256": "sha256:baf6fca51d081ef18286d538f6f9aa81114f3f8dee9923bb21840482ef1aa79e",
       "size": 14981
@@ -479,6 +644,26 @@
       "path": "envs/medusa_store_pagination_v0/provider-runtime/source.json",
       "sha256": "sha256:599a35de5c2aef621d886a5d2f75fe53ca266d73cc19ee6a625df4c93dea63ba",
       "size": 907
+    },
+    {
+      "path": "envs/openlmis_supply_chain_v0/state-profiles/regional-network-v1/base-seed.json",
+      "sha256": "sha256:2b865483bd1d52cf0f98e790d27364d6ac5bbca3b8b2ede560fbe0cc188c4dc4",
+      "size": 83294
+    },
+    {
+      "path": "envs/openlmis_supply_chain_v0/state-profiles/regional-network-v1/construction-trace.json",
+      "sha256": "sha256:c44cefdf3e8b41fc720722153019646ab368e74ac966e2ae8d67144cbc899cc1",
+      "size": 51471
+    },
+    {
+      "path": "envs/openlmis_supply_chain_v0/state-profiles/regional-network-v1/profile.json",
+      "sha256": "sha256:33100736247c19c645dac715090f67bbe40f0b8435121671df71c14cd3170152",
+      "size": 13377
+    },
+    {
+      "path": "envs/openlmis_supply_chain_v0/state-profiles/regional-network-v1/seed.json",
+      "sha256": "sha256:c505084a77e9ab00acf011212418b94cb759645a417235ae369904efda7899f1",
+      "size": 123126
     },
     {
       "path": "envs/pylabrobot_hamilton_star_v0/evidence/reference_execution.json",
@@ -556,6 +741,156 @@
       "size": 4948
     },
     {
+      "path": "envs/uniprot_idmapping_v0/evidence/authored-write-completeness.json",
+      "sha256": "sha256:f810760de402922f14f767eec8415ffe23481803a57979bbe9d7f9dabd5536bb",
+      "size": 1110
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/evidence/differential-report.json",
+      "sha256": "sha256:b8ea8dd5f151c8bdf185d0a0ba36cbf49e6ad78e1a5cab60e8363e3eb5c4093e",
+      "size": 9440
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/evidence/observed-lifecycle.json",
+      "sha256": "sha256:02fc0430aa4ec0c84756bc19707356f1d4ebb7f1d34a5ce25c45708a335260ad",
+      "size": 7299
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/evidence/observed-status-failure.json",
+      "sha256": "sha256:78a884529d8ba78c279d24b845ee38772015fc6861c6b2e14ea2643fa348b2b7",
+      "size": 1603
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/evidence/observed-uniref-result-failure.json",
+      "sha256": "sha256:4a18b15bf500c363c6ec2f18c34281ee80f2b0a9898b48d54e289cb4e93044ee",
+      "size": 1697
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/evidence/operation-claims.json",
+      "sha256": "sha256:b651d8d31a20fd2c992e48837def9aa4e066c927372c5a440ceadc6b72e93582",
+      "size": 12921
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/evidence/provenance.json",
+      "sha256": "sha256:4ce2d9bb4b5fb3c569b2ae24d74b242971fa79a18d3e2ebee270ad12f2a51b45",
+      "size": 5215
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/provider-admission.json",
+      "sha256": "sha256:bf79f386ffcbe48f655cf8fb379be4b73a6ba9535b7892671caa9892d4005244",
+      "size": 7125
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/provider-release/blobs/sha256/374837eef611d793d93b3685184b5a21b9daf45367db79ce9cfb45db80c96c09",
+      "sha256": "sha256:374837eef611d793d93b3685184b5a21b9daf45367db79ce9cfb45db80c96c09",
+      "size": 40960
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/provider-release/blobs/sha256/ae4abfe5b99a2bc659e25699b184a9f8df3aa8e24ecdfe5f1d6b32aceffa2147",
+      "sha256": "sha256:ae4abfe5b99a2bc659e25699b184a9f8df3aa8e24ecdfe5f1d6b32aceffa2147",
+      "size": 492
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/provider-release/blobs/sha256/c5202353c2ed3658373decf278a79def81cb98f8945956cd3e8408534e238c0a",
+      "sha256": "sha256:c5202353c2ed3658373decf278a79def81cb98f8945956cd3e8408534e238c0a",
+      "size": 6316
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/provider-release/index.json",
+      "sha256": "sha256:74d71399d28d2c16419072d44dd6216517ba2e7b981361f53558594cdd26f3e2",
+      "size": 412
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/provider-release/oci-layout",
+      "sha256": "sha256:18f0797eab35a4597c1e9624aa4f15fd91f6254e5538c1e0d193b2a95dd4acc6",
+      "size": 30
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/provider-runtime/identity.json",
+      "sha256": "sha256:886edaa36ada260be3fc515602d88de27120c2cc41f576d8eabacedb30daf287",
+      "size": 133
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/provider-runtime/provider-runtime.json",
+      "sha256": "sha256:27e35f855bf3549600b66ad32ce3e80d3bff21d0877f99cca0b8f0fd35972625",
+      "size": 1424
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/provider-runtime/roles.json",
+      "sha256": "sha256:51310eb097ae2d55a1ffc51d048e9ea07d1674bc00efae27ae68efa73b7e91cd",
+      "size": 141
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/provider-runtime/runtime/world/v1/contract.py",
+      "sha256": "sha256:386b3524348b32f3f448929d54bc4ad65889ab1566bbac3c61ed843d2a663d4c",
+      "size": 1894
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/provider-runtime/runtime/world/v1/implementation.py",
+      "sha256": "sha256:b322ce2fde0e05c4cd671ad6044ddf8927f82674a096df4c34ccd2821ecb3b6c",
+      "size": 10519
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/provider-runtime/seed.json",
+      "sha256": "sha256:db648da7b1b00a8a25d3e0ed70eb84c98951abb9615d24f077fec1e3bd7c27cb",
+      "size": 1659
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/provider-runtime/source.json",
+      "sha256": "sha256:d2c35294bc582c2ce1127e4a7ce3f89ea657041709728eff718221a2ce1b3998",
+      "size": 4021
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/provider-runtime/tools.json",
+      "sha256": "sha256:ff0af2a9d56b12e5c13629df1b7318a212a24fdd38888da77b5cbc3e8fb0187f",
+      "size": 2294
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/source-world/world/manifest.json",
+      "sha256": "sha256:dcb958b9ff6b43edf076a130b6f2a33bf5f2b2132cd181b893cf7fd4f98f3d7f",
+      "size": 1480
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/source-world/world/v1/construction.json",
+      "sha256": "sha256:0fb6f98cecf7de2b3907b796d93ddd12c3e47c97f09207d8b570db54fc977bb6",
+      "size": 993
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/source-world/world/v1/contract.py",
+      "sha256": "sha256:386b3524348b32f3f448929d54bc4ad65889ab1566bbac3c61ed843d2a663d4c",
+      "size": 1894
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/source-world/world/v1/episodes.jsonl",
+      "sha256": "sha256:0ec1715dbd06b2b13fe5d533d393150d1b372bb07e06caa58ad76f94412138fa",
+      "size": 1418
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/source-world/world/v1/implementation.py",
+      "sha256": "sha256:b322ce2fde0e05c4cd671ad6044ddf8927f82674a096df4c34ccd2821ecb3b6c",
+      "size": 10519
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/source-world/world/v1/roles.json",
+      "sha256": "sha256:755437d171b2fda9274d01f6af9b44b0d544e542f4011d6d8475205f8b477456",
+      "size": 141
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/source-world/world/v1/sources.json",
+      "sha256": "sha256:c7041ab9d0f2810fef4a6de371bed6257aceadf08094c9585a9d695d1fa413c4",
+      "size": 3546
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/source-world/world/v1/tools.json",
+      "sha256": "sha256:61a0068b9f96011017766720c54ecb051420d46eb579f7c399bea0670196d049",
+      "size": 1866
+    },
+    {
+      "path": "envs/uniprot_idmapping_v0/source-world/world/v1/verifier.json",
+      "sha256": "sha256:09baee5874d6bbc2520a2b304a40123dcd0887d0aacc28f09903de5eb1028051",
+      "size": 226
+    },
+    {
       "path": "examples/billing_support_world_v0/gate_config.json",
       "sha256": "sha256:c7e38aa2e5f4fd25564ff15bfcffad24eed9637c15c4a705ee4eb5ebbf3887bb",
       "size": 336
@@ -586,609 +921,14 @@
       "size": 476
     },
     {
-      "path": "integrations/README.md",
-      "sha256": "sha256:a85b2205147b2f501b06cb2d11fa59824115cb14e47e2ceb898642714fb2a43b",
-      "size": 1356
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/DATALOX_ADAPTER.json",
-      "sha256": "sha256:bb1e8d7c61caef1faf500b4b1280b4645be2ddf1c611af0d19cbbf0c6e59c397",
-      "size": 19529
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/LICENSE",
-      "sha256": "sha256:c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
-      "size": 11357
-    },
-    {
       "path": "integrations/harbor/incident_customer_coordination_v0/README.md",
-      "sha256": "sha256:de7fe876f305f68383e38905ef8bf8f9472234b6fb76764953d1a7f5b87c122f",
-      "size": 3622
+      "sha256": "sha256:95ab8590340f8fd353dc555f0dad4bd251cb5aca9f154b464daf1c6eed7c7bde",
+      "size": 3215
     },
     {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/docker-compose.yaml",
-      "sha256": "sha256:5dc5234acc16c73f50552d1cc406eebd2853d21d4a91a8373f3ca9c7bac53dc7",
-      "size": 831
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/.dockerignore",
-      "sha256": "sha256:2aa36c0731f6f8de7e18e3caea06614b9faabe1286dd5b8586c16c6e1b74f60f",
-      "size": 38
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/DATALOX_WORLD.json",
-      "sha256": "sha256:df78d3b8a65cf07584156927e7163ef855eda9270200198cfb011d23f9a87a31",
-      "size": 17806
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/Dockerfile",
-      "sha256": "sha256:3a1bab3c5836756505b4fb74a8e90cc17938827c763242ea23e02f24141ca86a",
-      "size": 1251
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/episode_template/.world_v1_code/world/v1/compiled_data.py",
-      "sha256": "sha256:e961818ded5ea848a9780efea6d754b2fa4ffee5d445ae50763fb350107c3030",
-      "size": 38544
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/episode_template/.world_v1_code/world/v1/implementation.py",
-      "sha256": "sha256:4173c727fca2f79ee04c661e19a13a98dd07c3fc68107b37f2220f1945d89b92",
-      "size": 21862
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/episode_template/gate_config.json",
-      "sha256": "sha256:bd7bd363a210075e8425e37798eca0a3b30e01db765d22a85c7df2463bba7547",
-      "size": 243
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/episode_template/task.json",
-      "sha256": "sha256:f66c93a77913121215c6a4de309f7f6f96d9911bc3516564d39a162723e1ef11",
-      "size": 1794
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/episode_template/world_v1.sqlite3",
-      "sha256": "sha256:b5d0e898ca3d663011fe4cbd2d4b2f015be56b4f9b635922128bdfc8e0b1ae0d",
-      "size": 147456
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/pyproject.toml",
-      "sha256": "sha256:8dd6f3b04d944d01831ce50402fa0d8a45fd44cec8f2bd9cdf9da2febcf34274",
-      "size": 1684
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/__init__.py",
-      "sha256": "sha256:0fdb5ace9ccc8facf75539eecceade9c6b9984097630183eb97d00dd0de37ecc",
-      "size": 816
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/audit.py",
-      "sha256": "sha256:86b3043926f0ec9cd41bf2853d29078ad870c949b4b51ac9646cb0dde01a9799",
-      "size": 8770
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/auth.py",
-      "sha256": "sha256:0d09913716c678404c4f43493e8024852db6fd8cdad6c322499d8c2eb7d4542c",
-      "size": 9146
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/authoring_mcp_runtime.py",
-      "sha256": "sha256:08163bca60e11affe6ff78f8bb20412d378d8c5062123d9035d5cdc9a4265f1d",
-      "size": 3504
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/authoring_runtime.py",
-      "sha256": "sha256:3ddbcaf5ebedbc25c77c778ffa0c8bcdfef2e53a0b10e67a24e5d8d1a747b88a",
-      "size": 3323
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/behavior_harvest/__init__.py",
-      "sha256": "sha256:ec20ea1bcfb226f3bf69998ec78e3c8ce50edad0f6400dbcc9677632cca0021c",
-      "size": 2822
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/behavior_harvest/compiler.py",
-      "sha256": "sha256:13bd3152314c2bd1cb87edcb04b98046cceec2d386f036770bb4ea303b266593",
-      "size": 13203
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/behavior_harvest/contracts.py",
-      "sha256": "sha256:c1f844a97c5325b21094a3d4f7a7e256373cb1eb359753cafd8b64cb1454e3d8",
-      "size": 163175
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/__init__.py",
-      "sha256": "sha256:ec77d4009006761fd37abe0c76764228fb8516d08e8633df89f123ca82a8540c",
-      "size": 57
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/v2/__init__.py",
-      "sha256": "sha256:7b423f6c048f6def74c77da8f59186f29c2c22b43c94ffd925b8f3000905205f",
-      "size": 3015
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/v2/compiler.py",
-      "sha256": "sha256:824933b20d2491811257e9fadb0cbc3633e4e88855b26945c0fc30e4f4376815",
-      "size": 16184
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/v2/contracts.py",
-      "sha256": "sha256:4b303a543bb4e9f0332a01adb5697a7bbbb321ad31988ce8c52a747d5911ef1b",
-      "size": 171013
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/v2/runner.py",
-      "sha256": "sha256:15978826d15a14716f25e1965dbf695a7008728cfab9e0b83c12064082575da5",
-      "size": 47004
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/v3/__init__.py",
-      "sha256": "sha256:ec1f5bf6bcf41e3eb9d65e09126aef620dc555a6ed1076efea1adea5cb900ee8",
-      "size": 3611
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/v3/compiler.py",
-      "sha256": "sha256:6dcded7234202f041f411c113636d44b9f740b4a990e8f79371274fea7aa644e",
-      "size": 19431
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/v3/contracts.py",
-      "sha256": "sha256:6984b9300ffb43be296368e182c546a0b12b80176246f694a6a32991ec617888",
-      "size": 222237
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/v3/runner.py",
-      "sha256": "sha256:5554d65fe3a61990cd5a1ea7d0cc0664bd4cf33cbb652d23076c72b43769a4e0",
-      "size": 60439
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/behavior_harvest/runner.py",
-      "sha256": "sha256:cb6d6f3b97792bf80db9061d8b1a2842db037b960b108cc0a61eb0cbf3568989",
-      "size": 46019
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/binary_response.py",
-      "sha256": "sha256:8196caf898931d8fce80b9b87a98fcfd70203431eebc9ba6367b53992927d0a7",
-      "size": 8864
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/capture.py",
-      "sha256": "sha256:8612022ce74b8b2e47e8f62d8fcb1d4d6d79b7afa6e6c68072453d86a2e8b71f",
-      "size": 6888
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/cli.py",
-      "sha256": "sha256:3ae696f08b95afb279a7a7ae970a1d2c0ba228f90583ad36cf7bc2952b39cba3",
-      "size": 36048
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/config.py",
-      "sha256": "sha256:bdbaa6181be43fec4ef11fdf959d768e8c5bae6800419187467b22f22fd00a15",
-      "size": 31804
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/data_plane.py",
-      "sha256": "sha256:4067d6fed44bb6591383e027da1c9a08659054822f6726c3039d05b1a2f9c839",
-      "size": 6132
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/documented_provider.py",
-      "sha256": "sha256:f66571cd93e628b9da1a4ade77e5d229fe605571eb7ae6190c17d6a0dd03b30b",
-      "size": 12513
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/engineering_proof/__init__.py",
-      "sha256": "sha256:602356bd82426da97f493a4ddc76c43638df6e3d718a8e5a9f324bbbf0577199",
-      "size": 1134
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/engineering_proof/contracts.py",
-      "sha256": "sha256:f9f1234c345870b2ec7688ee29aa48677a7234a6ccacb9c5f5ed279a25722bb6",
-      "size": 15897
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/engineering_proof/program.py",
-      "sha256": "sha256:ad3f643e77fa91ca1f6c4f7e09fbfb11bbff076455f2f8cf9731b2527664d87a",
-      "size": 3196
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/engineering_proof/runner.py",
-      "sha256": "sha256:d0bfa136dc316b8ccfd1f79aec656e64e4d00c85becab4b94c66a0c61fd33560",
-      "size": 10663
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/engineering_proof/world_target.py",
-      "sha256": "sha256:b7fa4a0abef9169488f893bae13b66350c795068c4138c2e58df4463b18e63a0",
-      "size": 11923
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/harness_adapters/__init__.py",
-      "sha256": "sha256:17dee48de0b54493e9090985af012d0dc3a4fb27677c957ac4c4d6b7567e3c49",
-      "size": 544
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/harness_adapters/_shared.py",
-      "sha256": "sha256:a855bf08afbd0e431d521298fa0e734e90d2ea922aa8fffcb64a1fdfc4a4ef7a",
-      "size": 4379
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/harness_adapters/contracts.py",
-      "sha256": "sha256:571661b2d36a71add5b76da57e9519428526e50da12b8706045f16f10450e304",
-      "size": 330
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/harness_adapters/harbor.py",
-      "sha256": "sha256:46475f0967d8dd0f1d8eef337e50c9035b540ac3d3c865b78207ff4dc7294633",
-      "size": 11153
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/harness_adapters/hud.py",
-      "sha256": "sha256:a387d782621bc223d1c7bb5ddf102d22160defa2a5aaa652e9edcab44abed78a",
-      "size": 5259
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/http_server.py",
-      "sha256": "sha256:79fcf0adcf1be10179028cb45ec227e20cf9b7ff85367f630d42975576839725",
-      "size": 6610
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/import_source_pack.py",
-      "sha256": "sha256:a5f3f3059d7766fc2be5aae1ff7b37a21ad43fbfb07acaab451f51e7a60ea8bd",
-      "size": 11705
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/interception/__init__.py",
-      "sha256": "sha256:15993087645cb30a83530b97093321aa237f79a53dcd199e3d461d9420382815",
-      "size": 276
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/interception/certificates.py",
-      "sha256": "sha256:722c6b4a3d58ae97dcafa2e28fc161f309d519dd2c41ea888352e62aa587f31f",
-      "size": 5043
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/interception/deployment.py",
-      "sha256": "sha256:04adbf2d78e23d881dc0f4810f93877c1732660a00b7d5673791c56ee99e070d",
-      "size": 14955
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/interception/gateway.py",
-      "sha256": "sha256:1feffaf8ca2f6c6f9eca0b9af2114733dcb224a4e0a03082621dfa908f16fe6c",
-      "size": 4428
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/interception/server.py",
-      "sha256": "sha256:2175e71d147cb58f621c484f3f9680abd66783b0be149679d32418796da92d14",
-      "size": 7696
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/json_digest.py",
-      "sha256": "sha256:13458f327abcaa9d41f96c0001e8d486ac8d23b06550302836ea913eeaf71db5",
-      "size": 1175
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/kubernetes_openapi.py",
-      "sha256": "sha256:c437cb26f6c381bf8439713d8d88bffb0693dfac301b69306840c7582a4f0189",
-      "size": 22655
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/ledger.py",
-      "sha256": "sha256:ee6e100b93f76bd437ce7bf7df3ea5c5308d58f9575306cbf1d5e11f27f57a36",
-      "size": 6977
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/mcp_capture.py",
-      "sha256": "sha256:6e1720b41359e5f69f7d6d7a2c25fffe28e48cc6db2f621d7b5eb365e5c30cec",
-      "size": 3186
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/mcp_registry.py",
-      "sha256": "sha256:de212355069b9abc6a301a6d0d9d2b18e33d047b41f95b6f9fb2e96dd09382c6",
-      "size": 10799
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/mcp_runtime.py",
-      "sha256": "sha256:1aa09b861e290d2bcdaf516ec93886a1c6ef7182c52b92007efcf2edd887af81",
-      "size": 6916
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/mcp_server.py",
-      "sha256": "sha256:072723d5ddecf9134cfdc52e91b80b7bf6c5fee2c2b2cc34f60f031de93e3879",
-      "size": 10472
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/mcp_upstream.py",
-      "sha256": "sha256:5f30ce385b351f253be9162800d6e5fce9fb04be1922a019896286679368a8df",
-      "size": 3673
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/models.py",
-      "sha256": "sha256:eaeb75779833ab123bf0ad9b99dd5fde9cc73e5bc9e8a911f4d30e5b0d19ad6d",
-      "size": 8305
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/policy.py",
-      "sha256": "sha256:5648f68856a0d982d6fe9925877271221afe4d54fa8e94b205a2fd114bc30465",
-      "size": 5989
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/promote.py",
-      "sha256": "sha256:c5b6dc67783cee8d0e5bae57e975c8e6597bfd28c5f9daa957a1d1dc1b03c449",
-      "size": 13001
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/provider_core_coverage.py",
-      "sha256": "sha256:f837efce2446c65d6ec89c4b2f17bc9279b8103bf1ecaa65dbedf3daa62a37bd",
-      "size": 40120
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/provider_probe.py",
-      "sha256": "sha256:5ba3afcf9b1226e4f8dd4d03aff4e3cdf4db7767ab1c072676e7055d74d9218f",
-      "size": 31765
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/provider_proofs/__init__.py",
-      "sha256": "sha256:93050dc9f4312bcde18478c22bb5662fc273eae41d92d5562c630c3a5b1a8566",
-      "size": 84
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/provider_proofs/stripe.py",
-      "sha256": "sha256:4d173885c4d3583770df7dc4e6a558b31355ed249774ecf01f56d619aea2d4a8",
-      "size": 10852
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/provider_runtime/__init__.py",
-      "sha256": "sha256:0f1c2fd16ac68d56d00caa20447ac287abae196dbadca6541a1d1d3d45144694",
-      "size": 838
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/provider_runtime/bundle.py",
-      "sha256": "sha256:bb282a249e1c0e825666346210154ae8b6d6aad899b3fa50c3337dae36254c91",
-      "size": 24157
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/provider_runtime/errors.py",
-      "sha256": "sha256:af4caa3dd0f9a7d0d4d6fce3cd55ed0cc18cea62051e54904a6a1ed9992ce5a9",
-      "size": 314
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/provider_runtime/runtime.py",
-      "sha256": "sha256:7527e0109b687464f6b7d21a07ef2fbd4bdda6dba182aa37967997a0bb72041c",
-      "size": 7805
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/public_export.py",
-      "sha256": "sha256:9bb8fa6db8ea957a4c8e31717a39b2ede687846ddc1b7233e3536976980838a2",
-      "size": 19035
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/query.py",
-      "sha256": "sha256:bb5fc7c0501793b90ae74afbf8e89f4064a2df4b54468c201acd507f0b4433f8",
-      "size": 2839
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/reference/__init__.py",
-      "sha256": "sha256:9c902eeaa4caa5731aba3d41c6f5311646ffc1a5c2296ca060043e8d48240985",
-      "size": 998
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/reference/comparison.py",
-      "sha256": "sha256:e66cd28135e5efe4e0bb526bbacc7dbf23309234cfeb22657de5dcb7ba5a380a",
-      "size": 3520
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/reference/contracts.py",
-      "sha256": "sha256:0101c024ddd38c017308b50baada5083faa1da8d829f4ad5da0d60bda3f07365",
-      "size": 25307
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/reference/runner.py",
-      "sha256": "sha256:9ba4540caa97e67618a21008b7c8d66d9d4fddb9362e44b590c83413480aea99",
-      "size": 7633
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/remote_world_service.py",
-      "sha256": "sha256:fb17f4dae5c189a801e272f5ab02c3de1b922b61df8c600ebd691f46c2bda505",
-      "size": 21429
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/runtime.py",
-      "sha256": "sha256:53a46448107a36aa701155efdcc4b0d49941576030f3303bfafc336c7006ec1a",
-      "size": 10292
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/serializer.py",
-      "sha256": "sha256:ab8176704da6025f9469504315d4067b616ff366e78c891c55413dea10a85869",
-      "size": 2774
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/server_control.py",
-      "sha256": "sha256:b6c51319c37e6f4611ca59c99f130f5d3f13e676173777cf449ede7e98bd0ca3",
-      "size": 8719
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/session.py",
-      "sha256": "sha256:50570e6e7c4321512b5da5914f12459d1275fee4df3923efffb177e0fd9b1580",
-      "size": 10099
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/verify.py",
-      "sha256": "sha256:bd039d94f3c45158dab9f01cc2f84cfeeb936e378cabbb7c1971d2bfb799348f",
-      "size": 7456
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/wire.py",
-      "sha256": "sha256:c687a2c856d3d378cfb2bbd689cc9e4216d0c526ff9f3dd8a2a37a25cb9551b1",
-      "size": 8265
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_backend.py",
-      "sha256": "sha256:b8758967e851ba9e844849411ec0003435c6336fa19df98728d2d4fafe91c3a3",
-      "size": 5495
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_package/__init__.py",
-      "sha256": "sha256:70a7f99eb2f632ab7dc2a14c266631e091c9b4a5e1109574e482360627db4da1",
-      "size": 457
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_package/builder.py",
-      "sha256": "sha256:ec0c9dc3b16485fbaa7646ae52cb5b6f59ca39c54da3eddcac1a850be8fb132a",
-      "size": 13034
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_package/contracts.py",
-      "sha256": "sha256:573a98b3beca61f73f864de4fe9a009419461de63a4c7675785608d7703a6707",
-      "size": 562
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_package/entrypoint.py",
-      "sha256": "sha256:80a4aad10557cff864a7d9c6472c92f031842e9b426af348f9c962d1feb45ab9",
-      "size": 18393
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_v1/__init__.py",
-      "sha256": "sha256:b904ba1a86b5140c6fe79246921fa402f97b6473f58c3d7cb5162b7b6f612af8",
-      "size": 1585
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_v1/admission.py",
-      "sha256": "sha256:dc38293843f0b246f4c9bc45e182fe72c333e73079e18ae24f6088fa1194084a",
-      "size": 45321
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_v1/admission_runtime.py",
-      "sha256": "sha256:13b3d2305ce4ed6761a7e61d908ec0d2a8ddf91eacebc9c9d711d8d96bbfc090",
-      "size": 10488
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_v1/backend.py",
-      "sha256": "sha256:45249637fec11e88c5da3cf2959f25d750dcfafaf6c276c196a2cbc95b3826cf",
-      "size": 25760
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_v1/bundle.py",
-      "sha256": "sha256:a36a148bc80d920e1b8325213ea53bb29a2036eac20bc9f5cc4318e7bae1cfe6",
-      "size": 33302
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_v1/contracts.py",
-      "sha256": "sha256:a4b4bd9deb85b461831ccc3767f839d907ceed98cecb8e435d6449ed4c7f9bb2",
-      "size": 9649
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_v1/errors.py",
-      "sha256": "sha256:f5c5c5f245a8de5baa39b15cc7f954fc828616a5d106cf2027bfefb0e5831500",
-      "size": 862
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_v1/evaluation.py",
-      "sha256": "sha256:78fc897562695363441414deed507eb5e34dce16f6e931fcf87f9ef3a5e99663",
-      "size": 29692
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_v1/interop.py",
-      "sha256": "sha256:e5f16a7c159024f68dcd419f9310a3b2055f0aaf53e84386a7e3bd20e9880bd1",
-      "size": 1667
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_v1/semantic_verifier.py",
-      "sha256": "sha256:341fb082ec79eba9eb1e3d2526889be3e94b510f8eccc9ce8065fbb9e182e9b5",
-      "size": 10900
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_v1/session.py",
-      "sha256": "sha256:cd0253d4f34d06614c85ab6cadd450f5ed3965050857cf7b946411c356d35109",
-      "size": 48660
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/world_v1/verifier_assertions.py",
-      "sha256": "sha256:1b1a213f726ef92ad45fece195d0adff52a0f5db7e963453a87c2ea3f8d6c9c4",
-      "size": 27429
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/worlds/__init__.py",
-      "sha256": "sha256:35e60d7e49250346ba3c12d273868ea3ec92f6967f9e46d9c3e8fb6c2e8619f0",
-      "size": 58
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/worlds/billing_support_v0/__init__.py",
-      "sha256": "sha256:5402771926a33339e1a29e4e0805429be51920967513060cba4f2bd1df3d5cec",
-      "size": 335
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/worlds/billing_support_v0/runtime.py",
-      "sha256": "sha256:c3a422b18f9ea33f59ac5c9282d92b9a1bf0cb0adace97112ba09ccf9bf976a5",
-      "size": 5365
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/worlds/billing_support_v0/sampler.py",
-      "sha256": "sha256:dc2fa051c2fb69c4f2c2c1f1226ad1f1aa995c82b448daf2e1632c74fc9eec7e",
-      "size": 10325
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/worlds/billing_support_v0/services.py",
-      "sha256": "sha256:46eb68580cf61ea7a28fdf900dad7a9558b6b50af1c49be802eaff2ba1dce0a7",
-      "size": 11539
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/worlds/billing_support_v0/state.py",
-      "sha256": "sha256:7c625a0e6af3a771c0a83d03f8afd8cfe5a0925febd89b56d84019610908ee45",
-      "size": 7493
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/worlds/billing_support_v0/verifier.py",
-      "sha256": "sha256:f1c6785c8fcd8166a53f2fff4c50a9410f955d7c07107ac786a1ee2f68bb930a",
-      "size": 4915
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/worlds/response_case_state_v0/__init__.py",
-      "sha256": "sha256:2dc7fb4bc75d6e9e4d4f1ca3a42dc1059430419615b5c1cdf159a3054cf2b6ba",
-      "size": 432
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/worlds/response_case_state_v0/contracts.py",
-      "sha256": "sha256:837ab46f83aaa40e75cc547937fb239cf967a7f5e98897d335b0d8a1c108eac8",
-      "size": 34512
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/worlds/response_case_state_v0/mcp_tools.py",
-      "sha256": "sha256:f450546b9434147641101136dbc94ea1d6f131e45c7f49dacbe4d864b974aff9",
-      "size": 988
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/worlds/response_case_state_v0/router.py",
-      "sha256": "sha256:3ca32456b6e8d03a716d12c01397f04b69ebe82180d8cdf2222478e3615d12c0",
-      "size": 4046
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/worlds/response_case_state_v0/runtime.py",
-      "sha256": "sha256:60f853a24ffbf436bf1971f03cf8e148fa50d35da78cba5decdd2d14403def09",
-      "size": 11831
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/worlds/response_case_state_v0/state.py",
-      "sha256": "sha256:4c4d27b863ac545718265c0ab3142709afb26c1088f7c40047b39c54ff81d121",
-      "size": 19188
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/worlds/response_case_state_v0/transitions.py",
-      "sha256": "sha256:ebc720d92a3e1117db801b52f8d008087c31d0ac896f5e4abbc8599cc4f021bc",
-      "size": 9614
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/src/datalox_gated_runtime/worlds/response_case_state_v0/verifier.py",
-      "sha256": "sha256:510c361114f2b314b7a81fea6ba4a33abaf829e16f333d046b8893f58cc2f600",
-      "size": 6968
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/environment/world/runtime/uv.lock",
-      "sha256": "sha256:eec4e9816bc39831d95077c5acdb3cae305f6dde549fd3d824bf47d49520aac5",
-      "size": 221662
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/instruction.md",
-      "sha256": "sha256:5bdffde2f7338dcc6305d06bf045190bd31f80bfb80f52ec12eeb4839fea6ce2",
-      "size": 1686
+      "path": "integrations/harbor/incident_customer_coordination_v0/package.py",
+      "sha256": "sha256:46c678fbaf7091750f6083f7197ae6c1a1851a2784fe47cd6921547219822389",
+      "size": 1063
     },
     {
       "path": "integrations/harbor/incident_customer_coordination_v0/solution/solve.py",
@@ -1199,696 +939,6 @@
       "path": "integrations/harbor/incident_customer_coordination_v0/solution/solve.sh",
       "sha256": "sha256:d483c03db097e34108d1121eb27f6226f1c8f2f61262d9d4d1a4f8ffb9e44636",
       "size": 44
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/task.toml",
-      "sha256": "sha256:ab1b24e5d173ef185625891d1707367dc89a70a2d7954192fd6e0fb32135cfe3",
-      "size": 1809
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/tests/Dockerfile",
-      "sha256": "sha256:5dba26211fc401b75e567b1d710b3bbb8fbe3ff9c5a97399b0167a58b1bbedad",
-      "size": 194
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/tests/grade.py",
-      "sha256": "sha256:59475b2c5f1d6a8a5f9b5f38bf40245014ac8f25e4c6964a13f993ddf8c456c5",
-      "size": 2988
-    },
-    {
-      "path": "integrations/harbor/incident_customer_coordination_v0/tests/test.sh",
-      "sha256": "sha256:bdc60e83b10a0697444200d98a9975a5e307d7a1adf527e0fdfa88a9a53e9a2c",
-      "size": 41
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/.gitignore",
-      "sha256": "sha256:d055a7a97c9fd403aedbbfaecb56ca78e72d8a8c49065b8b9d43932a1de28c41",
-      "size": 24
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/DATALOX_ADAPTER.json",
-      "sha256": "sha256:abe03c75c30648b23c6784ae26be82bbab01b1eca55b136cdb9b2e9cba7da129",
-      "size": 19476
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/LICENSE",
-      "sha256": "sha256:c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
-      "size": 11357
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/README.md",
-      "sha256": "sha256:5468d37162438913b6a0561fd45e7dcc14511da281f2eee03823a67822018ede",
-      "size": 3626
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/package-lock.json",
-      "sha256": "sha256:55f194572a27a6d04a5bc25750a87918ed34dcfabb90f099a1f342f647f5998b",
-      "size": 275102
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/package.json",
-      "sha256": "sha256:5a8f8fcd4fe0d97876a56f025e21f6e8aac6b0783b043a4ba9fccc966e844489",
-      "size": 818
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/src/experiment.ts",
-      "sha256": "sha256:430fb84f9d7826e5aefa0c594f7ee56bfa4ba467c678b88a2bce460ab299b5d4",
-      "size": 4175
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/src/live-experiment.ts",
-      "sha256": "sha256:9d83efda4a49bde902860a32086f89c7374f8089574d27fbebc28487e1b04584",
-      "size": 244
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/src/mastra/index.ts",
-      "sha256": "sha256:4ae4dad39c06eb8ccf3865a2f16be41c679fde095e4bd1ace6bec79fe5090e78",
-      "size": 510
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/src/mastra/scorer.ts",
-      "sha256": "sha256:4fb07a92cc8a7bfa7acc7fbd7152f4f23138d5ab171e730ad0d9ea08412d6cf1",
-      "size": 933
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/src/mcp.ts",
-      "sha256": "sha256:88739f2a8a40b8da451f24ea9790511822779d325957e30a0301debdd6042fce",
-      "size": 3142
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/src/negative-control.ts",
-      "sha256": "sha256:17669193e516603f69106dfc5af01b1ee443044a581062fdf3ba3a4381f7bdb1",
-      "size": 231
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/src/policies.ts",
-      "sha256": "sha256:0a4ffdb95cb2b14ebe9063625adb06a905619fbf5db6ca54e7276fba56e4bc4e",
-      "size": 3728
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/src/positive-control.ts",
-      "sha256": "sha256:f2c35a5f6ced6c0878f3c4285bfcbc7b2c58099e8cb87ccb51e70e1812e717d1",
-      "size": 226
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/src/studio.ts",
-      "sha256": "sha256:1d7bfa43a1120e1dc2189717467663e11e7496ebf2d53158e23519549c1ed473",
-      "size": 650
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/src/types.ts",
-      "sha256": "sha256:2881bb3c33aaf0869bc211c7e83fc42f38988675ac09e75862137b5a2e132df6",
-      "size": 1071
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/src/world-controller.ts",
-      "sha256": "sha256:df202a09067fd77fc6086d6dec58331587d166031ff41a00a96991d9445eebb8",
-      "size": 6386
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/src/world-run.ts",
-      "sha256": "sha256:17ffff569d5c674cc7cfcd5fd5e676d7bb0e1d1883dfde947771909906d3bba6",
-      "size": 1520
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/tests/contracts.test.ts",
-      "sha256": "sha256:ea9372431b39f1d8a22ea63dbb08a5abc5d1b9e7abcab3d0735a8ed83f0ff74e",
-      "size": 2346
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/tsconfig.json",
-      "sha256": "sha256:e6052cab65bba2352a0ba4ca05c2825d75a6519d1b763bc1bb0e63e2fc1df95e",
-      "size": 310
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/.dockerignore",
-      "sha256": "sha256:2aa36c0731f6f8de7e18e3caea06614b9faabe1286dd5b8586c16c6e1b74f60f",
-      "size": 38
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/DATALOX_WORLD.json",
-      "sha256": "sha256:8f040c712faa39f10cc1f966be70cc24f539184576add064bd2194893cfa95e4",
-      "size": 17627
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/Dockerfile",
-      "sha256": "sha256:3a1bab3c5836756505b4fb74a8e90cc17938827c763242ea23e02f24141ca86a",
-      "size": 1251
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/episode_template/.world_v1_code/world/implementation.py",
-      "sha256": "sha256:7eab6b3f57e287d7f416f21394b81ceeb61d1670c14df4e6f9d4f1836535ef0d",
-      "size": 23112
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/episode_template/gate_config.json",
-      "sha256": "sha256:a1e9656c2b76cac700234547925d10c888c5d7a8bcacfbae627a623aa25cde97",
-      "size": 233
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/episode_template/task.json",
-      "sha256": "sha256:a5ca0dc615af3c7150ad8594de528b7f4c23d35fd39e4433970f6dc1c6de674f",
-      "size": 974
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/episode_template/world_v1.sqlite3",
-      "sha256": "sha256:09bfaa96b0b7818af23843f00b4969c2d38f7015683ac7d93619c15bfff27c2f",
-      "size": 114688
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/pyproject.toml",
-      "sha256": "sha256:8dd6f3b04d944d01831ce50402fa0d8a45fd44cec8f2bd9cdf9da2febcf34274",
-      "size": 1684
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/__init__.py",
-      "sha256": "sha256:0fdb5ace9ccc8facf75539eecceade9c6b9984097630183eb97d00dd0de37ecc",
-      "size": 816
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/audit.py",
-      "sha256": "sha256:86b3043926f0ec9cd41bf2853d29078ad870c949b4b51ac9646cb0dde01a9799",
-      "size": 8770
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/auth.py",
-      "sha256": "sha256:0d09913716c678404c4f43493e8024852db6fd8cdad6c322499d8c2eb7d4542c",
-      "size": 9146
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/authoring_mcp_runtime.py",
-      "sha256": "sha256:08163bca60e11affe6ff78f8bb20412d378d8c5062123d9035d5cdc9a4265f1d",
-      "size": 3504
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/authoring_runtime.py",
-      "sha256": "sha256:3ddbcaf5ebedbc25c77c778ffa0c8bcdfef2e53a0b10e67a24e5d8d1a747b88a",
-      "size": 3323
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/behavior_harvest/__init__.py",
-      "sha256": "sha256:ec20ea1bcfb226f3bf69998ec78e3c8ce50edad0f6400dbcc9677632cca0021c",
-      "size": 2822
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/behavior_harvest/compiler.py",
-      "sha256": "sha256:13bd3152314c2bd1cb87edcb04b98046cceec2d386f036770bb4ea303b266593",
-      "size": 13203
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/behavior_harvest/contracts.py",
-      "sha256": "sha256:c1f844a97c5325b21094a3d4f7a7e256373cb1eb359753cafd8b64cb1454e3d8",
-      "size": 163175
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/__init__.py",
-      "sha256": "sha256:ec77d4009006761fd37abe0c76764228fb8516d08e8633df89f123ca82a8540c",
-      "size": 57
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/v2/__init__.py",
-      "sha256": "sha256:7b423f6c048f6def74c77da8f59186f29c2c22b43c94ffd925b8f3000905205f",
-      "size": 3015
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/v2/compiler.py",
-      "sha256": "sha256:824933b20d2491811257e9fadb0cbc3633e4e88855b26945c0fc30e4f4376815",
-      "size": 16184
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/v2/contracts.py",
-      "sha256": "sha256:4b303a543bb4e9f0332a01adb5697a7bbbb321ad31988ce8c52a747d5911ef1b",
-      "size": 171013
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/v2/runner.py",
-      "sha256": "sha256:15978826d15a14716f25e1965dbf695a7008728cfab9e0b83c12064082575da5",
-      "size": 47004
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/v3/__init__.py",
-      "sha256": "sha256:ec1f5bf6bcf41e3eb9d65e09126aef620dc555a6ed1076efea1adea5cb900ee8",
-      "size": 3611
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/v3/compiler.py",
-      "sha256": "sha256:6dcded7234202f041f411c113636d44b9f740b4a990e8f79371274fea7aa644e",
-      "size": 19431
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/v3/contracts.py",
-      "sha256": "sha256:6984b9300ffb43be296368e182c546a0b12b80176246f694a6a32991ec617888",
-      "size": 222237
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/behavior_harvest/engines/v3/runner.py",
-      "sha256": "sha256:5554d65fe3a61990cd5a1ea7d0cc0664bd4cf33cbb652d23076c72b43769a4e0",
-      "size": 60439
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/behavior_harvest/runner.py",
-      "sha256": "sha256:cb6d6f3b97792bf80db9061d8b1a2842db037b960b108cc0a61eb0cbf3568989",
-      "size": 46019
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/binary_response.py",
-      "sha256": "sha256:8196caf898931d8fce80b9b87a98fcfd70203431eebc9ba6367b53992927d0a7",
-      "size": 8864
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/capture.py",
-      "sha256": "sha256:8612022ce74b8b2e47e8f62d8fcb1d4d6d79b7afa6e6c68072453d86a2e8b71f",
-      "size": 6888
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/cli.py",
-      "sha256": "sha256:3ae696f08b95afb279a7a7ae970a1d2c0ba228f90583ad36cf7bc2952b39cba3",
-      "size": 36048
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/config.py",
-      "sha256": "sha256:bdbaa6181be43fec4ef11fdf959d768e8c5bae6800419187467b22f22fd00a15",
-      "size": 31804
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/data_plane.py",
-      "sha256": "sha256:4067d6fed44bb6591383e027da1c9a08659054822f6726c3039d05b1a2f9c839",
-      "size": 6132
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/documented_provider.py",
-      "sha256": "sha256:f66571cd93e628b9da1a4ade77e5d229fe605571eb7ae6190c17d6a0dd03b30b",
-      "size": 12513
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/engineering_proof/__init__.py",
-      "sha256": "sha256:602356bd82426da97f493a4ddc76c43638df6e3d718a8e5a9f324bbbf0577199",
-      "size": 1134
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/engineering_proof/contracts.py",
-      "sha256": "sha256:f9f1234c345870b2ec7688ee29aa48677a7234a6ccacb9c5f5ed279a25722bb6",
-      "size": 15897
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/engineering_proof/program.py",
-      "sha256": "sha256:ad3f643e77fa91ca1f6c4f7e09fbfb11bbff076455f2f8cf9731b2527664d87a",
-      "size": 3196
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/engineering_proof/runner.py",
-      "sha256": "sha256:d0bfa136dc316b8ccfd1f79aec656e64e4d00c85becab4b94c66a0c61fd33560",
-      "size": 10663
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/engineering_proof/world_target.py",
-      "sha256": "sha256:b7fa4a0abef9169488f893bae13b66350c795068c4138c2e58df4463b18e63a0",
-      "size": 11923
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/harness_adapters/__init__.py",
-      "sha256": "sha256:17dee48de0b54493e9090985af012d0dc3a4fb27677c957ac4c4d6b7567e3c49",
-      "size": 544
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/harness_adapters/_shared.py",
-      "sha256": "sha256:a855bf08afbd0e431d521298fa0e734e90d2ea922aa8fffcb64a1fdfc4a4ef7a",
-      "size": 4379
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/harness_adapters/contracts.py",
-      "sha256": "sha256:a8bbf1b730a9630a93ff68573efd965b25195f4ae629f5c00a8386b0edfe3f0d",
-      "size": 330
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/harness_adapters/harbor.py",
-      "sha256": "sha256:02d0f73e888eaa50241dd915df9cbd5081641d11c74451a7795668ac08fd8152",
-      "size": 6954
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/harness_adapters/hud.py",
-      "sha256": "sha256:a387d782621bc223d1c7bb5ddf102d22160defa2a5aaa652e9edcab44abed78a",
-      "size": 5259
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/http_server.py",
-      "sha256": "sha256:79fcf0adcf1be10179028cb45ec227e20cf9b7ff85367f630d42975576839725",
-      "size": 6610
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/import_source_pack.py",
-      "sha256": "sha256:a5f3f3059d7766fc2be5aae1ff7b37a21ad43fbfb07acaab451f51e7a60ea8bd",
-      "size": 11705
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/interception/__init__.py",
-      "sha256": "sha256:15993087645cb30a83530b97093321aa237f79a53dcd199e3d461d9420382815",
-      "size": 276
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/interception/certificates.py",
-      "sha256": "sha256:722c6b4a3d58ae97dcafa2e28fc161f309d519dd2c41ea888352e62aa587f31f",
-      "size": 5043
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/interception/deployment.py",
-      "sha256": "sha256:04adbf2d78e23d881dc0f4810f93877c1732660a00b7d5673791c56ee99e070d",
-      "size": 14955
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/interception/gateway.py",
-      "sha256": "sha256:1feffaf8ca2f6c6f9eca0b9af2114733dcb224a4e0a03082621dfa908f16fe6c",
-      "size": 4428
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/interception/server.py",
-      "sha256": "sha256:2175e71d147cb58f621c484f3f9680abd66783b0be149679d32418796da92d14",
-      "size": 7696
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/json_digest.py",
-      "sha256": "sha256:13458f327abcaa9d41f96c0001e8d486ac8d23b06550302836ea913eeaf71db5",
-      "size": 1175
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/kubernetes_openapi.py",
-      "sha256": "sha256:c437cb26f6c381bf8439713d8d88bffb0693dfac301b69306840c7582a4f0189",
-      "size": 22655
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/ledger.py",
-      "sha256": "sha256:ee6e100b93f76bd437ce7bf7df3ea5c5308d58f9575306cbf1d5e11f27f57a36",
-      "size": 6977
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/mcp_capture.py",
-      "sha256": "sha256:6e1720b41359e5f69f7d6d7a2c25fffe28e48cc6db2f621d7b5eb365e5c30cec",
-      "size": 3186
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/mcp_registry.py",
-      "sha256": "sha256:de212355069b9abc6a301a6d0d9d2b18e33d047b41f95b6f9fb2e96dd09382c6",
-      "size": 10799
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/mcp_runtime.py",
-      "sha256": "sha256:1aa09b861e290d2bcdaf516ec93886a1c6ef7182c52b92007efcf2edd887af81",
-      "size": 6916
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/mcp_server.py",
-      "sha256": "sha256:072723d5ddecf9134cfdc52e91b80b7bf6c5fee2c2b2cc34f60f031de93e3879",
-      "size": 10472
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/mcp_upstream.py",
-      "sha256": "sha256:5f30ce385b351f253be9162800d6e5fce9fb04be1922a019896286679368a8df",
-      "size": 3673
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/models.py",
-      "sha256": "sha256:eaeb75779833ab123bf0ad9b99dd5fde9cc73e5bc9e8a911f4d30e5b0d19ad6d",
-      "size": 8305
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/policy.py",
-      "sha256": "sha256:5648f68856a0d982d6fe9925877271221afe4d54fa8e94b205a2fd114bc30465",
-      "size": 5989
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/promote.py",
-      "sha256": "sha256:c5b6dc67783cee8d0e5bae57e975c8e6597bfd28c5f9daa957a1d1dc1b03c449",
-      "size": 13001
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/provider_core_coverage.py",
-      "sha256": "sha256:f837efce2446c65d6ec89c4b2f17bc9279b8103bf1ecaa65dbedf3daa62a37bd",
-      "size": 40120
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/provider_probe.py",
-      "sha256": "sha256:5ba3afcf9b1226e4f8dd4d03aff4e3cdf4db7767ab1c072676e7055d74d9218f",
-      "size": 31765
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/provider_proofs/__init__.py",
-      "sha256": "sha256:93050dc9f4312bcde18478c22bb5662fc273eae41d92d5562c630c3a5b1a8566",
-      "size": 84
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/provider_proofs/stripe.py",
-      "sha256": "sha256:4d173885c4d3583770df7dc4e6a558b31355ed249774ecf01f56d619aea2d4a8",
-      "size": 10852
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/provider_runtime/__init__.py",
-      "sha256": "sha256:0f1c2fd16ac68d56d00caa20447ac287abae196dbadca6541a1d1d3d45144694",
-      "size": 838
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/provider_runtime/bundle.py",
-      "sha256": "sha256:bb282a249e1c0e825666346210154ae8b6d6aad899b3fa50c3337dae36254c91",
-      "size": 24157
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/provider_runtime/errors.py",
-      "sha256": "sha256:af4caa3dd0f9a7d0d4d6fce3cd55ed0cc18cea62051e54904a6a1ed9992ce5a9",
-      "size": 314
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/provider_runtime/runtime.py",
-      "sha256": "sha256:7527e0109b687464f6b7d21a07ef2fbd4bdda6dba182aa37967997a0bb72041c",
-      "size": 7805
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/public_export.py",
-      "sha256": "sha256:9bb8fa6db8ea957a4c8e31717a39b2ede687846ddc1b7233e3536976980838a2",
-      "size": 19035
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/query.py",
-      "sha256": "sha256:bb5fc7c0501793b90ae74afbf8e89f4064a2df4b54468c201acd507f0b4433f8",
-      "size": 2839
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/reference/__init__.py",
-      "sha256": "sha256:9c902eeaa4caa5731aba3d41c6f5311646ffc1a5c2296ca060043e8d48240985",
-      "size": 998
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/reference/comparison.py",
-      "sha256": "sha256:e66cd28135e5efe4e0bb526bbacc7dbf23309234cfeb22657de5dcb7ba5a380a",
-      "size": 3520
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/reference/contracts.py",
-      "sha256": "sha256:0101c024ddd38c017308b50baada5083faa1da8d829f4ad5da0d60bda3f07365",
-      "size": 25307
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/reference/runner.py",
-      "sha256": "sha256:9ba4540caa97e67618a21008b7c8d66d9d4fddb9362e44b590c83413480aea99",
-      "size": 7633
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/remote_world_service.py",
-      "sha256": "sha256:fb17f4dae5c189a801e272f5ab02c3de1b922b61df8c600ebd691f46c2bda505",
-      "size": 21429
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/runtime.py",
-      "sha256": "sha256:53a46448107a36aa701155efdcc4b0d49941576030f3303bfafc336c7006ec1a",
-      "size": 10292
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/serializer.py",
-      "sha256": "sha256:ab8176704da6025f9469504315d4067b616ff366e78c891c55413dea10a85869",
-      "size": 2774
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/server_control.py",
-      "sha256": "sha256:b6c51319c37e6f4611ca59c99f130f5d3f13e676173777cf449ede7e98bd0ca3",
-      "size": 8719
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/session.py",
-      "sha256": "sha256:50570e6e7c4321512b5da5914f12459d1275fee4df3923efffb177e0fd9b1580",
-      "size": 10099
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/verify.py",
-      "sha256": "sha256:bd039d94f3c45158dab9f01cc2f84cfeeb936e378cabbb7c1971d2bfb799348f",
-      "size": 7456
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/wire.py",
-      "sha256": "sha256:c687a2c856d3d378cfb2bbd689cc9e4216d0c526ff9f3dd8a2a37a25cb9551b1",
-      "size": 8265
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_backend.py",
-      "sha256": "sha256:b8758967e851ba9e844849411ec0003435c6336fa19df98728d2d4fafe91c3a3",
-      "size": 5495
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_package/__init__.py",
-      "sha256": "sha256:70a7f99eb2f632ab7dc2a14c266631e091c9b4a5e1109574e482360627db4da1",
-      "size": 457
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_package/builder.py",
-      "sha256": "sha256:ec0c9dc3b16485fbaa7646ae52cb5b6f59ca39c54da3eddcac1a850be8fb132a",
-      "size": 13034
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_package/contracts.py",
-      "sha256": "sha256:573a98b3beca61f73f864de4fe9a009419461de63a4c7675785608d7703a6707",
-      "size": 562
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_package/entrypoint.py",
-      "sha256": "sha256:80a4aad10557cff864a7d9c6472c92f031842e9b426af348f9c962d1feb45ab9",
-      "size": 18393
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_v1/__init__.py",
-      "sha256": "sha256:b904ba1a86b5140c6fe79246921fa402f97b6473f58c3d7cb5162b7b6f612af8",
-      "size": 1585
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_v1/admission.py",
-      "sha256": "sha256:dc38293843f0b246f4c9bc45e182fe72c333e73079e18ae24f6088fa1194084a",
-      "size": 45321
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_v1/admission_runtime.py",
-      "sha256": "sha256:13b3d2305ce4ed6761a7e61d908ec0d2a8ddf91eacebc9c9d711d8d96bbfc090",
-      "size": 10488
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_v1/backend.py",
-      "sha256": "sha256:45249637fec11e88c5da3cf2959f25d750dcfafaf6c276c196a2cbc95b3826cf",
-      "size": 25760
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_v1/bundle.py",
-      "sha256": "sha256:a36a148bc80d920e1b8325213ea53bb29a2036eac20bc9f5cc4318e7bae1cfe6",
-      "size": 33302
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_v1/contracts.py",
-      "sha256": "sha256:a4b4bd9deb85b461831ccc3767f839d907ceed98cecb8e435d6449ed4c7f9bb2",
-      "size": 9649
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_v1/errors.py",
-      "sha256": "sha256:f5c5c5f245a8de5baa39b15cc7f954fc828616a5d106cf2027bfefb0e5831500",
-      "size": 862
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_v1/evaluation.py",
-      "sha256": "sha256:78fc897562695363441414deed507eb5e34dce16f6e931fcf87f9ef3a5e99663",
-      "size": 29692
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_v1/interop.py",
-      "sha256": "sha256:e5f16a7c159024f68dcd419f9310a3b2055f0aaf53e84386a7e3bd20e9880bd1",
-      "size": 1667
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_v1/semantic_verifier.py",
-      "sha256": "sha256:341fb082ec79eba9eb1e3d2526889be3e94b510f8eccc9ce8065fbb9e182e9b5",
-      "size": 10900
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_v1/session.py",
-      "sha256": "sha256:cd0253d4f34d06614c85ab6cadd450f5ed3965050857cf7b946411c356d35109",
-      "size": 48660
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/world_v1/verifier_assertions.py",
-      "sha256": "sha256:1b1a213f726ef92ad45fece195d0adff52a0f5db7e963453a87c2ea3f8d6c9c4",
-      "size": 27429
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/worlds/__init__.py",
-      "sha256": "sha256:35e60d7e49250346ba3c12d273868ea3ec92f6967f9e46d9c3e8fb6c2e8619f0",
-      "size": 58
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/worlds/billing_support_v0/__init__.py",
-      "sha256": "sha256:5402771926a33339e1a29e4e0805429be51920967513060cba4f2bd1df3d5cec",
-      "size": 335
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/worlds/billing_support_v0/runtime.py",
-      "sha256": "sha256:c3a422b18f9ea33f59ac5c9282d92b9a1bf0cb0adace97112ba09ccf9bf976a5",
-      "size": 5365
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/worlds/billing_support_v0/sampler.py",
-      "sha256": "sha256:dc2fa051c2fb69c4f2c2c1f1226ad1f1aa995c82b448daf2e1632c74fc9eec7e",
-      "size": 10325
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/worlds/billing_support_v0/services.py",
-      "sha256": "sha256:46eb68580cf61ea7a28fdf900dad7a9558b6b50af1c49be802eaff2ba1dce0a7",
-      "size": 11539
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/worlds/billing_support_v0/state.py",
-      "sha256": "sha256:7c625a0e6af3a771c0a83d03f8afd8cfe5a0925febd89b56d84019610908ee45",
-      "size": 7493
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/worlds/billing_support_v0/verifier.py",
-      "sha256": "sha256:f1c6785c8fcd8166a53f2fff4c50a9410f955d7c07107ac786a1ee2f68bb930a",
-      "size": 4915
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/worlds/response_case_state_v0/__init__.py",
-      "sha256": "sha256:2dc7fb4bc75d6e9e4d4f1ca3a42dc1059430419615b5c1cdf159a3054cf2b6ba",
-      "size": 432
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/worlds/response_case_state_v0/contracts.py",
-      "sha256": "sha256:837ab46f83aaa40e75cc547937fb239cf967a7f5e98897d335b0d8a1c108eac8",
-      "size": 34512
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/worlds/response_case_state_v0/mcp_tools.py",
-      "sha256": "sha256:f450546b9434147641101136dbc94ea1d6f131e45c7f49dacbe4d864b974aff9",
-      "size": 988
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/worlds/response_case_state_v0/router.py",
-      "sha256": "sha256:3ca32456b6e8d03a716d12c01397f04b69ebe82180d8cdf2222478e3615d12c0",
-      "size": 4046
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/worlds/response_case_state_v0/runtime.py",
-      "sha256": "sha256:60f853a24ffbf436bf1971f03cf8e148fa50d35da78cba5decdd2d14403def09",
-      "size": 11831
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/worlds/response_case_state_v0/state.py",
-      "sha256": "sha256:4c4d27b863ac545718265c0ab3142709afb26c1088f7c40047b39c54ff81d121",
-      "size": 19188
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/worlds/response_case_state_v0/transitions.py",
-      "sha256": "sha256:ebc720d92a3e1117db801b52f8d008087c31d0ac896f5e4abbc8599cc4f021bc",
-      "size": 9614
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/src/datalox_gated_runtime/worlds/response_case_state_v0/verifier.py",
-      "sha256": "sha256:510c361114f2b314b7a81fea6ba4a33abaf829e16f333d046b8893f58cc2f600",
-      "size": 6968
-    },
-    {
-      "path": "integrations/mastra/commerce_support_ops_v0/world/runtime/uv.lock",
-      "sha256": "sha256:eec4e9816bc39831d95077c5acdb3cae305f6dde549fd3d824bf47d49520aac5",
-      "size": 221662
     },
     {
       "path": "integrations/slime/Dockerfile.task",
@@ -1937,63 +987,78 @@
     },
     {
       "path": "integrations/verifiers_dirty_integration/README.md",
-      "sha256": "sha256:a920e36212aac383f707a683d02832b44fa72dac6aae67ec051f8a2a9d8ac463",
-      "size": 6195
+      "sha256": "sha256:ddffcaf04b1c5c85d76fcf862a233a12d7b30ec6bf354313d0397428d2ae1703",
+      "size": 6863
     },
     {
       "path": "integrations/verifiers_dirty_integration/THIRD_PARTY_NOTICES.md",
-      "sha256": "sha256:d2b8116fe727a81080ab26d2805ebe47cf5eea245e82325a6f6013e99699617f",
-      "size": 1521
+      "sha256": "sha256:4d1b60b3112e019cdd1a619ea16606a772741823f302c3c73d11c1f706c419ed",
+      "size": 1797
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/__init__.py",
-      "sha256": "sha256:b31d53c7916e984b28e617aa3cc346e66115680cad2c2eca75cbb7f2960b234b",
-      "size": 418
+      "sha256": "sha256:c55a748cd6e937eb84b6f0a88457312036ae56cc570a56bf070b403ba5120c49",
+      "size": 417
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/audit.py",
+      "sha256": "sha256:3b00194c3092081cffffcc57d64b65763ab6657bf10dd83410cbd36754fef619",
+      "size": 15041
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/calibration.py",
+      "sha256": "sha256:f5d4f127ee47260713d3d1da1dd5c89820da8623e606d0bb3a837bec6e019b6a",
+      "size": 16931
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/contract.py",
-      "sha256": "sha256:13e3e2970c64d6b8b0cb2dd7ab9697e6e66f9f6258130c1c9cfa6423518db84a",
-      "size": 1232
+      "sha256": "sha256:5022d41d345db8fdd81a6b71cfd7d98202f38bce81060d3edbd469dbec9ab66d",
+      "size": 2071
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/environment.py",
-      "sha256": "sha256:8a3e67d94891b4c1303f3f818d2b28af754c8f2cef28b64c81c9412d152d973d",
-      "size": 13523
+      "sha256": "sha256:3e6d875ceb7703135abb9b2d616500e6b276fcbe5ea09faf7336a3568652dd9c",
+      "size": 16130
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/episode.py",
-      "sha256": "sha256:7e796d203e752c57a820316af343703a08dda3c6a6092e5c955f58870f01b8ae",
-      "size": 10104
+      "sha256": "sha256:0ae5b8da36b8237a9de731833dba2c82d65bd059387a86e6a5c94969e15ddd9a",
+      "size": 13385
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/paired.py",
-      "sha256": "sha256:e8d5d693e6119b2ed24a9ca2ed59071848ec8a5d0c5bde4a7896415e9619c7d1",
-      "size": 11167
+      "sha256": "sha256:5f996612dbbbd97e6676577d37cad762cd7e2253e5201fef886f1a8a1564f6a9",
+      "size": 11645
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/policy.py",
-      "sha256": "sha256:99fda3ff5fb3cd691a8c7ec06bb39205b484d0c02cc12af00bcc9efcbca2a107",
-      "size": 5548
+      "sha256": "sha256:e8ae7cb2e19a546bc4724583e6f2f896c041a99d729cfa9cba6a48ae0c50fd98",
+      "size": 6694
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/reference.py",
-      "sha256": "sha256:88f3fead2e7ea4f6c12b431403af644694aa6c56e6ead18ee5e04cc7706fffba",
-      "size": 4985
+      "sha256": "sha256:f2d808c4ada0ad255b7f93c97f98f69b0c58a24985080b71cc47226305d6be51",
+      "size": 14242
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/scoring.py",
-      "sha256": "sha256:7bd76513e919aec382bbb527a2dcf15e134a3287b7bdf19acb349ff26a9f0b7c",
-      "size": 4026
+      "sha256": "sha256:f1fc2d2d3d41aa0a63097a89ba0757533bdc187b31666a0ac99733f41f86920c",
+      "size": 14288
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/issue-6-calibration-report.json",
+      "sha256": "sha256:09af511524f286e712b34af2cb67f78cc55eb5c04b4d3ae3b8b50da20b964a75",
+      "size": 11575
     },
     {
       "path": "integrations/verifiers_dirty_integration/pyproject.toml",
-      "sha256": "sha256:2c0bdf7ce08663a6c22cc5e8c6885f05b5f85b4e1da17bafc6fd2e52f83eb999",
-      "size": 658
+      "sha256": "sha256:61515ff8c921c538ddec61200e4e84e336a67cc594343a5d035545d3a8d5004c",
+      "size": 740
     },
     {
       "path": "integrations/verifiers_dirty_integration/rollout-information-boundary.json",
-      "sha256": "sha256:026423dc68b490a3b10b93e3b8018384130b10957824ee8807fe2604a5ae83d5",
-      "size": 1216
+      "sha256": "sha256:20ccc36cdd24af91de2a8ec047ee1c3a69a048afef10081cd581ab3baa64ded3",
+      "size": 1356
     },
     {
       "path": "integrations/verifiers_dirty_integration/upstream-contract.json",
@@ -2262,23 +1327,28 @@
     },
     {
       "path": "product-contract.json",
-      "sha256": "sha256:6313ace51cf378e7dc01200114ed1fe3d0ce6fa1645b65f517176ae2d2125df2",
-      "size": 1905
+      "sha256": "sha256:bac878a5e051a45d7866b6c1b827f3cbf16592152afd3490b647209f449ca960",
+      "size": 3136
     },
     {
       "path": "pyproject.toml",
-      "sha256": "sha256:b6e69b64919746c70602f6b28cf6f94b69bcb8ee3d647cb04b993fc0892684cc",
-      "size": 1863
+      "sha256": "sha256:d44e7c4a02cfc37be6818f495894595d15df2f89bb7d5084e51cd408bef9fa8c",
+      "size": 1923
     },
     {
       "path": "release/data-classification.json",
-      "sha256": "sha256:affd4874654bad205d682406cc5cdfb7e87208e43b5fc6760b41cb43e1a323c5",
-      "size": 45161
+      "sha256": "sha256:1dacc353d92f5f44631c7ad203e0164741ae6df9271613ac42106a5f50f07689",
+      "size": 93340
     },
     {
       "path": "release/public-release.json",
-      "sha256": "sha256:52df0d6a7ab3264910633b99e47fa7bc42f32dc3901a7e579816b218d04269c7",
-      "size": 7842
+      "sha256": "sha256:947ad01cba054ccdadf667cbd720dc9a342d99d35bb82472aa615b651a065a2a",
+      "size": 10651
+    },
+    {
+      "path": "schemas/behavior-authoring-run-v1.schema.json",
+      "sha256": "sha256:9b31e7862dd975512b5dac12b1c780abed80c3b0f08415aea71fb1778f42614d",
+      "size": 2159
     },
     {
       "path": "schemas/composition-admission-v1.schema.json",
@@ -2302,8 +1372,13 @@
     },
     {
       "path": "schemas/delivery-intervention-trace-v1.schema.json",
-      "sha256": "sha256:a082f7789d7be5986207f0f2dccffdce3470d521b79bb70e98eebb2921092dce",
-      "size": 8284
+      "sha256": "sha256:85a480a03418a3ab3e909dad1516f599c329b2385c00de09f6645d6368601914",
+      "size": 8695
+    },
+    {
+      "path": "schemas/delivery-intervention-trace-v2.schema.json",
+      "sha256": "sha256:061f231ed9c1620e8596c70be859eadc07b93065a42608356c247a409da1037e",
+      "size": 8683
     },
     {
       "path": "schemas/delivery-intervention-v1.schema.json",
@@ -2311,9 +1386,39 @@
       "size": 3995
     },
     {
+      "path": "schemas/delivery-intervention-v2.schema.json",
+      "sha256": "sha256:287740fcecefa98a5c15cb56717aab1e3a0e15e07fe8689bc589399a0b15d40f",
+      "size": 2307
+    },
+    {
       "path": "schemas/provider-admission-v1.schema.json",
       "sha256": "sha256:7fcc73446396bab32fe25157fdbe4b56f94f3d215e07ef7a9091452dd6364861",
       "size": 8149
+    },
+    {
+      "path": "schemas/provider-differential-attestation-v1.schema.json",
+      "sha256": "sha256:22d819abd6acabe6190a389b3daaf6195f712e13bf6f7f45fb22ba11d1c76cd5",
+      "size": 6262
+    },
+    {
+      "path": "schemas/provider-differential-principal-bindings-v1.schema.json",
+      "sha256": "sha256:33f4a19e99ef496ead54338b6644dac22e2396f0acc02a90eb7a240cb670a5e7",
+      "size": 943
+    },
+    {
+      "path": "schemas/provider-drift-assessment-v1.schema.json",
+      "sha256": "sha256:8acbe3165c56099487f4746aa754fa9db976b5ea03148f1dfc1cd062b11f5473",
+      "size": 4169
+    },
+    {
+      "path": "schemas/provider-drift-report-v1.schema.json",
+      "sha256": "sha256:5203fc64fe15332424da977485e4e7b7ae2b4713fd87f1add55475f2c3aee992",
+      "size": 7040
+    },
+    {
+      "path": "schemas/provider-grounding-measurement-v1.schema.json",
+      "sha256": "sha256:cb6791a06128df95dabc9d391d1ac506fe10950f297135a191b2488f4b1c18be",
+      "size": 2206
     },
     {
       "path": "schemas/provider-identity-v1.schema.json",
@@ -2322,13 +1427,13 @@
     },
     {
       "path": "schemas/provider-operation-claims-v1.schema.json",
-      "sha256": "sha256:f7b38c792079c8d1465c0b5a7892c8c6838aad0d4131e6850d36a988fc87bcd5",
-      "size": 9352
+      "sha256": "sha256:f831705a9e92aab3e5a7e16ad621d3f0fb50b7d3e5cd46511f06246efe248d21",
+      "size": 10233
     },
     {
       "path": "schemas/provider-release-v1.schema.json",
-      "sha256": "sha256:4926b813e76da0d5f149471b68208ecf9dcd7299e68d051ff331f8ef994c7f83",
-      "size": 10041
+      "sha256": "sha256:651513fa6625d07da81e156c740506cb2afc439e1a44e45abbb0e1ed877d8ff0",
+      "size": 10927
     },
     {
       "path": "schemas/provider-runtime-v1.schema.json",
@@ -2339,6 +1444,16 @@
       "path": "schemas/provider-runtime-v2.schema.json",
       "sha256": "sha256:3c1db65a55455ee42b951752c8d798fb2ecd44195ab663280cb29b1a0660c088",
       "size": 2442
+    },
+    {
+      "path": "schemas/provider-state-admission-v1.schema.json",
+      "sha256": "sha256:68d52e3b11f4db5896a003f8fcf60411caea9c043549f7139f3ecf7236dc64a4",
+      "size": 2759
+    },
+    {
+      "path": "schemas/provider-state-profile-v1.schema.json",
+      "sha256": "sha256:19a265eea132a90e1841d1c5778f9a0aad590db742da1cdd8d254c90ebd85811",
+      "size": 9347
     },
     {
       "path": "schemas/rollout-composition-execution-export-v1.schema.json",
@@ -2386,6 +1501,11 @@
       "size": 1202
     },
     {
+      "path": "schemas/verifiers-dirty-calibration-v1.schema.json",
+      "sha256": "sha256:f6af418ae261f1df393cde48f3fac9643d4c1b1b0a682bdc1763b26ba443f9f4",
+      "size": 11951
+    },
+    {
       "path": "scripts/check_provider_runtime_coverage.py",
       "sha256": "sha256:68aaa4e58bf4078656dd63d9c9d7f3b87b944b1f363f80059041f1f09d549ec1",
       "size": 10217
@@ -2411,6 +1531,21 @@
       "size": 8985
     },
     {
+      "path": "scripts/providers/acquire-medusa-store-cart-lifecycle.py",
+      "sha256": "sha256:1787ce5c79237f3f00a6a35d16dbf26c28aeaccb62964cac8e5f1ebf770f3a3c",
+      "size": 37017
+    },
+    {
+      "path": "scripts/providers/acquire-uniprot-idmapping-lifecycle.py",
+      "sha256": "sha256:3855fa41b1411069b76ca3c720b9f019cbc6efb30c2db860a4c18a87951ffaa2",
+      "size": 9813
+    },
+    {
+      "path": "scripts/providers/acquire-uniprot-idmapping-uniref-result-failure.py",
+      "sha256": "sha256:95f2848a9b733abb9c2de70e3a08c7e8a552dc9bc1d6f6fc67dab47e180a2387",
+      "size": 7704
+    },
+    {
       "path": "scripts/providers/build-gs1-epcis-behavior-evidence.py",
       "sha256": "sha256:2273f59af1023901eb24f9279244c7353e135fe7d783ab98b2c5383f7488cf1d",
       "size": 28023
@@ -2431,6 +1566,11 @@
       "size": 6265
     },
     {
+      "path": "scripts/providers/build-medusa-store-cart-release.py",
+      "sha256": "sha256:376bf4e14ed6a9efc67594c517828eec4a695e57a1f7acc767d344caa2a14f07",
+      "size": 24606
+    },
+    {
       "path": "scripts/providers/build-openlmis-behavior-coverage.py",
       "sha256": "sha256:41c9905e42590e74eb4952abbe9e36d86f1aae0ad2209c739a306e50770ca363",
       "size": 6771
@@ -2439,6 +1579,11 @@
       "path": "scripts/providers/build-openlmis-behavior-recipes.py",
       "sha256": "sha256:09a9b8b6cac94124d68b1c8f3896dfa4d01d261378c59f1828c076768d28b349",
       "size": 64539
+    },
+    {
+      "path": "scripts/providers/build-uniprot-idmapping-release.py",
+      "sha256": "sha256:e29937a4f15d87267c2234abdcfaf334c6687be9e324c53d0fb9068613c43cb0",
+      "size": 6143
     },
     {
       "path": "scripts/providers/capture-chembl-public.py",
@@ -2561,6 +1706,16 @@
       "size": 11442
     },
     {
+      "path": "scripts/providers/check-medusa-store-cart-grounding.py",
+      "sha256": "sha256:3fd39d44f103aac7c13ac73f96e6aebe9569c85dd9f7878d38c9374729bab148",
+      "size": 26696
+    },
+    {
+      "path": "scripts/providers/check-medusa-store-cart-lifecycle.py",
+      "sha256": "sha256:3252b92ad04e23376114eba05922cdda4fb739ab37922e36ef6c114cd3ffcbd2",
+      "size": 15537
+    },
+    {
       "path": "scripts/providers/check-openlmis-authoring-readiness.py",
       "sha256": "sha256:b187ae21c5959f72640b4e27fd6b5e63a09aa78f4a954791849ce991be1a53fe",
       "size": 14157
@@ -2579,6 +1734,11 @@
       "path": "scripts/providers/check-stripe-testmode-transition-evidence.py",
       "sha256": "sha256:7bf04f2d565f5686037477931537fc32af0c73a5d8798bdd226d0176d521ce00",
       "size": 74299
+    },
+    {
+      "path": "scripts/providers/check-uniprot-idmapping-lifecycle.py",
+      "sha256": "sha256:3a85ed2767561533a4a9a0065c55e6e900a90c69e7dff9dba75c71b65fd43be6",
+      "size": 52185
     },
     {
       "path": "scripts/providers/compose-rcsb-pdb.py",
@@ -2662,8 +1822,8 @@
     },
     {
       "path": "scripts/public_release.py",
-      "sha256": "sha256:051e4d2ca5ded17b1eaab91fface97fdd896e506e883e247520d0cf8e98d7c03",
-      "size": 26507
+      "sha256": "sha256:fa339fd5868ddad21b96457f71e1aa81bf1b8ddc83c3d5e623823d7a09b3e682",
+      "size": 26381
     },
     {
       "path": "scripts/worlds/build_commerce_support_ops.py",
@@ -2684,6 +1844,11 @@
       "path": "src/datalox_gated_runtime/auth.py",
       "sha256": "sha256:0d09913716c678404c4f43493e8024852db6fd8cdad6c322499d8c2eb7d4542c",
       "size": 9146
+    },
+    {
+      "path": "src/datalox_gated_runtime/authoring_cli.py",
+      "sha256": "sha256:d63520bf32233188e9346f28e22d83868dade5d1dff47c1278a22527c31342eb",
+      "size": 18944
     },
     {
       "path": "src/datalox_gated_runtime/authoring_mcp_runtime.py",
@@ -2772,8 +1937,8 @@
     },
     {
       "path": "src/datalox_gated_runtime/cli.py",
-      "sha256": "sha256:6af3d7e86c975b2db03e73f108de91b1d7f50788f262406e7897c8206142c603",
-      "size": 76639
+      "sha256": "sha256:18f1cd0bd7521e3b5946e5b58e7be61d755c5ede99152f1142766707ecec2491",
+      "size": 112908
     },
     {
       "path": "src/datalox_gated_runtime/composition/__init__.py",
@@ -2817,8 +1982,8 @@
     },
     {
       "path": "src/datalox_gated_runtime/data_plane.py",
-      "sha256": "sha256:4067d6fed44bb6591383e027da1c9a08659054822f6726c3039d05b1a2f9c839",
-      "size": 6132
+      "sha256": "sha256:50dfd2f5429c123d8e4c95c43951ff61edad1ae682baab7763b4de419e474540",
+      "size": 9896
     },
     {
       "path": "src/datalox_gated_runtime/documented_provider.py",
@@ -2922,8 +2087,8 @@
     },
     {
       "path": "src/datalox_gated_runtime/interception/__init__.py",
-      "sha256": "sha256:c38ac2dbcb5272c6d9a4dcf1e87e909eff5219ee965a7951316a82ef74c6b49a",
-      "size": 810
+      "sha256": "sha256:e187718a1163e3ba78c8842aedf9dd95316d7327950ffd7589db7a1630ed5f1b",
+      "size": 1124
     },
     {
       "path": "src/datalox_gated_runtime/interception/certificates.py",
@@ -2952,18 +2117,23 @@
     },
     {
       "path": "src/datalox_gated_runtime/interception/gateway.py",
-      "sha256": "sha256:80ed97bf771f1bbb5ba24e1f6e42c4e8c9206fe4964df69175af936b3443dd19",
-      "size": 17146
+      "sha256": "sha256:b8b244e4ef1414ee7194c64e5b0b39dbb03252cecb35de8d4f87722ac0dbcc03",
+      "size": 25022
     },
     {
       "path": "src/datalox_gated_runtime/interception/interventions.py",
-      "sha256": "sha256:4a31fed84cd001af28665526500160cea43509e6d2489fea9c7ca31a6e4b80b5",
-      "size": 43336
+      "sha256": "sha256:1dbb2bbf2d8cf9587b12a6f11720cf007043ff67fe39caf7362aa6682a9eccc6",
+      "size": 43725
+    },
+    {
+      "path": "src/datalox_gated_runtime/interception/interventions_v2.py",
+      "sha256": "sha256:c1c2af7c744438794917447d840fff86fdf7650ea48d6a4295827f1669e94fd6",
+      "size": 48170
     },
     {
       "path": "src/datalox_gated_runtime/interception/server.py",
-      "sha256": "sha256:ba33dfe2afdc6b5b4d606609c9766714efe4bf805ea6f329b170f04a5aee7233",
-      "size": 17157
+      "sha256": "sha256:12598eff0a917b3ec0301313d13166927277fd2c89a3a9b0b3f54debdf411241",
+      "size": 17330
     },
     {
       "path": "src/datalox_gated_runtime/json_digest.py",
@@ -3026,6 +2196,41 @@
       "size": 40120
     },
     {
+      "path": "src/datalox_gated_runtime/provider_differential/__init__.py",
+      "sha256": "sha256:06f7530da44cab3cda992588222a450fb1494539d187935cfba0602e9d271af3",
+      "size": 2731
+    },
+    {
+      "path": "src/datalox_gated_runtime/provider_differential/compiled_program.py",
+      "sha256": "sha256:2ee13fe684128e4909bbbbc019dac7894c3f765661940f1fad1ccb45dd94fd65",
+      "size": 44103
+    },
+    {
+      "path": "src/datalox_gated_runtime/provider_differential/contracts.py",
+      "sha256": "sha256:2703c24fca07688552ed97d7511290563524d08793e3de425ecced8c1d625e7f",
+      "size": 30114
+    },
+    {
+      "path": "src/datalox_gated_runtime/provider_differential/drift.py",
+      "sha256": "sha256:1c205a6510b5155a57e44dc713750d6ec8949f378c68c84346179e072b15f842",
+      "size": 40597
+    },
+    {
+      "path": "src/datalox_gated_runtime/provider_differential/errors.py",
+      "sha256": "sha256:3abb6c155f806e2c69eb701dcaa9be33aa9d9eebe38d2f581c46d27ee739bcb9",
+      "size": 393
+    },
+    {
+      "path": "src/datalox_gated_runtime/provider_differential/runner.py",
+      "sha256": "sha256:fd52819af7c94c584b76aa9e31f3cdb78f0460b73c4d75cceb0fe754b6cc3625",
+      "size": 12036
+    },
+    {
+      "path": "src/datalox_gated_runtime/provider_differential/target.py",
+      "sha256": "sha256:2d92e1f8cf5238cfacd97973b7fa78ab2bf60a9903b23e1ef5972d213279012a",
+      "size": 9361
+    },
+    {
       "path": "src/datalox_gated_runtime/provider_probe.py",
       "sha256": "sha256:5ba3afcf9b1226e4f8dd4d03aff4e3cdf4db7767ab1c072676e7055d74d9218f",
       "size": 31765
@@ -3042,18 +2247,23 @@
     },
     {
       "path": "src/datalox_gated_runtime/provider_runtime/__init__.py",
-      "sha256": "sha256:7f7ae9c3c0b86a5dcc0313d9c358c5b7e6026a9c3afc556276f170e48c24c679",
-      "size": 1957
+      "sha256": "sha256:b1475be0c2e0567246645a32e9ad77f12cf78b7138816d00287ab28d39c49836",
+      "size": 3220
     },
     {
       "path": "src/datalox_gated_runtime/provider_runtime/admission.py",
-      "sha256": "sha256:638564752dd5022df5895e42af785d0b44d3185fd3fc76a4bc74f6b4152952e5",
-      "size": 57537
+      "sha256": "sha256:6b12e028b3a11806aef50445cf91982b3d0a01cdb0cb78784aa0dcf3576fd431",
+      "size": 70253
+    },
+    {
+      "path": "src/datalox_gated_runtime/provider_runtime/assessment_registry.py",
+      "sha256": "sha256:29a38d6d9b9b26d2ccae453d0a700d84aee84f54464ced4ec3967f429202d3a8",
+      "size": 34048
     },
     {
       "path": "src/datalox_gated_runtime/provider_runtime/bundle.py",
-      "sha256": "sha256:7462364fded7ef493cbb870a9c889dcfffb32273b0059d1c34bb091d7b35287d",
-      "size": 25593
+      "sha256": "sha256:245bb14ad22f47c700356f57256eb77c9b8c084dc94fa266dff43c5be1211ffd",
+      "size": 27402
     },
     {
       "path": "src/datalox_gated_runtime/provider_runtime/errors.py",
@@ -3072,13 +2282,23 @@
     },
     {
       "path": "src/datalox_gated_runtime/provider_runtime/release.py",
-      "sha256": "sha256:7a676a5683d2e4ad78f3665a087755c91db1d61d70d04177bfc34f45215c775a",
-      "size": 72131
+      "sha256": "sha256:36039fdbef60f3b4bca83036b2ab641a1f619076e5d1dbcb9dd911328eec8e88",
+      "size": 82661
     },
     {
       "path": "src/datalox_gated_runtime/provider_runtime/runtime.py",
-      "sha256": "sha256:a25ee045f8da160e1346cbfa07f4f316cf885e05bd980870520c7a36ba2e9a44",
-      "size": 40949
+      "sha256": "sha256:4dc8cac505e968b7b2286f36d75b8d5b5e3d968d36c2538176b2cdf37372b9bd",
+      "size": 47990
+    },
+    {
+      "path": "src/datalox_gated_runtime/provider_runtime/state.py",
+      "sha256": "sha256:6dde59ac926bdc7eb9218ac0e2c8e0854da1c2eaa582b6fdaf97b7a093ae4f56",
+      "size": 896
+    },
+    {
+      "path": "src/datalox_gated_runtime/provider_runtime/state_profile.py",
+      "sha256": "sha256:352e26a02804f6eac0116b39798e8d56c05dd9569fd7b0f75475f7ad286e43a3",
+      "size": 55111
     },
     {
       "path": "src/datalox_gated_runtime/public_export.py",
@@ -3142,8 +2362,8 @@
     },
     {
       "path": "src/datalox_gated_runtime/rollout/provider_set.py",
-      "sha256": "sha256:dff83f2b7d8b0bc8c85966b28b9dc0df245ab03eef3389ee063483c213c39514",
-      "size": 68179
+      "sha256": "sha256:71c31849dbd75dcf2f2a4ebba2d21e44cc7c8b1103fa6f0d8736079d0fe5729f",
+      "size": 73834
     },
     {
       "path": "src/datalox_gated_runtime/rollout/verl.py",
@@ -3486,6 +2706,11 @@
       "size": 1874
     },
     {
+      "path": "tests/test_authoring_cli.py",
+      "sha256": "sha256:7176813ec8250ef058a7a6a528b0fe6c9b87ddb359d9dfb7b244a57b237cfec1",
+      "size": 11586
+    },
+    {
       "path": "tests/test_behavior_harvest.py",
       "sha256": "sha256:842e2acc255305626417d5c8c42c77d38a65b01988d4e07624d461bddc353a0f",
       "size": 79265
@@ -3562,8 +2787,8 @@
     },
     {
       "path": "tests/test_data_plane.py",
-      "sha256": "sha256:427bdaab0eb7601c67578fb971e72e34bcff835a8f93494d84982eaac5afde67",
-      "size": 3209
+      "sha256": "sha256:ad280bbaf3e5136fdfb36020e92670d9f6e096a3cbd54f6e79900042c023f37f",
+      "size": 4709
     },
     {
       "path": "tests/test_datadog_provider.py",
@@ -3572,8 +2797,13 @@
     },
     {
       "path": "tests/test_delivery_interventions.py",
-      "sha256": "sha256:c070706b33c96e7dc8c3b40a6df30d9e6ca72a3934dd301d1b5518540f1827af",
-      "size": 23477
+      "sha256": "sha256:ca78112090d3f4bb64fab0a4501b19a45da1687d0fa2444c01c83a232b93edc0",
+      "size": 26934
+    },
+    {
+      "path": "tests/test_delivery_interventions_v2.py",
+      "sha256": "sha256:3449610da904ad19cbfaffacc4556194f1f71ee8fb435786a6237a1cfed94f7c",
+      "size": 46888
     },
     {
       "path": "tests/test_execution_provider_offline.py",
@@ -3582,8 +2812,8 @@
     },
     {
       "path": "tests/test_foundry_cli.py",
-      "sha256": "sha256:a8b954fd5ea893842f51fdea1dc011dce656be89f252642c8904a8bba838a043",
-      "size": 4593
+      "sha256": "sha256:16d94c7ce01750071dca87e74754e14509248bd1f3b850a8f2fab61f3754cb4f",
+      "size": 5851
     },
     {
       "path": "tests/test_gate_response_digest.py",
@@ -3594,11 +2824,6 @@
       "path": "tests/test_google_workspace_provider.py",
       "sha256": "sha256:15105d684fcefcd50ae0757abb90e2d41fdf621fab6255d0a3c890a5af63bde2",
       "size": 10722
-    },
-    {
-      "path": "tests/test_harness_integration_packages.py",
-      "sha256": "sha256:d325a5bbb1405f628da4a462c8d4738db70478e15a95b1b85e359e5d84468e43",
-      "size": 2136
     },
     {
       "path": "tests/test_http_response_emission.py",
@@ -3701,6 +2926,11 @@
       "size": 6879
     },
     {
+      "path": "tests/test_medusa_store_cart_provider.py",
+      "sha256": "sha256:9f417c3f84ad1b6dcf6f765393731064f983ad413293cbce34d3a4644efc2e2c",
+      "size": 9892
+    },
+    {
       "path": "tests/test_microsoft_graph_provider.py",
       "sha256": "sha256:7797753708562431c26cadabcb23ffd9cce5949e07393a732cc244656b28ea6b",
       "size": 11598
@@ -3737,13 +2967,28 @@
     },
     {
       "path": "tests/test_provider_admission.py",
-      "sha256": "sha256:dee9f0bc6d2259ff579a5584837a7eef6f2f4a1a3ff5471ade8988621e577e4c",
-      "size": 17159
+      "sha256": "sha256:1e1abe170b351a6afc6f4407a9f37a4f8f10dbb32c416b524e30206f78dc02a9",
+      "size": 21082
+    },
+    {
+      "path": "tests/test_provider_assessment_registry.py",
+      "sha256": "sha256:4e0e1f03272acea065f510cd0cd95c0eb403eec9f14864a9eb44f6e4eb17b11f",
+      "size": 12828
+    },
+    {
+      "path": "tests/test_provider_differential_cli.py",
+      "sha256": "sha256:b9a724932e5a9125d477ec4842c82c1c71f7c9544387955f21e0758fdf16149d",
+      "size": 21510
     },
     {
       "path": "tests/test_provider_probe.py",
       "sha256": "sha256:24e876f8239d9003bd87bfcab0411ff104a388d32ff6697af41ca136d7d0ff07",
       "size": 27669
+    },
+    {
+      "path": "tests/test_provider_release_differential.py",
+      "sha256": "sha256:76cb3c242507613e1bd12ffe51d3cf82dbf23ad3b946d1bd66f0e877945999bb",
+      "size": 13626
     },
     {
       "path": "tests/test_provider_release_registry.py",
@@ -3766,9 +3011,14 @@
       "size": 8554
     },
     {
+      "path": "tests/test_provider_temporal_runtime.py",
+      "sha256": "sha256:6631fb761e760750f040a62e735391f7e89d43d740cf1d2ece502d687b581809",
+      "size": 39456
+    },
+    {
       "path": "tests/test_public_release.py",
-      "sha256": "sha256:42975f01a6a10cb282eefd3f8b1f78fdcb919227f63d684684f25e9eb5b65f9d",
-      "size": 4827
+      "sha256": "sha256:eaa50e7ea0876aed23d46c4c9a60ea18743afe14bab3bec78afe7e3cf799e05c",
+      "size": 4541
     },
     {
       "path": "tests/test_pylabrobot_hamilton_star_world.py",
@@ -3896,9 +3146,14 @@
       "size": 11805
     },
     {
+      "path": "tests/test_uniprot_idmapping_provider.py",
+      "sha256": "sha256:74dda62821de93b1a71aae49340ac757a88cf521f40a09e61e476c1b8fbec13f",
+      "size": 20206
+    },
+    {
       "path": "tests/test_verifiers_dirty_integration.py",
-      "sha256": "sha256:54e5651883e9bab3ff3d1032ca7b48aa4d0ec742fef7f2b9d88f3b7951cb1432",
-      "size": 23122
+      "sha256": "sha256:4813a8d971ad12f598f560b30d97df13b5026b639c39e7f7dcf174ef9fa69341",
+      "size": 32957
     },
     {
       "path": "tests/test_verl_integration.py",
@@ -3952,5 +3207,5 @@
     }
   ],
   "schema_version": "datalox_public_source_manifest_v1",
-  "source_revision": "d2e0fa33cdcbddf7845a392ab951dd93892fec35"
+  "source_revision": "af1eca3d88ef2eac762053cbcc46fdc763a77ba2"
 }

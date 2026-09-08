@@ -1,0 +1,53 @@
+{
+  "tools": [
+    {
+      "id": "uniprot.idmapping.run",
+      "description": "Submit a UniProt ID Mapping job using the native form fields.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "from": {"type": "string", "minLength": 1},
+          "to": {"type": "string", "minLength": 1},
+          "ids": {"type": "string", "minLength": 1}
+        },
+        "required": ["from", "to", "ids"],
+        "additionalProperties": false
+      },
+      "list_roles": ["idmapping_client"],
+      "invoke_roles": ["idmapping_client"],
+      "source_refs": [
+        "uniprot_idmapping_public_production_2026_09_02",
+        "uniprot_authored_write_completeness_v1"
+      ],
+      "operation_family": "id_mapping_job"
+    },
+    {
+      "id": "uniprot.idmapping.status",
+      "description": "Read the current status of a provider-issued UniProt ID Mapping job.",
+      "input_schema": {
+        "type": "object",
+        "properties": {"job_id": {"type": "string", "minLength": 1}},
+        "required": ["job_id"],
+        "additionalProperties": false
+      },
+      "list_roles": ["idmapping_client"],
+      "invoke_roles": ["idmapping_client"],
+      "source_refs": ["uniprot_idmapping_public_production_2026_09_02"],
+      "operation_family": "id_mapping_job"
+    },
+    {
+      "id": "uniprot.idmapping.uniref_results",
+      "description": "Read UniRef results for a completed provider-issued UniProt ID Mapping job.",
+      "input_schema": {
+        "type": "object",
+        "properties": {"job_id": {"type": "string", "minLength": 1}},
+        "required": ["job_id"],
+        "additionalProperties": false
+      },
+      "list_roles": ["idmapping_client"],
+      "invoke_roles": ["idmapping_client"],
+      "source_refs": ["uniprot_idmapping_public_production_2026_09_02"],
+      "operation_family": "id_mapping_job"
+    }
+  ]
+}

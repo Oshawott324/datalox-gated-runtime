@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/provider-drift-report-v1.schema.json",
+  "title": "Datalox Provider Drift Report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "report_id",
+    "observed_at",
+    "provider_id",
+    "program_id",
+    "comparison_profile",
+    "comparison_status",
+    "baseline",
+    "candidate",
+    "comparison_binding",
+    "classification_scope",
+    "differences",
+    "summary"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_provider_drift_report_v1"},
+    "report_id": {"$ref": "#/$defs/identifier"},
+    "observed_at": {"$ref": "#/$defs/timestamp"},
+    "provider_id": {"$ref": "#/$defs/identifier"},
+    "program_id": {"$ref": "#/$defs/identifier"},
+    "comparison_profile": {"const": "portable_behavior_structural_v1"},
+    "comparison_status": {"enum": ["equal", "changed", "reacquisition_blocked"]},
+    "baseline": {"$ref": "#/$defs/completeMeasurement"},
+    "candidate": {"$ref": "#/$defs/candidateMeasurement"},
+    "comparison_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "connector_sha256",
+        "recipe_sha256",
+        "harvest_engine_sha256",
+        "seed"
+      ],
+      "properties": {
+        "connector_sha256": {"$ref": "#/$defs/sha256"},
+        "recipe_sha256": {"$ref": "#/$defs/sha256"},
+        "harvest_engine_sha256": {"$ref": "#/$defs/sha256"},
+        "seed": {"type": "integer"}
+      }
+    },
+    "classification_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pagination_step_ids"],
+      "properties": {
+        "pagination_step_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/identifier"}
+        }
+      }
+    },
+    "differences": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/difference"}
+    },
+    "summary": {"$ref": "#/$defs/summary"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"comparison_status": {"const": "equal"}}},
+      "then": {
+        "properties": {
+          "candidate": {"$ref": "#/$defs/completeMeasurement"},
+          "differences": {"maxItems": 0}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"comparison_status": {"const": "changed"}}},
+      "then": {
+        "properties": {
+          "candidate": {"$ref": "#/$defs/completeMeasurement"},
+          "differences": {"minItems": 1}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"comparison_status": {"const": "reacquisition_blocked"}}},
+      "then": {
+        "properties": {
+          "candidate": {"$ref": "#/$defs/incompleteMeasurement"},
+          "differences": {"maxItems": 0}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]+)?Z$",
+      "format": "date-time"
+    },
+    "measurementFields": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "measurement_sha256",
+        "capture_sha256",
+        "compiled_program_sha256",
+        "provider_version",
+        "observed_at",
+        "completion"
+      ],
+      "properties": {
+        "measurement_sha256": {"$ref": "#/$defs/sha256"},
+        "capture_sha256": {"$ref": "#/$defs/sha256"},
+        "compiled_program_sha256": {
+          "oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "provider_version": {"type": "string", "minLength": 1},
+        "observed_at": {"$ref": "#/$defs/timestamp"},
+        "completion": {"enum": ["complete", "incomplete"]}
+      }
+    },
+    "completeMeasurement": {
+      "allOf": [
+        {"$ref": "#/$defs/measurementFields"},
+        {
+          "properties": {
+            "compiled_program_sha256": {"$ref": "#/$defs/sha256"},
+            "completion": {"const": "complete"}
+          }
+        }
+      ]
+    },
+    "incompleteMeasurement": {
+      "allOf": [
+        {"$ref": "#/$defs/measurementFields"},
+        {
+          "properties": {
+            "compiled_program_sha256": {"type": "null"},
+            "completion": {"const": "incomplete"}
+          }
+        }
+      ]
+    },
+    "candidateMeasurement": {
+      "oneOf": [
+        {"$ref": "#/$defs/completeMeasurement"},
+        {"$ref": "#/$defs/incompleteMeasurement"}
+      ]
+    },
+    "difference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "path",
+        "step_id",
+        "attempt_number",
+        "role",
+        "baseline_sha256",
+        "candidate_sha256"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "provider_version_changed",
+            "response_status_changed",
+            "response_headers_changed",
+            "response_body_changed",
+            "state_relation_changed",
+            "duplicate_semantics_changed",
+            "native_failure_semantics_changed",
+            "pagination_changed",
+            "async_sequence_changed"
+          ]
+        },
+        "path": {"type": "string", "pattern": "^(?:$|/.*)$"},
+        "step_id": {
+          "oneOf": [{"$ref": "#/$defs/identifier"}, {"type": "null"}]
+        },
+        "attempt_number": {
+          "oneOf": [{"type": "integer", "minimum": 1}, {"type": "null"}]
+        },
+        "role": {
+          "enum": [
+            "before",
+            "success",
+            "duplicate",
+            "native_failure",
+            "resulting_state",
+            "supporting",
+            null
+          ]
+        },
+        "baseline_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_version_changed",
+        "response_status_changed",
+        "response_headers_changed",
+        "response_body_changed",
+        "state_relation_changed",
+        "duplicate_semantics_changed",
+        "native_failure_semantics_changed",
+        "pagination_changed",
+        "async_sequence_changed"
+      ],
+      "properties": {
+        "provider_version_changed": {"type": "integer", "minimum": 0},
+        "response_status_changed": {"type": "integer", "minimum": 0},
+        "response_headers_changed": {"type": "integer", "minimum": 0},
+        "response_body_changed": {"type": "integer", "minimum": 0},
+        "state_relation_changed": {"type": "integer", "minimum": 0},
+        "duplicate_semantics_changed": {"type": "integer", "minimum": 0},
+        "native_failure_semantics_changed": {"type": "integer", "minimum": 0},
+        "pagination_changed": {"type": "integer", "minimum": 0},
+        "async_sequence_changed": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

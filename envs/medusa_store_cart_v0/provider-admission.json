@@ -1,0 +1,267 @@
+{
+  "admitted": true,
+  "behavior_probes": [
+    {
+      "first_run_sha256": "sha256:4fb3bece8e2279041678105640b13295480951121c3954f5f30cb13e7dac9714",
+      "probe_id": "medusa_store_cart_lifecycle",
+      "second_run_sha256": "sha256:4fb3bece8e2279041678105640b13295480951121c3954f5f30cb13e7dac9714",
+      "step_count": 23
+    }
+  ],
+  "bundle_version": "2.16.0-store-cart-v0",
+  "evidence_sources": [
+    {
+      "artifact_ref": "observations.json",
+      "artifact_sha256": "sha256:ce00055f67b9698f77d6ecedbd2fd5fbc37f7622a9d47193140879e4ca1713cd",
+      "distribution_label": "public",
+      "evidence_id": "medusa_store_cart_g2",
+      "grounding_level": "G2_SELF_HOSTED_REFERENCE",
+      "observed_at": "2026-09-02T16:08:44Z",
+      "rights_basis": "Self-authored sanitized factual measurements from an exact local MIT-licensed Medusa 2.16.0 release; no credentials, raw payload bodies, provider-generated ids, or tenant ids are retained.",
+      "valid_through": "2027-09-02T16:08:44Z"
+    },
+    {
+      "artifact_ref": "provenance.json",
+      "artifact_sha256": "sha256:c6030a60c118259b5aaa829e24ffa623bc2cddd991301ce3618dfd65947f99a0",
+      "distribution_label": "public",
+      "evidence_id": "medusa_store_cart_provenance",
+      "grounding_level": "G2_SELF_HOSTED_REFERENCE",
+      "observed_at": "2026-09-02T16:08:44Z",
+      "rights_basis": "Self-authored provenance manifest containing only release metadata, exact source digests, and retention declarations for an MIT-licensed local reference.",
+      "valid_through": "2027-09-02T16:08:44Z"
+    }
+  ],
+  "operation_claims_sha256": "sha256:8989404d6141e582672f514821985ff2e7bcc6e3ae1a82d95976cf2798286173",
+  "operations": [
+    {
+      "behavior_program": "medusa_2_16_0_store_cart_lifecycle_v1",
+      "covered_behaviors": {
+        "failure": true,
+        "pagination": true,
+        "success": true
+      },
+      "grounding": {
+        "evidence_refs": [
+          "medusa_store_cart_g2",
+          "medusa_store_cart_provenance"
+        ],
+        "grounded": true,
+        "level": "G2_SELF_HOSTED_REFERENCE"
+      },
+      "mutability": "read",
+      "native_surface": {
+        "authority": "api.medusa.local",
+        "method": "GET",
+        "path_template": "/store/products",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "medusa.store.products.list",
+      "rights": {
+        "behavior_distribution_basis": "Only self-authored runtime payloads and sanitized factual measurements from an exact MIT-licensed Medusa 2.16.0 self-hosted reference are distributed.",
+        "distribution_label": "public"
+      },
+      "state_effects": []
+    },
+    {
+      "behavior_program": "medusa_2_16_0_store_cart_lifecycle_v1",
+      "covered_behaviors": {
+        "duplicate": true,
+        "failure": true,
+        "readback": true,
+        "success": true
+      },
+      "grounding": {
+        "evidence_refs": [
+          "medusa_store_cart_g2",
+          "medusa_store_cart_provenance"
+        ],
+        "grounded": true,
+        "level": "G2_SELF_HOSTED_REFERENCE"
+      },
+      "mutability": "write",
+      "native_surface": {
+        "authority": "api.medusa.local",
+        "method": "POST",
+        "path_template": "/store/carts",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "medusa.store.carts.create",
+      "rights": {
+        "behavior_distribution_basis": "Only self-authored runtime payloads and sanitized factual measurements from an exact MIT-licensed Medusa 2.16.0 self-hosted reference are distributed.",
+        "distribution_label": "public"
+      },
+      "state_effects": [
+        "cart_created"
+      ]
+    },
+    {
+      "behavior_program": "medusa_2_16_0_store_cart_lifecycle_v1",
+      "covered_behaviors": {
+        "failure": true,
+        "success": true
+      },
+      "grounding": {
+        "evidence_refs": [
+          "medusa_store_cart_g2",
+          "medusa_store_cart_provenance"
+        ],
+        "grounded": true,
+        "level": "G2_SELF_HOSTED_REFERENCE"
+      },
+      "mutability": "read",
+      "native_surface": {
+        "authority": "api.medusa.local",
+        "method": "GET",
+        "path_template": "/store/carts/{cart_id}",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "medusa.store.carts.retrieve",
+      "rights": {
+        "behavior_distribution_basis": "Only self-authored runtime payloads and sanitized factual measurements from an exact MIT-licensed Medusa 2.16.0 self-hosted reference are distributed.",
+        "distribution_label": "public"
+      },
+      "state_effects": []
+    },
+    {
+      "behavior_program": "medusa_2_16_0_store_cart_lifecycle_v1",
+      "covered_behaviors": {
+        "duplicate": true,
+        "failure": true,
+        "readback": true,
+        "success": true
+      },
+      "grounding": {
+        "evidence_refs": [
+          "medusa_store_cart_g2",
+          "medusa_store_cart_provenance"
+        ],
+        "grounded": true,
+        "level": "G2_SELF_HOSTED_REFERENCE"
+      },
+      "mutability": "write",
+      "native_surface": {
+        "authority": "api.medusa.local",
+        "method": "POST",
+        "path_template": "/store/carts/{cart_id}/line-items",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "medusa.store.carts.line_items.add",
+      "rights": {
+        "behavior_distribution_basis": "Only self-authored runtime payloads and sanitized factual measurements from an exact MIT-licensed Medusa 2.16.0 self-hosted reference are distributed.",
+        "distribution_label": "public"
+      },
+      "state_effects": [
+        "line_item_created_or_incremented"
+      ]
+    },
+    {
+      "behavior_program": "medusa_2_16_0_store_cart_lifecycle_v1",
+      "covered_behaviors": {
+        "duplicate": true,
+        "failure": true,
+        "readback": true,
+        "success": true
+      },
+      "grounding": {
+        "evidence_refs": [
+          "medusa_store_cart_g2",
+          "medusa_store_cart_provenance"
+        ],
+        "grounded": true,
+        "level": "G2_SELF_HOSTED_REFERENCE"
+      },
+      "mutability": "write",
+      "native_surface": {
+        "authority": "api.medusa.local",
+        "method": "POST",
+        "path_template": "/store/carts/{cart_id}/line-items/{line_item_id}",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "medusa.store.carts.line_items.update",
+      "rights": {
+        "behavior_distribution_basis": "Only self-authored runtime payloads and sanitized factual measurements from an exact MIT-licensed Medusa 2.16.0 self-hosted reference are distributed.",
+        "distribution_label": "public"
+      },
+      "state_effects": [
+        "line_item_quantity_set"
+      ]
+    },
+    {
+      "behavior_program": "medusa_2_16_0_store_cart_lifecycle_v1",
+      "covered_behaviors": {
+        "duplicate": true,
+        "failure": true,
+        "readback": true,
+        "success": true
+      },
+      "grounding": {
+        "evidence_refs": [
+          "medusa_store_cart_g2",
+          "medusa_store_cart_provenance"
+        ],
+        "grounded": true,
+        "level": "G2_SELF_HOSTED_REFERENCE"
+      },
+      "mutability": "write",
+      "native_surface": {
+        "authority": "api.medusa.local",
+        "method": "DELETE",
+        "path_template": "/store/carts/{cart_id}/line-items/{line_item_id}",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "medusa.store.carts.line_items.delete",
+      "rights": {
+        "behavior_distribution_basis": "Only self-authored runtime payloads and sanitized factual measurements from an exact MIT-licensed Medusa 2.16.0 self-hosted reference are distributed.",
+        "distribution_label": "public"
+      },
+      "state_effects": [
+        "line_item_removed_if_present"
+      ]
+    }
+  ],
+  "provider_id": "medusa",
+  "provider_invariants": [
+    {
+      "expected": "region_datalox_us",
+      "operator": "equals",
+      "passed": true,
+      "pointer": "/state/region_id",
+      "predicate_id": "region_seed_is_fixed",
+      "source": "provider_state"
+    }
+  ],
+  "provider_runtime_sha256": "sha256:d79f37fcc02ec579cf919c1a4cb08897af8d974214dc620a8810e138abb2e79f",
+  "receipt_predicates": [
+    {
+      "expected_type": "object",
+      "operator": "type",
+      "passed": true,
+      "pointer": "",
+      "predicate_id": "response_is_object",
+      "source": "response_body"
+    },
+    {
+      "expected_type": "array",
+      "operator": "type",
+      "passed": true,
+      "pointer": "/events",
+      "predicate_id": "call_was_recorded",
+      "source": "call_evidence"
+    }
+  ],
+  "reset_profiles": [
+    {
+      "functional_equivalence_passed": true,
+      "kind": "compiled_seed",
+      "profile_id": "default"
+    }
+  ],
+  "schema_version": "datalox_provider_admission_v1",
+  "task_free": true
+}

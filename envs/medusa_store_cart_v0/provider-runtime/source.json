@@ -1,0 +1,41 @@
+{
+  "schema_version": "datalox_provider_runtime_source_v1",
+  "source_bundle_version": "2.16.0-store-cart-v0",
+  "source_declaration": {
+    "grounding_gaps": [
+      {
+        "claim": "Medusa Cloud, production tenant, payment, shipping, tax, inventory, promotion, production authorization beyond the observed Store publishable-key check, rate-limit, or latency behavior",
+        "operation_family": "all",
+        "reason": "The evidence comes from one exact self-hosted Medusa 2.16.0 reference release and covers only the declared catalog/cart slice."
+      },
+      {
+        "claim": "Raw provider response payload fidelity",
+        "operation_family": "all",
+        "reason": "The public artifact retains sanitized factual statuses, state relationships, and source digests only. Runtime payload values, deterministic ids, and error text are self-authored."
+      }
+    ],
+    "sources": [
+      {
+        "derivation": "Identifier-free factual observations from an exact local MIT-licensed Medusa 2.16.0 deployment. Runtime payload values and error text are self-authored; no credentials, provider-generated identifiers, or captured response bodies are retained.",
+        "grounding_level": "G2_SELF_HOSTED_REFERENCE",
+        "id": "medusa_2_16_0_store_cart_g2",
+        "kind": "self_hosted_reference_observation",
+        "locator": "envs/medusa_store_cart_v0/evidence/observations.json",
+        "provider": "Medusa",
+        "provider_version": "2.16.0",
+        "supports": [
+          "operation:medusa.store.products.list",
+          "operation:medusa.store.carts.create",
+          "operation:medusa.store.carts.retrieve",
+          "operation:medusa.store.carts.line_items.add",
+          "operation:medusa.store.carts.line_items.update",
+          "operation:medusa.store.carts.line_items.delete",
+          "behavior:success_duplicate_invalid_readback_delete"
+        ]
+      }
+    ]
+  },
+  "source_episode_id": "medusa_store_cart_reference",
+  "source_manifest_sha256": "sha256:aec6955ac0e251d038499afc63472a9260c73c2af3417695a0649af5bfde8cfd",
+  "source_world_id": "medusa_store_cart_v0"
+}

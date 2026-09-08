@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/provider-differential-principal-bindings-v1.schema.json",
+  "title": "Provider differential principal bindings",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "bindings"],
+  "properties": {
+    "schema_version": {
+      "const": "datalox_provider_differential_principal_bindings_v1"
+    },
+    "bindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["auth_context_id", "principal_context_id"],
+        "properties": {
+          "auth_context_id": {"$ref": "#/$defs/identifier"},
+          "principal_context_id": {"$ref": "#/$defs/identifier"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "roles": [
+    {
+      "description": "Operates one isolated Medusa Store tenant through provider-shaped operations.",
+      "id": "store_operator"
+    }
+  ]
+}

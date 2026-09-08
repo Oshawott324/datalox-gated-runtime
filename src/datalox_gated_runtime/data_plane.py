@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import threading
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Protocol
 from urllib.parse import urlsplit
@@ -21,8 +22,33 @@ from datalox_gated_runtime.wire import (
 )
 
 
+@dataclass(frozen=True)
+class NoResponseTransportDirective:
+    """An explicit ASGI instruction to deliver zero HTTP response bytes.
+
+    The provider/intervention lock is released before this directive is
+    awaited.  ``on_disconnect`` is controller bookkeeping only and runs after
+    ASGI reports a real client disconnect.
+    """
+
+    outcome_id: str
+    on_disconnect: Callable[[], None]
+
+
+@dataclass(frozen=True)
+class TrackedResponseTransportDirective:
+    """Send one exact provider response and durably acknowledge ASGI progress."""
+
+    outcome_id: str
+    response: GateResponse
+    on_asgi_send_completed: Callable[[bool, int], None]
+    on_response_aborted: Callable[[bool, int], None]
+
+
 class ProviderRequestHandler(Protocol):
-    def handle(self, request: CallRequest) -> GateResponse: ...
+    def handle(
+        self, request: CallRequest
+    ) -> GateResponse | NoResponseTransportDirective | TrackedResponseTransportDirective: ...
 
 
 @dataclass
@@ -99,8 +125,12 @@ def create_data_plane_app(bindings: dict[str, ProviderBinding]) -> FastAPI:
         except WireDecodeError as exc:
             return _error_response(exc)
         with binding.lock:
-            gate_response = binding.handler.handle(call_request)
-        return _raw_response(binding.codec.encode(gate_response))
+            outcome = binding.handler.handle(call_request)
+        if isinstance(outcome, NoResponseTransportDirective):
+            return _NoResponseASGIResponse(outcome)
+        if isinstance(outcome, TrackedResponseTransportDirective):
+            return _TrackedResponseASGIResponse(binding.codec.encode(outcome.response), outcome)
+        return _raw_response(binding.codec.encode(outcome))
 
     return app
 
@@ -170,3 +200,69 @@ def _raw_response(wire: WireResponse) -> Response:
         raw_headers.append((b"content-length", str(len(wire.body)).encode("ascii")))
     response.raw_headers = raw_headers
     return response
+
+
+class _NoResponseASGIResponse(Response):
+    """Wait for disconnect without sending ``http.response.start`` or body."""
+
+    def __init__(self, directive: NoResponseTransportDirective) -> None:
+        super().__init__(content=b"")
+        self._directive = directive
+
+    async def __call__(self, scope: dict, receive: Callable, send: Callable) -> None:
+        del scope, send
+        while True:
+            message = await receive()
+            if message.get("type") == "http.disconnect":
+                self._directive.on_disconnect()
+                return
+
+
+class _TrackedResponseASGIResponse(Response):
+    """Send the provider response while recording accepted ASGI messages."""
+
+    def __init__(
+        self,
+        wire: WireResponse,
+        directive: TrackedResponseTransportDirective,
+    ) -> None:
+        super().__init__(content=b"")
+        self._response = _raw_response(wire)
+        self._wire = wire
+        self._directive = directive
+
+    async def __call__(self, scope: dict, receive: Callable, send: Callable) -> None:
+        response_start_sent = False
+        response_body_bytes_sent = 0
+
+        async def tracked_send(message: dict) -> None:
+            nonlocal response_start_sent, response_body_bytes_sent
+            await send(message)
+            if message.get("type") == "http.response.start":
+                response_start_sent = True
+            elif message.get("type") == "http.response.body":
+                body = message.get("body", b"")
+                if not isinstance(body, bytes):
+                    raise TypeError("ASGI response body must be bytes")
+                response_body_bytes_sent += len(body)
+
+        expected_body_bytes = (
+            0
+            if scope.get("method") == "HEAD" or self._wire.status_code in {204, 304}
+            else len(self._wire.body)
+        )
+
+        async def protocol_send(message: dict) -> None:
+            if message.get("type") == "http.response.body" and expected_body_bytes == 0:
+                message = {**message, "body": b""}
+            await tracked_send(message)
+
+        try:
+            await self._response(scope, receive, protocol_send)
+        except BaseException:
+            self._directive.on_response_aborted(response_start_sent, response_body_bytes_sent)
+            raise
+        if not response_start_sent or response_body_bytes_sent != expected_body_bytes:
+            self._directive.on_response_aborted(response_start_sent, response_body_bytes_sent)
+            raise RuntimeError("ASGI response send did not match the exact response framing")
+        self._directive.on_asgi_send_completed(response_start_sent, response_body_bytes_sent)

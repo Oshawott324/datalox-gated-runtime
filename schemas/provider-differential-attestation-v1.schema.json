@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/provider-differential-attestation-v1.schema.json",
+  "title": "Provider Release differential attestation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "attestation_id",
+    "observed_at",
+    "provider_id",
+    "provider_version",
+    "program_id",
+    "measurement_sha256",
+    "source",
+    "replica",
+    "comparison_profile",
+    "program",
+    "runs",
+    "functional_reset",
+    "passed"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_provider_differential_attestation_v1"},
+    "attestation_id": {"$ref": "#/$defs/identifier"},
+    "observed_at": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]+)?Z$",
+      "format": "date-time"
+    },
+    "provider_id": {"$ref": "#/$defs/identifier"},
+    "provider_version": {"type": "string", "minLength": 1},
+    "program_id": {"$ref": "#/$defs/identifier"},
+    "measurement_sha256": {"$ref": "#/$defs/sha256"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capture_sha256",
+        "connector_sha256",
+        "recipe_sha256",
+        "harvest_engine_sha256",
+        "compiled_program_sha256"
+      ],
+      "properties": {
+        "capture_sha256": {"$ref": "#/$defs/sha256"},
+        "connector_sha256": {"$ref": "#/$defs/sha256"},
+        "recipe_sha256": {"$ref": "#/$defs/sha256"},
+        "harvest_engine_sha256": {"$ref": "#/$defs/sha256"},
+        "compiled_program_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "replica": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "release_reference",
+        "release_manifest_sha256",
+        "profile_id",
+        "provider_runtime_sha256",
+        "provider_admission_sha256"
+      ],
+      "properties": {
+        "release_reference": {"type": "string", "minLength": 1},
+        "release_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "profile_id": {"$ref": "#/$defs/identifier"},
+        "provider_runtime_sha256": {"$ref": "#/$defs/sha256"},
+        "provider_admission_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "comparison_profile": {"const": "behavior_binding_exact_v1"},
+    "program": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trace_schema_id",
+        "trace_digest",
+        "compiled_program_sha256",
+        "seed"
+      ],
+      "properties": {
+        "trace_schema_id": {"$ref": "#/$defs/identifier"},
+        "trace_digest": {"$ref": "#/$defs/sha256"},
+        "compiled_program_sha256": {"$ref": "#/$defs/sha256"},
+        "seed": {"type": "integer"}
+      }
+    },
+    "runs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "within_instance_initial",
+        "within_instance_after_reset",
+        "fresh_instance"
+      ],
+      "properties": {
+        "within_instance_initial": {"$ref": "#/$defs/runEvidence"},
+        "within_instance_after_reset": {"$ref": "#/$defs/runEvidence"},
+        "fresh_instance": {"$ref": "#/$defs/runEvidence"}
+      }
+    },
+    "functional_reset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "within_instance_equivalent",
+        "fresh_instance_equivalent",
+        "passed"
+      ],
+      "properties": {
+        "within_instance_equivalent": {"type": "boolean"},
+        "fresh_instance_equivalent": {"type": "boolean"},
+        "passed": {"type": "boolean"}
+      }
+    },
+    "passed": {"type": "boolean"}
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "runEvidence": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "phase",
+            "status",
+            "passed",
+            "reset_generation",
+            "initial_state_sha256",
+            "final_state_sha256",
+            "behavioral_fingerprint",
+            "report",
+            "error"
+          ],
+          "properties": {
+            "phase": {
+              "enum": [
+                "within_instance_initial",
+                "within_instance_after_reset",
+                "fresh_instance"
+              ]
+            },
+            "status": {"const": "completed"},
+            "passed": {"type": "boolean"},
+            "reset_generation": {"type": "integer", "minimum": 1},
+            "initial_state_sha256": {"$ref": "#/$defs/sha256"},
+            "final_state_sha256": {"$ref": "#/$defs/sha256"},
+            "behavioral_fingerprint": {"$ref": "#/$defs/sha256"},
+            "report": {"type": "object"},
+            "error": {"type": "null"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "phase",
+            "status",
+            "passed",
+            "reset_generation",
+            "initial_state_sha256",
+            "final_state_sha256",
+            "behavioral_fingerprint",
+            "report",
+            "error"
+          ],
+          "properties": {
+            "phase": {
+              "enum": [
+                "within_instance_initial",
+                "within_instance_after_reset",
+                "fresh_instance"
+              ]
+            },
+            "status": {"const": "failed"},
+            "passed": {"const": false},
+            "reset_generation": {"type": "integer", "minimum": 0},
+            "initial_state_sha256": {"type": "null"},
+            "final_state_sha256": {"type": "null"},
+            "behavioral_fingerprint": {"type": "null"},
+            "report": {"type": "null"},
+            "error": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["code", "type"],
+              "properties": {
+                "code": {"$ref": "#/$defs/identifier"},
+                "type": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

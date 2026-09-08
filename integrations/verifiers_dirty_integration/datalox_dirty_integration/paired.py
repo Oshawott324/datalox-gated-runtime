@@ -10,17 +10,22 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from datalox_dirty_integration.audit import audit_pair
 from datalox_dirty_integration.contract import (
     TASK_INSTRUCTIONS,
     provider_admission_path,
-    provider_config_path,
+    provider_grounding_path,
     provider_release_path,
     provider_runtime_bundle_path,
 )
 from datalox_dirty_integration.episode import CommerceEpisode, sha256_file
 from datalox_dirty_integration.policy import SeededCommercePolicy, load_profile
 from datalox_dirty_integration.reference import run_careful_reference, run_naive_reference
-from datalox_dirty_integration.scoring import EvaluationOracle
+from datalox_dirty_integration.scoring import (
+    EvaluationOracle,
+    request_discipline_report_for_episode,
+    verify_task_for_episode,
+)
 
 SCHEMA_VERSION = "datalox_verifiers_paired_experiment_v1"
 
@@ -38,7 +43,7 @@ def _write_json(path: Path, value: Any) -> None:
 def _run_side(
     *,
     output: Path,
-    provider_config: Path,
+    provider_grounding: Path,
     provider_admission: Path,
     provider_runtime_bundle: Path,
     provider_release: Path,
@@ -47,7 +52,7 @@ def _run_side(
     enabled: bool,
 ) -> dict[str, Any]:
     with CommerceEpisode(
-        provider_config=provider_config,
+        provider_grounding=provider_grounding,
         policy=policy,
         intervention_seed=intervention_seed,
         intervention_enabled=enabled,
@@ -55,21 +60,24 @@ def _run_side(
         provider_runtime_bundle=provider_runtime_bundle,
         provider_release=provider_release,
     ) as episode:
-        oracle = EvaluationOracle.from_provider_config(provider_config)
+        oracle = EvaluationOracle()
         result = run_careful_reference(episode, oracle)
+        task_verification = verify_task_for_episode(episode, oracle)
+        request_discipline = request_discipline_report_for_episode(episode, oracle)
         exported = episode.export()
         agent_trace = {
             "schema_version": SCHEMA_VERSION,
             "strategy": result.strategy,
             "outcome": result.outcome,
             "calls": exported["delivered_calls"],
-            "submission": list(result.submitted),
-            "reported_count": result.reported_count,
+            "selected_variant_id": result.selected_variant_id,
+            "cart_id": result.cart_id,
+            "line_item_id": result.line_item_id,
         }
         verification = {
             "schema_version": SCHEMA_VERSION,
-            "task_correctness": result.task_correctness,
-            "request_discipline": result.request_discipline,
+            "task_correctness": task_verification.to_dict(),
+            "request_discipline": request_discipline.to_dict(),
         }
         _write_json(output / "provider-export.json", exported["provider"])
         _write_json(output / "intervention-trace.json", exported["intervention"])
@@ -77,7 +85,7 @@ def _run_side(
         _write_json(output / "verification.json", verification)
         return {
             "enabled": enabled,
-            "provider_config_sha256": exported["provider_config_sha256"],
+            "provider_grounding_sha256": exported["provider_grounding_sha256"],
             "provider_runtime_sha256": exported["provider_runtime_sha256"],
             "provider_admission_sha256": exported["provider_admission_sha256"],
             "operation_claims_sha256": exported["operation_claims_sha256"],
@@ -94,13 +102,14 @@ def _run_side(
             "request_discipline": result.request_discipline,
             "outcome": result.outcome,
             "calls": exported["delivered_calls"],
+            "exported": exported,
         }
 
 
 def run_pair(
     *,
     output: Path,
-    provider_config: Path,
+    provider_grounding: Path,
     provider_admission: Path,
     provider_runtime_bundle: Path,
     provider_release: Path,
@@ -110,7 +119,7 @@ def run_pair(
     output = output.resolve()
     if output.exists():
         raise FileExistsError(f"output already exists: {output}")
-    provider_config = provider_config.resolve()
+    provider_grounding = provider_grounding.resolve()
     provider_admission = provider_admission.resolve()
     provider_runtime_bundle = provider_runtime_bundle.resolve()
     provider_release = provider_release.resolve()
@@ -118,21 +127,21 @@ def run_pair(
     task_digest = _canonical_digest({"instructions": TASK_INSTRUCTIONS})
     fixed_inputs = {
         "task_sha256": task_digest,
-        "provider_config_artifact": "medusa_store_pagination_v0:gate_config",
-        "provider_config_sha256": sha256_file(provider_config),
-        "provider_admission_artifact": "medusa_store_pagination_v0:provider_admission",
+        "provider_grounding_artifact": "medusa_store_cart_v0:evidence/observations.json",
+        "provider_grounding_sha256": sha256_file(provider_grounding),
+        "provider_admission_artifact": "medusa_store_cart_v0:provider_admission",
         "provider_admission_sha256": sha256_file(provider_admission),
-        "provider_runtime_artifact": "medusa_store_pagination_v0:provider_runtime",
-        "provider_release_artifact": "medusa_store_pagination_v0:provider_release",
+        "provider_runtime_artifact": "medusa_store_cart_v0:provider_runtime",
+        "provider_release_artifact": "medusa_store_cart_v0:provider_release",
         "intervention_seed": intervention_seed,
         "policy_id": policy.policy_id,
         "policy_version": policy.policy_version,
         "policy_sha256": policy.policy_sha256,
-        "agent": "model_free_provider_valid_careful_v1",
+        "agent": "model_free_provider_valid_careful_read_v1",
     }
     off = _run_side(
         output=output / "off",
-        provider_config=provider_config,
+        provider_grounding=provider_grounding,
         provider_admission=provider_admission,
         provider_runtime_bundle=provider_runtime_bundle,
         provider_release=provider_release,
@@ -142,7 +151,7 @@ def run_pair(
     )
     on = _run_side(
         output=output / "on",
-        provider_config=provider_config,
+        provider_grounding=provider_grounding,
         provider_admission=provider_admission,
         provider_runtime_bundle=provider_runtime_bundle,
         provider_release=provider_release,
@@ -152,6 +161,7 @@ def run_pair(
     )
     if off["initial_state_fingerprint"] != on["initial_state_fingerprint"]:
         raise RuntimeError("paired provider states do not have the same initial fingerprint")
+    audit = audit_pair(off["exported"], on["exported"])
     fixed_inputs["provider_runtime_sha256"] = off["provider_runtime_sha256"]
     fixed_inputs["operation_claims_sha256"] = off["operation_claims_sha256"]
     fixed_inputs["operation_contract_sha256"] = off["operation_contract_sha256"]
@@ -176,7 +186,8 @@ def run_pair(
         "schema_version": SCHEMA_VERSION,
         "binding_checks": {
             "same_task": True,
-            "same_provider_config": off["provider_config_sha256"] == on["provider_config_sha256"],
+            "same_provider_grounding": off["provider_grounding_sha256"]
+            == on["provider_grounding_sha256"],
             "same_provider_admission": off["provider_admission_sha256"]
             == on["provider_admission_sha256"],
             "same_operation_claims": off["operation_claims_sha256"]
@@ -192,6 +203,7 @@ def run_pair(
         },
         "off": {key: off[key] for key in ("outcome", "task_correctness", "request_discipline")},
         "on": {key: on[key] for key in ("outcome", "task_correctness", "request_discipline")},
+        "independent_audit": audit,
         "first_delivered_observation_divergence": first_divergence,
     }
     _write_json(output / "pair-manifest.json", manifest)
@@ -201,7 +213,7 @@ def run_pair(
 
 def calibrate(
     *,
-    provider_config: Path,
+    provider_grounding: Path,
     provider_admission: Path,
     provider_runtime_bundle: Path,
     provider_release: Path,
@@ -214,7 +226,7 @@ def calibrate(
     for seed in seeds:
         for strategy, target in ((run_careful_reference, careful), (run_naive_reference, naive)):
             with CommerceEpisode(
-                provider_config=provider_config,
+                provider_grounding=provider_grounding,
                 policy=policy,
                 intervention_seed=str(seed),
                 intervention_enabled=True,
@@ -222,7 +234,7 @@ def calibrate(
                 provider_runtime_bundle=provider_runtime_bundle,
                 provider_release=provider_release,
             ) as episode:
-                oracle = EvaluationOracle.from_provider_config(provider_config)
+                oracle = EvaluationOracle()
                 target.append(asdict(strategy(episode, oracle)))
     return {
         "profile": profile,
@@ -251,7 +263,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     comparison = run_pair(
         output=args.output,
-        provider_config=provider_config_path(),
+        provider_grounding=provider_grounding_path(),
         provider_admission=provider_admission_path(),
         provider_runtime_bundle=provider_runtime_bundle_path(),
         provider_release=provider_release_path(),

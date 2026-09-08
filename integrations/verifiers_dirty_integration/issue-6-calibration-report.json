@@ -1,0 +1,380 @@
+{
+  "acceptance": {
+    "all_configured_branches_reached": true,
+    "all_pairs_independently_audited": true,
+    "false_acceptance_count": 0,
+    "false_rejection_count": 0,
+    "passed": true,
+    "quality_discrimination_passed": true
+  },
+  "action_counts": {
+    "json_type_drift": 275,
+    "none": 765,
+    "quota_response": 2,
+    "repeat_page": 182
+  },
+  "applied_count": 459,
+  "branch_coverage": {
+    "json_type_drift": true,
+    "quota_response": true,
+    "repeat_page": true
+  },
+  "experiment": "issue_6_v1_read_intervention_calibration",
+  "observation_changed_count": 419,
+  "observational_noop_count": 40,
+  "pair_corpus_semantic_sha256": "sha256:6a78a2abac86d53e3838558f700d4fa659910906b55221b0cf7dfa993b3f1a67",
+  "profiles": {
+    "clean": {
+      "action_counts": {
+        "none": 360
+      },
+      "applied_count": 0,
+      "dimensions": {
+        "count_type_drift_rate": 0.0,
+        "repeat_page_rate": 0.0,
+        "request_quota": null
+      },
+      "observation_changed_count": 0,
+      "observational_noop_count": 0,
+      "off_request_discipline_range": {
+        "maximum": 1.0,
+        "minimum": 1.0
+      },
+      "off_task_passes": 60,
+      "on_request_discipline_range": {
+        "maximum": 1.0,
+        "minimum": 1.0
+      },
+      "on_task_passes": 60,
+      "pair_count": 60,
+      "semantic_sha256": "sha256:a74d0a0569722d450fa359a9f16ce6b17f097c64ba2dd28fe512fcf1bae03a0b"
+    },
+    "hostile": {
+      "action_counts": {
+        "json_type_drift": 180,
+        "none": 150,
+        "repeat_page": 126
+      },
+      "applied_count": 306,
+      "dimensions": {
+        "count_type_drift_rate": 0.5,
+        "repeat_page_rate": 0.3,
+        "request_quota": 16
+      },
+      "observation_changed_count": 276,
+      "observational_noop_count": 30,
+      "off_request_discipline_range": {
+        "maximum": 1.0,
+        "minimum": 1.0
+      },
+      "off_task_passes": 60,
+      "on_request_discipline_range": {
+        "maximum": 1.0,
+        "minimum": 0.7142857142857143
+      },
+      "on_task_passes": 60,
+      "pair_count": 60,
+      "semantic_sha256": "sha256:3f0fd9fab4425c688ca538c4ea7decfc046e0b4c895e1e5ff57767ec46c36810",
+      "targeted_quota": {
+        "declared_request_quota": 16,
+        "expected_logical_request_index": 17,
+        "observed": {
+          "action": {
+            "kind": "quota_response",
+            "response": {
+              "body": {
+                "message": "Request quota exceeded.",
+                "type": "rate_limit_error"
+              },
+              "headers": {
+                "content-type": "application/json"
+              },
+              "status_code": 429
+            }
+          },
+          "base_invoked": false,
+          "decision_kind": "quota_response",
+          "logical_request_index": 17,
+          "observation_changed": true,
+          "stage": "pre_dispatch",
+          "status_code": 429
+        },
+        "passed": true,
+        "profile": "hostile",
+        "trace_semantic_sha256": "sha256:0947cae0981910117ae4c1afcc0572dd2a3f590353d4e3ee525780ed8e904a7e"
+      }
+    },
+    "realistic": {
+      "action_counts": {
+        "json_type_drift": 95,
+        "none": 255,
+        "repeat_page": 56
+      },
+      "applied_count": 151,
+      "dimensions": {
+        "count_type_drift_rate": 0.25,
+        "repeat_page_rate": 0.15,
+        "request_quota": 12
+      },
+      "observation_changed_count": 141,
+      "observational_noop_count": 10,
+      "off_request_discipline_range": {
+        "maximum": 1.0,
+        "minimum": 1.0
+      },
+      "off_task_passes": 60,
+      "on_request_discipline_range": {
+        "maximum": 1.0,
+        "minimum": 0.7692307692307693
+      },
+      "on_task_passes": 60,
+      "pair_count": 60,
+      "semantic_sha256": "sha256:b7604932839ca165b68fa40546038940e899d45d6af0e6d59ab626ce6792b5cc",
+      "targeted_quota": {
+        "declared_request_quota": 12,
+        "expected_logical_request_index": 13,
+        "observed": {
+          "action": {
+            "kind": "quota_response",
+            "response": {
+              "body": {
+                "message": "Request quota exceeded.",
+                "type": "rate_limit_error"
+              },
+              "headers": {
+                "content-type": "application/json"
+              },
+              "status_code": 429
+            }
+          },
+          "base_invoked": false,
+          "decision_kind": "quota_response",
+          "logical_request_index": 13,
+          "observation_changed": true,
+          "stage": "pre_dispatch",
+          "status_code": 429
+        },
+        "passed": true,
+        "profile": "realistic",
+        "trace_semantic_sha256": "sha256:fcfb8bf3598a606d96748280168197241fe61ba3f4f52d9e64f8842f4070b8bf"
+      }
+    }
+  },
+  "protocol": {
+    "aggregate_scope": "paired_on_sides_plus_targeted_quota_probes",
+    "client": "model_free_provider_valid_careful_read_v1",
+    "only_paired_variable": "intervention_enabled",
+    "pair_count": 180,
+    "profiles": [
+      "clean",
+      "realistic",
+      "hostile"
+    ],
+    "seed_count": 60,
+    "seed_start": 1
+  },
+  "provider_claim": "g1_source_grounded_synthetic_fixture",
+  "quality_discrimination": {
+    "efficient": {
+      "request_discipline": {
+        "actual_call_count": 10,
+        "efficiency": 1.0,
+        "failed_call_count": 0,
+        "failure_factor": 1.0,
+        "minimum_call_count": 10,
+        "reason_codes": [
+          "minimum_call_path"
+        ],
+        "score": 1.0
+      },
+      "strategy": "provider_valid_careful_read_v1",
+      "task_correctness": 1.0,
+      "trace_semantic_sha256": "sha256:46bac28afeb218d9399fda08257a8fe83da324ba7dab70e461e1f56f2e4f5bd8"
+    },
+    "minimum_material_delta": 0.2,
+    "observed_delta": 0.375,
+    "passed": true,
+    "redundant": {
+      "request_discipline": {
+        "actual_call_count": 16,
+        "efficiency": 0.625,
+        "failed_call_count": 0,
+        "failure_factor": 1.0,
+        "minimum_call_count": 10,
+        "reason_codes": [
+          "redundant_calls"
+        ],
+        "score": 0.625
+      },
+      "strategy": "provider_valid_redundant_v1",
+      "task_correctness": 1.0,
+      "trace_semantic_sha256": "sha256:9a9b8d9cd3207adda3ce8d6c9772dbe648f35c89f1237396e1d4a92c22fb8071"
+    }
+  },
+  "quota_coverage": {
+    "hostile": {
+      "declared_request_quota": 16,
+      "expected_logical_request_index": 17,
+      "observed": {
+        "action": {
+          "kind": "quota_response",
+          "response": {
+            "body": {
+              "message": "Request quota exceeded.",
+              "type": "rate_limit_error"
+            },
+            "headers": {
+              "content-type": "application/json"
+            },
+            "status_code": 429
+          }
+        },
+        "base_invoked": false,
+        "decision_kind": "quota_response",
+        "logical_request_index": 17,
+        "observation_changed": true,
+        "stage": "pre_dispatch",
+        "status_code": 429
+      },
+      "passed": true,
+      "profile": "hostile",
+      "trace_semantic_sha256": "sha256:0947cae0981910117ae4c1afcc0572dd2a3f590353d4e3ee525780ed8e904a7e"
+    },
+    "realistic": {
+      "declared_request_quota": 12,
+      "expected_logical_request_index": 13,
+      "observed": {
+        "action": {
+          "kind": "quota_response",
+          "response": {
+            "body": {
+              "message": "Request quota exceeded.",
+              "type": "rate_limit_error"
+            },
+            "headers": {
+              "content-type": "application/json"
+            },
+            "status_code": 429
+          }
+        },
+        "base_invoked": false,
+        "decision_kind": "quota_response",
+        "logical_request_index": 13,
+        "observation_changed": true,
+        "stage": "pre_dispatch",
+        "status_code": 429
+      },
+      "passed": true,
+      "profile": "realistic",
+      "trace_semantic_sha256": "sha256:fcfb8bf3598a606d96748280168197241fe61ba3f4f52d9e64f8842f4070b8bf"
+    }
+  },
+  "report_semantic_sha256": "sha256:862fe06826f65ab1794ff8b49f297053532c622c098bf29be636548e4cff6e89",
+  "schema_version": "datalox_dirty_integration_calibration_v1",
+  "scope": {
+    "excluded": [
+      "write_timeout",
+      "unknown_write_completion"
+    ],
+    "interventions": "read_only_v1",
+    "negative_write": "existing_modeled_invalid_quantity_only"
+  },
+  "verifier_calibration": {
+    "cases": [
+      {
+        "case_id": "valid_careful",
+        "expected_pass": true,
+        "failed_check_ids": [],
+        "intended_check_failed": null,
+        "intended_failed_check": null,
+        "observed_pass": true,
+        "request_discipline": {
+          "actual_call_count": 10,
+          "efficiency": 1.0,
+          "failed_call_count": 0,
+          "failure_factor": 1.0,
+          "minimum_call_count": 10,
+          "reason_codes": [
+            "minimum_call_path"
+          ],
+          "score": 1.0
+        },
+        "task_correctness": 1.0,
+        "trace_semantic_sha256": "sha256:46bac28afeb218d9399fda08257a8fe83da324ba7dab70e461e1f56f2e4f5bd8"
+      },
+      {
+        "case_id": "negative_incomplete_pagination",
+        "expected_pass": false,
+        "failed_check_ids": [
+          "complete_catalog_before_write"
+        ],
+        "intended_check_failed": true,
+        "intended_failed_check": "complete_catalog_before_write",
+        "observed_pass": false,
+        "request_discipline": {
+          "actual_call_count": 5,
+          "efficiency": 0.5,
+          "failed_call_count": 0,
+          "failure_factor": 1.0,
+          "minimum_call_count": 10,
+          "reason_codes": [
+            "fewer_than_complete_path"
+          ],
+          "score": 0.5
+        },
+        "task_correctness": 0.0,
+        "trace_semantic_sha256": "sha256:f62bf5619ca5919af0859b1e76c7802e5a3736619f5874994fd60aa53a0e26dd"
+      },
+      {
+        "case_id": "negative_invalid_write",
+        "expected_pass": false,
+        "failed_check_ids": [
+          "quantity_transition_correct"
+        ],
+        "intended_check_failed": true,
+        "intended_failed_check": "quantity_transition_correct",
+        "observed_pass": false,
+        "request_discipline": {
+          "actual_call_count": 10,
+          "efficiency": 1.0,
+          "failed_call_count": 1,
+          "failure_factor": 0.5,
+          "minimum_call_count": 10,
+          "reason_codes": [
+            "minimum_call_path",
+            "failed_calls"
+          ],
+          "score": 0.5
+        },
+        "task_correctness": 0.0,
+        "trace_semantic_sha256": "sha256:46bac28afeb218d9399fda08257a8fe83da324ba7dab70e461e1f56f2e4f5bd8"
+      },
+      {
+        "case_id": "negative_write_after_quota",
+        "expected_pass": false,
+        "failed_check_ids": [
+          "no_write_after_unresolved_read_failure"
+        ],
+        "intended_check_failed": true,
+        "intended_failed_check": "no_write_after_unresolved_read_failure",
+        "observed_pass": false,
+        "request_discipline": {
+          "actual_call_count": 17,
+          "efficiency": 0.5882352941176471,
+          "failed_call_count": 1,
+          "failure_factor": 0.5,
+          "minimum_call_count": 10,
+          "reason_codes": [
+            "redundant_calls",
+            "failed_calls"
+          ],
+          "score": 0.29411764705882354
+        },
+        "task_correctness": 0.0,
+        "trace_semantic_sha256": "sha256:fcfb8bf3598a606d96748280168197241fe61ba3f4f52d9e64f8842f4070b8bf"
+      }
+    ],
+    "false_acceptance_count": 0,
+    "false_rejection_count": 0
+  }
+}

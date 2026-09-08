@@ -1,0 +1,69 @@
+{
+  "sources": [
+    {
+      "id": "uniprot_idmapping_public_production_2026_09_02",
+      "kind": "sanitized_public_production_observation",
+      "provider": "UniProt REST API",
+      "provider_version": "release 2026_03; deployment 02-September-2026",
+      "locator": "envs/uniprot_idmapping_v0/evidence/observed-lifecycle.json, observed-status-failure.json, and observed-uniref-result-failure.json",
+      "grounding_level": "G3_PUBLIC_PRODUCTION",
+      "derivation": "Identifier-free selected factual observations with per-observation provider Date timestamps and private receipt digests. They are not represented as one contiguous provider trace. The runtime schedule, identifiers, fixture mapping values, and error text are self-authored.",
+      "supports": [
+        "operation:uniprot.idmapping.run",
+        "operation:uniprot.idmapping.status",
+        "operation:uniprot.idmapping.uniref_results",
+        "behavior:uniref100_submit_pending_terminal_result_duplicate_after_terminal_unknown_status_unknown_result"
+      ]
+    },
+    {
+      "id": "uniprot_authored_write_completeness_v1",
+      "kind": "schema_instantiated_authored_behavior",
+      "provider": "Datalox local UniProt fixture",
+      "provider_version": "2026_03-idmapping-v0",
+      "locator": "envs/uniprot_idmapping_v0/evidence/authored-write-completeness.json",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "derivation": "Self-authored atomic invalid-write and exact-repeat branches used only to satisfy local core behavior completeness. They are not provider-grounded behavior claims.",
+      "supports": [
+        "operation:uniprot.idmapping.run",
+        "behavior:authored_failure_duplicate_completeness"
+      ]
+    }
+  ],
+  "grounding_gaps": [
+    {
+      "operation_family": "id_mapping_job",
+      "claim": "Grounded exact-duplicate request semantics",
+      "reason": "Raw request bytes were not retained. Local exact-repeat reuse is authored and excluded from admitted duplicate coverage."
+    },
+    {
+      "operation_family": "id_mapping_job",
+      "claim": "UniParc premature result and ChEMBL invalid-source behavior",
+      "reason": "The response artifacts are retained, but exact request identities are not durable enough for executable admission."
+    },
+    {
+      "operation_family": "id_mapping_job",
+      "claim": "Provider wall-clock completion distribution",
+      "reason": "The local 60-second completion point is an authored_logical_poll_schedule, not an observed latency sample."
+    },
+    {
+      "operation_family": "id_mapping_job",
+      "claim": "Provider reset or cleanup equivalence",
+      "reason": "The public service exposes no provider reset used by this acquisition; reset is local only."
+    },
+    {
+      "operation_family": "id_mapping_job",
+      "claim": "Production authentication or authorization beyond the observed public operations",
+      "reason": "The observed lifecycle required no credential and does not establish broader UniProt access policy."
+    },
+    {
+      "operation_family": "id_mapping_job",
+      "claim": "Rate limits, concurrent submissions, webhook delivery, retry windows, and unknown completion",
+      "reason": "These behaviors were outside the retained lifecycle observation."
+    },
+    {
+      "operation_family": "all",
+      "claim": "Broader UniProt REST behavior or raw response-payload equivalence",
+      "reason": "The evidence covers only three ID Mapping operations and retains factual response relations rather than provider payload bytes."
+    }
+  ]
+}

@@ -1,0 +1,213 @@
+{
+  "cycle_semantics_sha256": "sha256:cd49a2989fb83d709bd2032c3983d7d66df09805cf7085f411fa0d251c73aa24",
+  "cycles": 2,
+  "failure_atomicity_checked": true,
+  "observations_sha256": "sha256:ce00055f67b9698f77d6ecedbd2fd5fbc37f7622a9d47193140879e4ca1713cd",
+  "observed_step_count": 23,
+  "provider_admission_sha256": "sha256:f6f9807945160d13056f8973a4bf61e5224390b8e2785bfd2150bd075be9a6d6",
+  "provider_runtime_sha256": "sha256:d79f37fcc02ec579cf919c1a4cb08897af8d974214dc620a8810e138abb2e79f",
+  "provider_version": "2.16.0",
+  "reset_removed_created_resources": true,
+  "schema_version": "datalox_medusa_store_cart_differential_v1",
+  "status": "passed",
+  "steps": [
+    {
+      "error_type": "not_allowed",
+      "state_changed": false,
+      "status": 400,
+      "step": "missing_publishable_key"
+    },
+    {
+      "error_type": "not_allowed",
+      "state_changed": false,
+      "status": 400,
+      "step": "invalid_publishable_key"
+    },
+    {
+      "facts": {
+        "limit_offset_envelope": true,
+        "published_variant_available": true
+      },
+      "state_changed": false,
+      "status": 200,
+      "step": "initial_product_read"
+    },
+    {
+      "facts": {
+        "distinct_from_first_page": true,
+        "page_size": 10,
+        "returned_offset": 20
+      },
+      "state_changed": false,
+      "status": 200,
+      "step": "product_page"
+    },
+    {
+      "error_type": "not_allowed",
+      "state_changed": false,
+      "status": 400,
+      "step": "create_missing_publishable_key"
+    },
+    {
+      "error_type": "not_allowed",
+      "state_changed": false,
+      "status": 400,
+      "step": "create_invalid_publishable_key"
+    },
+    {
+      "relations": {
+        "items_empty": true,
+        "returned_cart": true
+      },
+      "state_changed": true,
+      "status": 200,
+      "step": "create_cart"
+    },
+    {
+      "relations": {
+        "distinct_cart": true,
+        "same_request_as_create": true
+      },
+      "state_changed": true,
+      "status": 200,
+      "step": "duplicate_create"
+    },
+    {
+      "error_type": "not_found",
+      "state_changed": false,
+      "status": 404,
+      "step": "invalid_region_create"
+    },
+    {
+      "relations": {
+        "returned_created_cart": true
+      },
+      "state_changed": false,
+      "status": 200,
+      "step": "cart_readback"
+    },
+    {
+      "error_type": "not_found",
+      "state_changed": false,
+      "status": 404,
+      "step": "retrieve_missing_cart"
+    },
+    {
+      "relations": {
+        "cart_total": 1000,
+        "quantity": 1,
+        "returned_line": true,
+        "unit_price": 1000
+      },
+      "state_changed": true,
+      "status": 200,
+      "step": "add_line_item"
+    },
+    {
+      "relations": {
+        "cart_total": 2000,
+        "quantity": 2,
+        "same_line": true,
+        "same_request_as_add": true,
+        "unit_price": 1000
+      },
+      "state_changed": true,
+      "status": 200,
+      "step": "duplicate_add"
+    },
+    {
+      "error_type": "invalid_data",
+      "relations": {
+        "quantity_after": 2
+      },
+      "state_changed": false,
+      "status": 400,
+      "step": "invalid_variant_add"
+    },
+    {
+      "relations": {
+        "cart": true,
+        "line": true,
+        "quantity": 2
+      },
+      "state_changed": false,
+      "status": 200,
+      "step": "add_readback"
+    },
+    {
+      "relations": {
+        "cart_total": 3000,
+        "quantity": 3,
+        "same_line": true,
+        "unit_price": 1000
+      },
+      "state_changed": true,
+      "status": 200,
+      "step": "set_quantity"
+    },
+    {
+      "relations": {
+        "quantity": 3,
+        "same_line": true,
+        "same_request_as_set": true
+      },
+      "state_changed": false,
+      "status": 200,
+      "step": "duplicate_set_quantity"
+    },
+    {
+      "error_type": "invalid_data",
+      "relations": {
+        "quantity_after": 3
+      },
+      "state_changed": false,
+      "status": 400,
+      "step": "invalid_quantity_type"
+    },
+    {
+      "relations": {
+        "cart": true,
+        "line": true,
+        "quantity": 3
+      },
+      "state_changed": false,
+      "status": 200,
+      "step": "update_readback"
+    },
+    {
+      "relations": {
+        "deleted": true,
+        "items_after": 0
+      },
+      "state_changed": true,
+      "status": 200,
+      "step": "delete_line_item"
+    },
+    {
+      "relations": {
+        "deleted": true,
+        "items_after": 0,
+        "same_request_as_delete": true
+      },
+      "state_changed": false,
+      "status": 200,
+      "step": "duplicate_delete"
+    },
+    {
+      "error_type": "unknown_error",
+      "state_changed": false,
+      "status": 500,
+      "step": "delete_from_missing_cart"
+    },
+    {
+      "relations": {
+        "cart": true,
+        "items_after": 0
+      },
+      "state_changed": false,
+      "status": 200,
+      "step": "delete_readback"
+    }
+  ],
+  "symbolic_relations_checked": true
+}

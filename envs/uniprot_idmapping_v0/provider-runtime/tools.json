@@ -1,0 +1,96 @@
+{
+  "tools": [
+    {
+      "description": "Submit a UniProt ID Mapping job using the native form fields.",
+      "id": "uniprot.idmapping.run",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "from": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "ids": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "to": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "from",
+          "to",
+          "ids"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "idmapping_client"
+      ],
+      "list_roles": [
+        "idmapping_client"
+      ],
+      "operation_family": "id_mapping_job",
+      "source_refs": [
+        "uniprot_idmapping_public_production_2026_09_02",
+        "uniprot_authored_write_completeness_v1"
+      ]
+    },
+    {
+      "description": "Read the current status of a provider-issued UniProt ID Mapping job.",
+      "id": "uniprot.idmapping.status",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "job_id": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "job_id"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "idmapping_client"
+      ],
+      "list_roles": [
+        "idmapping_client"
+      ],
+      "operation_family": "id_mapping_job",
+      "source_refs": [
+        "uniprot_idmapping_public_production_2026_09_02"
+      ]
+    },
+    {
+      "description": "Read UniRef results for a completed provider-issued UniProt ID Mapping job.",
+      "id": "uniprot.idmapping.uniref_results",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "job_id": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "job_id"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "idmapping_client"
+      ],
+      "list_roles": [
+        "idmapping_client"
+      ],
+      "operation_family": "id_mapping_job",
+      "source_refs": [
+        "uniprot_idmapping_public_production_2026_09_02"
+      ]
+    }
+  ]
+}

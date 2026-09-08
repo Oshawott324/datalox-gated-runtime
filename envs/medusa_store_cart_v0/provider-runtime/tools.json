@@ -1,0 +1,197 @@
+{
+  "tools": [
+    {
+      "description": "List products through Medusa Store API limit/offset pagination.",
+      "id": "medusa.store.products.list",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "maximum": 100,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "offset": {
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "invoke_roles": [
+        "store_operator"
+      ],
+      "list_roles": [
+        "store_operator"
+      ],
+      "operation_family": "catalog",
+      "source_refs": [
+        "medusa_2_16_0_store_cart_g2"
+      ]
+    },
+    {
+      "description": "Create a Medusa Store cart.",
+      "id": "medusa.store.carts.create",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "region_id": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "region_id"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "store_operator"
+      ],
+      "list_roles": [
+        "store_operator"
+      ],
+      "operation_family": "cart_lifecycle",
+      "source_refs": [
+        "medusa_2_16_0_store_cart_g2"
+      ]
+    },
+    {
+      "description": "Retrieve a Medusa Store cart by its provider-issued id.",
+      "id": "medusa.store.carts.retrieve",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "cart_id": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "cart_id"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "store_operator"
+      ],
+      "list_roles": [
+        "store_operator"
+      ],
+      "operation_family": "cart_lifecycle",
+      "source_refs": [
+        "medusa_2_16_0_store_cart_g2"
+      ]
+    },
+    {
+      "description": "Add a provider-issued product variant to a Medusa Store cart.",
+      "id": "medusa.store.carts.line_items.add",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "cart_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "quantity": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "variant_id": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "cart_id",
+          "variant_id",
+          "quantity"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "store_operator"
+      ],
+      "list_roles": [
+        "store_operator"
+      ],
+      "operation_family": "cart_line_items",
+      "source_refs": [
+        "medusa_2_16_0_store_cart_g2"
+      ]
+    },
+    {
+      "description": "Set a Medusa Store cart line item's quantity; zero removes it.",
+      "id": "medusa.store.carts.line_items.update",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "cart_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "line_item_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "quantity": {
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "cart_id",
+          "line_item_id",
+          "quantity"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "store_operator"
+      ],
+      "list_roles": [
+        "store_operator"
+      ],
+      "operation_family": "cart_line_items",
+      "source_refs": [
+        "medusa_2_16_0_store_cart_g2"
+      ]
+    },
+    {
+      "description": "Delete a Medusa Store cart line item.",
+      "id": "medusa.store.carts.line_items.delete",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "cart_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "line_item_id": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "cart_id",
+          "line_item_id"
+        ],
+        "type": "object"
+      },
+      "invoke_roles": [
+        "store_operator"
+      ],
+      "list_roles": [
+        "store_operator"
+      ],
+      "operation_family": "cart_line_items",
+      "source_refs": [
+        "medusa_2_16_0_store_cart_g2"
+      ]
+    }
+  ]
+}

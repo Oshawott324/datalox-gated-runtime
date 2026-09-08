@@ -6,20 +6,20 @@
     "agent_visible": true,
     "availability": "before_interaction",
     "contents": ["task_objectives", "agent_visible_constraints"],
-    "carrier": "Verifiers dataset question containing the collection objective and visible API constraints"
+    "carrier": "Verifiers dataset question containing the catalog and cart objectives plus visible page-size, email, region, and quantity constraints"
   },
   "observation_plane": {
     "owner": "consumer_environment_and_provider_runtime",
     "agent_visible": true,
     "availability": "after_causal_environment_interaction",
     "contents": ["provider_responses", "environment_anomalies"],
-    "carrier": "StatefulToolEnv tool result produced only after list_products is called"
+    "carrier": "StatefulToolEnv tool result produced only after the model calls a provider read or write tool"
   },
   "evaluation_plane": {
     "owner": "consumer",
     "agent_visible": false,
     "availability": "trusted_generation_or_evaluation_only",
     "contents": ["evaluation_ground_truth", "oracle_state", "verifier_inputs"],
-    "carrier": "consumer reward functions read scalar results from an environment-private map; optional provider, intervention, observation, and score evidence is atomically written to an operator-selected controller-only directory during rollout cleanup"
+    "carrier": "consumer reward functions verify delivered-call history and isolated final provider state before publishing scalar results to an environment-private map; optional provider, intervention, observation, and score evidence is atomically written to an operator-selected controller-only directory during rollout cleanup"
   }
 }

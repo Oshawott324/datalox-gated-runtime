@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.ai/schemas/behavior-authoring-run-v1.schema.json",
+  "title": "Datalox behavior authoring run v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "connector",
+    "recipe",
+    "engine",
+    "secret_environment",
+    "static_inputs",
+    "static_artifacts"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_behavior_authoring_run_v1"},
+    "run_id": {"$ref": "#/$defs/identifier"},
+    "connector": {"$ref": "#/$defs/digested_path"},
+    "recipe": {"$ref": "#/$defs/digested_path"},
+    "engine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engine_id", "engine_version", "source_sha256"],
+      "properties": {
+        "engine_id": {"$ref": "#/$defs/identifier"},
+        "engine_version": {"type": "string", "minLength": 1},
+        "source_sha256": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "secret_environment": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/identifier"},
+      "additionalProperties": {"$ref": "#/$defs/identifier"}
+    },
+    "static_inputs": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/identifier"},
+      "additionalProperties": {"$ref": "#/$defs/digested_path"}
+    },
+    "static_artifacts": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/identifier"},
+      "additionalProperties": {"$ref": "#/$defs/path"}
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "path": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path"],
+      "properties": {"path": {"type": "string", "minLength": 1}}
+    },
+    "digested_path": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/digest"}
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "cart_state_projection_continuity_checked": true,
+  "cart_state_projection_relations_checked": true,
+  "duplicate_safe_request_identity_checked": true,
+  "failure_atomicity_within_cart_state_projection_checked": true,
+  "generated_identifier_relations_checked": true,
+  "manifest_sha256": "sha256:607552b29f4cb418bf5e04087543a55d8a1d0ce266dd7137fdd0e3ced7eacd41",
+  "promoted_lifecycle_steps": 23,
+  "raw_bodies_and_framing_checked": true,
+  "raw_statuses_checked": true,
+  "record_count": 26,
+  "schema_version": "datalox_medusa_store_cart_grounding_check_v1",
+  "status": "passed",
+  "tree_sha256": "sha256:23a2b28e988dd9ba2fb7ceb03a8b735122e2a1ba563f9206b4fe9a21f770a8c9"
+}

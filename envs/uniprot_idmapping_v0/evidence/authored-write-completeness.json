@@ -1,0 +1,28 @@
+{
+  "schema_version": "datalox_authored_provider_write_completeness_v1",
+  "provider_id": "uniprot",
+  "operation_id": "uniprot.idmapping.run",
+  "evidence_class": "G1_SCHEMA_INSTANTIATED",
+  "distribution": "public",
+  "behaviors": [
+    {
+      "behavior": "failure",
+      "local_request": {
+        "from": "NOT_A_DB",
+        "to": "ChEMBL",
+        "ids": "DATALOX_INPUT_A"
+      },
+      "local_outcome": "atomic 400 rejection",
+      "grounding_boundary": "authored completeness only; retained provider response is unpromoted because exact request identity was not retained"
+    },
+    {
+      "behavior": "duplicate",
+      "local_request_relation": "exact repeat of the admitted local success request after terminal readback",
+      "local_outcome": "same local job identifier with no state change",
+      "grounding_boundary": "authored completeness informed by an unsigned investigator-attested semantic relation; raw provider request bytes were not retained"
+    }
+  ],
+  "provider_payload_bytes_present": false,
+  "provider_generated_identifiers_present": false,
+  "tenant_data_present": false
+}

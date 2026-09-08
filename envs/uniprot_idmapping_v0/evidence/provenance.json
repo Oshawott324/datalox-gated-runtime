@@ -1,0 +1,99 @@
+{
+  "schema_version": "datalox_provider_evidence_provenance_v1",
+  "provider": "UniProt REST API",
+  "provider_authority": "rest.uniprot.org",
+  "provider_release_observed": "2026_03",
+  "provider_deployment_date_observed": "02-September-2026",
+  "observed_at": "2026-09-02T15:57:34Z",
+  "evidence_collection_started_at": "2026-09-02T13:45:29Z",
+  "evidence_collection_ended_at": "2026-09-02T15:57:34Z",
+  "operation_grounding": {
+    "uniprot.idmapping.run": "G1_SCHEMA_INSTANTIATED aggregate; submit success separately observed at G3_PUBLIC_PRODUCTION",
+    "uniprot.idmapping.status": "G3_PUBLIC_PRODUCTION",
+    "uniprot.idmapping.uniref_results": "G3_PUBLIC_PRODUCTION"
+  },
+  "reviewed_utilities": [
+    {
+      "purpose": "read-only status-failure acquisition; writable generic mode removed",
+      "path": "scripts/providers/acquire-uniprot-idmapping-lifecycle.py",
+      "sha256": "sha256:3855fa41b1411069b76ca3c720b9f019cbc6efb30c2db860a4c18a87951ffaa2"
+    },
+    {
+      "purpose": "read-only exact UniRef unknown-result acquisition",
+      "path": "scripts/providers/acquire-uniprot-idmapping-uniref-result-failure.py",
+      "sha256": "sha256:95f2848a9b733abb9c2de70e3a08c7e8a552dc9bc1d6f6fc67dab47e180a2387"
+    },
+    {
+      "purpose": "private receipt verification, local differential, and reset check",
+      "path": "scripts/providers/check-uniprot-idmapping-lifecycle.py",
+      "sha256": "sha256:21276a640c3a7266f4a0137b56be0ca94926341d70b893a7d9822bfb55e34ead"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "authored-write-completeness.json",
+      "sha256": "sha256:f810760de402922f14f767eec8415ffe23481803a57979bbe9d7f9dabd5536bb",
+      "derivation": "Self-authored G1 invalid-write and duplicate branches required for complete local write admission; no provider-grounding claim."
+    },
+    {
+      "path": "observed-lifecycle.json",
+      "sha256": "sha256:02fc0430aa4ec0c84756bc19707356f1d4ebb7f1d34a5ce25c45708a335260ad",
+      "derivation": "Sanitized route-bound UniRef100 lifecycle facts plus explicitly unpromoted UniParc, ChEMBL, and duplicate notes, bound to exact retained response sets and an unsigned post-hoc UniRef request-identity record."
+    },
+    {
+      "path": "observed-status-failure.json",
+      "sha256": "sha256:78a884529d8ba78c279d24b845ee38772015fc6861c6b2e14ea2643fa348b2b7",
+      "derivation": "Sanitized facts generated from one exact retained read-only unknown-status response receipt."
+    },
+    {
+      "path": "observed-uniref-result-failure.json",
+      "sha256": "sha256:4a18b15bf500c363c6ec2f18c34281ee80f2b0a9898b48d54e289cb4e93044ee",
+      "derivation": "Sanitized facts generated from one exact retained read-only unknown-UniRef-result response receipt with exact path and query binding."
+    },
+    {
+      "path": "operation-claims.json",
+      "sha256": "sha256:b651d8d31a20fd2c992e48837def9aa4e066c927372c5a440ceadc6b72e93582",
+      "derivation": "Provider admission claims with behavior-level evidence references and explicit G1 aggregate grounding for the write operation."
+    }
+  ],
+  "private_source_receipts": [
+    {
+      "receipt_id": "async_live",
+      "content_manifest_sha256": "sha256:51577dc74f16c74b9d9122397042cb04106a7df717839c00ff93b14f3c04d587",
+      "post_hoc_request_identity_sha256": "sha256:d4cf78b61ae013113f64d0ec63dac29a955d6ee4855e0a6d399442654f109009",
+      "signed_contemporaneous_receipt": false
+    },
+    {
+      "receipt_id": "preterminal_unpromoted",
+      "content_manifest_sha256": "sha256:87a178420674fe1e773577589cb0dc75c0b7695d71d17fcfa07df3906f12e41b",
+      "signed_contemporaneous_receipt": false
+    },
+    {
+      "receipt_id": "invalid_duplicate_unpromoted",
+      "content_manifest_sha256": "sha256:3eb1621b9c39377e76a5d9200462c5351b852cdebb96dc3bc5ff5e8501233284",
+      "signed_contemporaneous_receipt": false
+    },
+    {
+      "receipt_id": "status_404",
+      "manifest_sha256": "sha256:0662582414c8eaea73b2ce20f3d7776d8b13041ab00285bcf6b2c9e53ace5a8b",
+      "signed_contemporaneous_receipt": false
+    },
+    {
+      "receipt_id": "uniref_result_404",
+      "manifest_sha256": "sha256:59e0368b1cd3815060a73880f3c0e27de336c7c66e3277a2979771e2ff02f85b",
+      "signed_contemporaneous_receipt": false
+    }
+  ],
+  "investigator_note": "Legacy writable-session raw request bytes were not retained. The exact UniRef identifier set is retained, while request equality is an unsigned post-hoc investigator attestation. Duplicate, UniParc premature-result, and ChEMBL invalid-source facts are not promoted as provider-grounded behaviors. Exact raw response bytes remain restricted.",
+  "distribution": {
+    "label": "public",
+    "rights_basis": "Self-authored factual observations and local behavior code without public provider payload bytes; released under the repository Apache-2.0 source license.",
+    "provider_payload_bytes_present": false,
+    "tenant_data_present": false,
+    "personal_data_present": false,
+    "secret_scan": "passed"
+  },
+  "provider_access_boundary": "Authoring-only public production probes. The compiled runtime has no provider client or upstream forwarding path.",
+  "provider_reset_claimed": false,
+  "provider_wall_clock_distribution_claimed": false
+}

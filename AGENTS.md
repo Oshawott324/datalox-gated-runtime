@@ -6,18 +6,20 @@ Read in this order:
 
 1. `product-contract.json`
 2. `docs/provider-foundry.md`
-3. `docs/transparent-interception.md`
-4. `docs/rollout-information-boundary.md` when changing rollout, task, agent,
+3. `docs/provider-state-profiles.md`
+4. `docs/transparent-interception.md`
+5. `docs/rollout-information-boundary.md` when changing rollout, task, agent,
    observation, generation, oracle, verifier, or training integration
-5. `docs/verl-grpo-rollouts.md` when changing parallel rollout or training integration
-6. `docs/what-we-are-building.md`
-7. `docs/provider-packs.md`
-8. `docs/provider-behavior-grounding.md`
-9. `docs/provider-core-completeness.md`
-10. `docs/data-release-policy.md`
-11. `docs/product-definition.md`
-12. `README.md`
-13. Relevant code and tests
+6. `docs/verl-grpo-rollouts.md` when changing parallel rollout or training integration
+7. `docs/what-we-are-building.md`
+8. `docs/provider-packs.md`
+9. `docs/provider-behavior-grounding.md`
+10. `docs/provider-differential-and-drift.md`
+11. `docs/provider-core-completeness.md`
+12. `docs/data-release-policy.md`
+13. `docs/product-definition.md`
+14. `README.md`
+15. Relevant code and tests
 
 ## Product boundary
 
@@ -29,6 +31,11 @@ Read in this order:
   or rewritten endpoint. Interception is supplied by the execution boundary.
 - **Fuel means reusable gated provider behavior packs.** User-owned worlds and
   benchmarks consume fuel; Datalox reference worlds are integration fixtures.
+- Provider tenant state stays provider-native and opaque. A reusable reset
+  state earns a State Profile claim only when its origin, rights, lifecycle
+  coverage, relationships, reachability, pagination, mutation, and reset
+  behavior pass admission against the exact compiled seed. State Profiles are
+  task-free, verifier-free, and selected only by the trusted operator.
 - The runtime owns gating, replay, shadow state, denials, ledgers, audits, and
   run exports. It does not own model routing or training recipes.
 - Parallel training gets one isolated provider-state lease per consumer
@@ -86,6 +93,14 @@ Read in this order:
   simulated provider policy, but are redacted from evidence and never forwarded.
 - Sandbox writes belong only in a separate, manually approved authoring utility.
 - Prefer structured, agent-readable errors with stable codes.
+- Provider faithfulness is a behavior-program claim. A passing claim requires
+  one digest-bound source measurement, an immutable Provider Release target,
+  exact operation/principal execution, and equivalent initial state, transcript,
+  and final state across the initial, post-mutation reset, and fresh-instance
+  runs. `replay_complete` is not a faithfulness claim.
+- Source drift and replica mismatch are separate outcomes. Drift comparison
+  uses the same digest-pinned connector, recipe, harvest engine, and seed;
+  incomplete reacquisition yields `reacquisition_blocked` without a drift claim.
 
 ## Public data boundary
 

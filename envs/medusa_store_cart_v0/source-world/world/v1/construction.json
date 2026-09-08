@@ -1,0 +1,6 @@
+{
+  "schema_version": "datalox_world_construction_v1",
+  "method": "code_first_provider_behavior",
+  "grounding": "Bounded cart and line-item behavior is implemented from identifier-free factual observations of exact Medusa 2.16.0 self-hosted routes; all runtime fixtures and text are self-authored.",
+  "task_ownership": "The source world task is an integration fixture. Compiled provider runtime and OCI release exclude task and verifier assets."
+}

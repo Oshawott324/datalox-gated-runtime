@@ -17,6 +17,8 @@ from datalox_gated_runtime.provider_runtime import (
     ProviderRuntimeError,
     load_provider_admission,
     load_provider_runtime_bundle,
+    load_provider_state_admission,
+    load_provider_state_profile,
 )
 from datalox_gated_runtime.provider_runtime.registry import (
     FilesystemProviderReleaseRegistry,
@@ -69,6 +71,8 @@ _MATERIALIZED_PROVIDER_FIELDS = _V2_PROVIDER_FIELDS | {
     "provider_set_v1_index",
     "bundle_path",
     "admission_path",
+    "state_profile_path",
+    "state_admission_path",
     "release_manifest_path",
     "release_config_path",
     "release_config_sha256",
@@ -156,6 +160,8 @@ class AdmittedRolloutProviderBinding:
     provider: LoadedRolloutProviderV2
     bundle_dir: Path
     admission_path: Path
+    state_profile_path: Path | None
+    state_admission_path: Path | None
     release_manifest_path: Path
     release_config_path: Path
     release_config_sha256: str
@@ -732,6 +738,16 @@ def materialize_rollout_provider_set_v2(
                     "provider_set_v1_index": index,
                     "bundle_path": profile.bundle_dir.relative_to(temporary).as_posix(),
                     "admission_path": profile.admission_path.relative_to(temporary).as_posix(),
+                    "state_profile_path": (
+                        profile.state_profile_path.relative_to(temporary).as_posix()
+                        if profile.state_profile_path is not None
+                        else None
+                    ),
+                    "state_admission_path": (
+                        profile.state_admission_path.relative_to(temporary).as_posix()
+                        if profile.state_admission_path is not None
+                        else None
+                    ),
                     "release_manifest_path": release_manifest_path.relative_to(
                         temporary
                     ).as_posix(),
@@ -896,6 +912,32 @@ def load_materialized_rollout_provider_set_v2(
             raw_provider["admission_path"],
             field="admission_path",
         )
+        raw_state_profile_path = raw_provider["state_profile_path"]
+        raw_state_admission_path = raw_provider["state_admission_path"]
+        if (raw_state_profile_path is None) != (raw_state_admission_path is None):
+            raise RolloutProviderSetError(
+                "rollout_provider_set_v2_materialized_state_assets_incomplete",
+                "Materialized state profile and admission paths must be present together.",
+                {"index": index},
+            )
+        state_profile_path = (
+            _resolve_materialized_relative_file(
+                materialized_root,
+                raw_state_profile_path,
+                field="state_profile_path",
+            )
+            if raw_state_profile_path is not None
+            else None
+        )
+        state_admission_path = (
+            _resolve_materialized_relative_file(
+                materialized_root,
+                raw_state_admission_path,
+                field="state_admission_path",
+            )
+            if raw_state_admission_path is not None
+            else None
+        )
         release_manifest_path = _resolve_materialized_relative_file(
             materialized_root,
             raw_provider["release_manifest_path"],
@@ -937,6 +979,12 @@ def load_materialized_rollout_provider_set_v2(
             actual_release_config_sha256=actual_release_config_sha256,
             declared_release_config_sha256=release_config_sha256,
         )
+        _validate_materialized_state_assets(
+            provider=source_provider,
+            release_config=release_config,
+            state_profile_path=state_profile_path,
+            state_admission_path=state_admission_path,
+        )
         admission_digest = _sha256_regular_file(admission_path)
         admission = load_provider_admission(admission_path)
         operation_contract_sha256 = canonical_json_sha256(
@@ -971,6 +1019,8 @@ def load_materialized_rollout_provider_set_v2(
                 provider=source_provider,
                 bundle_dir=bundle_path,
                 admission_path=admission_path,
+                state_profile_path=state_profile_path,
+                state_admission_path=state_admission_path,
                 release_manifest_path=release_manifest_path,
                 release_config_path=release_config_path,
                 release_config_sha256=release_config_sha256,
@@ -1511,6 +1561,81 @@ def _validate_materialized_release_metadata(
         raise RolloutProviderSetError(
             "rollout_provider_set_v2_release_config_invalid",
             "Materialized provider release profile does not match the selected profile binding.",
+        )
+
+
+def _validate_materialized_state_assets(
+    *,
+    provider: LoadedRolloutProviderV2,
+    release_config: dict[str, Any],
+    state_profile_path: Path | None,
+    state_admission_path: Path | None,
+) -> None:
+    selected = [
+        profile
+        for profile in release_config["profiles"]
+        if isinstance(profile, dict) and profile.get("profile_id") == provider.profile_id
+    ]
+    if len(selected) != 1:
+        raise RolloutProviderSetError(
+            "rollout_provider_set_v2_release_config_invalid",
+            "Selected provider release profile is missing from controller metadata.",
+        )
+    expected_profile_sha256 = selected[0].get("state_profile_sha256")
+    expected_admission_sha256 = selected[0].get("state_admission_sha256")
+    expected_present = isinstance(expected_profile_sha256, str) and isinstance(
+        expected_admission_sha256, str
+    )
+    actual_present = state_profile_path is not None and state_admission_path is not None
+    if expected_present != actual_present or (
+        (expected_profile_sha256 is None) != (expected_admission_sha256 is None)
+    ):
+        raise RolloutProviderSetError(
+            "rollout_provider_set_v2_materialized_state_binding_mismatch",
+            "Materialized state assets do not match the selected release profile.",
+        )
+    if not expected_present:
+        return
+    assert state_profile_path is not None
+    assert state_admission_path is not None
+    try:
+        state_profile = load_provider_state_profile(state_profile_path)
+        state_admission = load_provider_state_admission(state_admission_path)
+    except ProviderRuntimeError as exc:
+        raise RolloutProviderSetError(
+            "rollout_provider_set_v2_materialized_state_invalid",
+            f"Materialized provider state assets are invalid: {exc}",
+            {"provider_runtime_error": exc.code},
+        ) from exc
+    mismatches = []
+    if _sha256_regular_file(state_profile_path) != expected_profile_sha256:
+        mismatches.append("state_profile_sha256")
+    if _sha256_regular_file(state_admission_path) != expected_admission_sha256:
+        mismatches.append("state_admission_sha256")
+    if state_profile["profile_id"] != provider.profile_id:
+        mismatches.append("state_profile.profile_id")
+    if state_admission["profile_id"] != provider.profile_id:
+        mismatches.append("state_admission.profile_id")
+    if state_profile["provider_id"] != provider.provider_id:
+        mismatches.append("state_profile.provider_id")
+    if state_admission["provider_id"] != provider.provider_id:
+        mismatches.append("state_admission.provider_id")
+    if state_admission["provider_runtime_sha256"] != provider.provider_runtime_sha256:
+        mismatches.append("state_admission.provider_runtime_sha256")
+    if state_admission["profile_sha256"] != expected_profile_sha256:
+        mismatches.append("state_admission.profile_sha256")
+    if state_admission["seed_sha256"] != state_profile["seed_sha256"]:
+        mismatches.append("state_admission.seed_sha256")
+    if (
+        state_admission["construction_trace_sha256"]
+        != state_profile["construction"]["trace_sha256"]
+    ):
+        mismatches.append("state_admission.construction_trace_sha256")
+    if mismatches:
+        raise RolloutProviderSetError(
+            "rollout_provider_set_v2_materialized_state_binding_mismatch",
+            "Materialized state assets fail their selected release bindings.",
+            {"fields": sorted(mismatches)},
         )
 
 

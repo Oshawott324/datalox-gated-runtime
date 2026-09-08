@@ -1,0 +1,253 @@
+{
+  "fixed_reference_inputs": {
+    "explicit_region": "one valid seeded region",
+    "known_variant": "one published fixed-price variant",
+    "publishable_key": "required on the Store surface; no key value retained",
+    "unit_price": 1000
+  },
+  "grounding_receipt": {
+    "manifest_sha256": "sha256:607552b29f4cb418bf5e04087543a55d8a1d0ce266dd7137fdd0e3ced7eacd41",
+    "record_count": 26,
+    "schema_version": "datalox_provider_grounding_receipt_v1",
+    "tree_sha256": "sha256:23a2b28e988dd9ba2fb7ceb03a8b735122e2a1ba563f9206b4fe9a21f770a8c9"
+  },
+  "initial_reference_state": {
+    "non_deleted_cart_count": 0,
+    "verified_by": "authoring-only PostgreSQL count before lifecycle acquisition"
+  },
+  "lifecycle": [
+    {
+      "error_type": "not_allowed",
+      "operation_id": "medusa.store.products.list",
+      "state_changed": false,
+      "status": 400,
+      "step": "missing_publishable_key"
+    },
+    {
+      "error_type": "not_allowed",
+      "operation_id": "medusa.store.products.list",
+      "state_changed": false,
+      "status": 400,
+      "step": "invalid_publishable_key"
+    },
+    {
+      "facts": {
+        "limit_offset_envelope": true,
+        "published_variant_available": true
+      },
+      "operation_id": "medusa.store.products.list",
+      "state_changed": false,
+      "status": 200,
+      "step": "initial_product_read"
+    },
+    {
+      "facts": {
+        "distinct_from_first_page": true,
+        "page_size": 10,
+        "returned_offset": 20
+      },
+      "operation_id": "medusa.store.products.list",
+      "state_changed": false,
+      "status": 200,
+      "step": "product_page"
+    },
+    {
+      "error_type": "not_allowed",
+      "operation_id": "medusa.store.carts.create",
+      "state_changed": false,
+      "status": 400,
+      "step": "create_missing_publishable_key"
+    },
+    {
+      "error_type": "not_allowed",
+      "operation_id": "medusa.store.carts.create",
+      "state_changed": false,
+      "status": 400,
+      "step": "create_invalid_publishable_key"
+    },
+    {
+      "operation_id": "medusa.store.carts.create",
+      "relations": {
+        "items_empty": true,
+        "returned_cart": "$cart_1"
+      },
+      "state_changed": true,
+      "status": 200,
+      "step": "create_cart"
+    },
+    {
+      "operation_id": "medusa.store.carts.create",
+      "relations": {
+        "distinct_from": "$cart_1",
+        "returned_cart": "$cart_2",
+        "same_request_as": "create_cart"
+      },
+      "state_changed": true,
+      "status": 200,
+      "step": "duplicate_create"
+    },
+    {
+      "error_type": "not_found",
+      "operation_id": "medusa.store.carts.create",
+      "state_changed": false,
+      "status": 404,
+      "step": "invalid_region_create"
+    },
+    {
+      "operation_id": "medusa.store.carts.retrieve",
+      "relations": {
+        "requested": "$cart_1",
+        "returned": "$cart_1"
+      },
+      "state_changed": false,
+      "status": 200,
+      "step": "cart_readback"
+    },
+    {
+      "error_type": "not_found",
+      "operation_id": "medusa.store.carts.retrieve",
+      "state_changed": false,
+      "status": 404,
+      "step": "retrieve_missing_cart"
+    },
+    {
+      "operation_id": "medusa.store.carts.line_items.add",
+      "relations": {
+        "cart": "$cart_1",
+        "cart_total": 1000,
+        "quantity": 1,
+        "returned_line": "$line_1",
+        "unit_price": 1000
+      },
+      "state_changed": true,
+      "status": 200,
+      "step": "add_line_item"
+    },
+    {
+      "operation_id": "medusa.store.carts.line_items.add",
+      "relations": {
+        "cart_total": 2000,
+        "quantity": 2,
+        "same_line": "$line_1",
+        "same_request_as": "add_line_item",
+        "unit_price": 1000
+      },
+      "state_changed": true,
+      "status": 200,
+      "step": "duplicate_add"
+    },
+    {
+      "error_type": "invalid_data",
+      "operation_id": "medusa.store.carts.line_items.add",
+      "relations": {
+        "cart": "$cart_1",
+        "quantity_after": 2
+      },
+      "state_changed": false,
+      "status": 400,
+      "step": "invalid_variant_add"
+    },
+    {
+      "operation_id": "medusa.store.carts.retrieve",
+      "relations": {
+        "cart": "$cart_1",
+        "line": "$line_1",
+        "quantity": 2
+      },
+      "state_changed": false,
+      "status": 200,
+      "step": "add_readback"
+    },
+    {
+      "operation_id": "medusa.store.carts.line_items.update",
+      "relations": {
+        "cart_total": 3000,
+        "line": "$line_1",
+        "quantity": 3,
+        "unit_price": 1000
+      },
+      "state_changed": true,
+      "status": 200,
+      "step": "set_quantity"
+    },
+    {
+      "operation_id": "medusa.store.carts.line_items.update",
+      "relations": {
+        "line": "$line_1",
+        "quantity": 3,
+        "same_request_as": "set_quantity"
+      },
+      "state_changed": false,
+      "status": 200,
+      "step": "duplicate_set_quantity"
+    },
+    {
+      "error_type": "invalid_data",
+      "operation_id": "medusa.store.carts.line_items.update",
+      "relations": {
+        "line": "$line_1",
+        "quantity_after": 3
+      },
+      "state_changed": false,
+      "status": 400,
+      "step": "invalid_quantity_type"
+    },
+    {
+      "operation_id": "medusa.store.carts.retrieve",
+      "relations": {
+        "cart": "$cart_1",
+        "line": "$line_1",
+        "quantity": 3
+      },
+      "state_changed": false,
+      "status": 200,
+      "step": "update_readback"
+    },
+    {
+      "operation_id": "medusa.store.carts.line_items.delete",
+      "relations": {
+        "deleted": true,
+        "items_after": 0,
+        "line": "$line_1"
+      },
+      "state_changed": true,
+      "status": 200,
+      "step": "delete_line_item"
+    },
+    {
+      "operation_id": "medusa.store.carts.line_items.delete",
+      "relations": {
+        "deleted": true,
+        "items_after": 0,
+        "line": "$line_1",
+        "same_request_as": "delete_line_item"
+      },
+      "state_changed": false,
+      "status": 200,
+      "step": "duplicate_delete"
+    },
+    {
+      "error_type": "unknown_error",
+      "operation_id": "medusa.store.carts.line_items.delete",
+      "state_changed": false,
+      "status": 500,
+      "step": "delete_from_missing_cart"
+    },
+    {
+      "operation_id": "medusa.store.carts.retrieve",
+      "relations": {
+        "cart": "$cart_1",
+        "items_after": 0
+      },
+      "state_changed": false,
+      "status": 200,
+      "step": "delete_readback"
+    }
+  ],
+  "provider": "Medusa",
+  "provider_version": "2.16.0",
+  "reference_kind": "self_hosted_exact_release",
+  "sanitization": "No credentials, raw payload bodies, provider-generated identifiers, or tenant identifiers are retained. Symbolic references express only observed relationships.",
+  "schema_version": "datalox_medusa_store_cart_observations_v1",
+  "scope": "Store product reads plus cart and line-item lifecycle"
+}

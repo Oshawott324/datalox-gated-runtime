@@ -1,0 +1,332 @@
+{
+  "schema_version": "datalox_provider_operation_claims_v1",
+  "provider_id": "uniprot",
+  "bundle_version": "2026_03-idmapping-v0",
+  "evidence_sources": [
+    {
+      "evidence_id": "uniprot_public_idmapping_lifecycle_2026_09_02",
+      "artifact_ref": "observed-lifecycle.json",
+      "artifact_sha256": "sha256:02fc0430aa4ec0c84756bc19707356f1d4ebb7f1d34a5ce25c45708a335260ad",
+      "grounding_level": "G3_PUBLIC_PRODUCTION",
+      "observed_at": "2026-09-02T13:46:05Z",
+      "valid_through": "2027-09-02T00:00:00Z",
+      "distribution_label": "public",
+      "rights_basis": "Self-authored factual observations without provider payload bytes, credentials, identifiers, or tenant data."
+    },
+    {
+      "evidence_id": "uniprot_authored_write_completeness_v1",
+      "artifact_ref": "authored-write-completeness.json",
+      "artifact_sha256": "sha256:f810760de402922f14f767eec8415ffe23481803a57979bbe9d7f9dabd5536bb",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "observed_at": "2026-09-02T16:00:00Z",
+      "valid_through": "2027-09-02T00:00:00Z",
+      "distribution_label": "public",
+      "rights_basis": "Self-authored local completeness fixture without provider payload bytes, credentials, identifiers, or tenant data."
+    },
+    {
+      "evidence_id": "uniprot_public_idmapping_status_failure_2026_09_02",
+      "artifact_ref": "observed-status-failure.json",
+      "artifact_sha256": "sha256:78a884529d8ba78c279d24b845ee38772015fc6861c6b2e14ea2643fa348b2b7",
+      "grounding_level": "G3_PUBLIC_PRODUCTION",
+      "observed_at": "2026-09-02T15:35:24Z",
+      "valid_through": "2027-09-02T00:00:00Z",
+      "distribution_label": "public",
+      "rights_basis": "Self-authored sanitized response-shape facts backed by a retained private read-only response receipt."
+    },
+    {
+      "evidence_id": "uniprot_public_uniref_result_failure_2026_09_02",
+      "artifact_ref": "observed-uniref-result-failure.json",
+      "artifact_sha256": "sha256:4a18b15bf500c363c6ec2f18c34281ee80f2b0a9898b48d54e289cb4e93044ee",
+      "grounding_level": "G3_PUBLIC_PRODUCTION",
+      "observed_at": "2026-09-02T15:57:34Z",
+      "valid_through": "2027-09-02T00:00:00Z",
+      "distribution_label": "public",
+      "rights_basis": "Self-authored sanitized response-shape facts backed by a retained private read-only response receipt."
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "uniprot.idmapping.run",
+      "native_surface": {
+        "type": "http",
+        "scheme": "https",
+        "authority": "rest.uniprot.org",
+        "method": "POST",
+        "path_template": "/idmapping/run"
+      },
+      "mutability": "write",
+      "behavior_program": "uniprot_uniref100_async_lifecycle",
+      "state_effects": ["jobs", "request_index", "scheduled_events"],
+      "grounding": {
+        "level": "G1_SCHEMA_INSTANTIATED",
+        "evidence_refs": [
+          "uniprot_authored_write_completeness_v1",
+          "uniprot_public_idmapping_lifecycle_2026_09_02"
+        ]
+      },
+      "rights": {
+        "distribution_label": "public",
+        "behavior_distribution_basis": "The executable local fixture is self-authored from non-copyrightable status and state-transition facts."
+      },
+      "covered_behaviors": ["success", "failure", "duplicate", "readback"]
+    },
+    {
+      "operation_id": "uniprot.idmapping.status",
+      "native_surface": {
+        "type": "http",
+        "scheme": "https",
+        "authority": "rest.uniprot.org",
+        "method": "GET",
+        "path_template": "/idmapping/status/{job_id}"
+      },
+      "mutability": "read",
+      "behavior_program": "uniprot_uniref100_async_lifecycle",
+      "state_effects": [],
+      "grounding": {
+        "level": "G3_PUBLIC_PRODUCTION",
+        "evidence_refs": [
+          "uniprot_public_idmapping_lifecycle_2026_09_02",
+          "uniprot_public_idmapping_status_failure_2026_09_02"
+        ]
+      },
+      "rights": {
+        "distribution_label": "public",
+        "behavior_distribution_basis": "The executable local fixture is self-authored from non-copyrightable status and state-transition facts."
+      },
+      "covered_behaviors": ["success", "failure", "async"]
+    },
+    {
+      "operation_id": "uniprot.idmapping.uniref_results",
+      "native_surface": {
+        "type": "http",
+        "scheme": "https",
+        "authority": "rest.uniprot.org",
+        "method": "GET",
+        "path_template": "/idmapping/uniref/results/{job_id}"
+      },
+      "mutability": "read",
+      "behavior_program": "uniprot_uniref100_async_lifecycle",
+      "state_effects": [],
+      "grounding": {
+        "level": "G3_PUBLIC_PRODUCTION",
+        "evidence_refs": [
+          "uniprot_public_idmapping_lifecycle_2026_09_02",
+          "uniprot_public_uniref_result_failure_2026_09_02"
+        ]
+      },
+      "rights": {
+        "distribution_label": "public",
+        "behavior_distribution_basis": "The executable local fixture is self-authored from non-copyrightable status, route, and response-shape facts."
+      },
+      "covered_behaviors": ["success", "failure"]
+    }
+  ],
+  "provider_invariants": [
+    {
+      "predicate_id": "jobs_state_is_object",
+      "source": "provider_state",
+      "operator": "type",
+      "pointer": "/state/jobs",
+      "expected_type": "object"
+    },
+    {
+      "predicate_id": "scheduled_events_is_array",
+      "source": "provider_state",
+      "operator": "type",
+      "pointer": "/scheduled_events",
+      "expected_type": "array"
+    }
+  ],
+  "receipt_predicates": [
+    {
+      "predicate_id": "call_was_recorded",
+      "source": "call_evidence",
+      "operator": "type",
+      "pointer": "/events",
+      "expected_type": "array"
+    },
+    {
+      "predicate_id": "response_is_object",
+      "source": "response_body",
+      "operator": "type",
+      "pointer": "",
+      "expected_type": "object"
+    },
+    {
+      "predicate_id": "response_has_job_id",
+      "source": "response_body",
+      "operator": "type",
+      "pointer": "/jobId",
+      "expected_type": "string"
+    }
+  ],
+  "reset_profiles": [
+    {"profile_id": "default", "kind": "compiled_seed"}
+  ],
+  "behavior_probes": [
+    {
+      "probe_id": "uniprot_uniref100_async_lifecycle",
+      "reset_profile": "default",
+      "steps": [
+        {
+          "step_id": "authored_invalid_chembl_source_database",
+          "operation_id": "uniprot.idmapping.run",
+          "request": {
+            "scheme": "https",
+            "authority": "rest.uniprot.org",
+            "method": "POST",
+            "path": "/idmapping/run",
+            "query": {},
+            "headers": {"content-type": "application/x-www-form-urlencoded"},
+            "body": {"from": "NOT_A_DB", "to": "ChEMBL", "ids": "DATALOX_INPUT_A"}
+          },
+          "expected_status_code": 400,
+          "expected_decision_kind": "deny",
+          "expected_state_change": false,
+          "covers": [{"operation_id": "uniprot.idmapping.run", "behavior": "failure"}],
+          "receipt_predicate_refs": ["response_is_object", "call_was_recorded"]
+        },
+        {
+          "step_id": "submit_uniref100_job",
+          "operation_id": "uniprot.idmapping.run",
+          "request": {
+            "scheme": "https",
+            "authority": "rest.uniprot.org",
+            "method": "POST",
+            "path": "/idmapping/run",
+            "query": {},
+            "headers": {"content-type": "application/x-www-form-urlencoded"},
+            "body": {"from": "UniProtKB_AC-ID", "to": "UniRef100", "ids": "DATALOX_INPUT_A"}
+          },
+          "expected_status_code": 200,
+          "expected_decision_kind": "shadow_write",
+          "expected_state_change": true,
+          "covers": [{"operation_id": "uniprot.idmapping.run", "behavior": "success"}],
+          "receipt_predicate_refs": ["response_is_object", "response_has_job_id", "call_was_recorded"]
+        },
+        {
+          "step_id": "pending_uniref100_status",
+          "operation_id": "uniprot.idmapping.status",
+          "request": {
+            "scheme": "https",
+            "authority": "rest.uniprot.org",
+            "method": "GET",
+            "path": "/idmapping/status/datalox_job_000001",
+            "query": {},
+            "headers": {},
+            "body": null
+          },
+          "expected_status_code": 200,
+          "expected_decision_kind": "replay",
+          "async_observation": "pending",
+          "async_transition_id": "uniref100_job_completion",
+          "covers": [
+            {"operation_id": "uniprot.idmapping.status", "behavior": "success"},
+            {"operation_id": "uniprot.idmapping.status", "behavior": "async"}
+          ],
+          "receipt_predicate_refs": ["response_is_object", "call_was_recorded"]
+        },
+        {
+          "step_id": "unknown_status",
+          "operation_id": "uniprot.idmapping.status",
+          "request": {
+            "scheme": "https",
+            "authority": "rest.uniprot.org",
+            "method": "GET",
+            "path": "/idmapping/status/datalox-nonexistent-20260902",
+            "query": {},
+            "headers": {},
+            "body": null
+          },
+          "expected_status_code": 404,
+          "expected_decision_kind": "deny",
+          "covers": [{"operation_id": "uniprot.idmapping.status", "behavior": "failure"}],
+          "receipt_predicate_refs": ["response_is_object", "call_was_recorded"]
+        },
+        {
+          "step_id": "unknown_uniref_result",
+          "operation_id": "uniprot.idmapping.uniref_results",
+          "request": {
+            "scheme": "https",
+            "authority": "rest.uniprot.org",
+            "method": "GET",
+            "path": "/idmapping/uniref/results/datalox-nonexistent-uniref-20260902",
+            "query": {"format": "json", "size": "1"},
+            "headers": {},
+            "body": null
+          },
+          "expected_status_code": 404,
+          "expected_decision_kind": "deny",
+          "covers": [{"operation_id": "uniprot.idmapping.uniref_results", "behavior": "failure"}],
+          "receipt_predicate_refs": ["response_is_object", "call_was_recorded"]
+        },
+        {
+          "step_id": "terminal_uniref100_status",
+          "operation_id": "uniprot.idmapping.status",
+          "controller_actions_before": [
+            {
+              "action": "advance_provider_time",
+              "target": "2026-09-02T00:01:00Z",
+              "async_transition_id": "uniref100_job_completion",
+              "expected_event_id": "complete:datalox_job_000001",
+              "expected_event_kind": "uniprot_idmapping_job_complete"
+            }
+          ],
+          "request": {
+            "scheme": "https",
+            "authority": "rest.uniprot.org",
+            "method": "GET",
+            "path": "/idmapping/status/datalox_job_000001",
+            "query": {},
+            "headers": {},
+            "body": null
+          },
+          "expected_status_code": 303,
+          "expected_decision_kind": "replay",
+          "async_observation": "terminal",
+          "async_transition_id": "uniref100_job_completion",
+          "covers": [{"operation_id": "uniprot.idmapping.status", "behavior": "async"}],
+          "receipt_predicate_refs": ["call_was_recorded"]
+        },
+        {
+          "step_id": "terminal_uniref100_results",
+          "operation_id": "uniprot.idmapping.uniref_results",
+          "request": {
+            "scheme": "https",
+            "authority": "rest.uniprot.org",
+            "method": "GET",
+            "path": "/idmapping/uniref/results/datalox_job_000001",
+            "query": {"format": "json", "size": "1"},
+            "headers": {},
+            "body": null
+          },
+          "expected_status_code": 200,
+          "expected_decision_kind": "replay",
+          "covers": [
+            {"operation_id": "uniprot.idmapping.uniref_results", "behavior": "success"},
+            {"operation_id": "uniprot.idmapping.run", "behavior": "readback"}
+          ],
+          "receipt_predicate_refs": ["response_is_object", "call_was_recorded"]
+        },
+        {
+          "step_id": "authored_duplicate_uniref100_submit_after_terminal_result",
+          "operation_id": "uniprot.idmapping.run",
+          "request": {
+            "scheme": "https",
+            "authority": "rest.uniprot.org",
+            "method": "POST",
+            "path": "/idmapping/run",
+            "query": {},
+            "headers": {"content-type": "application/x-www-form-urlencoded"},
+            "body": {"from": "UniProtKB_AC-ID", "to": "UniRef100", "ids": "DATALOX_INPUT_A"}
+          },
+          "expected_status_code": 200,
+          "expected_decision_kind": "replay",
+          "expected_state_change": false,
+          "covers": [{"operation_id": "uniprot.idmapping.run", "behavior": "duplicate"}],
+          "receipt_predicate_refs": ["response_is_object", "response_has_job_id", "call_was_recorded"]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "bundle_version": "2.16.0-store-cart-v0",
+  "content_hashes": {
+    "world/v1/construction.json": "sha256:e9bb668e2960b9b64fea7785079d49ec4fbc4598bce3724e04c458889d7fcb6d",
+    "world/v1/contract.py": "sha256:2b230f09b0cf052d14637c216799b17b616f19ba7a26c82ffa39811746bb72dc",
+    "world/v1/episodes.jsonl": "sha256:81141436cc9eb155fb1c0f9d2f05b56bfa5d926914a3840707d3b5b934e45c4a",
+    "world/v1/implementation.py": "sha256:8007ca5e1aed30b648a8cdf52d2a7e926c20535faabdf7e1c412c598dd443e34",
+    "world/v1/roles.json": "sha256:a7eb4374cc17a7f88b8b51d175a4ef93f541819e7cf132a09bbd07468ccfc271",
+    "world/v1/sources.json": "sha256:565b2ee4c94950a66db35ee9b6c1967fb006351fbff929ff6b9ddbd7e69c01b2",
+    "world/v1/tools.json": "sha256:b1f9c118c866ce18ccb38aa8a976130b80b9d839bf367215cd6ee07acf1975bd",
+    "world/v1/verifier.json": "sha256:541f90b4d98430263bccdf260bcecb994de1d2255d31eb499ac9c9c7db7f85df"
+  },
+  "default_actor_role": "store_operator",
+  "episodes_path": "world/v1/episodes.jsonl",
+  "implementation": "world/v1/implementation.py:create_world",
+  "required_runtime_capabilities": [
+    "actors",
+    "role_scoped_tools",
+    "transactions"
+  ],
+  "roles_path": "world/v1/roles.json",
+  "schema_version": "datalox_world_bundle_v1",
+  "sources_path": "world/v1/sources.json",
+  "tools_path": "world/v1/tools.json",
+  "trajectory_paths": [],
+  "verifier_path": "world/v1/verifier.json",
+  "world_id": "medusa_store_cart_v0"
+}

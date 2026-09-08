@@ -3,15 +3,6 @@
 This is a Harbor 0.21 task for evaluating an agent on a stateful incident
 workflow spanning Datadog, HubSpot, Jira/JSM, and Microsoft Graph.
 
-## Research question
-
-Can an independently produced, stateful software world be delivered as an
-ordinary Harbor task without changing Harbor's runner, while the world retains
-its reset lifecycle, provider-shaped MCP surface, and hidden state verifier?
-
-This package tests that integration boundary. Harbor owns the agent trial and
-reward collection; the packaged world owns episode state and verification.
-
 The agent must investigate a production-service incident, reconcile customer
 and ownership evidence across the four systems, and make four related changes:
 

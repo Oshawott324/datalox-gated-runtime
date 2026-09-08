@@ -1,0 +1,1486 @@
+{
+  "base_state_sha256": "sha256:641c9b95f1b602bbcae77f8e1daf117ece75f5977e044fc7cb0a1309689be623",
+  "final_state_sha256": "sha256:b49eb99633778de296a4ac97f52cccdd08b585bc9386fa8af5996dca2a00403b",
+  "profile_id": "regional-network-v1",
+  "schema_version": "datalox_provider_state_construction_trace_v1",
+  "steps": [
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {
+        "emergency": false,
+        "facilityId": "10000000-0000-4000-8000-000000000001",
+        "programId": "20000000-0000-4000-8000-000000000001",
+        "unfinished": true
+      },
+      "operation_id": "requisition.periods_for_initiate",
+      "response_body_sha256": "sha256:7ddc39571acc9c6bacf93b0606a7eb54b7c1a167c8cf2bb38a7378b1ee9d0439",
+      "sequence": 1,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {
+        "emergency": false,
+        "facility": "10000000-0000-4000-8000-000000000001",
+        "program": "20000000-0000-4000-8000-000000000001",
+        "suggestedPeriod": "35000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "requisition.initiate",
+      "response_body_sha256": "sha256:947a71fb9acbf0283d65ba1953be3c289bd31628013dd4bfa310863dc7600ac7",
+      "sequence": 2,
+      "state_changed": true,
+      "status_code": 201
+    },
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "requisition.get",
+      "response_body_sha256": "sha256:947a71fb9acbf0283d65ba1953be3c289bd31628013dd4bfa310863dc7600ac7",
+      "sequence": 3,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000001",
+        "requisition": {
+          "emergency": false,
+          "facility": {
+            "id": "10000000-0000-4000-8000-000000000001"
+          },
+          "id": "40000000-0000-4000-8000-000000000001",
+          "modifiedDate": "2026-07-22T08:01:00+00:00",
+          "processingPeriod": {
+            "id": "35000000-0000-4000-8000-000000000001"
+          },
+          "program": {
+            "id": "20000000-0000-4000-8000-000000000001"
+          },
+          "requisitionLineItems": [
+            {
+              "id": "41000000-0000-4000-8000-000000000001",
+              "orderable": {
+                "id": "30000000-0000-4000-8000-000000000001",
+                "versionNumber": 1
+              },
+              "requestedQuantity": 20
+            }
+          ],
+          "status": "INITIATED"
+        }
+      },
+      "operation_id": "requisition.update",
+      "response_body_sha256": "sha256:18a84d957736aaf0f6668e0142150aa671641accdfb9234f9b3a309dda3e81e3",
+      "sequence": 4,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "requisition.submit",
+      "response_body_sha256": "sha256:fcfe5f6fa5063d541a2769eb4ee2872703b80aa159d4cff717e391c71dde5737",
+      "sequence": 5,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-program_authorizer",
+      "actor_role": "program_authorizer",
+      "arguments": {
+        "facilityId": "10000000-0000-4000-8000-000000000001",
+        "programId": "20000000-0000-4000-8000-000000000001",
+        "status": "SUBMITTED"
+      },
+      "operation_id": "requisition.search",
+      "response_body_sha256": "sha256:2237e6d820af1bcd38d308d7414daf35215fe0b3510a6218e9db74295172490b",
+      "sequence": 6,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-program_authorizer",
+      "actor_role": "program_authorizer",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "requisition.authorize",
+      "response_body_sha256": "sha256:b69a6591b1599e122592c905f643447bb713f92226ec2272b194264911132302",
+      "sequence": 7,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-program_approver",
+      "actor_role": "program_approver",
+      "arguments": {
+        "facility": "10000000-0000-4000-8000-000000000001",
+        "processingPeriod": "35000000-0000-4000-8000-000000000001",
+        "program": "20000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "requisition.list_for_approval",
+      "response_body_sha256": "sha256:1d7ff8a3e093411cfeacd31ee59713477b47bfb406f710593b2d058514df646d",
+      "sequence": 8,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-program_approver",
+      "actor_role": "program_approver",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "requisition.reject",
+      "response_body_sha256": "sha256:900e32ba0422748e17b4ddd5e0807037e454634ca3fcf7dfba9af0d931e96b65",
+      "sequence": 9,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "requisition.get",
+      "response_body_sha256": "sha256:900e32ba0422748e17b4ddd5e0807037e454634ca3fcf7dfba9af0d931e96b65",
+      "sequence": 10,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000001",
+        "requisition": {
+          "emergency": false,
+          "facility": {
+            "id": "10000000-0000-4000-8000-000000000001"
+          },
+          "id": "40000000-0000-4000-8000-000000000001",
+          "modifiedDate": "2026-07-22T08:05:00+00:00",
+          "processingPeriod": {
+            "id": "35000000-0000-4000-8000-000000000001"
+          },
+          "program": {
+            "id": "20000000-0000-4000-8000-000000000001"
+          },
+          "requisitionLineItems": [
+            {
+              "approvedQuantity": 20,
+              "id": "41000000-0000-4000-8000-000000000001",
+              "orderable": {
+                "id": "30000000-0000-4000-8000-000000000001",
+                "versionNumber": 1
+              },
+              "requestedQuantity": 20
+            }
+          ],
+          "status": "REJECTED"
+        }
+      },
+      "operation_id": "requisition.update",
+      "response_body_sha256": "sha256:ae7336e23abced5d15c16a9b578e279614101d2695537a85021a02c81458043e",
+      "sequence": 11,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "requisition.submit",
+      "response_body_sha256": "sha256:06fdee87fc76ab07814edae171fb9470cf04317d76ffb356336cb8bca2ada293",
+      "sequence": 12,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-program_authorizer",
+      "actor_role": "program_authorizer",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "requisition.authorize",
+      "response_body_sha256": "sha256:543cc7b7ca20fd472b15802089d8e2c00def0f14cf1ac72b34e8ba4b8240954a",
+      "sequence": 13,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-program_approver",
+      "actor_role": "program_approver",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "requisition.approve",
+      "response_body_sha256": "sha256:1a12cc22139a35fb00b5ab4e143790fcefeb90ab5425f08fdfa1853494552167",
+      "sequence": 14,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-warehouse_clerk",
+      "actor_role": "warehouse_clerk",
+      "arguments": {
+        "facilityId": "10000000-0000-4000-8000-000000000001",
+        "programId": "20000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "requisition.list_for_convert",
+      "response_body_sha256": "sha256:f16e683bf38dc5da27f78431b6a5eb7ad5c6c6c329af188ab0ee7fca85d6487f",
+      "sequence": 15,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-warehouse_clerk",
+      "actor_role": "warehouse_clerk",
+      "arguments": {
+        "requisitions": [
+          {
+            "requisitionId": "40000000-0000-4000-8000-000000000001",
+            "supplyingDepotId": "10000000-0000-4000-8000-000000000002"
+          }
+        ]
+      },
+      "operation_id": "requisition.convert_to_order",
+      "response_body_sha256": "sha256:74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "sequence": 16,
+      "state_changed": true,
+      "status_code": 201
+    },
+    {
+      "actor_id": "state-construction-warehouse_clerk",
+      "actor_role": "warehouse_clerk",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "requisition.get",
+      "response_body_sha256": "sha256:c2b10a4a2cd9009f27b1bf84e3132f0b65a4377d1fa1b6f177ed52ee46a3e8aa",
+      "sequence": 17,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-warehouse_clerk",
+      "actor_role": "warehouse_clerk",
+      "arguments": {
+        "id": "70000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "fulfillment.get_order",
+      "response_body_sha256": "sha256:5f6d96d6b99fb9a0e3fe4d7e7e448b62a31f1c1974acb8ec8e99a28271f28d70",
+      "sequence": 18,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-stock_manager",
+      "actor_role": "stock_manager",
+      "arguments": {
+        "facility": "10000000-0000-4000-8000-000000000001",
+        "program": "20000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "stock.list_summaries",
+      "response_body_sha256": "sha256:ae1f658a3a8a974bb820910ffd7361e45098b36bae06cd890beb9d7bc453512c",
+      "sequence": 19,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-stock_manager",
+      "actor_role": "stock_manager",
+      "arguments": {
+        "documentNumber": "DATALOX-RECEIPT-001",
+        "facilityId": "10000000-0000-4000-8000-000000000001",
+        "isActive": true,
+        "lineItems": [
+          {
+            "occurredDate": "2026-07-22",
+            "orderableId": "30000000-0000-4000-8000-000000000001",
+            "quantity": 50,
+            "reasonId": "50000000-0000-4000-8000-000000000001"
+          }
+        ],
+        "programId": "20000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "stock.create_event",
+      "response_body_sha256": "sha256:e923c1e2af8f55fe8035bc5f2c7c06c8f31cb704aca12b5e363b11457c58fe32",
+      "sequence": 20,
+      "state_changed": true,
+      "status_code": 201
+    },
+    {
+      "actor_id": "state-construction-stock_manager",
+      "actor_role": "stock_manager",
+      "arguments": {
+        "id": "53000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "stock.get_card",
+      "response_body_sha256": "sha256:16d8f6e5fbbb030c6d720436de554edd27da3d0cfcea84712a1e75a40b03dd4d",
+      "sequence": 21,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-stock_manager",
+      "actor_role": "stock_manager",
+      "arguments": {
+        "facilityId": "10000000-0000-4000-8000-000000000001",
+        "programId": "20000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "stock.create_physical_inventory",
+      "response_body_sha256": "sha256:17197f2b68a8ecadf37cc9f77435e2ad730f07b5689cefe1e0921df03ef81a32",
+      "sequence": 22,
+      "state_changed": true,
+      "status_code": 201
+    },
+    {
+      "actor_id": "state-construction-stock_manager",
+      "actor_role": "stock_manager",
+      "arguments": {
+        "id": "74000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "stock.get_physical_inventory",
+      "response_body_sha256": "sha256:17197f2b68a8ecadf37cc9f77435e2ad730f07b5689cefe1e0921df03ef81a32",
+      "sequence": 23,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-stock_manager",
+      "actor_role": "stock_manager",
+      "arguments": {
+        "id": "74000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "stock.delete_physical_inventory",
+      "response_body_sha256": "sha256:74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "sequence": 24,
+      "state_changed": true,
+      "status_code": 204
+    },
+    {
+      "actor_id": "state-construction-stock_manager",
+      "actor_role": "stock_manager",
+      "arguments": {
+        "facilityId": "10000000-0000-4000-8000-000000000001",
+        "programId": "20000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "stock.create_physical_inventory",
+      "response_body_sha256": "sha256:3f56f54330368a1d0712f8c8ad9530cfd4847ff0c31b6614a6b8ec61a99abe76",
+      "sequence": 25,
+      "state_changed": true,
+      "status_code": 201
+    },
+    {
+      "actor_id": "state-construction-stock_manager",
+      "actor_role": "stock_manager",
+      "arguments": {
+        "id": "74000000-0000-4000-8000-000000000002",
+        "physicalInventory": {
+          "documentNumber": "DATALOX-PI-001",
+          "facilityId": "10000000-0000-4000-8000-000000000001",
+          "id": "74000000-0000-4000-8000-000000000002",
+          "isDraft": true,
+          "isStarter": false,
+          "lineItems": [
+            {
+              "extraData": {},
+              "orderableId": "30000000-0000-4000-8000-000000000001",
+              "quantity": 147,
+              "stockAdjustments": [],
+              "stockOnHand": 150
+            }
+          ],
+          "occurredDate": "2026-07-22",
+          "programId": "20000000-0000-4000-8000-000000000001",
+          "signature": "Datalox Stock Manager"
+        }
+      },
+      "operation_id": "stock.update_physical_inventory",
+      "response_body_sha256": "sha256:828dc98ddeaf6f056044bbb4463b132af48b3be195d54c262e2bf9ff48d61fd0",
+      "sequence": 26,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-stock_manager",
+      "actor_role": "stock_manager",
+      "arguments": {
+        "documentNumber": "DATALOX-PI-001",
+        "facilityId": "10000000-0000-4000-8000-000000000001",
+        "isActive": true,
+        "lineItems": [
+          {
+            "occurredDate": "2026-07-22",
+            "orderableId": "30000000-0000-4000-8000-000000000001",
+            "quantity": 147
+          }
+        ],
+        "programId": "20000000-0000-4000-8000-000000000001",
+        "resourceId": "74000000-0000-4000-8000-000000000002"
+      },
+      "operation_id": "stock.create_event",
+      "response_body_sha256": "sha256:4ed8e238ce2e90ea53f3e293b0d6acdeb2422b9bd658575e9f68e2cee147ac89",
+      "sequence": 27,
+      "state_changed": true,
+      "status_code": 201
+    },
+    {
+      "actor_id": "state-construction-stock_manager",
+      "actor_role": "stock_manager",
+      "arguments": {
+        "id": "74000000-0000-4000-8000-000000000002"
+      },
+      "operation_id": "stock.get_physical_inventory",
+      "response_body_sha256": "sha256:6b248723ee83f5d2a7ca7b507826b952329d5a1662b40180b99ce9b0dbb4daa4",
+      "sequence": 28,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-warehouse_clerk",
+      "actor_role": "warehouse_clerk",
+      "arguments": {
+        "lineItems": [
+          {
+            "extraData": {
+              "temperatureControlled": false
+            },
+            "lot": {
+              "id": "36000000-0000-4000-8000-000000000001"
+            },
+            "orderable": {
+              "id": "30000000-0000-4000-8000-000000000001",
+              "versionNumber": 1
+            },
+            "quantityShipped": 20
+          }
+        ],
+        "notes": "Datalox reference shipment",
+        "order": {
+          "id": "70000000-0000-4000-8000-000000000001"
+        }
+      },
+      "operation_id": "fulfillment.create_shipment",
+      "response_body_sha256": "sha256:12e82c7b2407bb59292eb6ed6e539446ef7494cb790a9c9d08360a7d14535b48",
+      "sequence": 29,
+      "state_changed": true,
+      "status_code": 201
+    },
+    {
+      "actor_id": "state-construction-warehouse_clerk",
+      "actor_role": "warehouse_clerk",
+      "arguments": {
+        "orderId": "70000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "fulfillment.list_shipments",
+      "response_body_sha256": "sha256:90170ed44f247ec2070ef6a218f79001cdc13c727e17f5f7ce007dc35f0d7016",
+      "sequence": 30,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-warehouse_clerk",
+      "actor_role": "warehouse_clerk",
+      "arguments": {
+        "id": "72000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "fulfillment.get_shipment",
+      "response_body_sha256": "sha256:12e82c7b2407bb59292eb6ed6e539446ef7494cb790a9c9d08360a7d14535b48",
+      "sequence": 31,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-receiving_clerk",
+      "actor_role": "receiving_clerk",
+      "arguments": {
+        "id": "73000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "fulfillment.get_proof_of_delivery",
+      "response_body_sha256": "sha256:737c8988b0b0a621c58e06d38d96936e69aae2f1169fe53f91d0b62b3485666b",
+      "sequence": 32,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-receiving_clerk",
+      "actor_role": "receiving_clerk",
+      "arguments": {
+        "id": "73000000-0000-4000-8000-000000000001",
+        "proofOfDelivery": {
+          "deliveredBy": "Datalox Courier",
+          "id": "73000000-0000-4000-8000-000000000001",
+          "lineItems": [
+            {
+              "id": "73100000-0000-4000-8000-000000000001",
+              "lot": {
+                "id": "36000000-0000-4000-8000-000000000001"
+              },
+              "notes": "",
+              "orderable": {
+                "id": "30000000-0000-4000-8000-000000000001",
+                "versionNumber": 1
+              },
+              "quantityAccepted": 20,
+              "quantityRejected": 0,
+              "useVvm": false
+            }
+          ],
+          "receivedBy": "Datalox Receiver",
+          "receivedDate": "2026-07-22",
+          "shipment": {
+            "id": "72000000-0000-4000-8000-000000000001"
+          },
+          "status": "CONFIRMED"
+        }
+      },
+      "operation_id": "fulfillment.update_proof_of_delivery",
+      "response_body_sha256": "sha256:89474f574c80d99beebf13e0cf926518aa6f52cc242073483bf205cb9b3ee30b",
+      "sequence": 33,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-receiving_clerk",
+      "actor_role": "receiving_clerk",
+      "arguments": {
+        "id": "70000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "fulfillment.get_order",
+      "response_body_sha256": "sha256:1fb518b623e1d49bd09d1e0061a9a0d26b446f47b80df0b064be00a09f334891",
+      "sequence": 34,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-receiving_clerk",
+      "actor_role": "receiving_clerk",
+      "arguments": {
+        "id": "53000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "stock.get_card",
+      "response_body_sha256": "sha256:73b63f607743a5156683944d4ef103dd3d291263237c4fb17a12cf870d3ae826",
+      "sequence": 35,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {
+        "id": "73000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "fulfillment.get_proof_of_delivery_audit",
+      "response_body_sha256": "sha256:875fbb9a8b10c50817f2e456fe626faadcb058cb1e2bcf258f2f38c0c9085207",
+      "sequence": 36,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-warehouse_clerk",
+      "actor_role": "warehouse_clerk",
+      "arguments": {
+        "emergency": false,
+        "id": "70000000-0000-4000-8000-000000000002",
+        "orderLineItems": [
+          {
+            "id": "71000000-0000-4000-8000-000000000002",
+            "orderable": {
+              "id": "30000000-0000-4000-8000-000000000001",
+              "versionNumber": 1
+            },
+            "orderedQuantity": 5
+          }
+        ],
+        "program": {
+          "id": "20000000-0000-4000-8000-000000000001"
+        },
+        "receivingFacility": {
+          "id": "10000000-0000-4000-8000-000000000001"
+        },
+        "requestingFacility": {
+          "id": "10000000-0000-4000-8000-000000000001"
+        },
+        "status": "CREATING",
+        "supplyingFacility": {
+          "id": "10000000-0000-4000-8000-000000000002"
+        }
+      },
+      "operation_id": "fulfillment.create_requisitionless_order",
+      "response_body_sha256": "sha256:ab1257a81af6d633b2171a776299e6b40d2eca7def54e387e6d9cfbc912a1f1c",
+      "sequence": 37,
+      "state_changed": true,
+      "status_code": 201
+    },
+    {
+      "actor_id": "state-construction-warehouse_clerk",
+      "actor_role": "warehouse_clerk",
+      "arguments": {
+        "id": "70000000-0000-4000-8000-000000000002",
+        "order": {
+          "emergency": false,
+          "id": "70000000-0000-4000-8000-000000000002",
+          "orderLineItems": [
+            {
+              "id": "71000000-0000-4000-8000-000000000002",
+              "orderable": {
+                "id": "30000000-0000-4000-8000-000000000001",
+                "versionNumber": 1
+              },
+              "orderedQuantity": 5
+            }
+          ],
+          "program": {
+            "id": "20000000-0000-4000-8000-000000000001"
+          },
+          "receivingFacility": {
+            "id": "10000000-0000-4000-8000-000000000001"
+          },
+          "requestingFacility": {
+            "id": "10000000-0000-4000-8000-000000000001"
+          },
+          "status": "CREATING",
+          "supplyingFacility": {
+            "id": "10000000-0000-4000-8000-000000000002"
+          }
+        }
+      },
+      "operation_id": "fulfillment.update_order",
+      "response_body_sha256": "sha256:ab1257a81af6d633b2171a776299e6b40d2eca7def54e387e6d9cfbc912a1f1c",
+      "sequence": 38,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-warehouse_clerk",
+      "actor_role": "warehouse_clerk",
+      "arguments": {
+        "id": "70000000-0000-4000-8000-000000000002",
+        "order": {
+          "emergency": false,
+          "id": "70000000-0000-4000-8000-000000000002",
+          "orderLineItems": [
+            {
+              "id": "71000000-0000-4000-8000-000000000002",
+              "orderable": {
+                "id": "30000000-0000-4000-8000-000000000001",
+                "versionNumber": 1
+              },
+              "orderedQuantity": 5
+            }
+          ],
+          "program": {
+            "id": "20000000-0000-4000-8000-000000000001"
+          },
+          "receivingFacility": {
+            "id": "10000000-0000-4000-8000-000000000001"
+          },
+          "requestingFacility": {
+            "id": "10000000-0000-4000-8000-000000000001"
+          },
+          "status": "CREATING",
+          "supplyingFacility": {
+            "id": "10000000-0000-4000-8000-000000000002"
+          }
+        }
+      },
+      "operation_id": "fulfillment.send_requisitionless_order",
+      "response_body_sha256": "sha256:74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "sequence": 39,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-warehouse_clerk",
+      "actor_role": "warehouse_clerk",
+      "arguments": {
+        "id": "70000000-0000-4000-8000-000000000002"
+      },
+      "operation_id": "fulfillment.get_order",
+      "response_body_sha256": "sha256:4d8f9dbc3f73c67b5e0e1c10ad23b6da2bb4831e94901f0cd994b9a40447af8f",
+      "sequence": 40,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-administrator",
+      "actor_role": "administrator",
+      "arguments": {
+        "createdDate": "2026-07-22T08:30:00+00:00",
+        "important": true,
+        "messages": {
+          "email": {
+            "body": "The supply-chain order was received.",
+            "subject": "Workflow received",
+            "tag": "openlmis"
+          }
+        },
+        "userId": "00000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "notification.create_notification",
+      "response_body_sha256": "sha256:74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "sequence": 41,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-administrator",
+      "actor_role": "administrator",
+      "arguments": {
+        "userId": "00000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "notification.list_notifications",
+      "response_body_sha256": "sha256:0dfb5edc46ef80d1a567be91196346858bcd13e0cce7dbe761930e6f949de8b1",
+      "sequence": 42,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-administrator",
+      "actor_role": "administrator",
+      "arguments": {
+        "contactDetails": {
+          "allowNotify": true,
+          "emailDetails": {
+            "email": "ops@example.test",
+            "emailVerified": false
+          },
+          "phoneNumber": "+260111111",
+          "referenceDataUserId": "00000000-0000-4000-8000-000000000001"
+        },
+        "id": "00000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "notification.update_contact_details",
+      "response_body_sha256": "sha256:d35033998d57e9d9b2d04a80d5a7c68c2fa247214b03f59ed682ea24da16c242",
+      "sequence": 43,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-administrator",
+      "actor_role": "administrator",
+      "arguments": {
+        "id": "00000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "notification.get_contact_details",
+      "response_body_sha256": "sha256:d35033998d57e9d9b2d04a80d5a7c68c2fa247214b03f59ed682ea24da16c242",
+      "sequence": 44,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-administrator",
+      "actor_role": "administrator",
+      "arguments": {
+        "id": "00000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "notification.list_contact_details",
+      "response_body_sha256": "sha256:4b32279a55fff33a5f8b7e88dbd0862c652ea3a69b5f278c82ec8165bd1b4c96",
+      "sequence": 45,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-warehouse_clerk",
+      "actor_role": "warehouse_clerk",
+      "arguments": {
+        "createOrder": false,
+        "requisitionsToRelease": [
+          {
+            "requisitionId": "40000000-0000-4000-8000-000000000003",
+            "supplyingDepotId": "10000000-0000-4000-8000-000000000002"
+          }
+        ]
+      },
+      "operation_id": "requisition.batch_release",
+      "response_body_sha256": "sha256:2b1f5073638a0cbcb9e8075089f2d7e8e0d454902e3eb3d3ecb682e599e3e639",
+      "sequence": 46,
+      "state_changed": true,
+      "status_code": 201
+    },
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000002"
+      },
+      "operation_id": "requisition.skip",
+      "response_body_sha256": "sha256:55a9c488c912afecb01672d0bcbc2eb3cb4cd4e24e3dcc2272e8f63848861a05",
+      "sequence": 47,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {},
+      "operation_id": "requisition.get_unskip_configuration",
+      "response_body_sha256": "sha256:f0e9f542a6f29bc4207cb10af633b0c5df47ff2994d1e081f26a23213ae4f987",
+      "sequence": 48,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "refdata.list_users",
+      "response_body_sha256": "sha256:03dc227b96357673fd82266935447ff468a649ae3981304052bdab9622d7a977",
+      "sequence": 49,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {
+        "id": "00000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "refdata.get_user",
+      "response_body_sha256": "sha256:4051a1e782e9fd2e11370e972e9c572f6747aad3242f98027d23899a12f8c23c",
+      "sequence": 50,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {
+        "userId": "00000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "refdata.get_permission_strings",
+      "response_body_sha256": "sha256:25831f0dd1bf794036108bed20d2ccdcd4c4c838d10dd7df2989c740d88e078a",
+      "sequence": 51,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {
+        "userId": "00000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "refdata.get_role_assignments",
+      "response_body_sha256": "sha256:f7039dcf1c13747344067f8f9e66bfbbe25929a1106dd01d6c1c20b62a7e8fbe",
+      "sequence": 52,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "refdata.list_roles",
+      "response_body_sha256": "sha256:313dc32405dd3126022b575ac3fcee6cbdbd02ca6296f966a2eebf90bb60dc40",
+      "sequence": 53,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "refdata.list_rights",
+      "response_body_sha256": "sha256:d2321631969231e799388dde7772ef514ba8585e93c33c8347aebeec07a47a77",
+      "sequence": 54,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "refdata.list_facilities",
+      "response_body_sha256": "sha256:b0bdc9aef8dda0af38d7956f1cb4594545d1b4b01343d28f2765fc7fc4499f5d",
+      "sequence": 55,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {
+        "id": "10000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "refdata.get_facility",
+      "response_body_sha256": "sha256:c2110710d97e720f84d8bd83aed6f2eb171ff9090134da5fb12c3d699e741d67",
+      "sequence": 56,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "refdata.list_programs",
+      "response_body_sha256": "sha256:5aabf64bf989a32287b6c358957efefe068bf1e6a914605cd3525ef6b9134ec8",
+      "sequence": 57,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {
+        "id": "20000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "refdata.get_program",
+      "response_body_sha256": "sha256:e55951cae33009be358f0bc8f01427a0f6647ea338f35a25c40a95fc3063c770",
+      "sequence": 58,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "refdata.list_orderables",
+      "response_body_sha256": "sha256:f2d2a902ff1d4fb730d8b9b4eacab09a3d729f57818ac228cf6e3d41328c06c1",
+      "sequence": 59,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {
+        "id": "30000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "refdata.get_orderable",
+      "response_body_sha256": "sha256:293b182952b2984f8ca4790dd8ac97e4ce5796b633d4841fb108d95ab555af2b",
+      "sequence": 60,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "refdata.list_commodity_types",
+      "response_body_sha256": "sha256:02c1df648951c9c0c3d60ec28488af6e348733ec0e150e4e30681fb146618c3a",
+      "sequence": 61,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "refdata.list_geographic_zones",
+      "response_body_sha256": "sha256:bf2c8a29f9b61161887b722e0b033d2e64a11c02b8be0e82e4a511e8485cd50d",
+      "sequence": 62,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "refdata.list_supply_partners",
+      "response_body_sha256": "sha256:7cf7144306808831b4a4d585ad94ead18a20e2faab724b73d56428be82e09051",
+      "sequence": 63,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "refdata.list_processing_schedules",
+      "response_body_sha256": "sha256:9a2cb83a3697855d31a6e4d2f8ae318a42230ca4bb4f6407a91baba926cb715a",
+      "sequence": 64,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "refdata.list_processing_periods",
+      "response_body_sha256": "sha256:6f4a1e032ef4db85baf03c73ef03569d7e8dda5bba7386366870891a439636df",
+      "sequence": 65,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "refdata.list_lots",
+      "response_body_sha256": "sha256:d206f504f3e9c7113f8f2beff6f3dfbcf55bb30f51349ecb65ed093dd23504a3",
+      "sequence": 66,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "refdata.list_trade_items",
+      "response_body_sha256": "sha256:9660f493ba3a7655a1f8b1840f9d26fd3edf7942d976525ad7db3e904c56af1a",
+      "sequence": 67,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "requisition.status_messages",
+      "response_body_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sequence": 68,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "stock.list_reasons",
+      "response_body_sha256": "sha256:85bfb1bb3af85b1cf988ae2d9330f3bf1636723fdea5eb478e4d8aee5ad66fd6",
+      "sequence": 69,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {
+        "facilityType": "11000000-0000-4000-8000-000000000001",
+        "program": "20000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "stock.list_valid_reasons",
+      "response_body_sha256": "sha256:e516417652d5850be73a382a8176351ad62ca76bb57f0c698042dbc934a50cc5",
+      "sequence": 70,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {
+        "facilityId": "10000000-0000-4000-8000-000000000001",
+        "programId": "20000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "stock.list_valid_sources",
+      "response_body_sha256": "sha256:47bf71805405998e66a414e84182d8abcd079c1de78c2abe97b6f235d6b1f4b9",
+      "sequence": 71,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {
+        "facilityId": "10000000-0000-4000-8000-000000000002",
+        "programId": "20000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "stock.list_valid_destinations",
+      "response_body_sha256": "sha256:a6fe709f6ffddb7813366ed6467ca31af6598dfe558d78bfe4ec04c1641772c1",
+      "sequence": 72,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {
+        "facility": "HC01",
+        "program": "PRG001"
+      },
+      "operation_id": "stock.list_public_summaries",
+      "response_body_sha256": "sha256:b1a21f192ce121ad9b6bf2fea60d90eaa4765f855c5d9fe8fd208215999bc639",
+      "sequence": 73,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {
+        "endDate": "2026-07-22",
+        "facilityId": "10000000-0000-4000-8000-000000000001",
+        "programId": "20000000-0000-4000-8000-000000000001",
+        "startDate": "2026-07-01"
+      },
+      "operation_id": "stock.list_range_summaries",
+      "response_body_sha256": "sha256:b1a21f192ce121ad9b6bf2fea60d90eaa4765f855c5d9fe8fd208215999bc639",
+      "sequence": 74,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "stock.list_organizations",
+      "response_body_sha256": "sha256:6418762e14876ec0d079d2bcad7b35398547040f075bb636c7ce211c49df0b56",
+      "sequence": 75,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {
+        "facility": "10000000-0000-4000-8000-000000000001",
+        "isDraft": false,
+        "program": "20000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "stock.list_physical_inventories",
+      "response_body_sha256": "sha256:7fbc4b31014210c4ca2d7881d213e59bccb76722a762ddc7ff163b8da9e51c56",
+      "sequence": 76,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "fulfillment.list_orders",
+      "response_body_sha256": "sha256:36c9103c670fa6bda468a2dd3bb8b028362a47e76b57731e1be475ce5b7ec2e4",
+      "sequence": 77,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {
+        "orderId": "70000000-0000-4000-8000-000000000001",
+        "shipmentId": "72000000-0000-4000-8000-000000000001"
+      },
+      "operation_id": "fulfillment.list_proofs_of_delivery",
+      "response_body_sha256": "sha256:d2c6033e57a2b50785bdef71fe955707970333001fb8693b52d6c8bf3f736a7c",
+      "sequence": 78,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "report.list_report_categories",
+      "response_body_sha256": "sha256:44b068c39b3852d7a25c7e6f36eca01c35ff000919ea86fc9961efd256164d37",
+      "sequence": 79,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "report.list_dashboard_reports",
+      "response_body_sha256": "sha256:c53985b2e10208a2d535c8a49e2e0a7d27b1b4f3bbd2c7142d175ccd0bb9164a",
+      "sequence": 80,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {
+        "showOnHomePage": true
+      },
+      "operation_id": "report.list_available_reports",
+      "response_body_sha256": "sha256:c53985b2e10208a2d535c8a49e2e0a7d27b1b4f3bbd2c7142d175ccd0bb9164a",
+      "sequence": 81,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "operation_id": "report.list_common_templates",
+      "response_body_sha256": "sha256:2dce3d4af297b0ecc037a90a2ec8e7f8f9c2638fe5e410f247fa12d4059419d2",
+      "sequence": 82,
+      "state_changed": false,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {
+        "emergency": false,
+        "facility": "10000000-0000-4000-8000-000000000001",
+        "program": "20000000-0000-4000-8000-000000000001",
+        "suggestedPeriod": "35000000-0000-4000-8000-000000000010"
+      },
+      "operation_id": "requisition.initiate",
+      "response_body_sha256": "sha256:fe0d932778601e37c02dfa8d94abaa94a284e7ddb0e8b69c30a4041111107367",
+      "sequence": 83,
+      "state_changed": true,
+      "status_code": 201
+    },
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {
+        "emergency": false,
+        "facility": "10000000-0000-4000-8000-000000000001",
+        "program": "20000000-0000-4000-8000-000000000001",
+        "suggestedPeriod": "35000000-0000-4000-8000-000000000011"
+      },
+      "operation_id": "requisition.initiate",
+      "response_body_sha256": "sha256:107069e29e03d82f311490b4bc45d2cce2764e15923973959c3bb9d36f066ed3",
+      "sequence": 84,
+      "state_changed": true,
+      "status_code": 201
+    },
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000020"
+      },
+      "operation_id": "requisition.submit",
+      "response_body_sha256": "sha256:df13c16aee474dd5d6c13cd5503ec468275587e8210c94395ef9e3ca89866db3",
+      "sequence": 85,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {
+        "emergency": false,
+        "facility": "10000000-0000-4000-8000-000000000001",
+        "program": "20000000-0000-4000-8000-000000000001",
+        "suggestedPeriod": "35000000-0000-4000-8000-000000000012"
+      },
+      "operation_id": "requisition.initiate",
+      "response_body_sha256": "sha256:2f6333921fcad1b37629b5d3a5a9df50925ee90acfa2609070f90476b058e25e",
+      "sequence": 86,
+      "state_changed": true,
+      "status_code": 201
+    },
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000021"
+      },
+      "operation_id": "requisition.submit",
+      "response_body_sha256": "sha256:72bb18628db0ce54100923b3fe24cc7774edc76c3f68c7476daff1ba310a6cf3",
+      "sequence": 87,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-program_authorizer",
+      "actor_role": "program_authorizer",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000021"
+      },
+      "operation_id": "requisition.authorize",
+      "response_body_sha256": "sha256:c4ddcd900e8fdaa07291d03973fe075d1c6e621693c79bcba75fc9e2f647a6bb",
+      "sequence": 88,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {
+        "emergency": false,
+        "facility": "10000000-0000-4000-8000-000000000001",
+        "program": "20000000-0000-4000-8000-000000000001",
+        "suggestedPeriod": "35000000-0000-4000-8000-000000000013"
+      },
+      "operation_id": "requisition.initiate",
+      "response_body_sha256": "sha256:e6f5c0bb655d7f7426a9162bab8a76592b27aee6e6ffab4d94816068393228fc",
+      "sequence": 89,
+      "state_changed": true,
+      "status_code": 201
+    },
+    {
+      "actor_id": "state-construction-facility_clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000022"
+      },
+      "operation_id": "requisition.submit",
+      "response_body_sha256": "sha256:d9c157b5cb0091122e2a5e9c9ba19f0c04149e84d617f7d44e5b10e616587cac",
+      "sequence": 90,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-program_authorizer",
+      "actor_role": "program_authorizer",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000022"
+      },
+      "operation_id": "requisition.authorize",
+      "response_body_sha256": "sha256:8034c7ccaf41acd9f017cd2340e9c4be49c846c8adbad340be95edef9f8b85cc",
+      "sequence": 91,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-program_approver",
+      "actor_role": "program_approver",
+      "arguments": {
+        "id": "40000000-0000-4000-8000-000000000022"
+      },
+      "operation_id": "requisition.approve",
+      "response_body_sha256": "sha256:324c62a383946db522a427ef7df96eed98bbf310593c9cd95db351e20b408fed",
+      "sequence": 92,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-warehouse_clerk",
+      "actor_role": "warehouse_clerk",
+      "arguments": {
+        "orderLineItems": [
+          {
+            "orderable": {
+              "id": "30000000-0000-4000-8000-000000000001",
+              "versionNumber": 1
+            },
+            "orderedQuantity": 4
+          }
+        ],
+        "program": {
+          "id": "20000000-0000-4000-8000-000000000001"
+        },
+        "receivingFacility": {
+          "id": "10000000-0000-4000-8000-000000000001"
+        },
+        "requestingFacility": {
+          "id": "10000000-0000-4000-8000-000000000001"
+        },
+        "status": "CREATING",
+        "supplyingFacility": {
+          "id": "10000000-0000-4000-8000-000000000002"
+        }
+      },
+      "operation_id": "fulfillment.create_requisitionless_order",
+      "response_body_sha256": "sha256:fb3a40bcf27453515f0d2b4d3a4c850ea8254f6208a6244af3fe940843b260f9",
+      "sequence": 93,
+      "state_changed": true,
+      "status_code": 201
+    },
+    {
+      "actor_id": "state-construction-warehouse_clerk",
+      "actor_role": "warehouse_clerk",
+      "arguments": {
+        "orderLineItems": [
+          {
+            "orderable": {
+              "id": "30000000-0000-4000-8000-000000000001",
+              "versionNumber": 1
+            },
+            "orderedQuantity": 6
+          }
+        ],
+        "program": {
+          "id": "20000000-0000-4000-8000-000000000001"
+        },
+        "receivingFacility": {
+          "id": "10000000-0000-4000-8000-000000000001"
+        },
+        "requestingFacility": {
+          "id": "10000000-0000-4000-8000-000000000001"
+        },
+        "status": "CREATING",
+        "supplyingFacility": {
+          "id": "10000000-0000-4000-8000-000000000002"
+        }
+      },
+      "operation_id": "fulfillment.create_requisitionless_order",
+      "response_body_sha256": "sha256:bbd3d5ff371c6a407a0942781bd941702aa5d341d6478b2a80cbd5e74647748e",
+      "sequence": 94,
+      "state_changed": true,
+      "status_code": 201
+    },
+    {
+      "actor_id": "state-construction-warehouse_clerk",
+      "actor_role": "warehouse_clerk",
+      "arguments": {
+        "id": "70000000-0000-4000-8000-000000000011",
+        "order": {
+          "emergency": false,
+          "id": "70000000-0000-4000-8000-000000000011",
+          "orderLineItems": [
+            {
+              "id": "71000000-0000-4000-8000-000000000011",
+              "orderable": {
+                "id": "30000000-0000-4000-8000-000000000001",
+                "versionNumber": 1
+              },
+              "orderedQuantity": 6
+            }
+          ],
+          "program": {
+            "id": "20000000-0000-4000-8000-000000000001"
+          },
+          "receivingFacility": {
+            "id": "10000000-0000-4000-8000-000000000001"
+          },
+          "requestingFacility": {
+            "id": "10000000-0000-4000-8000-000000000001"
+          },
+          "status": "CREATING",
+          "supplyingFacility": {
+            "id": "10000000-0000-4000-8000-000000000002"
+          }
+        }
+      },
+      "operation_id": "fulfillment.send_requisitionless_order",
+      "response_body_sha256": "sha256:74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "sequence": 95,
+      "state_changed": true,
+      "status_code": 200
+    },
+    {
+      "actor_id": "state-construction-warehouse_clerk",
+      "actor_role": "warehouse_clerk",
+      "arguments": {
+        "lineItems": [
+          {
+            "extraData": {
+              "temperatureControlled": false
+            },
+            "lot": {
+              "id": "36000000-0000-4000-8000-000000000002"
+            },
+            "orderable": {
+              "id": "30000000-0000-4000-8000-000000000001",
+              "versionNumber": 1
+            },
+            "quantityShipped": 6
+          }
+        ],
+        "notes": "Pending receipt in the regional state profile",
+        "order": {
+          "id": "70000000-0000-4000-8000-000000000011"
+        }
+      },
+      "operation_id": "fulfillment.create_shipment",
+      "response_body_sha256": "sha256:00e5e1e10ff8e2fcb669909ffb5ee5187cd2fff60fbcff2a1adbf6b5790037d2",
+      "sequence": 96,
+      "state_changed": true,
+      "status_code": 201
+    }
+  ]
+}

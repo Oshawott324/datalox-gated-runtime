@@ -52,6 +52,7 @@ Repository = "https://github.com/Oshawott324/datalox-gated-runtime"
 Security = "https://github.com/Oshawott324/datalox-gated-runtime/security/policy"
 
 [project.scripts]
+datalox-author = "datalox_gated_runtime.authoring_cli:main"
 datalox-gate = "datalox_gated_runtime.cli:main"
 
 [tool.setuptools.packages.find]

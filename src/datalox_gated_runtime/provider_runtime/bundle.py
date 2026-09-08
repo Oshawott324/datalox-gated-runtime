@@ -127,6 +127,23 @@ class WorldProviderBehaviorAdapter:
     def handle(self, request: Any, *, actor: Any, session: Any) -> Any:
         return self._implementation.handle(request, actor=actor, session=session)
 
+    @property
+    def has_scheduled_event_handler(self) -> bool:
+        """Whether the provider implementation declares provider-owned timer behavior."""
+
+        return callable(getattr(self._implementation, "handle_scheduled_event", None))
+
+    def handle_scheduled_event(self, event: Any, *, session: Any) -> Any:
+        """Forward a due provider event without exposing it as an agent operation."""
+
+        handler = getattr(self._implementation, "handle_scheduled_event", None)
+        if not callable(handler):
+            raise ProviderRuntimeError(
+                "provider_runtime_scheduled_event_handler_missing",
+                "The provider bundle declares scheduled events without an event handler.",
+            )
+        return handler(event, session=session)
+
 
 def build_provider_runtime_from_world(
     *,
@@ -134,10 +151,11 @@ def build_provider_runtime_from_world(
     output_dir: Path,
     provider_id: str,
     authorities: tuple[str, ...],
-    episode_id: str,
+    episode_id: str | None = None,
+    seed_path: Path | None = None,
     identity_policy_path: Path | None = None,
 ) -> Path:
-    """Compile existing behavior code and one reset seed without task/verifier assets."""
+    """Compile existing behavior code and one task-free reset seed."""
 
     if output_dir.exists():
         raise ProviderRuntimeError(
@@ -145,10 +163,29 @@ def build_provider_runtime_from_world(
             "Provider runtime output directory already exists.",
             {"path": str(output_dir)},
         )
+    if (episode_id is None) == (seed_path is None):
+        raise ProviderRuntimeError(
+            "provider_runtime_seed_source_invalid",
+            "Select exactly one world episode or external task-free seed.",
+        )
     source = validate_world_bundle(source_world_dir)
-    episode = deepcopy(source.episode(episode_id))
-    for world_owned_key in ("task", "hidden", "expected"):
-        episode.pop(world_owned_key, None)
+    if seed_path is None:
+        assert episode_id is not None
+        episode = deepcopy(source.episode(episode_id))
+        for world_owned_key in ("task", "hidden", "expected"):
+            episode.pop(world_owned_key, None)
+        source_seed_sha256 = None
+    else:
+        resolved_seed_path = seed_path.resolve(strict=True)
+        episode = _require_object(_load_json(resolved_seed_path), resolved_seed_path.name)
+        forbidden = sorted({"task", "hidden", "expected"} & set(episode))
+        if forbidden:
+            raise ProviderRuntimeError(
+                "provider_runtime_seed_information_boundary_invalid",
+                "External provider reset seeds must not contain task or evaluation fields.",
+                {"fields": forbidden},
+            )
+        source_seed_sha256 = _sha256(resolved_seed_path)
     state = episode.get("state", episode.get("initial_state"))
     if not isinstance(episode.get("id"), str) or not isinstance(state, dict):
         raise ProviderRuntimeError(
@@ -199,17 +236,17 @@ def build_provider_runtime_from_world(
         )
     _write_json(output_dir / "identity.json", identity_policy.to_dict())
     source_manifest_path = source.root / "world" / "manifest.json"
-    _write_json(
-        output_dir / "source.json",
-        {
-            "schema_version": "datalox_provider_runtime_source_v1",
-            "source_world_id": source.manifest.world_id,
-            "source_bundle_version": source.manifest.bundle_version,
-            "source_episode_id": episode_id,
-            "source_manifest_sha256": _sha256(source_manifest_path),
-            "source_declaration": _load_json(source.root / source.manifest.sources_path),
-        },
-    )
+    source_payload = {
+        "schema_version": "datalox_provider_runtime_source_v1",
+        "source_world_id": source.manifest.world_id,
+        "source_bundle_version": source.manifest.bundle_version,
+        "source_episode_id": episode["id"],
+        "source_manifest_sha256": _sha256(source_manifest_path),
+        "source_declaration": _load_json(source.root / source.manifest.sources_path),
+    }
+    if source_seed_sha256 is not None:
+        source_payload["source_seed_sha256"] = source_seed_sha256
+    _write_json(output_dir / "source.json", source_payload)
 
     implementation_path, factory = source.manifest.implementation.split(":", 1)
     hashes = compute_provider_runtime_hashes(output_dir)

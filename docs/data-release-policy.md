@@ -70,12 +70,6 @@ operator path is provenance for missing data, not durable provider evidence.
 Redaction is not a redistribution license and is not sufficient by itself to
 promote an artifact from restricted to public.
 
-The checked Harbor and Mastra integration packages in this public repository
-are explicit public release artifacts. Their generated runtime files remain
-content-hashed package outputs, so source formatting checks exclude those two
-directories while lint, package tests, and the public manifest still cover
-them.
-
 ## Runtime and harness exports
 
 Provider runtime bundles, Docker/Kubernetes injection artifacts, and legacy

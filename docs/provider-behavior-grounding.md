@@ -1,7 +1,20 @@
 # Provider Behavior Grounding
 
+For the first pinned self-hosted writable lifecycle, including the exact
+evidence boundary, native status/duplicate relations, task-free OCI release,
+and local reset differential, see
+[`medusa-store-cart-provider.md`](medusa-store-cart-provider.md).
+
+For the first public-production asynchronous lifecycle, including provider-local
+scheduled events, pending/terminal observations, post-terminal duplicate
+grounding, private receipt digests, and transactional reset checks, see
+[`uniprot-idmapping-temporal-provider.md`](uniprot-idmapping-temporal-provider.md).
+
 Provider core completeness and provider behavior grounding are different
 milestones.
+
+The executable release comparison and freshness contracts are defined in
+[Provider Differential and Drift](provider-differential-and-drift.md).
 
 Private provider execution order is deliberately kept outside this public
 grounding contract.
@@ -196,9 +209,22 @@ retained programs all execute through the provider-neutral differential target
 with explicit principal contexts. The five-step
 `notification.update_contact_details` program—administrator read, supervisor
 denial, administrator write, duplicate, and read-after-write—passes exactly.
-The other ten report their concrete response or state mismatches. This is one
-bounded behavior-equivalence result, not provider-wide faithfulness; nine
-partial programs and functional reset equivalence remain incomplete.
+It now also passes against an immutable task-free Provider Release on the
+initial instance, after resetting that mutated instance, and in a separately
+materialized instance. The other ten report their concrete response or state
+mismatches. This is one bounded behavior-equivalence result, not provider-wide
+faithfulness; incomplete and mismatching programs retain their narrower
+status.
+
+OpenLMIS also carries the first admitted
+[`Provider State Profile`](provider-state-profiles.md),
+`regional-network-v1`. The profile makes a narrower claim than behavior
+equivalence: self-authored tenant values and cardinalities form the base, while
+96 provider-operation invocations construct a linked transactional history.
+Admission proves native-family counts, lifecycle coverage, referential links,
+authorization, three-page traversal, mutation, reset, and fresh-run
+equivalence. It does not promote those authored tenant distributions to
+provider-observed production data.
 
 Stripe remains a narrow construction-machine regression and a useful example
 of the sandbox-first rule below. Reproducing its already capable playground is

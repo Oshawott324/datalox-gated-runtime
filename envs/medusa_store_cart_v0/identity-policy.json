@@ -1,0 +1,34 @@
+{
+  "invalid_identity": {
+    "body": {
+      "message": "A valid publishable API key is required.",
+      "type": "not_allowed"
+    },
+    "headers": {},
+    "status_code": 400
+  },
+  "missing_identity": {
+    "body": {
+      "message": "A valid publishable API key is required.",
+      "type": "not_allowed"
+    },
+    "headers": {},
+    "status_code": 400
+  },
+  "mode": "credential_map",
+  "principals": [
+    {
+      "actor_id": "store_agent",
+      "actor_role": "store_operator",
+      "credentials": [
+        {
+          "location": "header",
+          "name": "x-publishable-api-key",
+          "value_sha256": "sha256:32ba5333f501bf144a27382cd04786729f5ec03bacde8918864c7e98fa266fdc"
+        }
+      ],
+      "principal_context_id": "store_public_client"
+    }
+  ],
+  "schema_version": "datalox_provider_identity_v1"
+}
