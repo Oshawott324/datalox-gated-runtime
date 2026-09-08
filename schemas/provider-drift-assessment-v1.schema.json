@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/provider-drift-assessment-v1.schema.json",
+  "title": "Datalox Provider Drift Assessment v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "assessment_id",
+    "provider_id",
+    "program_id",
+    "observed_at",
+    "baseline_measurement_sha256",
+    "candidate_measurement_sha256",
+    "release_manifest_sha256",
+    "profile_id",
+    "source_comparison",
+    "replica_comparison",
+    "status",
+    "freshness_window_days",
+    "expires_at"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_provider_drift_assessment_v1"},
+    "assessment_id": {"$ref": "#/$defs/identifier"},
+    "provider_id": {"$ref": "#/$defs/identifier"},
+    "program_id": {"$ref": "#/$defs/identifier"},
+    "observed_at": {"$ref": "#/$defs/timestamp"},
+    "baseline_measurement_sha256": {"$ref": "#/$defs/sha256"},
+    "candidate_measurement_sha256": {"$ref": "#/$defs/sha256"},
+    "release_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "profile_id": {"$ref": "#/$defs/identifier"},
+    "source_comparison": {"$ref": "#/$defs/sourceComparison"},
+    "replica_comparison": {"$ref": "#/$defs/replicaComparison"},
+    "status": {
+      "enum": [
+        "current",
+        "provider_drift_detected",
+        "replica_mismatch",
+        "reacquisition_blocked"
+      ]
+    },
+    "freshness_window_days": {"type": "integer", "minimum": 1},
+    "expires_at": {"$ref": "#/$defs/timestamp"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "current"}}},
+      "then": {
+        "properties": {
+          "source_comparison": {
+            "properties": {"status": {"const": "equal"}}
+          },
+          "replica_comparison": {
+            "properties": {"status": {"const": "passed"}}
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"status": {"const": "provider_drift_detected"}}},
+      "then": {
+        "properties": {
+          "source_comparison": {
+            "properties": {"status": {"const": "changed"}}
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"status": {"const": "replica_mismatch"}}},
+      "then": {
+        "properties": {
+          "source_comparison": {
+            "properties": {"status": {"const": "equal"}}
+          },
+          "replica_comparison": {
+            "properties": {"status": {"const": "failed"}}
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"status": {"const": "reacquisition_blocked"}}},
+      "then": {
+        "properties": {
+          "source_comparison": {
+            "properties": {
+              "status": {"enum": ["incomplete", "not_compared"]}
+            }
+          },
+          "replica_comparison": {
+            "properties": {
+              "status": {"enum": ["incomplete", "not_run"]}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,6})?Z$"
+    },
+    "sourceComparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "report_sha256", "difference_count"],
+      "properties": {
+        "status": {"enum": ["equal", "changed", "incomplete", "not_compared"]},
+        "report_sha256": {
+          "oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "difference_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "replicaComparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "report_sha256", "difference_count"],
+      "properties": {
+        "status": {"enum": ["passed", "failed", "incomplete", "not_run"]},
+        "report_sha256": {
+          "oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "difference_count": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

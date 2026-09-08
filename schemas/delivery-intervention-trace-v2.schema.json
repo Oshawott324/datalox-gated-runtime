@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/delivery-intervention-trace-v2.schema.json",
+  "title": "Durable transport delivery intervention trace",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "provider", "admitted_operations",
+    "admitted_operation_mutability_sha256", "policy_id", "policy_version",
+    "policy_sha256", "seed", "enabled", "next_request_index",
+    "pending_transport_count", "terminal_failure", "events"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_delivery_intervention_trace_v2"},
+    "provider": {"$ref": "#/$defs/provider"},
+    "admitted_operations": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["operation_id", "mutability"],
+        "properties": {
+          "operation_id": {"type": "string", "minLength": 1},
+          "mutability": {"enum": ["read", "write"]}
+        }
+      }
+    },
+    "admitted_operation_mutability_sha256": {"$ref": "#/$defs/sha256"},
+    "policy_id": {"type": "string", "minLength": 1},
+    "policy_version": {"type": "string", "minLength": 1},
+    "policy_sha256": {"$ref": "#/$defs/sha256"},
+    "seed": {"type": "string", "minLength": 1},
+    "enabled": {"type": "boolean"},
+    "next_request_index": {"type": "integer", "minimum": 1},
+    "pending_transport_count": {"type": "integer", "minimum": 0},
+    "terminal_failure": {
+      "oneOf": [{"type": "null"}, {"$ref": "#/$defs/failure"}]
+    },
+    "events": {"type": "array", "items": {"$ref": "#/$defs/event"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "failure": {
+      "type": "object", "additionalProperties": false,
+      "required": ["logical_request_index", "code", "message"],
+      "properties": {
+        "logical_request_index": {"type": "integer", "minimum": 1},
+        "code": {"type": "string", "minLength": 1},
+        "message": {"type": "string", "minLength": 1}
+      }
+    },
+    "provider": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "provider_id", "release_version", "profile_id", "bundle_version",
+        "release_config_sha256", "provider_runtime_sha256",
+        "provider_admission_sha256", "operation_contract_sha256"
+      ],
+      "properties": {
+        "provider_id": {"type": "string", "minLength": 1},
+        "release_version": {"type": "string", "minLength": 1},
+        "profile_id": {"type": "string", "minLength": 1},
+        "bundle_version": {"type": "string", "minLength": 1},
+        "release_config_sha256": {"$ref": "#/$defs/sha256"},
+        "provider_runtime_sha256": {"$ref": "#/$defs/sha256"},
+        "provider_admission_sha256": {"$ref": "#/$defs/sha256"},
+        "operation_contract_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "response": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status_code", "headers", "body"],
+      "properties": {
+        "status_code": {"type": "integer", "minimum": 100, "maximum": 599},
+        "headers": {"type": "object", "additionalProperties": {"type": "string"}},
+        "body": {}
+      }
+    },
+    "base": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "invoked", "completion_certainty", "event_id", "response_sha256",
+        "response", "provider_state_before_sha256", "provider_state_after_sha256",
+        "provider_state_relation"
+      ],
+      "properties": {
+        "invoked": {"type": ["boolean", "null"]},
+        "completion_certainty": {"enum": ["not_dispatched", "known_completed", "unknown"]},
+        "event_id": {"type": ["string", "null"]},
+        "response_sha256": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+        "response": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/response"}]},
+        "provider_state_before_sha256": {
+          "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "provider_state_after_sha256": {
+          "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "provider_state_relation": {"enum": ["unknown", "unchanged", "changed"]}
+      }
+    },
+    "noResponse": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "kind", "response_start_sent", "response_body_bytes_sent", "transport_status",
+        "client_completion_certainty"
+      ],
+      "properties": {
+        "kind": {"const": "no_response"},
+        "response_start_sent": {"const": false},
+        "response_body_bytes_sent": {"const": 0},
+        "transport_status": {
+          "enum": [
+            "pending", "client_disconnected", "trusted_shutdown_aborted",
+            "process_loss_aborted"
+          ]
+        },
+        "client_completion_certainty": {"const": "unknown"}
+      }
+    },
+    "deliveredResponse": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "kind", "response_sha256", "response", "response_start_sent",
+        "response_body_bytes_sent", "transport_status", "client_completion_certainty"
+      ],
+      "properties": {
+        "kind": {"const": "response"},
+        "response_sha256": {"$ref": "#/$defs/sha256"},
+        "response": {"$ref": "#/$defs/response"},
+        "response_start_sent": {"type": "boolean"},
+        "response_body_bytes_sent": {"type": "integer", "minimum": 0},
+        "transport_status": {
+          "enum": [
+            "pending", "asgi_send_completed", "send_aborted",
+            "trusted_shutdown_aborted", "process_loss_aborted"
+          ]
+        },
+        "client_completion_certainty": {"const": "unknown"}
+      }
+    },
+    "event": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "event_id", "provider", "admitted_operation_mutability_sha256",
+        "policy_id", "policy_version", "policy_sha256", "seed",
+        "logical_request_index", "operation_id", "operation_mutability", "request_sha256",
+        "enabled", "decision", "stage", "applied", "outcome", "base",
+        "delivered", "error"
+      ],
+      "properties": {
+        "event_id": {"type": "string", "pattern": "^intv2_[0-9a-f]{24}$"},
+        "provider": {"$ref": "#/$defs/provider"},
+        "admitted_operation_mutability_sha256": {"$ref": "#/$defs/sha256"},
+        "policy_id": {"type": "string", "minLength": 1},
+        "policy_version": {"type": "string", "minLength": 1},
+        "policy_sha256": {"$ref": "#/$defs/sha256"},
+        "seed": {"type": "string", "minLength": 1},
+        "logical_request_index": {"type": "integer", "minimum": 1},
+        "operation_id": {"type": "string", "minLength": 1},
+        "operation_mutability": {"enum": ["read", "write"]},
+        "request_sha256": {
+          "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "enabled": {"type": "boolean"},
+        "decision": {
+          "type": "object", "additionalProperties": false,
+          "required": ["decision_id", "kind", "action"],
+          "properties": {
+            "decision_id": {"type": ["string", "null"]},
+            "kind": {"enum": ["none", "no_response"]},
+            "action": {
+              "oneOf": [
+                {"type": "null"},
+                {
+                  "type": "object", "additionalProperties": false,
+                  "required": ["kind", "phase"],
+                  "properties": {
+                    "kind": {"const": "no_response"},
+                    "phase": {"enum": ["pre_dispatch", "post_dispatch"]}
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "stage": {"enum": ["none", "pre_dispatch", "post_dispatch"]},
+        "applied": {"type": "boolean"},
+        "outcome": {
+          "enum": [
+            "decision_recorded", "asgi_send_completed", "transport_pending",
+            "transport_disconnected", "transport_aborted", "terminal_failure"
+          ]
+        },
+        "base": {"$ref": "#/$defs/base"},
+        "delivered": {
+          "oneOf": [
+            {"type": "null"}, {"$ref": "#/$defs/noResponse"}, {"$ref": "#/$defs/deliveredResponse"}
+          ]
+        },
+        "error": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object", "additionalProperties": false,
+              "required": ["code", "message"],
+              "properties": {
+                "code": {"type": "string", "minLength": 1},
+                "message": {"type": "string", "minLength": 1}
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

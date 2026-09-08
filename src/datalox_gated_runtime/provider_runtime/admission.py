@@ -7,12 +7,13 @@ import json
 import os
 import re
 import tempfile
+from collections.abc import Mapping
 from copy import deepcopy
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
 from tempfile import TemporaryDirectory
-from typing import Any, Mapping
+from typing import Any
 
 from datalox_gated_runtime.json_digest import canonical_json_sha256
 from datalox_gated_runtime.models import CallRequest, GateResponse
@@ -23,6 +24,7 @@ from datalox_gated_runtime.provider_runtime.bundle import (
 )
 from datalox_gated_runtime.provider_runtime.errors import ProviderRuntimeError
 from datalox_gated_runtime.provider_runtime.runtime import ProviderRuntime
+from datalox_gated_runtime.provider_runtime.state import project_provider_behavior_state
 
 OPERATION_CLAIMS_SCHEMA_VERSION = "datalox_provider_operation_claims_v1"
 PROVIDER_ADMISSION_SCHEMA_VERSION = "datalox_provider_admission_v1"
@@ -80,7 +82,19 @@ _STEP_REQUIRED_FIELDS = frozenset(
         "receipt_predicate_refs",
     }
 )
-_STEP_OPTIONAL_FIELDS = frozenset({"expected_decision_kind"})
+_STEP_OPTIONAL_FIELDS = frozenset(
+    {
+        "expected_decision_kind",
+        "expected_state_change",
+        "async_observation",
+        "async_transition_id",
+        "controller_actions_before",
+    }
+)
+_CONTROLLER_ACTION_REQUIRED_FIELDS = frozenset(
+    {"action", "target", "async_transition_id", "expected_event_id"}
+)
+_CONTROLLER_ACTION_OPTIONAL_FIELDS = frozenset({"expected_event_kind"})
 _REQUEST_FIELDS = frozenset({"scheme", "authority", "method", "path", "query", "headers", "body"})
 _COVER_FIELDS = frozenset({"operation_id", "behavior"})
 _PREDICATE_COMMON_FIELDS = frozenset({"predicate_id", "source", "operator", "pointer"})
@@ -690,6 +704,15 @@ def _validate_probes(
             decision = step.get("expected_decision_kind")
             if decision is not None and decision not in _DECISION_KINDS:
                 _fail("provider_admission_probe_step_invalid", "expected_decision_kind is invalid.")
+            expected_state_change = step.get("expected_state_change")
+            if expected_state_change is not None and not isinstance(expected_state_change, bool):
+                _fail(
+                    "provider_admission_probe_step_invalid",
+                    "expected_state_change must be a boolean.",
+                )
+            controller_actions = _validate_controller_actions(
+                step.get("controller_actions_before", [])
+            )
             covers = step["covers"]
             if not isinstance(covers, list) or not covers:
                 _fail("provider_admission_probe_step_invalid", "covers must be non-empty.")
@@ -706,6 +729,52 @@ def _validate_probes(
                         "Probe covers behavior absent from the operation claim.",
                     )
                 normalized_covers.append({"operation_id": covered_operation, "behavior": behavior})
+            covers_async = any(cover["behavior"] == "async" for cover in normalized_covers)
+            async_observation = step.get("async_observation")
+            async_transition_id = step.get("async_transition_id")
+            if covers_async and async_observation not in {"pending", "terminal"}:
+                _fail(
+                    "provider_admission_async_probe_invalid",
+                    "Every async-covered provider observation must declare pending or terminal phase.",
+                    step_id=step_id,
+                )
+            if covers_async:
+                _identifier(async_transition_id, field="async_transition_id")
+            if not covers_async and async_observation is not None:
+                _fail(
+                    "provider_admission_async_probe_invalid",
+                    "async_observation is allowed only on an async-covered provider observation.",
+                    step_id=step_id,
+                )
+            if not covers_async and async_transition_id is not None:
+                _fail(
+                    "provider_admission_async_probe_invalid",
+                    "async_transition_id is allowed only on an async-covered provider observation.",
+                    step_id=step_id,
+                )
+            write_behaviors = {
+                cover["behavior"]
+                for cover in normalized_covers
+                if operations[cover["operation_id"]]["mutability"] == "write"
+            }
+            if write_behaviors & {"duplicate", "failure"} and expected_state_change is None:
+                _fail(
+                    "provider_admission_state_relation_missing",
+                    "Write duplicate and failure probes must declare expected_state_change.",
+                    step_id=step_id,
+                )
+            if "failure" in write_behaviors and expected_state_change is not False:
+                _fail(
+                    "provider_admission_state_relation_invalid",
+                    "Write failure probes must declare expected_state_change as false.",
+                    step_id=step_id,
+                )
+            if "success" in write_behaviors and expected_state_change is False:
+                _fail(
+                    "provider_admission_state_relation_invalid",
+                    "Write success probes may only declare expected_state_change as true.",
+                    step_id=step_id,
+                )
             refs = _unique_identifiers(
                 step["receipt_predicate_refs"], field="receipt_predicate_refs"
             )
@@ -727,6 +796,7 @@ def _validate_probes(
                     "request": request,
                     "covers": normalized_covers,
                     "receipt_predicate_refs": refs,
+                    "controller_actions_before": controller_actions,
                 }
             )
         probes.append({"probe_id": probe_id, "reset_profile": "default", "steps": steps})
@@ -748,16 +818,65 @@ def _validate_behavior_semantics(
     for probe in probes:
         successful_requests: dict[str, list[dict[str, Any]]] = {}
         successful_writes: set[str] = set()
+        pending_phase_pairs: set[tuple[str, str]] = set()
+        terminal_phase_pairs: set[tuple[str, str]] = set()
+        pending_transitions: set[str] = set()
+        delivered_transitions: set[str] = set()
         for step in probe["steps"]:
             executing_operation = step["operation_id"]
+            for action in step["controller_actions_before"]:
+                transition_id = action["async_transition_id"]
+                if transition_id not in pending_transitions:
+                    _fail(
+                        "provider_admission_async_probe_invalid",
+                        "A provider-time action must name the single pending async transition it advances.",
+                        probe_id=probe["probe_id"],
+                        step_id=step["step_id"],
+                        async_transition_id=transition_id,
+                    )
+                if len(pending_transitions) != 1:
+                    _fail(
+                        "provider_admission_async_probe_ambiguous",
+                        "A provider-time action cannot advance multiple simultaneously pending async transitions.",
+                        probe_id=probe["probe_id"],
+                        step_id=step["step_id"],
+                        pending_async_transition_ids=sorted(pending_transitions),
+                    )
+                delivered_transitions.add(transition_id)
+                pending_transitions.remove(transition_id)
             for cover in step["covers"]:
                 covered_operation = cover["operation_id"]
                 behavior = cover["behavior"]
-                if behavior in {"success", "failure", "duplicate", "async", "pagination"}:
-                    if executing_operation != covered_operation:
+                if (
+                    behavior in {"success", "failure", "duplicate", "async", "pagination"}
+                    and executing_operation != covered_operation
+                ):
+                    _fail(
+                        "provider_admission_probe_coverage_invalid",
+                        f"{behavior} must execute the operation it covers.",
+                    )
+                if behavior == "async" and step["async_observation"] == "pending":
+                    transition_id = step["async_transition_id"]
+                    if transition_id in delivered_transitions:
                         _fail(
-                            "provider_admission_probe_coverage_invalid",
-                            f"{behavior} must execute the operation it covers.",
+                            "provider_admission_async_probe_invalid",
+                            "An async pending observation must precede its bound provider-time delivery.",
+                            probe_id=probe["probe_id"],
+                            step_id=step["step_id"],
+                            async_transition_id=transition_id,
+                        )
+                    pending_phase_pairs.add((transition_id, covered_operation))
+                    pending_transitions.add(transition_id)
+                elif behavior == "async" and step["async_observation"] == "terminal":
+                    transition_id = step["async_transition_id"]
+                    terminal_phase_pairs.add((transition_id, covered_operation))
+                    if transition_id not in delivered_transitions:
+                        _fail(
+                            "provider_admission_async_probe_invalid",
+                            "An async terminal observation must name a transition delivered by a preceding provider-time action.",
+                            probe_id=probe["probe_id"],
+                            step_id=step["step_id"],
+                            async_transition_id=transition_id,
                         )
                 if (
                     behavior == "readback"
@@ -782,6 +901,21 @@ def _validate_behavior_semantics(
                         "provider_admission_readback_probe_invalid",
                         f"Readback for {covered_operation!r} must follow its successful write in the same behavior program.",
                     )
+        async_phase_pairs = pending_phase_pairs | terminal_phase_pairs
+        for transition_id, operation_id in sorted(async_phase_pairs):
+            phase_pair = (transition_id, operation_id)
+            if (
+                transition_id not in delivered_transitions
+                or phase_pair not in pending_phase_pairs
+                or phase_pair not in terminal_phase_pairs
+            ):
+                _fail(
+                    "provider_admission_async_probe_invalid",
+                    "Each operation in an async transition requires its own pending and terminal observations around the explicitly bound provider-time event delivery.",
+                    probe_id=probe["probe_id"],
+                    async_transition_id=transition_id,
+                    operation_id=operation_id,
+                )
 
 
 def _require_complete_coverage(
@@ -829,9 +963,9 @@ def _run_functional_reset_checks(
                     receipt_predicates=receipt_predicates,
                 )
                 reset = runtime.reset()
-                if _behavior_state(reset["provider_state"]) != _behavior_state(
-                    initial["provider_state"]
-                ):
+                if project_provider_behavior_state(
+                    reset["provider_state"]
+                ) != project_provider_behavior_state(initial["provider_state"]):
                     _fail(
                         "provider_admission_reset_state_mismatch",
                         f"Reset did not restore initial provider state for {probe['probe_id']!r}.",
@@ -878,8 +1012,23 @@ def _run_probe(
 ) -> dict[str, Any]:
     steps = []
     changed_successful_writes: set[str] = set()
+    delivered_async_transitions: set[str] = set()
     for step in probe["steps"]:
+        controller_results = []
+        for action in step["controller_actions_before"]:
+            result = runtime.advance_provider_time(action["target"])
+            delivered_events = result["delivered_events"]
+            if not any(_event_matches_action(event, action) for event in delivered_events):
+                _fail(
+                    "provider_admission_async_event_delivery_missing",
+                    "Provider-time advance did not deliver the event admitted for its async transition.",
+                    step_id=step["step_id"],
+                    async_transition_id=action["async_transition_id"],
+                )
+            delivered_async_transitions.add(action["async_transition_id"])
+            controller_results.append(result)
         before = runtime.export()
+        before_time = _provider_time_from_export(before)
         request = step["request"]
         response = runtime.handle(
             CallRequest(
@@ -906,25 +1055,58 @@ def _run_probe(
                 f"Probe step {step['step_id']!r} returned an unexpected decision.",
             )
         after = runtime.export()
+        after_time = _provider_time_from_export(after)
+        if after_time != before_time:
+            _fail(
+                "provider_admission_data_plane_time_mutation",
+                f"Probe step {step['step_id']!r} advanced provider time from the data plane.",
+                before=before_time,
+                after=after_time,
+            )
         operation = operations[step["operation_id"]]
         if isinstance(bundle_behavior, WorldV1BehaviorSpec) and response.decision.kind != "deny":
             _verify_world_operation_mapping(after, declared_operation=step["operation_id"])
         for predicate_ref in step["receipt_predicate_refs"]:
             _evaluate_predicate(receipt_predicates[predicate_ref], response=response, export=after)
         _evaluate_invariants(provider_invariants, after)
-        before_state = _behavior_state(before["provider_state"])
-        after_state = _behavior_state(after["provider_state"])
+        before_state = project_provider_behavior_state(before["provider_state"])
+        after_state = project_provider_behavior_state(after["provider_state"])
+        state_changed = before_state != after_state
+        expected_state_change = step.get("expected_state_change")
+        if expected_state_change is not None and state_changed is not expected_state_change:
+            _fail(
+                "provider_admission_state_relation_mismatch",
+                f"Probe step {step['step_id']!r} violated its declared provider state relation.",
+                expected_state_change=expected_state_change,
+                actual_state_change=state_changed,
+            )
         if operation["mutability"] == "write" and any(
             cover["operation_id"] == step["operation_id"] and cover["behavior"] == "success"
             for cover in step["covers"]
         ):
-            if response.decision.kind != "shadow_write" or before_state == after_state:
+            if response.decision.kind != "shadow_write" or not state_changed:
                 _fail(
                     "provider_admission_write_transition_missing",
                     f"Successful write {step['operation_id']!r} did not change provider state.",
                 )
             changed_successful_writes.add(step["operation_id"])
-        steps.append(_stable_step_result(step, response, after_state))
+        if step.get("async_observation") == "terminal":
+            transition_id = step["async_transition_id"]
+            if transition_id not in delivered_async_transitions:
+                _fail(
+                    "provider_admission_async_event_delivery_missing",
+                    "Async terminal observation was not preceded by its admitted scheduled event.",
+                    step_id=step["step_id"],
+                    async_transition_id=transition_id,
+                )
+        steps.append(
+            _stable_step_result(
+                step,
+                response,
+                after_state,
+                controller_results=controller_results,
+            )
+        )
     claimed_writes = {
         operation_id
         for operation_id, operation in operations.items()
@@ -946,9 +1128,13 @@ def _run_probe(
 
 
 def _stable_step_result(
-    step: Mapping[str, Any], response: GateResponse, behavior_state: Any
+    step: Mapping[str, Any],
+    response: GateResponse,
+    behavior_state: Any,
+    *,
+    controller_results: list[dict[str, Any]],
 ) -> dict[str, Any]:
-    return {
+    result = {
         "step_id": step["step_id"],
         "status_code": response.status_code,
         "body": deepcopy(response.body),
@@ -962,6 +1148,16 @@ def _stable_step_result(
         "response_case_id": response.response_case_id,
         "provider_state_sha256": canonical_json_sha256(behavior_state),
     }
+    if controller_results:
+        result["controller_actions_before"] = deepcopy(controller_results)
+    return result
+
+
+def _provider_time_from_export(export: Mapping[str, Any]) -> Any:
+    provider_state = export.get("provider_state")
+    if not isinstance(provider_state, dict):
+        return None
+    return provider_state.get("simulation_time")
 
 
 def _verify_world_operation_mapping(export: Mapping[str, Any], *, declared_operation: str) -> None:
@@ -1018,16 +1214,81 @@ def _evaluate_predicate(
         )
 
 
-def _behavior_state(provider_state: Any) -> Any:
-    if not isinstance(provider_state, dict):
-        return deepcopy(provider_state)
-    if provider_state.get("protocol") == "gate_config_v1":
-        return deepcopy(provider_state.get("shadow_state"))
-    return {
-        key: deepcopy(value)
-        for key, value in provider_state.items()
-        if key not in {"events", "verifier_events"}
-    }
+def _event_matches_action(event: Mapping[str, Any], action: Mapping[str, str]) -> bool:
+    expected_id = action.get("expected_event_id")
+    expected_kind = action.get("expected_event_kind")
+    return (expected_id is None or event.get("event_id") == expected_id) and (
+        expected_kind is None or event.get("kind") == expected_kind
+    )
+
+
+def _validate_controller_actions(raw: Any) -> list[dict[str, str]]:
+    if not isinstance(raw, list) or len(raw) > 1:
+        _fail(
+            "provider_admission_controller_actions_invalid",
+            "controller_actions_before must contain at most one action.",
+        )
+    result: list[dict[str, str]] = []
+    for action in raw:
+        fields = set(action) if isinstance(action, dict) else set()
+        if (
+            not isinstance(action, dict)
+            or not _CONTROLLER_ACTION_REQUIRED_FIELDS.issubset(fields)
+            or not fields.issubset(
+                _CONTROLLER_ACTION_REQUIRED_FIELDS | _CONTROLLER_ACTION_OPTIONAL_FIELDS
+            )
+        ):
+            _fail(
+                "provider_admission_controller_actions_invalid",
+                "Provider controller action fields do not match the admitted contract.",
+            )
+        if action["action"] != "advance_provider_time":
+            _fail(
+                "provider_admission_controller_actions_invalid",
+                "Unsupported provider controller action.",
+            )
+        target = action["target"]
+        if not isinstance(target, str):
+            _fail(
+                "provider_admission_controller_actions_invalid",
+                "Provider time target must be an RFC 3339 timestamp.",
+            )
+        try:
+            parsed = datetime.fromisoformat(target)
+        except ValueError:
+            _fail(
+                "provider_admission_controller_actions_invalid",
+                "Provider time target must be an RFC 3339 timestamp.",
+            )
+        if parsed.tzinfo is None:
+            _fail(
+                "provider_admission_controller_actions_invalid",
+                "Provider time target must include an explicit UTC offset.",
+            )
+        transition_id = _identifier(action["async_transition_id"], field="async_transition_id")
+        expected_event_id = action["expected_event_id"]
+        expected_event_kind = action.get("expected_event_kind")
+        normalized = {
+            "action": "advance_provider_time",
+            "target": parsed.astimezone(UTC).isoformat(),
+            "async_transition_id": transition_id,
+            "expected_event_id": _event_discriminator(expected_event_id, field="expected_event_id"),
+        }
+        if expected_event_kind is not None:
+            normalized["expected_event_kind"] = _event_discriminator(
+                expected_event_kind, field="expected_event_kind"
+            )
+        result.append(normalized)
+    return result
+
+
+def _event_discriminator(raw: Any, *, field: str) -> str:
+    if not isinstance(raw, str) or not raw or raw.strip() != raw:
+        _fail(
+            "provider_admission_controller_actions_invalid",
+            f"{field} must be a non-empty, trimmed string.",
+        )
+    return raw
 
 
 def _validate_request(raw: Any) -> dict[str, Any]:
@@ -1225,7 +1486,7 @@ def _timestamp(value: Any, *, field: str) -> datetime:
     if not isinstance(value, str):
         _fail("provider_admission_evidence_invalid", f"{field} must be an RFC 3339 timestamp.")
     try:
-        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        parsed = datetime.fromisoformat(value)
     except ValueError:
         _fail("provider_admission_evidence_invalid", f"{field} must be an RFC 3339 timestamp.")
     if parsed.tzinfo is None:

@@ -7,7 +7,7 @@ import json
 import os
 import re
 import shutil
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from copy import deepcopy
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime
@@ -35,6 +35,7 @@ from datalox_gated_runtime.provider_runtime.identity import (
     resolve_external_identity,
     sanitize_external_request,
 )
+from datalox_gated_runtime.provider_runtime.state import provider_behavior_state_sha256
 from datalox_gated_runtime.runtime import GatedRuntime
 from datalox_gated_runtime.serializer import dataclass_to_dict
 from datalox_gated_runtime.world_backend import WorldResponse
@@ -43,8 +44,8 @@ from datalox_gated_runtime.world_v1.contracts import (
     ToolCatalog,
     resolve_actor_context,
 )
-from datalox_gated_runtime.world_v1.errors import WorldAuthorizationError
-from datalox_gated_runtime.world_v1.session import WorldSession
+from datalox_gated_runtime.world_v1.errors import WorldAuthorizationError, WorldSessionError
+from datalox_gated_runtime.world_v1.session import ScheduledWorldEvent, WorldSession
 
 _PATH_PARAMETER = re.compile(r"^\{[A-Za-z_][A-Za-z0-9_]*\}$")
 _RUN_METADATA_FILENAME = "provider-run.json"
@@ -63,6 +64,7 @@ _RUN_METADATA_FIELDS = frozenset(
 )
 _RUN_BINDING_FIELDS = _RUN_METADATA_FIELDS - {"run_id", "created_at"}
 _RUN_LIFECYCLES = frozenset({"create", "resume"})
+_PROVIDER_TIME_CAPABILITIES = frozenset({"clock", "scheduled_events"})
 
 
 @dataclass(frozen=True)
@@ -71,6 +73,16 @@ class _AdmittedOperation:
     authority: str
     method: str
     path_segments: tuple[str, ...]
+
+
+class _TransactionalAssuranceFailure(Exception):
+    def __init__(self, failure: dict[str, str]) -> None:
+        super().__init__("provider invariant failed inside temporal transaction")
+        self.failure = failure
+
+
+class _ScheduledEventHandlerFailure(Exception):
+    pass
 
 
 class ProviderBehaviorBackend:
@@ -119,6 +131,88 @@ class ProviderBehaviorBackend:
             session=self.session,
             episode=deepcopy(self.bundle.seed),
         )
+
+    def provider_time(self) -> str:
+        self._require_provider_time_capabilities()
+        return self.session.current_time()
+
+    def advance_provider_time(
+        self,
+        target: str,
+        *,
+        validate_after_delivery: Callable[[], None] | None = None,
+    ) -> dict[str, Any]:
+        """Advance one provider-local clock and deliver its due events atomically."""
+
+        self._require_provider_time_capabilities()
+        normalized_target = _normalize_provider_time(target)
+        previous_time = self.session.current_time()
+        if normalized_target == previous_time:
+            return {
+                "previous_time": previous_time,
+                "current_time": previous_time,
+                "delivered_events": [],
+            }
+        delivered: tuple[ScheduledWorldEvent, ...]
+        try:
+            with self.session.transaction(operation_id="provider.clock.advance"):
+                delivered = self.session.advance_clock(
+                    normalized_target,
+                    handler=self._deliver_scheduled_event,
+                )
+                if validate_after_delivery is not None:
+                    validate_after_delivery()
+        except _TransactionalAssuranceFailure as exc:
+            raise ProviderRuntimeError(
+                "provider_runtime_invariant_failed",
+                "An admitted provider invariant failed during provider_time_advance.",
+                {"failure": deepcopy(exc.failure)},
+            ) from exc
+        except _ScheduledEventHandlerFailure as exc:
+            raise ProviderRuntimeError(
+                "provider_runtime_scheduled_event_delivery_failed",
+                "A provider scheduled-event handler failed; the time advance was rolled back.",
+            ) from exc
+        except WorldSessionError as exc:
+            raise ProviderRuntimeError(exc.code, exc.message, dict(exc.context)) from exc
+        except Exception as exc:
+            raise ProviderRuntimeError(
+                "provider_runtime_time_advance_failed",
+                "Provider time advance failed and was rolled back.",
+            ) from exc
+        return {
+            "previous_time": previous_time,
+            "current_time": self.session.current_time(),
+            "delivered_events": [
+                {
+                    "event_id": event.id,
+                    "deliver_at": event.deliver_at,
+                    "kind": event.kind,
+                }
+                for event in delivered
+            ],
+        }
+
+    def _deliver_scheduled_event(self, session: WorldSession, event: ScheduledWorldEvent) -> None:
+        try:
+            self.bundle.implementation.handle_scheduled_event(event, session=session)
+        except Exception as exc:
+            raise _ScheduledEventHandlerFailure from exc
+
+    def _require_provider_time_capabilities(self) -> None:
+        declared = frozenset(self.behavior.required_runtime_capabilities)
+        missing = sorted(_PROVIDER_TIME_CAPABILITIES - declared)
+        if missing:
+            raise ProviderRuntimeError(
+                "provider_runtime_time_unsupported",
+                "The provider bundle does not declare provider-local temporal behavior.",
+                {"missing_capabilities": missing},
+            )
+        if not self.bundle.implementation.has_scheduled_event_handler:
+            raise ProviderRuntimeError(
+                "provider_runtime_scheduled_event_handler_missing",
+                "The provider bundle declares scheduled events without an event handler.",
+            )
 
     def request_for_tool(
         self,
@@ -587,6 +681,44 @@ class ProviderRuntime:
         }
         return exported
 
+    def behavior_state_sha256(self) -> str:
+        """Digest provider behavior state without call/audit receipt history."""
+
+        return provider_behavior_state_sha256(self._base_export()["provider_state"])
+
+    def provider_time(self) -> dict[str, Any]:
+        """Inspect the provider-local clock through trusted controller code only."""
+
+        if self.backend is None:
+            raise ProviderRuntimeError(
+                "provider_runtime_time_unsupported",
+                "This provider runtime has no provider-local temporal behavior.",
+            )
+        return {
+            "schema_version": "datalox_provider_time_v1",
+            "provider_id": self.bundle.manifest.provider_id,
+            "current_time": self.backend.provider_time(),
+        }
+
+    def advance_provider_time(self, target: str) -> dict[str, Any]:
+        """Advance provider-local time without creating an agent-visible operation."""
+
+        if self.backend is None:
+            raise ProviderRuntimeError(
+                "provider_runtime_time_unsupported",
+                "This provider runtime has no provider-local temporal behavior.",
+            )
+        self._require_current_assurance(context="provider_time_advance_precondition")
+        result = self.backend.advance_provider_time(
+            target,
+            validate_after_delivery=self._require_transactional_assurance,
+        )
+        return {
+            "schema_version": "datalox_provider_time_advance_v1",
+            "provider_id": self.bundle.manifest.provider_id,
+            **result,
+        }
+
     def _base_export(self) -> dict[str, Any]:
         call_evidence = dataclass_to_dict(self.gate.export())
         call_evidence["run_id"] = self._run_id
@@ -719,15 +851,31 @@ class ProviderRuntime:
             {"failure": failure},
         )
 
+    def _require_transactional_assurance(self) -> None:
+        """Reject an invalid temporal transition before its SQLite transaction commits."""
+
+        if self._admission is None:
+            return
+        failure = self._find_invariant_failure(self._base_export())
+        if failure is None:
+            return
+        raise _TransactionalAssuranceFailure(failure)
+
     def _evaluate_current_assurance(self, exported: Mapping[str, Any]) -> bool:
+        failure = self._find_invariant_failure(exported)
+        if failure is None:
+            return True
+        self._assurance_failure = failure
+        return False
+
+    def _find_invariant_failure(self, exported: Mapping[str, Any]) -> dict[str, str] | None:
         for predicate in self._provider_invariants:
             if not _predicate_passes(predicate, exported):
-                self._assurance_failure = {
+                return {
                     "code": "provider_invariant_failed",
                     "predicate_id": predicate["predicate_id"],
                 }
-                return False
-        return True
+        return None
 
     def _assurance_denial(self, request: CallRequest) -> GateResponse:
         return self._record_denial(
@@ -994,6 +1142,29 @@ def _require_existing_run_file(path: Path, *, code: str, description: str) -> No
             f"Resume lifecycle requires an existing regular {description}.",
             {"path": str(path)},
         )
+
+
+def _normalize_provider_time(value: Any) -> str:
+    if not isinstance(value, str):
+        raise ProviderRuntimeError(
+            "provider_runtime_time_invalid",
+            "Provider time must be an RFC 3339 timestamp with an explicit UTC offset.",
+        )
+    try:
+        parsed = datetime.fromisoformat(value)
+    except ValueError as exc:
+        raise ProviderRuntimeError(
+            "provider_runtime_time_invalid",
+            "Provider time must be an RFC 3339 timestamp with an explicit UTC offset.",
+            {"target": value},
+        ) from exc
+    if parsed.tzinfo is None:
+        raise ProviderRuntimeError(
+            "provider_runtime_time_invalid",
+            "Provider time must include an explicit UTC offset.",
+            {"target": value},
+        )
+    return parsed.astimezone(UTC).isoformat()
 
 
 def _write_json_exclusive(path: Path, value: Mapping[str, Any], *, mode: int) -> None:

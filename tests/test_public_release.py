@@ -39,16 +39,6 @@ def test_public_build_contains_safe_reference_world_but_not_private_sources(
     assert (out / "envs/commerce_support_ops_v0/world/manifest.json").is_file()
     assert (out / "envs/pylabrobot_hamilton_star_v0/world/manifest.json").is_file()
     assert (out / "envs/pylabrobot_hamilton_star_v0/world_admission.json").is_file()
-    assert (
-        out
-        / "integrations"
-        / "harbor"
-        / "incident_customer_coordination_v0"
-        / "DATALOX_ADAPTER.json"
-    ).is_file()
-    assert (
-        out / "integrations" / "mastra" / "commerce_support_ops_v0" / "DATALOX_ADAPTER.json"
-    ).is_file()
     assert not (out / "runs").exists()
     assert not (out / "documented_sources").exists()
     public_reports = sorted(

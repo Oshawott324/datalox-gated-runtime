@@ -1,0 +1,311 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/provider-state-profile-v1.schema.json",
+  "title": "Task-independent provider state profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "provider_id",
+    "bundle_version",
+    "source_episode_id",
+    "seed_sha256",
+    "distribution_label",
+    "rights_basis",
+    "construction",
+    "state_families",
+    "relationship_checks",
+    "observation_probes",
+    "pagination_probes",
+    "mutation_probes",
+    "temporal",
+    "information_boundary",
+    "known_gaps"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_provider_state_profile_v1"},
+    "profile_id": {"$ref": "#/$defs/identifier"},
+    "provider_id": {"$ref": "#/$defs/identifier"},
+    "bundle_version": {"$ref": "#/$defs/identifier"},
+    "source_episode_id": {"$ref": "#/$defs/identifier"},
+    "seed_sha256": {"$ref": "#/$defs/sha256"},
+    "distribution_label": {"$ref": "#/$defs/distributionLabel"},
+    "rights_basis": {"type": "string", "minLength": 1},
+    "construction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "base_seed_path",
+        "base_seed_sha256",
+        "trace_path",
+        "trace_sha256",
+        "operation_count",
+        "source_release",
+        "principal"
+      ],
+      "properties": {
+        "method": {
+          "enum": [
+            "seed_plus_provider_operation_trace_v1",
+            "provider_operation_trace_v1",
+            "compiled_seed_v1"
+          ]
+        },
+        "base_seed_path": {"$ref": "#/$defs/relativePath"},
+        "base_seed_sha256": {"$ref": "#/$defs/sha256"},
+        "trace_path": {"$ref": "#/$defs/relativePath"},
+        "trace_sha256": {"$ref": "#/$defs/sha256"},
+        "operation_count": {"type": "integer", "minimum": 0},
+        "source_release": {"type": "string", "minLength": 1},
+        "principal": {"const": "trusted_controller"}
+      }
+    },
+    "state_families": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/stateFamily"}
+    },
+    "relationship_checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/relationship"}
+    },
+    "observation_probes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/probe"}
+    },
+    "pagination_probes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/paginationProbe"}
+    },
+    "mutation_probes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "allOf": [
+          {"$ref": "#/$defs/probe"},
+          {
+            "type": "object",
+            "required": ["expected_state_change"],
+            "properties": {"expected_state_change": {"type": "boolean"}}
+          }
+        ],
+        "unevaluatedProperties": false
+      }
+    },
+    "temporal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["logical_time", "scheduled_work_supported", "pending_state_pointers"],
+      "properties": {
+        "logical_time": {"type": "string", "format": "date-time"},
+        "scheduled_work_supported": {"type": "boolean"},
+        "pending_state_pointers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/jsonPointer"}
+        }
+      }
+    },
+    "information_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contains_task_objectives",
+        "contains_evaluation_ground_truth",
+        "agent_selectable"
+      ],
+      "properties": {
+        "contains_task_objectives": {"const": false},
+        "contains_evaluation_ground_truth": {"const": false},
+        "agent_selectable": {"const": false}
+      }
+    },
+    "known_gaps": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "distributionLabel": {"enum": ["public", "restricted", "private"]},
+    "relativePath": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "jsonPointer": {
+      "type": "string",
+      "pattern": "^(?:/(?:[^~/]|~[01])*)*$"
+    },
+    "stateFamily": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "family_id",
+        "state_pointer",
+        "instance_count",
+        "value_origin",
+        "grounding_level",
+        "source_refs",
+        "lifecycle"
+      ],
+      "properties": {
+        "family_id": {"$ref": "#/$defs/identifier"},
+        "state_pointer": {"$ref": "#/$defs/jsonPointer"},
+        "instance_count": {"type": "integer", "minimum": 0},
+        "value_origin": {
+          "enum": [
+            "self_authored",
+            "provider_observed",
+            "reference_service_instantiated",
+            "authorized_snapshot_derived"
+          ]
+        },
+        "grounding_level": {"type": "string", "pattern": "^G[0-4](?:_[A-Z0-9]+)*$"},
+        "source_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/identifier"}
+        },
+        "lifecycle": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["value_pointer", "required_values"],
+              "properties": {
+                "value_pointer": {"$ref": "#/$defs/jsonPointer"},
+                "required_values": {"type": "array", "minItems": 1, "uniqueItems": true}
+              }
+            }
+          ]
+        }
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "check_id",
+        "from_collection_pointer",
+        "reference_pointer",
+        "to_collection_pointer",
+        "to_id_pointer",
+        "nullable",
+        "minimum_checked"
+      ],
+      "properties": {
+        "check_id": {"$ref": "#/$defs/identifier"},
+        "from_collection_pointer": {"$ref": "#/$defs/jsonPointer"},
+        "reference_pointer": {"$ref": "#/$defs/jsonPointer"},
+        "to_collection_pointer": {"$ref": "#/$defs/jsonPointer"},
+        "to_id_pointer": {"$ref": "#/$defs/jsonPointer"},
+        "nullable": {"type": "boolean"},
+        "minimum_checked": {"type": "integer", "minimum": 1}
+      }
+    },
+    "assertion": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["operator", "pointer"],
+          "properties": {
+            "operator": {"const": "exists"},
+            "pointer": {"$ref": "#/$defs/jsonPointer"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["operator", "pointer", "expected"],
+          "properties": {
+            "operator": {"enum": ["equals", "type", "length"]},
+            "pointer": {"$ref": "#/$defs/jsonPointer"},
+            "expected": {}
+          }
+        }
+      ]
+    },
+    "probe": {
+      "type": "object",
+      "required": [
+        "probe_id",
+        "operation_id",
+        "actor_id",
+        "actor_role",
+        "arguments",
+        "expected_status_code",
+        "assertions"
+      ],
+      "properties": {
+        "probe_id": {"$ref": "#/$defs/identifier"},
+        "operation_id": {"$ref": "#/$defs/identifier"},
+        "actor_id": {"type": "string", "minLength": 1},
+        "actor_role": {"$ref": "#/$defs/identifier"},
+        "arguments": {"type": "object"},
+        "expected_status_code": {"type": "integer", "minimum": 100, "maximum": 599},
+        "assertions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/assertion"}
+        }
+      }
+    },
+    "paginationPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["arguments", "expected_status_code", "assertions"],
+      "properties": {
+        "arguments": {"type": "object"},
+        "expected_status_code": {"type": "integer", "minimum": 100, "maximum": 599},
+        "assertions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/assertion"}
+        }
+      }
+    },
+    "paginationProbe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "probe_id",
+        "operation_id",
+        "actor_id",
+        "actor_role",
+        "item_collection_pointer",
+        "item_id_pointer",
+        "expected_unique_items",
+        "pages"
+      ],
+      "properties": {
+        "probe_id": {"$ref": "#/$defs/identifier"},
+        "operation_id": {"$ref": "#/$defs/identifier"},
+        "actor_id": {"type": "string", "minLength": 1},
+        "actor_role": {"$ref": "#/$defs/identifier"},
+        "item_collection_pointer": {"$ref": "#/$defs/jsonPointer"},
+        "item_id_pointer": {"$ref": "#/$defs/jsonPointer"},
+        "expected_unique_items": {"type": "integer", "minimum": 1},
+        "pages": {
+          "type": "array",
+          "minItems": 3,
+          "items": {"$ref": "#/$defs/paginationPage"}
+        }
+      }
+    }
+  }
+}

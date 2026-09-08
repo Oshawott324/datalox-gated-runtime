@@ -8,11 +8,15 @@ cross-provider integrations from being treated as the same artifact.
 
 ```text
 authorized source behavior
+  -> digest-bound grounding measurement and portable behavior program
   -> task-free provider runtime bundle
   -> provider operation claims
   -> derived Provider Admission
+  -> task-independent State Profile and derived State Admission, when claimed
   -> immutable OCI Provider Release
   -> immutable registry reference and reset profile
+  -> three-run source-versus-release differential attestation
+  -> periodic source drift and append-only release assessment
   -> Provider Set or admitted Composition Pack
   -> one isolated transparent-interception session
   -> controller evidence consumed by the user's harness
@@ -39,6 +43,7 @@ A Provider Release is the distributable admitted provider module. It binds:
 
 - the exact provider authorities and native operation surfaces;
 - the resettable runtime bundle and reset profile;
+- an optional admitted, rights-bound State Profile for the exact reset seed;
 - operation-level read/write/failure/duplicate/readback claims;
 - provider invariants and reusable receipt predicates;
 - grounding evidence, rights, distribution label, and content digests; and
@@ -49,6 +54,14 @@ The release is an OCI artifact. The Datalox runtime image is separate: a
 release contains provider behavior, while the runtime image supplies the
 generic execution engine. A registry reference such as
 `provider@release-version` is immutable.
+
+The State Profile is provider-native rather than a normalized Datalox entity
+model. It describes tenant content, lifecycle depth, relationships,
+reachability, pagination, and reset evidence without containing a task or
+evaluation truth. The provider profile selected by the operator binds its state
+profile and admission digests into the OCI layer. A release profile without
+state digests makes no admitted tenant-depth claim. See
+[`Provider State Profiles`](provider-state-profiles.md).
 
 ## Provider Set: agent-mediated composition
 
@@ -148,6 +161,14 @@ All three compile to the same admitted Provider Release. Runtime schemas cannot
 express provider forwarding, and evaluated-agent execution has no provider
 network path.
 
+The acquisition and release claims stay joined by the
+[provider differential and drift loop](provider-differential-and-drift.md).
+Provider Admission proves the declared local contract. A differential
+attestation separately proves one complete observed behavior program against an
+immutable release profile, including post-mutation reset and fresh-instance
+equivalence. A later authorized acquisition distinguishes provider drift from a
+replica regression without editing the frozen release.
+
 ## Consumer integration
 
 Docker and Kubernetes place the generic runtime and selected admitted releases
@@ -166,6 +187,8 @@ the trusted session export.
 The foundry is considered mechanically complete only when tests prove:
 
 - strict claims, admission, OCI release, registry publication, and resolution;
+- digest-bound acquisition, portable multi-attempt programs, immutable-release
+  differential execution, and append-only freshness assessment;
 - registry-backed provider selection with no caller-authored runtime paths;
 - admitted exact-authority execution with zero provider egress;
 - deterministic reset and isolated parallel sessions;

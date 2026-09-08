@@ -10,15 +10,25 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException, Request
 
 from datalox_gated_runtime.data_plane import ProviderBinding, create_data_plane_app
 from datalox_gated_runtime.interception.interventions import (
+    DELIVERY_INTERVENTION_SCHEMA_VERSION,
     DeliveryInterventionHandler,
     DeliveryInterventionSession,
     ProviderBaseBinding,
     load_delivery_intervention,
     validate_policy_for_operations,
+)
+from datalox_gated_runtime.interception.interventions_v2 import (
+    DELIVERY_INTERVENTION_V2_SCHEMA_VERSION,
+    DeliveryInterventionHandlerV2,
+    DeliveryInterventionResetConflict,
+    DeliveryInterventionSessionV2,
+    intervention_schema_version,
+    load_delivery_intervention_v2,
+    validate_v2_policy_for_operations,
 )
 from datalox_gated_runtime.json_digest import canonical_json_sha256
 from datalox_gated_runtime.models import CallRequest
@@ -26,6 +36,7 @@ from datalox_gated_runtime.provider_runtime import (
     ProviderRuntime,
     load_provider_admission,
 )
+from datalox_gated_runtime.provider_runtime.errors import ProviderRuntimeError
 from datalox_gated_runtime.provider_runtime.release import (
     PROVIDER_RELEASE_MAX_JSON_BYTES,
     PROVIDER_RELEASE_SCHEMA_VERSION,
@@ -37,7 +48,7 @@ class GatewayProvider:
     runtime: ProviderRuntime
     binding: ProviderBinding
     release_config: dict[str, object] | None = None
-    intervention: DeliveryInterventionSession | None = None
+    intervention: DeliveryInterventionSession | DeliveryInterventionSessionV2 | None = None
 
 
 class InterceptionGateway:
@@ -129,6 +140,7 @@ class InterceptionGateway:
         delivery_intervention_configs: Mapping[str, Path] | None,
     ) -> InterceptionGateway:
         providers: dict[str, GatewayProvider] = {}
+        v2_sessions: list[DeliveryInterventionSessionV2] = []
         pending_interventions = dict(delivery_intervention_configs or {})
         try:
             for index, (bundle_dir, admission_path, release_config_path) in enumerate(
@@ -162,18 +174,15 @@ class InterceptionGateway:
                     binding=ProviderBinding(runtime),
                     release_config=release_config,
                 )
-                intervention: DeliveryInterventionSession | None = None
+                intervention: DeliveryInterventionSession | DeliveryInterventionSessionV2 | None = (
+                    None
+                )
                 handler: Any = runtime
                 intervention_config_path = pending_interventions.pop(provider_id, None)
                 if intervention_config_path is not None:
                     if release_config is None:
                         raise ValueError(
                             "delivery interventions require an admitted provider release"
-                        )
-                    loaded = load_delivery_intervention(intervention_config_path)
-                    if loaded.provider_id != provider_id:
-                        raise ValueError(
-                            "delivery intervention provider_id does not match its runtime"
                         )
                     if admission_path is None:
                         raise ValueError(
@@ -189,39 +198,75 @@ class InterceptionGateway:
                         provider_runtime_sha256=provider_runtime_sha256,
                         provider_admission_sha256=provider_admission_sha256,
                     )
-                    validate_policy_for_operations(
-                        loaded.policy,
-                        operation_mutability={
-                            operation["operation_id"]: operation["mutability"]
-                            for operation in operations
-                        },
+                    operation_mutability = {
+                        operation["operation_id"]: operation["mutability"]
+                        for operation in operations
+                    }
+                    provider_binding = ProviderBaseBinding(
+                        provider_id=provider_id,
+                        release_version=release_config["release_version"],
+                        profile_id=profile_id,
+                        bundle_version=runtime.bundle.manifest.bundle_version,
+                        release_config_sha256=_sha256_file(release_config_path),
+                        provider_runtime_sha256=provider_runtime_sha256,
+                        provider_admission_sha256=provider_admission_sha256,
+                        operation_contract_sha256=release_config["operation_contract_sha256"],
                     )
-                    intervention = DeliveryInterventionSession(
-                        loaded.policy,
-                        provider=ProviderBaseBinding(
-                            provider_id=provider_id,
-                            release_version=release_config["release_version"],
-                            profile_id=profile_id,
-                            bundle_version=runtime.bundle.manifest.bundle_version,
-                            release_config_sha256=_sha256_file(release_config_path),
-                            provider_runtime_sha256=provider_runtime_sha256,
-                            provider_admission_sha256=provider_admission_sha256,
-                            operation_contract_sha256=release_config["operation_contract_sha256"],
-                        ),
-                        allowed_read_operation_ids=frozenset(
-                            operation["operation_id"]
-                            for operation in operations
-                            if operation["mutability"] == "read"
-                        ),
-                        seed=loaded.seed,
-                        enabled=loaded.enabled,
-                        trace_path=runtime.run_dir / "delivery-interventions.jsonl",
-                    )
-                    handler = DeliveryInterventionHandler(
-                        base_handler=runtime,
-                        session=intervention,
-                        resolve_operation_id=_operation_resolver(operations),
-                    )
+                    schema_version = intervention_schema_version(intervention_config_path)
+                    if schema_version == DELIVERY_INTERVENTION_SCHEMA_VERSION:
+                        loaded = load_delivery_intervention(intervention_config_path)
+                        if loaded.provider_id != provider_id:
+                            raise ValueError(
+                                "delivery intervention provider_id does not match its runtime"
+                            )
+                        validate_policy_for_operations(
+                            loaded.policy,
+                            operation_mutability=operation_mutability,
+                        )
+                        intervention = DeliveryInterventionSession(
+                            loaded.policy,
+                            provider=provider_binding,
+                            allowed_read_operation_ids=frozenset(
+                                operation_id
+                                for operation_id, mutability in operation_mutability.items()
+                                if mutability == "read"
+                            ),
+                            seed=loaded.seed,
+                            enabled=loaded.enabled,
+                            trace_path=runtime.run_dir / "delivery-interventions.jsonl",
+                        )
+                        handler = DeliveryInterventionHandler(
+                            base_handler=runtime,
+                            session=intervention,
+                            resolve_operation_id=_operation_resolver(operations),
+                        )
+                    elif schema_version == DELIVERY_INTERVENTION_V2_SCHEMA_VERSION:
+                        loaded_v2 = load_delivery_intervention_v2(intervention_config_path)
+                        if loaded_v2.provider_id != provider_id:
+                            raise ValueError(
+                                "delivery intervention provider_id does not match its runtime"
+                            )
+                        validate_v2_policy_for_operations(
+                            loaded_v2.policy,
+                            operation_mutability=operation_mutability,
+                        )
+                        intervention = DeliveryInterventionSessionV2(
+                            loaded_v2.policy,
+                            provider=provider_binding,
+                            operation_mutability=operation_mutability,
+                            seed=loaded_v2.seed,
+                            enabled=loaded_v2.enabled,
+                            journal_path=runtime.run_dir / "delivery-interventions-v2.sqlite3",
+                            identity_policy=runtime.bundle.identity_policy,
+                        )
+                        v2_sessions.append(intervention)
+                        handler = DeliveryInterventionHandlerV2(
+                            base_handler=runtime,
+                            session=intervention,
+                            resolve_operation_id=_operation_resolver(operations),
+                        )
+                    else:
+                        raise ValueError("unsupported delivery intervention schema")
                 providers[provider_id] = GatewayProvider(
                     runtime=runtime,
                     binding=ProviderBinding(handler),
@@ -234,6 +279,11 @@ class InterceptionGateway:
                     + ", ".join(sorted(pending_interventions))
                 )
         except Exception:
+            for session in v2_sessions:
+                try:
+                    session.shutdown()
+                except Exception:  # noqa: BLE001, S110 - preserve the construction failure
+                    pass
             for provider in providers.values():
                 provider.runtime.close()
             raise
@@ -251,8 +301,19 @@ class InterceptionGateway:
         )
 
     def close(self) -> None:
+        failures: list[Exception] = []
         for provider in self.providers.values():
-            provider.runtime.close()
+            try:
+                if isinstance(provider.intervention, DeliveryInterventionSessionV2):
+                    provider.intervention.shutdown()
+            except Exception as exc:  # noqa: BLE001 - close all independently owned resources
+                failures.append(exc)
+            try:
+                provider.runtime.close()
+            except Exception as exc:  # noqa: BLE001 - close all independently owned resources
+                failures.append(exc)
+        if failures:
+            raise RuntimeError("one or more gateway resources failed to close") from failures[0]
 
     def _create_control_app(self) -> FastAPI:
         app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
@@ -276,6 +337,32 @@ class InterceptionGateway:
             with provider.binding.lock:
                 return provider.runtime.export()
 
+        @app.get("/v1/providers/{provider_id}/time")
+        def provider_time(
+            provider_id: str,
+            _: None = Depends(authorize),
+        ) -> dict[str, object]:
+            provider = self._provider(provider_id)
+            with provider.binding.lock:
+                try:
+                    return provider.runtime.provider_time()
+                except ProviderRuntimeError as exc:
+                    raise _provider_time_http_error(exc) from exc
+
+        @app.post("/v1/providers/{provider_id}/time/advance")
+        async def advance_provider_time(
+            provider_id: str,
+            request: Request,
+            _: None = Depends(authorize),
+        ) -> dict[str, object]:
+            target = await _provider_time_target(request)
+            provider = self._provider(provider_id)
+            with provider.binding.lock:
+                try:
+                    return provider.runtime.advance_provider_time(target)
+                except ProviderRuntimeError as exc:
+                    raise _provider_time_http_error(exc) from exc
+
         @app.get("/v1/providers/{provider_id}/delivery-interventions/export")
         def export_delivery_interventions(
             provider_id: str,
@@ -297,10 +384,34 @@ class InterceptionGateway:
         ) -> dict[str, object]:
             provider = self._provider(provider_id)
             with provider.binding.lock:
-                result = provider.runtime.reset()
-                if provider.intervention is not None:
-                    provider.intervention.reset()
-                return result
+                try:
+                    if isinstance(provider.intervention, DeliveryInterventionSessionV2):
+                        provider.intervention.ensure_resettable()
+                    result = provider.runtime.reset()
+                    if provider.intervention is not None:
+                        provider.intervention.reset()
+                    return result
+                except DeliveryInterventionResetConflict as exc:
+                    raise HTTPException(status_code=409, detail=str(exc)) from exc
+                except Exception as exc:
+                    if isinstance(provider.intervention, DeliveryInterventionSessionV2):
+                        try:
+                            provider.intervention.latch_reset_failure(
+                                "Provider state and intervention journal reset did not complete "
+                                "as one trusted control operation."
+                            )
+                        except Exception as latch_exc:
+                            raise HTTPException(
+                                status_code=500,
+                                detail=(
+                                    "provider reset failed and the terminal latch could not "
+                                    "be persisted"
+                                ),
+                            ) from latch_exc
+                    raise HTTPException(
+                        status_code=500,
+                        detail="provider reset failed and the session is terminally latched",
+                    ) from exc
 
         return app
 
@@ -309,6 +420,63 @@ class InterceptionGateway:
         if provider is None:
             raise HTTPException(status_code=404, detail="provider runtime not found")
         return provider
+
+
+async def _provider_time_target(request: Request) -> str:
+    content_type = request.headers.get("content-type", "").split(";", 1)[0].strip().lower()
+    if content_type != "application/json":
+        raise HTTPException(
+            status_code=415,
+            detail={
+                "code": "provider_time_control_content_type_invalid",
+                "message": "Provider time advance requires Content-Type: application/json.",
+            },
+        )
+    payload = await request.body()
+    if len(payload) > 4096:
+        raise HTTPException(
+            status_code=413,
+            detail={
+                "code": "provider_time_control_body_too_large",
+                "message": "Provider time advance body exceeds the control-plane limit.",
+            },
+        )
+    try:
+        decoded = json.loads(payload.decode("utf-8"))
+    except (UnicodeError, json.JSONDecodeError) as exc:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "code": "provider_time_control_body_invalid",
+                "message": "Provider time advance body must be valid JSON.",
+            },
+        ) from exc
+    if (
+        not isinstance(decoded, dict)
+        or set(decoded) != {"target"}
+        or not isinstance(decoded["target"], str)
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "code": "provider_time_control_fields_invalid",
+                "message": "Provider time advance requires exactly one string target field.",
+            },
+        )
+    return decoded["target"]
+
+
+def _provider_time_http_error(error: ProviderRuntimeError) -> HTTPException:
+    if error.code == "world_clock_reverse_forbidden":
+        status_code = 409
+    elif error.code == "provider_runtime_time_invalid":
+        status_code = 400
+    else:
+        status_code = 422
+    return HTTPException(
+        status_code=status_code,
+        detail={"code": error.code, "message": error.message, "details": error.details},
+    )
 
 
 def _load_release_config(

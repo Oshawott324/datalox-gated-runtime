@@ -1,0 +1,15 @@
+{
+  "id": "medusa_store_cart_reference",
+  "metadata": {
+    "clock": "2026-09-02T00:00:00Z"
+  },
+  "state": {
+    "cart_sequence": 0,
+    "carts": {},
+    "catalog": {
+      "product_count": 50
+    },
+    "line_item_sequence": 0,
+    "region_id": "region_datalox_us"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "authorities": [
+    "rest.uniprot.org"
+  ],
+  "behavior": {
+    "default_actor_role": "idmapping_client",
+    "identity_path": "identity.json",
+    "implementation": "runtime/world/v1/implementation.py:create_world",
+    "protocol": "world_v1_adapter",
+    "required_runtime_capabilities": [
+      "actors",
+      "role_scoped_tools",
+      "transactions",
+      "clock",
+      "scheduled_events"
+    ],
+    "roles_path": "roles.json",
+    "seed_path": "seed.json",
+    "tools_path": "tools.json"
+  },
+  "bundle_version": "2026_03-idmapping-v0",
+  "content_hashes": {
+    "identity.json": "sha256:886edaa36ada260be3fc515602d88de27120c2cc41f576d8eabacedb30daf287",
+    "roles.json": "sha256:51310eb097ae2d55a1ffc51d048e9ea07d1674bc00efae27ae68efa73b7e91cd",
+    "runtime/world/v1/contract.py": "sha256:386b3524348b32f3f448929d54bc4ad65889ab1566bbac3c61ed843d2a663d4c",
+    "runtime/world/v1/implementation.py": "sha256:b322ce2fde0e05c4cd671ad6044ddf8927f82674a096df4c34ccd2821ecb3b6c",
+    "seed.json": "sha256:db648da7b1b00a8a25d3e0ed70eb84c98951abb9615d24f077fec1e3bd7c27cb",
+    "source.json": "sha256:d2c35294bc582c2ce1127e4a7ce3f89ea657041709728eff718221a2ce1b3998",
+    "tools.json": "sha256:ff0af2a9d56b12e5c13629df1b7318a212a24fdd38888da77b5cbc3e8fb0187f"
+  },
+  "provider_id": "uniprot",
+  "schema_version": "datalox_provider_runtime_v2",
+  "source_path": "source.json",
+  "wire_protocol": "standard_http_v1"
+}

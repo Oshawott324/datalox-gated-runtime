@@ -103,9 +103,34 @@
           "layer": {"$ref": "#/$defs/descriptor"},
           "provider_runtime_sha256": {"$ref": "#/$defs/sha256"},
           "provider_admission_sha256": {"$ref": "#/$defs/sha256"},
+          "state_profile_sha256": {
+            "oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+          },
+          "state_admission_sha256": {
+            "oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+          },
           "operation_claims_sha256": {"$ref": "#/$defs/sha256"},
           "distribution_label": {"$ref": "#/$defs/distributionLabel"}
-        }
+        },
+        "dependentRequired": {
+          "state_profile_sha256": ["state_admission_sha256"],
+          "state_admission_sha256": ["state_profile_sha256"]
+        },
+        "oneOf": [
+          {
+            "required": ["state_profile_sha256", "state_admission_sha256"],
+            "properties": {
+              "state_profile_sha256": {"$ref": "#/$defs/sha256"},
+              "state_admission_sha256": {"$ref": "#/$defs/sha256"}
+            }
+          },
+          {
+            "properties": {
+              "state_profile_sha256": {"type": "null"},
+              "state_admission_sha256": {"type": "null"}
+            }
+          }
+        ]
       }
     }
   },

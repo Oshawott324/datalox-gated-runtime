@@ -14,6 +14,8 @@ returns stateful simulated behavior without contacting that provider.**
 [Delivery interventions](docs/delivery-interventions.md) ·
 [Rollout information boundary](docs/rollout-information-boundary.md) ·
 [Behavior grounding](docs/provider-behavior-grounding.md) ·
+[Differential and drift](docs/provider-differential-and-drift.md) ·
+[Async provider proof](docs/uniprot-idmapping-temporal-provider.md) ·
 [Behavior harvest](docs/provider-behavior-grounding.md#current-specialized-harvest-wave) ·
 [Container injection](docs/transparent-interception.md#export-container-injection) ·
 [veRL / GRPO](docs/verl-grpo-rollouts.md) ·
@@ -191,11 +193,14 @@ declared roles lives in the runtime bundle. Agent requests containing internal
 the boundary and excluded from behavior evidence.
 
 For controlled robustness experiments, a consumer may add a switchable seeded
-[delivery intervention](docs/delivery-interventions.md) after an admitted
-provider response. The provider ledger remains the grounded base record; a
-separate trace records the counterfactual or applied intervention and the exact
-observation delivered to the agent. Datalox applies the consumer-owned policy
-without choosing its distribution, retrying, or normalizing its output.
+[delivery intervention](docs/delivery-interventions.md) around an admitted
+provider operation. V1 keeps its read-response transformations. V2 can hold an
+admitted read or write before dispatch, or dispatch it exactly once and send
+zero HTTP response bytes so the client observes unknown completion. The
+provider ledger remains the grounded base record; a separate durable trace
+records the counterfactual or applied intervention. Datalox applies the
+consumer-owned policy without choosing its distribution, retrying, or
+normalizing its output.
 
 ## Verify the transparent runtime offline
 
@@ -232,24 +237,15 @@ These checks exercise the actual provider-runtime entry point. They:
 7. generate Docker and Kubernetes injection artifacts; and
 8. keep the provider runtime free of tasks, verifiers, rewards, and upstream clients.
 
+Tenant depth is a separate admitted artifact. A
+[Provider State Profile](docs/provider-state-profiles.md) binds one exact,
+task-independent reset seed to its provenance, rights, lifecycle coverage,
+relationships, pagination, mutation probes, and reset-equivalence evidence.
+It stays in the provider's native state shape and is selected by the operator,
+never by the model.
+
 For the full build and injection commands, see
 [Transparent Interception](docs/transparent-interception.md#compile-a-provider-runtime).
-
-## Use a world from an existing agent framework
-
-The repository also contains two self-contained framework examples:
-
-- [Harbor incident coordination](integrations/harbor/incident_customer_coordination_v0/)
-  is an ordinary Harbor task with role-scoped MCP tools and a separate hidden
-  verifier.
-- [Mastra commerce support](integrations/mastra/commerce_support_ops_v0/)
-  uses Mastra MCPClient, Datasets, Experiments, and a deterministic scorer over
-  a fresh world per dataset item.
-
-Both examples run without provider credentials. They use synthetic episodes
-with source-grounded provider shapes to test the framework integration
-boundary, not to claim live-provider behavioral fidelity. See
-[Harness Integrations](integrations/) for the shared research question.
 
 ## Use provider packs in veRL / GRPO
 
@@ -322,9 +318,32 @@ The portable construction path is provider-neutral. Current depth work applies
 the same authoring, compilation, differential, reset, provider-runtime, and
 container-injection contracts to specialized operational systems instead of
 treating one well-built commercial sandbox as the product. HUD, Harbor,
-OpenEnv, and custom harnesses remain downstream owners of their worlds. The checked provider-by-provider
-status and exact claim boundaries are summarized in
+OpenEnv, and custom harnesses remain downstream owners of their worlds. The
+checked provider-by-provider status and exact claim boundaries are summarized in
 [Provider Behavior Grounding](docs/provider-behavior-grounding.md#current-specialized-harvest-wave).
+
+### Measure faithfulness and drift
+
+The evaluated-agent runtime never contacts providers. A separate
+`datalox-author` executable runs a reviewed behavior recipe against an
+authorized sandbox, simulator, or disposable reference service. It emits a
+sanitized capture, a portable behavior program, and a grounding measurement
+bound to their exact bytes plus the connector, recipe, and frozen harvest
+engine.
+
+`datalox-gate provider differential` runs that program against one immutable
+Provider Release profile three times: initially, after resetting the mutated
+instance, and in a newly materialized instance. `provider drift compare`
+compares a later authorized acquisition; `provider drift assess` separates
+provider change from replica mismatch; and the append-only assessment registry
+derives freshness at a trusted time.
+
+This is program-scoped evidence, not a provider-wide label. The retained
+OpenLMIS contact-update program is the first restricted real-write checkpoint
+that passes the immutable-release differential and both reset-equivalence
+checks. See
+[Provider Differential and Drift](docs/provider-differential-and-drift.md) for
+the contracts and complete command sequence.
 
 For harnesses that consume native MCP servers, the same provider runtime can be
 projected without rewriting provider behavior. The EnvFactory adapter emits its
@@ -337,6 +356,7 @@ for state-isolated pass@k execution. See
 | Path | Purpose |
 | --- | --- |
 | [`src/datalox_gated_runtime/provider_runtime/`](src/datalox_gated_runtime/provider_runtime/) | Task-free, content-addressed provider behavior bundles and resettable execution |
+| [`src/datalox_gated_runtime/provider_differential/`](src/datalox_gated_runtime/provider_differential/) | Portable captured programs, immutable-release differential execution, source drift, and assessment derivation |
 | [`src/datalox_gated_runtime/composition/`](src/datalox_gated_runtime/composition/) | Explicit provider-mediated causal edges, delivery-scheduler time, evidence, and admission |
 | [`src/datalox_gated_runtime/sdk_adapters/`](src/datalox_gated_runtime/sdk_adapters/) | Execution-boundary adapters that preserve native SDK calls for providers without an HTTP API |
 | [`src/datalox_gated_runtime/interception/`](src/datalox_gated_runtime/interception/) | Exact-authority TLS data plane, private control plane, and container injection |
@@ -355,6 +375,12 @@ for state-isolated pass@k execution. See
 | [`schemas/provider-runtime-v1.schema.json`](schemas/provider-runtime-v1.schema.json) | Historical provider-runtime v1 contract |
 | [`schemas/provider-identity-v1.schema.json`](schemas/provider-identity-v1.schema.json) | Provider-native identity-to-role policy contract |
 | [`schemas/provider-release-v1.schema.json`](schemas/provider-release-v1.schema.json) | Immutable OCI Provider Release contract |
+| [`schemas/provider-state-profile-v1.schema.json`](schemas/provider-state-profile-v1.schema.json) | Task-independent provider-native reset-state claims |
+| [`schemas/provider-state-admission-v1.schema.json`](schemas/provider-state-admission-v1.schema.json) | Derived state reachability, pagination, mutation, and reset evidence |
+| [`schemas/provider-grounding-measurement-v1.schema.json`](schemas/provider-grounding-measurement-v1.schema.json) | Source observation, rights, and exact compiled-program binding |
+| [`schemas/provider-differential-attestation-v1.schema.json`](schemas/provider-differential-attestation-v1.schema.json) | Three-run release comparison and functional-reset evidence |
+| [`schemas/provider-drift-report-v1.schema.json`](schemas/provider-drift-report-v1.schema.json) | Typed provider-source behavior drift report |
+| [`schemas/provider-drift-assessment-v1.schema.json`](schemas/provider-drift-assessment-v1.schema.json) | Release/profile/program currency, mismatch, and blocked status |
 | [`schemas/composition-pack-v1.schema.json`](schemas/composition-pack-v1.schema.json) | Authored provider-mediated composition claim contract |
 | [`docs/world-packages.md`](docs/world-packages.md) | Legacy Datalox-owned world package compatibility path |
 | [`scripts/public_release.py`](scripts/public_release.py) | Deterministic public-source builder and verifier |
@@ -386,10 +412,13 @@ test failures, formatting failures, or package-build failures.
 
 Datalox currently proves exact-authority TLS interception, zero runtime provider
 clients, task-free provider bundle compilation, stateful local behavior,
-controller-only reset/export, and Docker/Kubernetes injection. All 48 registered
-provider-scoped assets pass compilation and reset under this contract; that does
-not mean all 48 are core-complete, writable, or behaviorally equivalent to the
-provider. The exact structural result is in
+controller-only reset/export, Docker/Kubernetes injection, digest-bound
+behavior acquisition, three-run immutable-release differential execution, and
+append-only drift assessment. All 48 registered provider-scoped assets pass
+compilation and reset under this contract; that does not mean all 48 are
+core-complete, writable, or behaviorally equivalent to the provider. Only an
+individual complete behavior program with a passing differential attestation
+earns that bounded claim. The exact structural result is in
 [`docs/reports/provider-runtime-coverage.json`](docs/reports/provider-runtime-coverage.json).
 Public checkouts can validate that report with
 `python scripts/check_provider_runtime_coverage.py --validate-report`; the full

@@ -7,6 +7,11 @@ under the MIT License. This directory does not copy its implementation; the
 pinned source and file digests are retained in `upstream-contract.json` so the
 origin of the experimental control model remains explicit.
 
+Serhii also performed the initial independent 180-pair calibration, identified
+the observation-effect, quota-reachability, and verifier-discrimination gaps,
+and permitted adaptation of his persistent-client and causal-chain checking
+approach in this public regression suite.
+
 Copyright (c) 2026 Serhii Nazarov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of

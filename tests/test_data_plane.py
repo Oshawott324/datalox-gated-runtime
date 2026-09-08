@@ -1,9 +1,14 @@
 import json
 from dataclasses import dataclass, field
 
+import pytest
 from fastapi.testclient import TestClient
 
-from datalox_gated_runtime.data_plane import ProviderBinding, create_data_plane_app
+from datalox_gated_runtime.data_plane import (
+    ProviderBinding,
+    TrackedResponseTransportDirective,
+    create_data_plane_app,
+)
 from datalox_gated_runtime.models import CallRequest, GateDecision, GateResponse
 
 
@@ -83,3 +88,38 @@ def test_data_plane_does_not_expose_control_routes_on_provider_authority() -> No
     assert response.status_code == 404
     assert json.loads(response.content) == {"error": {"type": "resource_missing"}}
     assert provider.requests[0].path == "/_datalox/health"
+
+
+@pytest.mark.parametrize(("method", "status"), (("HEAD", 200), ("GET", 204), ("GET", 304)))
+def test_tracked_response_uses_zero_body_for_http_bodyless_semantics(
+    method: str,
+    status: int,
+) -> None:
+    completed: list[tuple[bool, int]] = []
+    aborted: list[tuple[bool, int]] = []
+
+    class TrackedProvider:
+        def handle(self, request: CallRequest) -> TrackedResponseTransportDirective:
+            del request
+            response = GateResponse(
+                status_code=status,
+                headers={"content-type": "application/json"},
+                body={"provider": "body-must-not-be-sent"},
+                decision=GateDecision("replay", "fixture", "fixture"),
+                event_id="evt_tracked",
+            )
+            return TrackedResponseTransportDirective(
+                outcome_id="tracked-1",
+                response=response,
+                on_asgi_send_completed=lambda started, sent: completed.append((started, sent)),
+                on_response_aborted=lambda started, sent: aborted.append((started, sent)),
+            )
+
+    app = create_data_plane_app({"api.stripe.com": ProviderBinding(TrackedProvider())})
+    with TestClient(app, base_url="https://api.stripe.com") as client:
+        response = client.request(method, "/bodyless")
+
+    assert response.status_code == status
+    assert response.content == b""
+    assert completed == [(True, 0)]
+    assert aborted == []

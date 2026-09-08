@@ -11,6 +11,7 @@ import json
 from dataclasses import asdict, dataclass
 from typing import Any
 
+from datalox_dirty_integration.contract import LIST_PRODUCTS_OPERATION
 from datalox_gated_runtime.interception.interventions import (
     InterventionDecision,
     JsonTypeDriftAction,
@@ -18,8 +19,6 @@ from datalox_gated_runtime.interception.interventions import (
     RepeatPageAction,
 )
 from datalox_gated_runtime.models import CallRequest
-
-LIST_PRODUCTS_OPERATION = "medusa.store.products.list"
 
 
 def _draw(*, seed: str, logical_request_index: int, salt: str) -> float:
@@ -60,7 +59,7 @@ class SeededCommercePolicy:
     """
 
     policy_id = "serhii_commerce_read_faults"
-    policy_version = "1"
+    policy_version = "2"
 
     def __init__(self, profile: FaultProfile) -> None:
         self.profile = profile
@@ -143,8 +142,15 @@ class SeededCommercePolicy:
         logical_request_index: int,
         action: Any,
     ) -> InterventionDecision:
+        identity = {
+            "policy_sha256": self.policy_sha256,
+            "seed": seed,
+            "logical_request_index": logical_request_index,
+            "operation_id": LIST_PRODUCTS_OPERATION,
+            "action": _action_payload(action),
+        }
         digest = hashlib.sha256(
-            f"{self.policy_sha256}:{seed}:{logical_request_index}:{type(action).__name__}".encode()
+            json.dumps(identity, sort_keys=True, separators=(",", ":")).encode("utf-8")
         ).hexdigest()[:24]
         return InterventionDecision(
             decision_id=f"decision_{digest}",
@@ -167,3 +173,29 @@ def load_profile(name: str) -> FaultProfile:
         return PROFILES[name]
     except KeyError as exc:
         raise ValueError(f"unknown profile {name!r}; expected one of {sorted(PROFILES)}") from exc
+
+
+def _action_payload(action: Any) -> dict[str, Any]:
+    if isinstance(action, QuotaResponseAction):
+        return {
+            "kind": "quota_response",
+            "response": {
+                "status_code": action.status_code,
+                "headers": dict(action.headers),
+                "body": action.body,
+            },
+        }
+    if isinstance(action, RepeatPageAction):
+        return {
+            "kind": "repeat_page",
+            "source_request_index": action.source_request_index,
+        }
+    if isinstance(action, JsonTypeDriftAction):
+        return {
+            "kind": "json_type_drift",
+            "pointer": action.pointer,
+            "from_type": action.from_type,
+            "to_type": action.to_type,
+            "value": action.value,
+        }
+    raise TypeError(f"unsupported commerce intervention action: {type(action).__name__}")

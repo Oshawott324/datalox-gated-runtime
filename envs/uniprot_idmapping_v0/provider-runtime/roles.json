@@ -1,0 +1,8 @@
+{
+  "roles": [
+    {
+      "description": "Uses one isolated UniProt ID Mapping provider state.",
+      "id": "idmapping_client"
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "schema_version": "datalox_provider_runtime_source_v1",
+  "source_bundle_version": "2026_03-idmapping-v0",
+  "source_declaration": {
+    "grounding_gaps": [
+      {
+        "claim": "Grounded exact-duplicate request semantics",
+        "operation_family": "id_mapping_job",
+        "reason": "Raw request bytes were not retained. Local exact-repeat reuse is authored and excluded from admitted duplicate coverage."
+      },
+      {
+        "claim": "UniParc premature result and ChEMBL invalid-source behavior",
+        "operation_family": "id_mapping_job",
+        "reason": "The response artifacts are retained, but exact request identities are not durable enough for executable admission."
+      },
+      {
+        "claim": "Provider wall-clock completion distribution",
+        "operation_family": "id_mapping_job",
+        "reason": "The local 60-second completion point is an authored_logical_poll_schedule, not an observed latency sample."
+      },
+      {
+        "claim": "Provider reset or cleanup equivalence",
+        "operation_family": "id_mapping_job",
+        "reason": "The public service exposes no provider reset used by this acquisition; reset is local only."
+      },
+      {
+        "claim": "Production authentication or authorization beyond the observed public operations",
+        "operation_family": "id_mapping_job",
+        "reason": "The observed lifecycle required no credential and does not establish broader UniProt access policy."
+      },
+      {
+        "claim": "Rate limits, concurrent submissions, webhook delivery, retry windows, and unknown completion",
+        "operation_family": "id_mapping_job",
+        "reason": "These behaviors were outside the retained lifecycle observation."
+      },
+      {
+        "claim": "Broader UniProt REST behavior or raw response-payload equivalence",
+        "operation_family": "all",
+        "reason": "The evidence covers only three ID Mapping operations and retains factual response relations rather than provider payload bytes."
+      }
+    ],
+    "sources": [
+      {
+        "derivation": "Identifier-free selected factual observations with per-observation provider Date timestamps and private receipt digests. They are not represented as one contiguous provider trace. The runtime schedule, identifiers, fixture mapping values, and error text are self-authored.",
+        "grounding_level": "G3_PUBLIC_PRODUCTION",
+        "id": "uniprot_idmapping_public_production_2026_09_02",
+        "kind": "sanitized_public_production_observation",
+        "locator": "envs/uniprot_idmapping_v0/evidence/observed-lifecycle.json, observed-status-failure.json, and observed-uniref-result-failure.json",
+        "provider": "UniProt REST API",
+        "provider_version": "release 2026_03; deployment 02-September-2026",
+        "supports": [
+          "operation:uniprot.idmapping.run",
+          "operation:uniprot.idmapping.status",
+          "operation:uniprot.idmapping.uniref_results",
+          "behavior:uniref100_submit_pending_terminal_result_duplicate_after_terminal_unknown_status_unknown_result"
+        ]
+      },
+      {
+        "derivation": "Self-authored atomic invalid-write and exact-repeat branches used only to satisfy local core behavior completeness. They are not provider-grounded behavior claims.",
+        "grounding_level": "G1_SCHEMA_INSTANTIATED",
+        "id": "uniprot_authored_write_completeness_v1",
+        "kind": "schema_instantiated_authored_behavior",
+        "locator": "envs/uniprot_idmapping_v0/evidence/authored-write-completeness.json",
+        "provider": "Datalox local UniProt fixture",
+        "provider_version": "2026_03-idmapping-v0",
+        "supports": [
+          "operation:uniprot.idmapping.run",
+          "behavior:authored_failure_duplicate_completeness"
+        ]
+      }
+    ]
+  },
+  "source_episode_id": "uniprot_idmapping_reference",
+  "source_manifest_sha256": "sha256:dcb958b9ff6b43edf076a130b6f2a33bf5f2b2132cd181b893cf7fd4f98f3d7f",
+  "source_world_id": "uniprot_idmapping_v0"
+}

@@ -1,0 +1,30 @@
+{
+  "bundle_version": "2026_03-idmapping-v0",
+  "content_hashes": {
+    "world/v1/construction.json": "sha256:0fb6f98cecf7de2b3907b796d93ddd12c3e47c97f09207d8b570db54fc977bb6",
+    "world/v1/contract.py": "sha256:386b3524348b32f3f448929d54bc4ad65889ab1566bbac3c61ed843d2a663d4c",
+    "world/v1/episodes.jsonl": "sha256:0ec1715dbd06b2b13fe5d533d393150d1b372bb07e06caa58ad76f94412138fa",
+    "world/v1/implementation.py": "sha256:b322ce2fde0e05c4cd671ad6044ddf8927f82674a096df4c34ccd2821ecb3b6c",
+    "world/v1/roles.json": "sha256:755437d171b2fda9274d01f6af9b44b0d544e542f4011d6d8475205f8b477456",
+    "world/v1/sources.json": "sha256:c7041ab9d0f2810fef4a6de371bed6257aceadf08094c9585a9d695d1fa413c4",
+    "world/v1/tools.json": "sha256:61a0068b9f96011017766720c54ecb051420d46eb579f7c399bea0670196d049",
+    "world/v1/verifier.json": "sha256:09baee5874d6bbc2520a2b304a40123dcd0887d0aacc28f09903de5eb1028051"
+  },
+  "default_actor_role": "idmapping_client",
+  "episodes_path": "world/v1/episodes.jsonl",
+  "implementation": "world/v1/implementation.py:create_world",
+  "required_runtime_capabilities": [
+    "actors",
+    "role_scoped_tools",
+    "transactions",
+    "clock",
+    "scheduled_events"
+  ],
+  "roles_path": "world/v1/roles.json",
+  "schema_version": "datalox_world_bundle_v1",
+  "sources_path": "world/v1/sources.json",
+  "tools_path": "world/v1/tools.json",
+  "trajectory_paths": [],
+  "verifier_path": "world/v1/verifier.json",
+  "world_id": "uniprot_idmapping_v0"
+}

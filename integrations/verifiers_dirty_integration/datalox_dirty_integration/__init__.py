@@ -1,4 +1,4 @@
-"""Verifiers compatibility fixture for paired Datalox intervention experiments."""
+"""Verifiers fixture for paired Medusa read interventions and provider writes."""
 
 from __future__ import annotations
 

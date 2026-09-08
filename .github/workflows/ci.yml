@@ -123,7 +123,9 @@ jobs:
       - name: Install wheel into runner environment
         run: python -m pip install --disable-pip-version-check dist/*.whl
       - name: CLI smoke
-        run: datalox-gate --help
+        run: |
+          datalox-gate --help
+          datalox-author --help
       - name: Offline world smoke
         run: python scripts/demo/offline-world-smoke.py
 

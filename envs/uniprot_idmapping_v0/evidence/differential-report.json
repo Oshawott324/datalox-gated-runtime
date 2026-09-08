@@ -1,0 +1,294 @@
+{
+  "authored_schedule": "authored_logical_poll_schedule",
+  "cycles": 2,
+  "first_cycle_sha256": "sha256:c98edeb479e4dd04944dae411e456cb80e4bcafcdc45192e7f45acce74486fc3",
+  "grounded_observation_count": 6,
+  "private_receipt_verification": {
+    "claim_boundary": {
+      "derived": "response bytes, response headers, and manifest-backed synthetic GET identity",
+      "investigator_attested": "the admitted UniRef100 semantic POST identity; raw HTTP request bytes were not retained",
+      "retained_unpromoted": "UniParc and ChEMBL response-only sessions"
+    },
+    "exact_receipts_present": true,
+    "receipt_count": 5,
+    "receipts": {
+      "async_live": {
+        "content_manifest_sha256": "sha256:51577dc74f16c74b9d9122397042cb04106a7df717839c00ff93b14f3c04d587",
+        "derived_response_facts": {
+          "duplicate_submit": {
+            "response_bytes_equal": true,
+            "same_job_id": true,
+            "status_code": 200
+          },
+          "pending_status": {
+            "job_status": "RUNNING",
+            "observation_count": 4,
+            "observed_at": [
+              "2026-09-02T13:46:40Z",
+              "2026-09-02T13:46:41Z",
+              "2026-09-02T13:46:41Z",
+              "2026-09-02T13:46:43Z"
+            ],
+            "status_code": 200
+          },
+          "submit": {
+            "job_id_shape": "non_empty_string",
+            "status_code": 200
+          },
+          "terminal_result": {
+            "item_keys": [
+              "from",
+              "to"
+            ],
+            "observed_at": "2026-09-02T13:48:12Z",
+            "result_count": 1,
+            "status_code": 200,
+            "to_keys": [
+              "commonTaxon",
+              "entryType",
+              "id",
+              "memberCount",
+              "memberIdTypes",
+              "members",
+              "name",
+              "organismCount",
+              "organisms",
+              "representativeMember",
+              "seedId",
+              "updated"
+            ],
+            "top_level_keys": [
+              "results"
+            ]
+          },
+          "terminal_status": {
+            "job_status": "FINISHED",
+            "location_template": "/idmapping/uniref/results/{same_job_id}",
+            "observed_at": "2026-09-02T13:46:44Z",
+            "status_code": 303
+          }
+        },
+        "file_count": 20,
+        "request_identity": {
+          "duplicate_relation": "investigator_attested_same_semantic_form_and_exact_identifier_set",
+          "manifest_sha256": "sha256:d4cf78b61ae013113f64d0ec63dac29a955d6ee4855e0a6d399442654f109009",
+          "raw_request_bytes_retained": false,
+          "request": {
+            "form": {
+              "from": "UniProtKB_AC-ID",
+              "ids": "identifier_set",
+              "to": "UniRef100"
+            },
+            "identifier_set": {
+              "line_count": 500,
+              "sha256": "sha256:c900711cf6571ea3415562c7ad52c0aa06302ad5bb5a16b8052b7b7a82d69e86",
+              "size": 3508
+            },
+            "method": "POST",
+            "path": "/idmapping/run"
+          },
+          "response_bytes_equal": true,
+          "signed_contemporaneous_receipt": false,
+          "status": "verified_unsigned_post_hoc_attestation"
+        }
+      },
+      "invalid_duplicate_live": {
+        "content_manifest_sha256": "sha256:3eb1621b9c39377e76a5d9200462c5351b852cdebb96dc3bc5ff5e8501233284",
+        "file_count": 12,
+        "promotion_status": "retained_unpromoted",
+        "reason": "exact_request_identity_not_retained"
+      },
+      "preterminal": {
+        "content_manifest_sha256": "sha256:87a178420674fe1e773577589cb0dc75c0b7695d71d17fcfa07df3906f12e41b",
+        "derived_response_facts": {
+          "preterminal_failure_status_code": 404,
+          "submit_status_code": 200,
+          "terminal_location_template": "/idmapping/uniparc/results/{same_job_id}",
+          "terminal_status_code": 303
+        },
+        "file_count": 12,
+        "request_association": "investigator_attested_not_derived_from_retained_response_bytes"
+      },
+      "status_failure": {
+        "deployment_date_header": "02-September-2026",
+        "exact_request_path_verified": true,
+        "manifest_sha256": "sha256:0662582414c8eaea73b2ce20f3d7776d8b13041ab00285bcf6b2c9e53ace5a8b",
+        "observed_at": "2026-09-02T15:35:24Z",
+        "operation": "GET /idmapping/status/{unknown_job_id}",
+        "query": null,
+        "raw_file_count": 2,
+        "release_header": "2026_03",
+        "response_shape": {
+          "json_type": "object",
+          "top_level_keys": [
+            "messages",
+            "url"
+          ],
+          "top_level_value_types": {
+            "messages": "list",
+            "url": "str"
+          }
+        },
+        "status_code": 404
+      },
+      "uniref_result_failure": {
+        "deployment_date_header": "02-September-2026",
+        "exact_request_path_verified": true,
+        "manifest_sha256": "sha256:59e0368b1cd3815060a73880f3c0e27de336c7c66e3277a2979771e2ff02f85b",
+        "observed_at": "2026-09-02T15:57:34Z",
+        "operation": "GET /idmapping/uniref/results/{unknown_job_id}",
+        "query": {
+          "format": "json",
+          "size": "1"
+        },
+        "raw_file_count": 2,
+        "release_header": "2026_03",
+        "response_shape": {
+          "json_type": "object",
+          "top_level_keys": [
+            "messages",
+            "url"
+          ],
+          "top_level_value_types": {
+            "messages": "list",
+            "url": "str"
+          }
+        },
+        "status_code": 404
+      }
+    },
+    "status": "verified"
+  },
+  "provider_admission_sha256": "sha256:bf79f386ffcbe48f655cf8fb379be4b73a6ba9535b7892671caa9892d4005244",
+  "provider_id": "uniprot",
+  "provider_release": "2026_03",
+  "provider_reset_claimed": false,
+  "provider_runtime_sha256": "sha256:27e35f855bf3549600b66ad32ce3e80d3bff21d0877f99cca0b8f0fd35972625",
+  "provider_wall_clock_claimed": false,
+  "schema_version": "datalox_provider_temporal_differential_v1",
+  "second_cycle_sha256": "sha256:c98edeb479e4dd04944dae411e456cb80e4bcafcdc45192e7f45acce74486fc3",
+  "source_observation_sha256s": {
+    "lifecycle": "sha256:02fc0430aa4ec0c84756bc19707356f1d4ebb7f1d34a5ce25c45708a335260ad",
+    "status_failure": "sha256:78a884529d8ba78c279d24b845ee38772015fc6861c6b2e14ea2643fa348b2b7",
+    "uniref_result_failure": "sha256:4a18b15bf500c363c6ec2f18c34281ee80f2b0a9898b48d54e289cb4e93044ee"
+  },
+  "status": "passed",
+  "steps": [
+    {
+      "atomic_rejection": true,
+      "error_shape": [
+        "messages"
+      ],
+      "provider_time": "2026-09-02T00:00:00+00:00",
+      "source": "G1_authored_completeness",
+      "state_changed": false,
+      "status_code": 400,
+      "step": "authored_invalid_source"
+    },
+    {
+      "provider_time": "2026-09-02T00:00:00+00:00",
+      "relation": "job_id_returned",
+      "state_changed": true,
+      "status_code": 200,
+      "step": "submit_job"
+    },
+    {
+      "job_status": "RUNNING",
+      "provider_time": "2026-09-02T00:00:00+00:00",
+      "state_changed": false,
+      "status_code": 200,
+      "step": "pending_status"
+    },
+    {
+      "error_shape": {
+        "keys": [
+          "messages",
+          "url"
+        ],
+        "messages_type": "list"
+      },
+      "provider_time": "2026-09-02T00:00:00+00:00",
+      "state_changed": false,
+      "status_code": 404,
+      "step": "unknown_status"
+    },
+    {
+      "error_shape": {
+        "keys": [
+          "messages",
+          "url"
+        ],
+        "messages_type": "list",
+        "url_type": "str"
+      },
+      "provider_time": "2026-09-02T00:00:00+00:00",
+      "state_changed": false,
+      "status_code": 404,
+      "step": "unknown_uniref_result"
+    },
+    {
+      "current_time": "2026-09-02T00:01:00+00:00",
+      "delivered_event_count": 1,
+      "previous_time": "2026-09-02T00:00:00+00:00",
+      "source": "authored_logical_poll_schedule",
+      "state_changed": true,
+      "step": "authored_logical_poll_schedule"
+    },
+    {
+      "location_relation": true,
+      "provider_time": "2026-09-02T00:01:00+00:00",
+      "state_changed": false,
+      "status_code": 303,
+      "step": "terminal_status"
+    },
+    {
+      "provider_time": "2026-09-02T00:01:00+00:00",
+      "result_shape": {
+        "from_type": "str",
+        "item_keys": [
+          "from",
+          "to"
+        ],
+        "result_count": 1,
+        "results_type": "list",
+        "to_keys": [
+          "commonTaxon",
+          "entryType",
+          "id",
+          "memberCount",
+          "memberIdTypes",
+          "members",
+          "name",
+          "organismCount",
+          "organisms",
+          "representativeMember",
+          "seedId",
+          "updated"
+        ],
+        "to_type": "dict",
+        "top_level_keys": [
+          "results"
+        ]
+      },
+      "state_changed": false,
+      "status_code": 200,
+      "step": "terminal_results"
+    },
+    {
+      "provider_time": "2026-09-02T00:01:00+00:00",
+      "same_job_id": true,
+      "source": "G1_authored_completeness",
+      "state_changed": false,
+      "state_unchanged": true,
+      "status_code": 200,
+      "step": "authored_duplicate_submit"
+    },
+    {
+      "provider_time": "2026-09-02T00:01:00+00:00",
+      "same_result": true,
+      "state_changed": false,
+      "status_code": 200,
+      "step": "stable_terminal_results"
+    }
+  ]
+}

@@ -1,0 +1,346 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.ai/schemas/verifiers-dirty-calibration-v1.schema.json",
+  "title": "Datalox Verifiers dirty-integration calibration report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment",
+    "provider_claim",
+    "scope",
+    "protocol",
+    "profiles",
+    "action_counts",
+    "applied_count",
+    "observation_changed_count",
+    "observational_noop_count",
+    "pair_corpus_semantic_sha256",
+    "branch_coverage",
+    "quota_coverage",
+    "verifier_calibration",
+    "quality_discrimination",
+    "acceptance",
+    "report_semantic_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_dirty_integration_calibration_v1"},
+    "experiment": {"const": "issue_6_v1_read_intervention_calibration"},
+    "provider_claim": {"const": "g1_source_grounded_synthetic_fixture"},
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["interventions", "negative_write", "excluded"],
+      "properties": {
+        "interventions": {"const": "read_only_v1"},
+        "negative_write": {"const": "existing_modeled_invalid_quantity_only"},
+        "excluded": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "write_timeout"},
+            {"const": "unknown_write_completion"}
+          ],
+          "items": false
+        }
+      }
+    },
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profiles",
+        "seed_start",
+        "seed_count",
+        "pair_count",
+        "only_paired_variable",
+        "client",
+        "aggregate_scope"
+      ],
+      "properties": {
+        "profiles": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "clean"},
+            {"const": "realistic"},
+            {"const": "hostile"}
+          ],
+          "items": false
+        },
+        "seed_start": {"type": "integer", "minimum": 0},
+        "seed_count": {"type": "integer", "minimum": 1},
+        "pair_count": {"type": "integer", "minimum": 3},
+        "only_paired_variable": {"const": "intervention_enabled"},
+        "client": {"const": "model_free_provider_valid_careful_read_v1"},
+        "aggregate_scope": {"const": "paired_on_sides_plus_targeted_quota_probes"}
+      }
+    },
+    "profiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["clean", "realistic", "hostile"],
+      "properties": {
+        "clean": {"$ref": "#/$defs/profileReport"},
+        "realistic": {"$ref": "#/$defs/profileReport"},
+        "hostile": {"$ref": "#/$defs/profileReport"}
+      }
+    },
+    "action_counts": {"$ref": "#/$defs/countMap"},
+    "applied_count": {"type": "integer", "minimum": 0},
+    "observation_changed_count": {"type": "integer", "minimum": 0},
+    "observational_noop_count": {"type": "integer", "minimum": 0},
+    "pair_corpus_semantic_sha256": {"$ref": "#/$defs/sha256"},
+    "branch_coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["json_type_drift", "repeat_page", "quota_response"],
+      "properties": {
+        "json_type_drift": {"type": "boolean"},
+        "repeat_page": {"type": "boolean"},
+        "quota_response": {"type": "boolean"}
+      }
+    },
+    "quota_coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["realistic", "hostile"],
+      "properties": {
+        "realistic": {"$ref": "#/$defs/quotaCase"},
+        "hostile": {"$ref": "#/$defs/quotaCase"}
+      }
+    },
+    "verifier_calibration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cases", "false_acceptance_count", "false_rejection_count"],
+      "properties": {
+        "cases": {
+          "type": "array",
+          "minItems": 4,
+          "items": {"$ref": "#/$defs/validationCase"}
+        },
+        "false_acceptance_count": {"type": "integer", "minimum": 0},
+        "false_rejection_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "quality_discrimination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "passed",
+        "minimum_material_delta",
+        "observed_delta",
+        "efficient",
+        "redundant"
+      ],
+      "properties": {
+        "passed": {"type": "boolean"},
+        "minimum_material_delta": {"type": "number", "minimum": 0},
+        "observed_delta": {"type": "number"},
+        "efficient": {"$ref": "#/$defs/qualityCase"},
+        "redundant": {"$ref": "#/$defs/qualityCase"}
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "all_configured_branches_reached",
+        "all_pairs_independently_audited",
+        "false_acceptance_count",
+        "false_rejection_count",
+        "quality_discrimination_passed",
+        "passed"
+      ],
+      "properties": {
+        "all_configured_branches_reached": {"type": "boolean"},
+        "all_pairs_independently_audited": {"type": "boolean"},
+        "false_acceptance_count": {"type": "integer", "minimum": 0},
+        "false_rejection_count": {"type": "integer", "minimum": 0},
+        "quality_discrimination_passed": {"type": "boolean"},
+        "passed": {"type": "boolean"}
+      }
+    },
+    "report_semantic_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "countMap": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
+    "scoreRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum", "maximum"],
+      "properties": {
+        "minimum": {"type": "number", "minimum": 0, "maximum": 1},
+        "maximum": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "profileReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dimensions",
+        "pair_count",
+        "off_task_passes",
+        "on_task_passes",
+        "off_request_discipline_range",
+        "on_request_discipline_range",
+        "action_counts",
+        "applied_count",
+        "observation_changed_count",
+        "observational_noop_count",
+        "semantic_sha256"
+      ],
+      "properties": {
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repeat_page_rate", "count_type_drift_rate", "request_quota"],
+          "properties": {
+            "repeat_page_rate": {"type": "number", "minimum": 0, "maximum": 1},
+            "count_type_drift_rate": {"type": "number", "minimum": 0, "maximum": 1},
+            "request_quota": {"type": ["integer", "null"], "minimum": 1}
+          }
+        },
+        "pair_count": {"type": "integer", "minimum": 1},
+        "off_task_passes": {"type": "integer", "minimum": 0},
+        "on_task_passes": {"type": "integer", "minimum": 0},
+        "off_request_discipline_range": {"$ref": "#/$defs/scoreRange"},
+        "on_request_discipline_range": {"$ref": "#/$defs/scoreRange"},
+        "action_counts": {"$ref": "#/$defs/countMap"},
+        "applied_count": {"type": "integer", "minimum": 0},
+        "observation_changed_count": {"type": "integer", "minimum": 0},
+        "observational_noop_count": {"type": "integer", "minimum": 0},
+        "semantic_sha256": {"$ref": "#/$defs/sha256"},
+        "targeted_quota": {"$ref": "#/$defs/quotaCase"}
+      }
+    },
+    "quotaCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "passed",
+        "profile",
+        "declared_request_quota",
+        "expected_logical_request_index",
+        "observed",
+        "trace_semantic_sha256"
+      ],
+      "properties": {
+        "passed": {"type": "boolean"},
+        "profile": {"enum": ["realistic", "hostile"]},
+        "declared_request_quota": {"type": "integer", "minimum": 1},
+        "expected_logical_request_index": {"type": "integer", "minimum": 2},
+        "observed": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "logical_request_index",
+            "stage",
+            "base_invoked",
+            "status_code",
+            "decision_kind",
+            "action",
+            "observation_changed"
+          ],
+          "properties": {
+            "logical_request_index": {"type": "integer", "minimum": 2},
+            "stage": {"const": "pre_dispatch"},
+            "base_invoked": {"const": false},
+            "status_code": {"const": 429},
+            "decision_kind": {"const": "quota_response"},
+            "action": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "response"],
+              "properties": {
+                "kind": {"const": "quota_response"},
+                "response": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["status_code", "headers", "body"],
+                  "properties": {
+                    "status_code": {"const": 429},
+                    "headers": {
+                      "type": "object",
+                      "additionalProperties": {"type": "string"}
+                    },
+                    "body": {"type": "object"}
+                  }
+                }
+              }
+            },
+            "observation_changed": {"const": true}
+          }
+        },
+        "trace_semantic_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "requestDiscipline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "score",
+        "minimum_call_count",
+        "actual_call_count",
+        "failed_call_count",
+        "efficiency",
+        "failure_factor",
+        "reason_codes"
+      ],
+      "properties": {
+        "score": {"type": "number", "minimum": 0, "maximum": 1},
+        "minimum_call_count": {"type": ["integer", "null"], "minimum": 1},
+        "actual_call_count": {"type": "integer", "minimum": 0},
+        "failed_call_count": {"type": "integer", "minimum": 0},
+        "efficiency": {"type": "number", "minimum": 0, "maximum": 1},
+        "failure_factor": {"type": "number", "minimum": 0, "maximum": 1},
+        "reason_codes": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "validationCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_id",
+        "expected_pass",
+        "observed_pass",
+        "intended_failed_check",
+        "intended_check_failed",
+        "failed_check_ids",
+        "task_correctness",
+        "request_discipline",
+        "trace_semantic_sha256"
+      ],
+      "properties": {
+        "case_id": {"type": "string", "minLength": 1},
+        "expected_pass": {"type": "boolean"},
+        "observed_pass": {"type": "boolean"},
+        "intended_failed_check": {"type": ["string", "null"]},
+        "intended_check_failed": {"type": ["boolean", "null"]},
+        "failed_check_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "task_correctness": {"type": "number", "minimum": 0, "maximum": 1},
+        "request_discipline": {"$ref": "#/$defs/requestDiscipline"},
+        "trace_semantic_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "qualityCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strategy",
+        "task_correctness",
+        "request_discipline",
+        "trace_semantic_sha256"
+      ],
+      "properties": {
+        "strategy": {"type": "string", "minLength": 1},
+        "task_correctness": {"type": "number", "minimum": 0, "maximum": 1},
+        "request_discipline": {"$ref": "#/$defs/requestDiscipline"},
+        "trace_semantic_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

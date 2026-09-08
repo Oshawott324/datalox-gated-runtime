@@ -9,10 +9,11 @@ import os
 import shutil
 import tarfile
 import tempfile
+from collections.abc import Mapping
 from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
-from typing import Any, BinaryIO, Mapping
+from typing import Any, BinaryIO
 
 from datalox_gated_runtime.json_digest import canonical_json_bytes, canonical_json_sha256
 from datalox_gated_runtime.provider_runtime.admission import load_provider_admission
@@ -23,6 +24,10 @@ from datalox_gated_runtime.provider_runtime.bundle import (
     load_provider_runtime_bundle,
 )
 from datalox_gated_runtime.provider_runtime.errors import ProviderRuntimeError
+from datalox_gated_runtime.provider_runtime.state_profile import (
+    load_provider_state_admission,
+    load_provider_state_profile,
+)
 
 PROVIDER_RELEASE_SCHEMA_VERSION = "datalox_provider_release_v1"
 OCI_IMAGE_LAYOUT_VERSION = "1.0.0"
@@ -72,10 +77,16 @@ _PROFILE_FIELDS = frozenset(
         "layer",
         "provider_runtime_sha256",
         "provider_admission_sha256",
+        "state_profile_sha256",
+        "state_admission_sha256",
         "operation_claims_sha256",
         "distribution_label",
     }
 )
+_LEGACY_PROFILE_FIELDS = _PROFILE_FIELDS - {
+    "state_profile_sha256",
+    "state_admission_sha256",
+}
 _DESCRIPTOR_FIELDS = frozenset({"mediaType", "digest", "size"})
 
 
@@ -84,6 +95,8 @@ class ProviderReleaseProfileInput:
     profile_id: str
     bundle_dir: Path
     admission_path: Path
+    state_profile_path: Path | None = None
+    state_admission_path: Path | None = None
 
 
 @dataclass(frozen=True)
@@ -93,6 +106,8 @@ class ProviderReleaseProfile:
     layer: dict[str, Any]
     provider_runtime_sha256: str
     provider_admission_sha256: str
+    state_profile_sha256: str | None
+    state_admission_sha256: str | None
     operation_claims_sha256: str
     distribution_label: str
 
@@ -119,6 +134,8 @@ class MaterializedProviderProfile:
     root: Path
     bundle_dir: Path
     admission_path: Path
+    state_profile_path: Path | None
+    state_admission_path: Path | None
     release: LoadedProviderRelease
     profile: ProviderReleaseProfile
 
@@ -130,6 +147,12 @@ class _ValidatedProfileInput:
     admission_path: Path
     admission: dict[str, Any]
     admission_sha256: str
+    state_profile_path: Path | None
+    state_profile: dict[str, Any] | None
+    state_profile_sha256: str | None
+    state_admission_path: Path | None
+    state_admission: dict[str, Any] | None
+    state_admission_sha256: str | None
     evidence_sources: tuple[dict[str, Any], ...]
     operations: tuple[dict[str, Any], ...]
     invariants: tuple[dict[str, Any], ...]
@@ -179,19 +202,21 @@ def build_provider_release(
             layer = _build_profile_layer(profile, layer_path)
             _install_blob_file(staged, layer, layer_path)
             layers.append(layer)
-            profile_configs.append(
-                {
-                    "profile_id": profile.profile_id,
-                    "reset_profile_id": "default",
-                    "layer": deepcopy(layer),
-                    "provider_runtime_sha256": _sha256_file(
-                        profile.bundle.root / "provider-runtime.json"
-                    ),
-                    "provider_admission_sha256": profile.admission_sha256,
-                    "operation_claims_sha256": profile.admission["operation_claims_sha256"],
-                    "distribution_label": profile.distribution_label,
-                }
-            )
+            profile_config = {
+                "profile_id": profile.profile_id,
+                "reset_profile_id": "default",
+                "layer": deepcopy(layer),
+                "provider_runtime_sha256": _sha256_file(
+                    profile.bundle.root / "provider-runtime.json"
+                ),
+                "provider_admission_sha256": profile.admission_sha256,
+                "operation_claims_sha256": profile.admission["operation_claims_sha256"],
+                "distribution_label": profile.distribution_label,
+            }
+            if profile.state_profile_sha256 is not None:
+                profile_config["state_profile_sha256"] = profile.state_profile_sha256
+                profile_config["state_admission_sha256"] = profile.state_admission_sha256
+            profile_configs.append(profile_config)
 
         evidence_sources = _release_evidence_sources(first.evidence_sources)
         operations = deepcopy(list(first.operations))
@@ -258,8 +283,6 @@ def build_provider_release(
             validity_marker="index.json",
             exists_code="provider_release_output_exists",
         )
-    except BaseException:
-        raise
     finally:
         shutil.rmtree(scratch, ignore_errors=True)
     return load_provider_release(destination)
@@ -381,6 +404,14 @@ def materialize_provider_release_profile(
         root=root,
         bundle_dir=root / "runtime",
         admission_path=root / "provider-admission.json",
+        state_profile_path=(
+            root / "state" / "profile.json" if profile.state_profile_sha256 is not None else None
+        ),
+        state_admission_path=(
+            root / "state" / "admission.json"
+            if profile.state_admission_sha256 is not None
+            else None
+        ),
         release=loaded,
         profile=profile,
     )
@@ -437,6 +468,12 @@ def load_provider_release_from_descriptor(
 
 def _validate_profile_input(item: ProviderReleaseProfileInput) -> _ValidatedProfileInput:
     profile_id = _identifier(item.profile_id, field="profile_id")
+    if (item.state_profile_path is None) != (item.state_admission_path is None):
+        _fail(
+            "provider_release_state_assets_incomplete",
+            "A state profile and its derived admission must be supplied together.",
+            profile_id=profile_id,
+        )
     bundle = load_provider_runtime_bundle(item.bundle_dir)
     admission_path = _resolve_regular_file(
         item.admission_path, code="provider_release_admission_unreadable"
@@ -479,6 +516,55 @@ def _validate_profile_input(item: ProviderReleaseProfileInput) -> _ValidatedProf
         )
     )
     labels = [operation["rights"]["distribution_label"] for operation in admission["operations"]]
+    state_profile_path: Path | None = None
+    state_profile: dict[str, Any] | None = None
+    state_profile_sha256: str | None = None
+    state_admission_path: Path | None = None
+    state_admission: dict[str, Any] | None = None
+    state_admission_sha256: str | None = None
+    if item.state_profile_path is not None and item.state_admission_path is not None:
+        state_profile_path = _resolve_regular_file(
+            item.state_profile_path,
+            code="provider_release_state_profile_unreadable",
+        )
+        state_admission_path = _resolve_regular_file(
+            item.state_admission_path,
+            code="provider_release_state_admission_unreadable",
+        )
+        state_profile = load_provider_state_profile(state_profile_path)
+        state_admission = load_provider_state_admission(state_admission_path)
+        state_profile_sha256 = _sha256_file(state_profile_path)
+        state_admission_sha256 = _sha256_file(state_admission_path)
+        base_seed_path = _resolve_state_asset(
+            state_profile_path.parent,
+            state_profile["construction"]["base_seed_path"],
+        )
+        construction_trace_path = _resolve_state_asset(
+            state_profile_path.parent,
+            state_profile["construction"]["trace_path"],
+        )
+        if (
+            state_profile["profile_id"] != profile_id
+            or state_profile["provider_id"] != bundle.manifest.provider_id
+            or state_profile["bundle_version"] != bundle.manifest.bundle_version
+            or state_admission["profile_id"] != profile_id
+            or state_admission["provider_id"] != bundle.manifest.provider_id
+            or state_admission["bundle_version"] != bundle.manifest.bundle_version
+            or state_admission["provider_runtime_sha256"] != runtime_sha256
+            or state_admission["profile_sha256"] != state_profile_sha256
+            or state_admission["seed_sha256"] != state_profile["seed_sha256"]
+            or state_admission["construction_trace_sha256"]
+            != state_profile["construction"]["trace_sha256"]
+            or _sha256_file(base_seed_path) != state_profile["construction"]["base_seed_sha256"]
+            or _sha256_file(construction_trace_path)
+            != state_profile["construction"]["trace_sha256"]
+        ):
+            _fail(
+                "provider_release_state_binding_invalid",
+                "State profile admission does not bind the selected provider profile.",
+                profile_id=profile_id,
+            )
+        labels.append(state_profile["distribution_label"])
     distribution = max(labels, key=_DISTRIBUTION_ORDER.__getitem__)
     return _ValidatedProfileInput(
         profile_id=profile_id,
@@ -486,6 +572,12 @@ def _validate_profile_input(item: ProviderReleaseProfileInput) -> _ValidatedProf
         admission_path=admission_path,
         admission=admission,
         admission_sha256=_sha256_file(admission_path),
+        state_profile_path=state_profile_path,
+        state_profile=state_profile,
+        state_profile_sha256=state_profile_sha256,
+        state_admission_path=state_admission_path,
+        state_admission=state_admission,
+        state_admission_sha256=state_admission_sha256,
         evidence_sources=evidence_sources,
         operations=operations,
         invariants=invariants,
@@ -623,6 +715,35 @@ def _build_profile_layer(profile: _ValidatedProfileInput, output_path: Path) -> 
                 path=str(path),
             )
     entries["provider-admission.json"] = (False, profile.admission_path)
+    if (
+        profile.state_profile_path is not None
+        and profile.state_admission_path is not None
+        and profile.state_profile is not None
+    ):
+        entries["state"] = (True, None)
+        state_files = {
+            "profile.json": profile.state_profile_path,
+            "admission.json": profile.state_admission_path,
+        }
+        for field in ("base_seed_path", "trace_path"):
+            relative = profile.state_profile["construction"][field]
+            if relative in state_files:
+                _fail(
+                    "provider_release_state_asset_collision",
+                    "State construction assets collide with reserved package paths.",
+                    path=relative,
+                )
+            state_files[relative] = _resolve_state_asset(
+                profile.state_profile_path.parent,
+                relative,
+            )
+        for relative, source in state_files.items():
+            archive_name = f"state/{relative}"
+            parent = PurePosixPath(archive_name).parent
+            while parent.as_posix() != ".":
+                entries[parent.as_posix()] = (True, None)
+                parent = parent.parent
+            entries[archive_name] = (False, source)
     if len(entries) > PROVIDER_RELEASE_MAX_TAR_MEMBERS:
         _fail(
             "provider_release_member_limit_exceeded",
@@ -659,30 +780,29 @@ def _build_profile_layer(profile: _ValidatedProfileInput, output_path: Path) -> 
             )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     try:
-        with output_path.open("xb") as output:
-            archive = tarfile.open(fileobj=output, mode="w", format=tarfile.GNU_FORMAT)
-            try:
-                for name in sorted(entries):
-                    is_dir, source = entries[name]
-                    info = tarfile.TarInfo(f"{name}/" if is_dir else name)
-                    info.mtime = 0
-                    info.uid = 0
-                    info.gid = 0
-                    info.uname = ""
-                    info.gname = ""
-                    if is_dir:
-                        info.type = tarfile.DIRTYPE
-                        info.mode = 0o755
-                        archive.addfile(info)
-                        continue
-                    info.mode = 0o644
-                    if not isinstance(source, Path):
-                        raise TypeError("regular profile entries require a source path")
-                    info.size = source.stat().st_size
-                    with source.open("rb") as source_handle:
-                        archive.addfile(info, source_handle)
-            finally:
-                archive.close()
+        with (
+            output_path.open("xb") as output,
+            tarfile.open(fileobj=output, mode="w", format=tarfile.GNU_FORMAT) as archive,
+        ):
+            for name in sorted(entries):
+                is_dir, source = entries[name]
+                info = tarfile.TarInfo(f"{name}/" if is_dir else name)
+                info.mtime = 0
+                info.uid = 0
+                info.gid = 0
+                info.uname = ""
+                info.gname = ""
+                if is_dir:
+                    info.type = tarfile.DIRTYPE
+                    info.mode = 0o755
+                    archive.addfile(info)
+                    continue
+                info.mode = 0o644
+                if not isinstance(source, Path):
+                    raise TypeError("regular profile entries require a source path")
+                info.size = source.stat().st_size
+                with source.open("rb") as source_handle:
+                    archive.addfile(info, source_handle)
     except (OSError, tarfile.TarError, ValueError) as exc:
         _fail("provider_release_layer_build_failed", f"Could not build provider layer: {exc}.")
     return _descriptor_file(PROVIDER_RELEASE_PROFILE_MEDIA_TYPE, output_path)
@@ -750,7 +870,10 @@ def _validate_release_config(
     profiles: list[ProviderReleaseProfile] = []
     profile_ids: set[str] = set()
     for index, (raw, layer) in enumerate(zip(raw_profiles, layers, strict=True)):
-        if not isinstance(raw, dict) or set(raw) != _PROFILE_FIELDS:
+        if not isinstance(raw, dict) or set(raw) not in {
+            _PROFILE_FIELDS,
+            _LEGACY_PROFILE_FIELDS,
+        }:
             _fail("provider_release_config_invalid", f"Profile {index} fields are invalid.")
         profile_id = _identifier(raw["profile_id"], field="profile_id")
         if profile_id in profile_ids:
@@ -764,6 +887,16 @@ def _validate_release_config(
             "operation_claims_sha256",
         ):
             _sha256(raw[field], field=field)
+        state_profile_sha256 = raw.get("state_profile_sha256")
+        state_admission_sha256 = raw.get("state_admission_sha256")
+        if (state_profile_sha256 is None) != (state_admission_sha256 is None):
+            _fail(
+                "provider_release_profile_binding_invalid",
+                "State profile and admission digests must both be present or both be null.",
+            )
+        if state_profile_sha256 is not None and state_admission_sha256 is not None:
+            _sha256(state_profile_sha256, field="state_profile_sha256")
+            _sha256(state_admission_sha256, field="state_admission_sha256")
         if raw["operation_claims_sha256"] != config["operation_claims_sha256"]:
             _fail(
                 "provider_release_profile_binding_invalid",
@@ -777,6 +910,8 @@ def _validate_release_config(
                 layer=deepcopy(layer),
                 provider_runtime_sha256=raw["provider_runtime_sha256"],
                 provider_admission_sha256=raw["provider_admission_sha256"],
+                state_profile_sha256=state_profile_sha256,
+                state_admission_sha256=state_admission_sha256,
                 operation_claims_sha256=raw["operation_claims_sha256"],
                 distribution_label=label,
             )
@@ -861,9 +996,9 @@ def _extract_profile_archive(source_stream: BinaryIO, destination: Path) -> None
                         "Provider layer metadata is not normalized.",
                         path=name,
                     )
-                if name != "provider-admission.json" and not (
-                    name == "runtime" or name.startswith("runtime/")
-                ):
+                if name not in {
+                    "provider-admission.json",
+                } and not (name in {"runtime", "state"} or name.startswith(("runtime/", "state/"))):
                     _fail(
                         "provider_release_layer_entry_forbidden",
                         "Provider layer contains an unexpected path.",
@@ -917,7 +1052,10 @@ def _extract_profile_archive(source_stream: BinaryIO, destination: Path) -> None
 def _validate_materialized_profile(
     release: LoadedProviderRelease, profile: ProviderReleaseProfile, root: Path
 ) -> None:
-    if set(path.name for path in root.iterdir()) != {"runtime", "provider-admission.json"}:
+    expected_assets = {"runtime", "provider-admission.json"}
+    if profile.state_profile_sha256 is not None:
+        expected_assets.add("state")
+    if {path.name for path in root.iterdir()} != expected_assets:
         _fail("provider_release_layer_invalid", "Materialized provider layer has extra assets.")
     bundle = load_provider_runtime_bundle(root / "runtime")
     admission_path = root / "provider-admission.json"
@@ -970,6 +1108,76 @@ def _validate_materialized_profile(
             "Materialized receipt predicates do not match the release.",
         )
     labels = [operation["rights"]["distribution_label"] for operation in admission["operations"]]
+    if profile.state_profile_sha256 is not None:
+        state_root = root / "state"
+        state_profile_path = state_root / "profile.json"
+        state_admission_path = state_root / "admission.json"
+        state_profile = load_provider_state_profile(state_profile_path)
+        state_admission = load_provider_state_admission(state_admission_path)
+        expected_state_files = {
+            "profile.json",
+            "admission.json",
+            state_profile["construction"]["base_seed_path"],
+            state_profile["construction"]["trace_path"],
+        }
+        actual_state_files = {
+            path.relative_to(state_root).as_posix()
+            for path in state_root.rglob("*")
+            if path.is_file()
+        }
+        expected_state_directories = {
+            parent.as_posix()
+            for relative in expected_state_files
+            for parent in PurePosixPath(relative).parents
+            if parent.as_posix() != "."
+        }
+        actual_state_directories = {
+            path.relative_to(state_root).as_posix()
+            for path in state_root.rglob("*")
+            if path.is_dir()
+        }
+        if (
+            actual_state_files != expected_state_files
+            or actual_state_directories != expected_state_directories
+        ):
+            _fail(
+                "provider_release_materialized_state_assets_invalid",
+                "Materialized state evidence tree differs from its profile declaration.",
+                profile_id=profile.profile_id,
+            )
+        base_seed_path = _resolve_state_asset(
+            state_root,
+            state_profile["construction"]["base_seed_path"],
+        )
+        construction_trace_path = _resolve_state_asset(
+            state_root,
+            state_profile["construction"]["trace_path"],
+        )
+        if (
+            profile.state_admission_sha256 is None
+            or _sha256_file(state_profile_path) != profile.state_profile_sha256
+            or _sha256_file(state_admission_path) != profile.state_admission_sha256
+            or state_profile["profile_id"] != profile.profile_id
+            or state_admission["profile_id"] != profile.profile_id
+            or state_profile["provider_id"] != release.provider_id
+            or state_admission["provider_id"] != release.provider_id
+            or state_profile["bundle_version"] != release.config["bundle_version"]
+            or state_admission["bundle_version"] != release.config["bundle_version"]
+            or state_admission["provider_runtime_sha256"] != profile.provider_runtime_sha256
+            or state_admission["profile_sha256"] != profile.state_profile_sha256
+            or state_admission["seed_sha256"] != state_profile["seed_sha256"]
+            or state_admission["construction_trace_sha256"]
+            != state_profile["construction"]["trace_sha256"]
+            or _sha256_file(base_seed_path) != state_profile["construction"]["base_seed_sha256"]
+            or _sha256_file(construction_trace_path)
+            != state_profile["construction"]["trace_sha256"]
+        ):
+            _fail(
+                "provider_release_materialized_state_binding_invalid",
+                "Materialized state assets do not match the selected profile.",
+                profile_id=profile.profile_id,
+            )
+        labels.append(state_profile["distribution_label"])
     if max(labels, key=_DISTRIBUTION_ORDER.__getitem__) != profile.distribution_label:
         _fail(
             "provider_release_materialized_rights_invalid",
@@ -1247,7 +1455,7 @@ def _fsync_directory(path: Path) -> None:
 def _safe_tar_name(value: str) -> str:
     if not value or "\\" in value:
         _fail("provider_release_layer_path_invalid", "Provider layer path is invalid.")
-    normalized = value[:-1] if value.endswith("/") else value
+    normalized = value.removesuffix("/")
     parsed = PurePosixPath(normalized)
     if (
         not normalized
@@ -1316,6 +1524,24 @@ def _resolve_regular_file(path: Path, *, code: str) -> Path:
     if not resolved.is_file():
         _fail(code, "Provider release input must be a regular file.", path=str(resolved))
     return resolved
+
+
+def _resolve_state_asset(root: Path, relative: str) -> Path:
+    safe_relative = _safe_tar_name(relative)
+    resolved_root = _resolve_directory(root, code="provider_release_state_root_unreadable")
+    candidate = resolved_root.joinpath(*PurePosixPath(safe_relative).parts)
+    _reject_path_links(resolved_root, candidate)
+    asset = _resolve_regular_file(
+        candidate,
+        code="provider_release_state_asset_unreadable",
+    )
+    if not asset.is_relative_to(resolved_root):
+        _fail(
+            "provider_release_state_asset_escape",
+            "State profile asset leaves its declared source root.",
+            path=relative,
+        )
+    return asset
 
 
 def _ensure_output_absent(path: Path, *, code: str) -> None:

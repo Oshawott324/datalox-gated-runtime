@@ -21,6 +21,13 @@ authorities, wire codecs, provider-native identity policy, seed/reset
 contracts, and content hashes. It must run without a Datalox-owned task,
 episode, reward, or world verifier.
 
+A provider may also publish multiple task-independent State Profiles. Each
+profile keeps the provider's own state schema and binds one exact seed plus
+provenance, rights, lifecycle coverage, relationships, reachability,
+pagination, mutation, and reset-equivalence evidence. The trusted operator
+selects a profile; the agent never selects it. See
+[Provider State Profiles](provider-state-profiles.md).
+
 The runtime bundle is the deployment unit. It supports two migration protocols
 without duplicating existing behavior code:
 
@@ -36,10 +43,19 @@ trusted state/ledger export through the private control plane.
 
 An admitted runtime bundle becomes distributable as an immutable OCI Provider
 Release. The release binds exact operation claims, admission evidence,
-invariants, receipt predicates, rights, and one or more reset profiles. A local
+invariants, receipt predicates, rights, and one or more reset profiles. When a
+profile makes tenant-depth claims, the same OCI layer also carries its State
+Profile and derived State Admission. A local
 registry gives each release an immutable `provider@version` reference. A
 registry-backed Provider Set selects only release references and profiles; it
 does not accept caller-authored runtime paths.
+
+Admission alone does not establish provider equivalence. A complete observed
+behavior program earns that narrower claim only after the
+[Provider Differential and Drift](provider-differential-and-drift.md) runner
+executes it against the immutable release before reset, after mutation and
+reset, and in a fresh materialization. Later acquisitions create append-only
+assessments; they never rewrite a release in place.
 
 An ordered provider-set manifest can bind several runtime bundles to a
 parallel rollout pool without adding a task or reward:

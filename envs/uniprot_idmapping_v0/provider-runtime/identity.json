@@ -1,0 +1,6 @@
+{
+  "actor_id": "agent",
+  "actor_role": "idmapping_client",
+  "mode": "fixed",
+  "schema_version": "datalox_provider_identity_v1"
+}

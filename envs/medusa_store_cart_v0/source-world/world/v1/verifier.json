@@ -1,0 +1,10 @@
+{
+  "assertions": [
+    {"failure_code": "cart_created", "type": "implementation_check"},
+    {"failure_code": "line_item_quantity_set", "type": "implementation_check"},
+    {"failure_code": "no_denied_operations", "type": "implementation_check"}
+  ],
+  "reward_atoms": ["cart_created", "line_item_quantity_set", "no_denied_operations"],
+  "schema_version": "medusa_store_cart_verifier_v1",
+  "semantic_rubrics": []
+}

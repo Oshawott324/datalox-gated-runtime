@@ -1,0 +1,71 @@
+{
+  "id": "uniprot_idmapping_reference",
+  "metadata": {
+    "clock": "2026-09-02T00:00:00Z"
+  },
+  "state": {
+    "job_sequence": 0,
+    "jobs": {},
+    "mapping_fixture": {
+      "DATALOX_INPUT_A": {
+        "commonTaxon": {
+          "id": 9606,
+          "scientificName": "Synthetic taxon A"
+        },
+        "entryType": "UniRef100 cluster",
+        "id": "UniRef100_DATALOX_A",
+        "memberCount": 1,
+        "memberIdTypes": [
+          "UniProtKB ID"
+        ],
+        "members": [
+          {
+            "memberId": "DATALOX_MEMBER_A"
+          }
+        ],
+        "name": "Synthetic UniRef cluster A",
+        "organismCount": 1,
+        "organisms": [
+          {
+            "taxonId": 9606
+          }
+        ],
+        "representativeMember": {
+          "memberId": "DATALOX_MEMBER_A"
+        },
+        "seedId": "DATALOX_SEED_A",
+        "updated": "2026-09-02"
+      },
+      "DATALOX_INPUT_B": {
+        "commonTaxon": {
+          "id": 10090,
+          "scientificName": "Synthetic taxon B"
+        },
+        "entryType": "UniRef100 cluster",
+        "id": "UniRef100_DATALOX_B",
+        "memberCount": 1,
+        "memberIdTypes": [
+          "UniProtKB ID"
+        ],
+        "members": [
+          {
+            "memberId": "DATALOX_MEMBER_B"
+          }
+        ],
+        "name": "Synthetic UniRef cluster B",
+        "organismCount": 1,
+        "organisms": [
+          {
+            "taxonId": 10090
+          }
+        ],
+        "representativeMember": {
+          "memberId": "DATALOX_MEMBER_B"
+        },
+        "seedId": "DATALOX_SEED_B",
+        "updated": "2026-09-02"
+      }
+    },
+    "request_index": {}
+  }
+}

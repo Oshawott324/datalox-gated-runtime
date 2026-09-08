@@ -1,0 +1,55 @@
+{
+  "grounding_receipt": {
+    "manifest_sha256": "sha256:607552b29f4cb418bf5e04087543a55d8a1d0ce266dd7137fdd0e3ced7eacd41",
+    "record_count": 26,
+    "schema_version": "datalox_provider_grounding_receipt_v1",
+    "tree_sha256": "sha256:23a2b28e988dd9ba2fb7ceb03a8b735122e2a1ba563f9206b4fe9a21f770a8c9"
+  },
+  "observed_at": "2026-09-02T16:08:44Z",
+  "provider": "Medusa",
+  "provider_version": "2.16.0",
+  "reference_kind": "self_hosted_exact_release",
+  "retention": {
+    "cart_state_projection_snapshots_restricted": true,
+    "credential_commitments": true,
+    "credentials": false,
+    "provider_generated_identifiers_public": false,
+    "raw_request_bodies_restricted": true,
+    "raw_response_bodies_restricted": true,
+    "retained_material": "Public artifacts contain only self-authored factual assertions. The digest-bound restricted receipt retains exact request/response bodies and canonical state snapshots from the disposable reference.",
+    "tenant_identifiers": false
+  },
+  "schema_version": "datalox_medusa_store_cart_provenance_v1",
+  "source_artifacts": [
+    {
+      "path_role": "reference_backend_package",
+      "sha256": "sha256:e2c0b6f8e5a1fd5b1c8075e823a90412e72dfefad7d0eb2634b9e040f03c93dd"
+    },
+    {
+      "path_role": "reference_backend_lockfile",
+      "sha256": "sha256:e9f9e5a55568488aee1819dada473d2f9540484da339623e9d670fd161b4de85"
+    },
+    {
+      "path_role": "installed_medusa_runtime_package",
+      "sha256": "sha256:5c9c8f7833a99aa293318fb01072758a66de0b906d7e63c7afd469497775e4fd"
+    },
+    {
+      "path_role": "installed_store_carts_route",
+      "sha256": "sha256:920208e656d4cb5afe1861b905f9a95e45cfe37885c02e792a7ab777db0c9a40"
+    },
+    {
+      "path_role": "installed_store_cart_route",
+      "sha256": "sha256:ed97b69c3bb1b73ea7705691e9bfa308d4a441351747f9746c4b777d2cfaa780"
+    },
+    {
+      "path_role": "installed_store_line_item_add_route",
+      "sha256": "sha256:b5452c142529f95eee03b51f7203c4d151b029f988e36c20ee47f1ad24f84c0f"
+    },
+    {
+      "path_role": "installed_store_line_item_update_delete_route",
+      "sha256": "sha256:de846d6822c144105a0f5c2eedb78ab875cd55927a98508881fa45af74c631f8"
+    }
+  ],
+  "source_artifacts_verified_at": "2026-09-02T16:23:55Z",
+  "source_license": "MIT"
+}

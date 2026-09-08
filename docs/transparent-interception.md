@@ -253,11 +253,24 @@ token:
 GET  /health
 GET  /v1/providers/{provider_id}/export
 POST /v1/providers/{provider_id}/reset
+GET  /v1/providers/{provider_id}/time
+POST /v1/providers/{provider_id}/time/advance
 ```
 
 The evaluated agent receives neither that socket nor its token. A harness may
 reset between rollouts and pass the exported state and ledger to its own
 verifier without giving Datalox ownership of the task or reward.
+
+The two time routes exist only for an admitted provider runtime that declares
+both `clock` and `scheduled_events` and implements scheduled-event delivery.
+Time advance is a trusted controller action, never a provider-shaped agent
+operation. It advances only that provider's local clock, delivers admitted
+events transactionally, and validates provider invariants before commit.
+Event payloads remain private. Composition `composition_delivery_time` is a
+separate cross-provider delivery scheduler and never advances this clock.
+Async admission binds each pending/terminal transition to a controller advance
+and the exact expected event ID; an event kind may add a second check but can
+never substitute for that identity binding.
 
 ## Checked repository coverage
 

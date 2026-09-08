@@ -36,6 +36,22 @@ Datalox provides the provider-behavior substrate. External systems own the task,
 world, agent loop, planning, context, retries, memory, model routing, verifier,
 and reward.
 
+Provider state is not normalized into a universal Datalox business schema.
+Reusable tenant states are versioned as task-independent State Profiles around
+the provider's native objects. Their data origin, rights, lifecycle depth,
+relationships, reachable reads, pagination, mutation, and reset behavior are
+admitted separately from operation grounding. The operator selects the profile
+before the rollout; the task and agent cannot select it.
+
+Provider faithfulness is measured per complete behavior program. A
+digest-bound authorized acquisition is executed against an immutable Provider
+Release initially, after mutating and resetting the same instance, and in a
+fresh materialization. Later acquisitions distinguish source drift from a
+replica mismatch and publish append-only freshness assessments. This evidence
+loop is described in
+[Provider Differential and Drift](provider-differential-and-drift.md); it does
+not turn replay completion or provider count into a grounding claim.
+
 Rollout integrations preserve a strict
 [`three-plane information boundary`](rollout-information-boundary.md): visible
 task objectives and constraints arrive before interaction; provider and

@@ -140,6 +140,12 @@ def test_off_is_identity_and_records_same_counterfactual_decisions(tmp_path: Pat
     }
     assert exported["events"][1]["enabled"] is False
     assert exported["events"][1]["applied"] is False
+    assert exported["events"][1]["observation_changed"] is False
+    assert exported["events"][1]["base_sha256"] == exported["events"][1]["base"]["response_sha256"]
+    assert (
+        exported["events"][1]["delivered_sha256"]
+        == exported["events"][1]["delivered"]["response_sha256"]
+    )
     assert (
         exported["events"][1]["base"]["response_sha256"]
         == exported["events"][1]["delivered"]["response_sha256"]
@@ -189,12 +195,18 @@ def test_on_applies_repeat_and_quota_without_modifying_base_evidence(tmp_path: P
         ),
     }
     assert events[1]["base"]["response_sha256"] != events[1]["delivered"]["response_sha256"]
+    assert events[1]["base_sha256"] == events[1]["base"]["response_sha256"]
+    assert events[1]["delivered_sha256"] == events[1]["delivered"]["response_sha256"]
+    assert events[1]["observation_changed"] is True
     assert events[2]["base"] == {
         "invoked": False,
         "event_id": None,
         "response_sha256": None,
     }
     assert events[2]["stage"] == "pre_dispatch"
+    assert events[2]["base_sha256"] is None
+    assert events[2]["delivered_sha256"] == events[2]["delivered"]["response_sha256"]
+    assert events[2]["observation_changed"] is True
 
     off = DeliveryInterventionSession(
         _Policy(),

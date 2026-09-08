@@ -1,0 +1,7 @@
+{
+  "schema_version": "datalox_world_construction_v1",
+  "method": "code_first_provider_behavior",
+  "grounding": "The bounded UniRef100 job lifecycle follows route-bound factual observations from UniProt public production on 2026-09-02 plus separately retained unknown-status and unknown-UniRef-result reads. The UniRef100 request identity is bound to an exact retained identifier artifact by an unsigned post-hoc record; raw request bytes were not retained. UniParc premature-result and ChEMBL invalid-source facts remain unpromoted. The logical completion schedule, identifiers, mapping payload, and error text are self-authored.",
+  "non_admitted_executable_behavior": ["Local exact-repeat reuse is authored behavior informed by an unpromoted investigator-attested semantic duplicate relation; it is not admitted duplicate coverage."],
+  "task_ownership": "The source-world task is an integration fixture. The compiled provider runtime and OCI release exclude task and verifier assets."
+}

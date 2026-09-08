@@ -2,13 +2,24 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import re
+import stat
 import sys
+import tempfile
 from dataclasses import asdict
 from datetime import UTC, datetime
 from pathlib import Path
 
 from datalox_gated_runtime.auth import preflight_auth
-from datalox_gated_runtime.config import load_gate_config
+from datalox_gated_runtime.provider_differential.compiled_program import (
+    compiled_behavior_program_sha256,
+    load_compiled_behavior_program,
+    run_compiled_behavior_program,
+)
+from datalox_gated_runtime.behavior_harvest.engines.v3.contracts import (
+    BehaviorContractError,
+)
 from datalox_gated_runtime.composition.admission import (
     CompositionAdmissionError,
     validate_composition_authoring_inputs,
@@ -21,6 +32,7 @@ from datalox_gated_runtime.composition.pack import (
     CompositionPackError,
     load_composition_pack,
 )
+from datalox_gated_runtime.config import load_gate_config
 from datalox_gated_runtime.documented_provider import compile_documented_provider_env
 from datalox_gated_runtime.harness_adapters.envfactory import build_envfactory_projection
 from datalox_gated_runtime.http_server import create_app
@@ -46,6 +58,21 @@ from datalox_gated_runtime.provider_probe import (
     run_provider_auth_preflight,
     run_provider_probe,
 )
+from datalox_gated_runtime.provider_differential import (
+    DIFFERENTIAL_COMPARISON_PROFILE,
+    DifferentialProgramBinding,
+    DriftClassificationScope,
+    ProviderDifferentialError,
+    ProviderReleaseTarget,
+    compare_provider_drift,
+    derive_provider_drift_assessment,
+    load_differential_attestation,
+    load_grounding_measurement,
+    load_provider_drift_report,
+    run_provider_release_differential,
+    write_differential_attestation,
+)
+from datalox_gated_runtime.json_digest import canonical_json_bytes, canonical_json_sha256
 from datalox_gated_runtime.provider_runtime import (
     ProviderRuntimeError,
     admit_provider_runtime,
@@ -55,16 +82,20 @@ from datalox_gated_runtime.provider_runtime import (
 from datalox_gated_runtime.provider_runtime.registry import (
     FilesystemProviderReleaseRegistry,
 )
+from datalox_gated_runtime.provider_runtime.assessment_registry import (
+    FilesystemProviderAssessmentRegistry,
+    PublishedProviderAssessment,
+)
 from datalox_gated_runtime.provider_runtime.release import (
     ProviderReleaseProfileInput,
     build_provider_release,
 )
+from datalox_gated_runtime.rollout.composition import CompositionRolloutConfig
 from datalox_gated_runtime.rollout.docker import (
     DockerRolloutError,
     run_docker_rollout,
     run_docker_rollout_provider_set_v2,
 )
-from datalox_gated_runtime.rollout.composition import CompositionRolloutConfig
 from datalox_gated_runtime.rollout.pool import RolloutPool, RolloutPoolError, serve_rollout_pool
 from datalox_gated_runtime.rollout.provider_set import (
     ProviderReleaseSelection,
@@ -439,19 +470,22 @@ def _provider_probe_rollup(args: argparse.Namespace) -> int:
 def _provider_build_runtime(args: argparse.Namespace) -> int:
     try:
         if args.source_world:
-            if not args.episode_id:
-                raise ValueError("--episode-id is required with --source-world")
+            if bool(args.episode_id) == bool(args.seed_file):
+                raise ValueError(
+                    "select exactly one of --episode-id or --seed-file with --source-world"
+                )
             manifest = build_provider_runtime_from_world(
                 source_world_dir=Path(args.source_world),
                 output_dir=Path(args.out),
                 provider_id=args.provider_id,
                 authorities=tuple(args.authority),
                 episode_id=args.episode_id,
+                seed_path=(Path(args.seed_file) if args.seed_file else None),
                 identity_policy_path=(Path(args.identity_policy) if args.identity_policy else None),
             )
         else:
-            if args.episode_id:
-                raise ValueError("--episode-id applies only to --source-world")
+            if args.episode_id or args.seed_file:
+                raise ValueError("--episode-id and --seed-file apply only to --source-world")
             if args.identity_policy:
                 raise ValueError("--identity-policy applies only to --source-world")
             manifest = build_provider_runtime_from_gate_config(
@@ -461,8 +495,11 @@ def _provider_build_runtime(args: argparse.Namespace) -> int:
                 authorities=tuple(args.authority),
                 bundle_version=args.bundle_version,
             )
-    except (ValueError, FileNotFoundError) as exc:
-        return _handle_command_error(args.json, str(exc))
+    except (ValueError, ProviderRuntimeError, FileNotFoundError, OSError) as exc:
+        code = (
+            exc.code if isinstance(exc, ProviderRuntimeError) else "provider_runtime_build_failed"
+        )
+        return _handle_command_error(args.json, str(exc), code=code)
     payload = {"manifest": str(manifest), "provider_id": args.provider_id}
     if args.json:
         print(json.dumps(payload, indent=2, sort_keys=True))
@@ -494,12 +531,66 @@ def _provider_admit(args: argparse.Namespace) -> int:
     return 0
 
 
+def _provider_admit_state(args: argparse.Namespace) -> int:
+    from datalox_gated_runtime.provider_runtime.state_profile import (
+        admit_provider_state_profile,
+    )
+
+    try:
+        result = admit_provider_state_profile(
+            bundle_dir=Path(args.bundle),
+            profile_path=Path(args.profile),
+            output_path=Path(args.out),
+        )
+    except (ProviderRuntimeError, FileNotFoundError, OSError) as exc:
+        code = (
+            exc.code if isinstance(exc, ProviderRuntimeError) else "provider_state_admission_failed"
+        )
+        return _handle_command_error(args.json, str(exc), code=code)
+    payload = {
+        "state_admission": str(result.path),
+        "state_admission_sha256": result.sha256,
+        "provider_id": result.payload["provider_id"],
+        "profile_id": result.payload["profile_id"],
+    }
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        print(f"Provider state admission: {result.path}")
+        print(f"Digest: {result.sha256}")
+    return 0
+
+
 def _provider_release_build(args: argparse.Namespace) -> int:
+    state_assets: dict[str, tuple[Path, Path]] = {}
+    for profile_id, profile_path, admission_path in getattr(args, "state_profile", None) or []:
+        if profile_id in state_assets:
+            return _handle_command_error(
+                args.json,
+                f"State assets were supplied more than once for profile {profile_id!r}.",
+                code="provider_release_state_profile_duplicate",
+            )
+        state_assets[profile_id] = (Path(profile_path), Path(admission_path))
+    declared_profiles = {profile_id for profile_id, _, _ in args.profile}
+    unknown_state_profiles = sorted(set(state_assets) - declared_profiles)
+    if unknown_state_profiles:
+        return _handle_command_error(
+            args.json,
+            "State assets name profiles absent from --profile: "
+            + ", ".join(unknown_state_profiles),
+            code="provider_release_state_profile_unknown",
+        )
     profiles = tuple(
         ProviderReleaseProfileInput(
             profile_id=profile_id,
             bundle_dir=Path(bundle),
             admission_path=Path(admission),
+            state_profile_path=(
+                state_assets[profile_id][0] if profile_id in state_assets else None
+            ),
+            state_admission_path=(
+                state_assets[profile_id][1] if profile_id in state_assets else None
+            ),
         )
         for profile_id, bundle, admission in args.profile
     )
@@ -595,6 +686,589 @@ def _provider_registry_resolve(args: argparse.Namespace) -> int:
     return 0
 
 
+def _provider_differential(args: argparse.Namespace) -> int:
+    try:
+        output = Path(args.out)
+        if output.exists() or output.is_symlink():
+            raise ProviderDifferentialError(
+                "provider_differential_output_exists",
+                "Attestation output already exists.",
+                {"path": str(output)},
+            )
+        measurement = load_grounding_measurement(
+            Path(args.measurement),
+            expected_sha256=args.measurement_sha256,
+        )
+        compiled = load_compiled_behavior_program(
+            Path(args.program),
+            expected_sha256=args.program_sha256,
+        )
+        compiled_program_sha256 = compiled_behavior_program_sha256(compiled)
+        if compiled_program_sha256 != args.program_sha256:
+            raise ProviderDifferentialError(
+                "provider_differential_compiled_program_noncanonical",
+                "Compiled behavior program must use its canonical portable encoding.",
+                {
+                    "expected": args.program_sha256,
+                    "canonical": compiled_program_sha256,
+                },
+            )
+        principal_bindings = _load_differential_principal_bindings(
+            Path(args.principal_bindings),
+            expected_auth_contexts={step.auth_context_id for step in compiled.recipe.steps},
+        )
+
+        def execute_program(target: ProviderReleaseTarget):
+            return run_compiled_behavior_program(
+                target=target,
+                program=compiled,
+            )
+
+        program = DifferentialProgramBinding(
+            program_id=compiled.recipe.program_id,
+            provider_id=compiled.provider_id,
+            provider_version=compiled.provider_version,
+            trace_schema_id="datalox_reference_trace_v2",
+            trace_digest=compiled.capture_sha256,
+            connector_sha256=compiled.connector_sha256,
+            recipe_sha256=compiled.recipe_sha256,
+            harvest_engine_sha256=compiled.harvest_engine_sha256,
+            compiled_program_sha256=compiled_program_sha256,
+            seed=compiled.seed,
+            profile_id=DIFFERENTIAL_COMPARISON_PROFILE,
+            runner=execute_program,
+        )
+        registry = FilesystemProviderReleaseRegistry.load(Path(args.registry))
+        attestation = run_provider_release_differential(
+            registry=registry,
+            release_reference=args.reference,
+            profile_id=args.profile,
+            authority=args.authority,
+            principal_bindings=principal_bindings,
+            measurement=measurement,
+            program=program,
+            observed_at=args.observed_at,
+        )
+        attestation_sha256 = write_differential_attestation(output, attestation)
+    except (
+        BehaviorContractError,
+        ProviderDifferentialError,
+        ProviderRuntimeError,
+        FileNotFoundError,
+        OSError,
+        ValueError,
+    ) as exc:
+        code = getattr(exc, "code", "provider_differential_failed")
+        return _handle_command_error(args.json, str(exc), code=code)
+
+    payload = {
+        "attestation": str(output.resolve(strict=True)),
+        "attestation_sha256": attestation_sha256,
+        **attestation.to_dict(),
+    }
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        print(f"Provider differential: {'passed' if attestation.passed else 'failed'}")
+        print(f"Attestation: {payload['attestation']}")
+        print(f"Digest: {attestation_sha256}")
+    return 0 if attestation.passed else 1
+
+
+def _provider_drift_compare(args: argparse.Namespace) -> int:
+    try:
+        output = Path(args.out)
+        _require_new_drift_output(output)
+        baseline_measurement = load_grounding_measurement(
+            Path(args.baseline_measurement),
+            expected_sha256=args.baseline_measurement_sha256,
+        )
+        candidate_measurement = load_grounding_measurement(
+            Path(args.candidate_measurement),
+            expected_sha256=args.candidate_measurement_sha256,
+        )
+        baseline_program = load_compiled_behavior_program(
+            Path(args.baseline_program),
+            expected_sha256=args.baseline_program_sha256,
+        )
+        if bool(args.candidate_program) != bool(args.candidate_program_sha256):
+            raise ProviderDifferentialError(
+                "provider_drift_candidate_program_binding_invalid",
+                "Candidate program path and digest must be supplied together.",
+            )
+        if candidate_measurement.completion == "complete":
+            if not args.candidate_program:
+                raise ProviderDifferentialError(
+                    "provider_drift_candidate_program_required",
+                    "A complete candidate measurement requires its compiled program.",
+                )
+            candidate_program = load_compiled_behavior_program(
+                Path(args.candidate_program),
+                expected_sha256=args.candidate_program_sha256,
+            )
+        else:
+            if args.candidate_program:
+                raise ProviderDifferentialError(
+                    "provider_drift_incomplete_program_forbidden",
+                    "An incomplete candidate measurement cannot supply a comparison program.",
+                )
+            candidate_program = None
+        if bool(args.classification_scope) != bool(args.classification_scope_sha256):
+            raise ProviderDifferentialError(
+                "provider_drift_classification_scope_binding_invalid",
+                "Classification scope path and digest must be supplied together.",
+            )
+        classification_scope = (
+            DriftClassificationScope()
+            if not args.classification_scope
+            else _load_drift_classification_scope(
+                Path(args.classification_scope),
+                expected_sha256=args.classification_scope_sha256,
+            )
+        )
+        report = compare_provider_drift(
+            report_id=args.report_id,
+            baseline_measurement=baseline_measurement,
+            candidate_measurement=candidate_measurement,
+            baseline_program=baseline_program,
+            candidate_program=candidate_program,
+            classification_scope=classification_scope,
+        )
+        report_sha256 = _write_provider_drift_artifact(output, report.to_dict())
+    except (
+        BehaviorContractError,
+        ProviderDifferentialError,
+        FileNotFoundError,
+        OSError,
+        ValueError,
+    ) as exc:
+        code = getattr(exc, "code", "provider_drift_compare_failed")
+        return _handle_command_error(args.json, str(exc), code=code)
+    payload = {
+        "report": str(output.resolve(strict=True)),
+        "report_sha256": report_sha256,
+        **report.to_dict(),
+    }
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        print(f"Provider drift comparison: {report.comparison_status}")
+        print(f"Report: {payload['report']}")
+        print(f"Digest: {report_sha256}")
+    return 0
+
+
+def _provider_drift_assess(args: argparse.Namespace) -> int:
+    try:
+        output = Path(args.out)
+        _require_new_drift_output(output)
+        report = load_provider_drift_report(
+            Path(args.report),
+            expected_sha256=args.report_sha256,
+        )
+        if bool(args.attestation) != bool(args.attestation_sha256):
+            raise ProviderDifferentialError(
+                "provider_drift_attestation_binding_invalid",
+                "Differential attestation path and digest must be supplied together.",
+            )
+        attestation = (
+            None
+            if not args.attestation
+            else load_differential_attestation(
+                Path(args.attestation),
+                expected_sha256=args.attestation_sha256,
+            )
+        )
+        assessment = derive_provider_drift_assessment(
+            assessment_id=args.assessment_id,
+            report=report,
+            release_manifest_sha256=args.release_manifest_sha256,
+            profile_id=args.profile,
+            freshness_window_days=args.freshness_window_days,
+            differential_attestation=attestation,
+        )
+        assessment_sha256 = _write_provider_drift_artifact(output, assessment)
+    except (ProviderDifferentialError, ProviderRuntimeError, OSError, ValueError) as exc:
+        code = getattr(exc, "code", "provider_drift_assess_failed")
+        return _handle_command_error(args.json, str(exc), code=code)
+    payload = {
+        "assessment": str(output.resolve(strict=True)),
+        "assessment_sha256": assessment_sha256,
+        **assessment,
+    }
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        print(f"Provider release assessment: {assessment['status']}")
+        print(f"Assessment: {payload['assessment']}")
+        print(f"Digest: {assessment_sha256}")
+    return 0
+
+
+def _provider_assessments_create(args: argparse.Namespace) -> int:
+    try:
+        registry = FilesystemProviderAssessmentRegistry.create(Path(args.root))
+    except (ProviderRuntimeError, FileNotFoundError, OSError) as exc:
+        code = getattr(exc, "code", "provider_assessment_registry_create_failed")
+        return _handle_command_error(args.json, str(exc), code=code)
+    payload = {"assessment_registry": str(registry.root)}
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        print(f"Provider assessment registry: {registry.root}")
+    return 0
+
+
+def _provider_assessments_publish(args: argparse.Namespace) -> int:
+    try:
+        registry = FilesystemProviderAssessmentRegistry.load(Path(args.root))
+        published = registry.publish_assessment(Path(args.assessment))
+    except (ProviderRuntimeError, FileNotFoundError, OSError) as exc:
+        code = getattr(exc, "code", "provider_assessment_registry_publish_failed")
+        return _handle_command_error(args.json, str(exc), code=code)
+    payload = _published_assessment_payload(published)
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        print(f"Published provider assessment: {published.assessment_id}")
+        print(f"Digest: {published.content_sha256}")
+    return 0
+
+
+def _provider_assessments_list(args: argparse.Namespace) -> int:
+    try:
+        registry = FilesystemProviderAssessmentRegistry.load(Path(args.root))
+        values = registry.list_assessments(
+            release_manifest_sha256=args.release_manifest_sha256,
+            profile_id=args.profile,
+            program_id=args.program,
+        )
+    except (ProviderRuntimeError, FileNotFoundError, OSError) as exc:
+        code = getattr(exc, "code", "provider_assessment_registry_list_failed")
+        return _handle_command_error(args.json, str(exc), code=code)
+    payload = {
+        "assessment_registry": str(registry.root),
+        "release_manifest_sha256": args.release_manifest_sha256,
+        "profile_id": args.profile,
+        "program_id": args.program,
+        "assessments": [_published_assessment_payload(value) for value in values],
+    }
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        print(f"Provider assessments: {len(values)}")
+        for value in values:
+            print(f"- {value.assessment_id}: {value.assessment['status']} ({value.observed_at})")
+    return 0
+
+
+def _provider_assessments_latest(args: argparse.Namespace) -> int:
+    try:
+        registry = FilesystemProviderAssessmentRegistry.load(Path(args.root))
+        latest = registry.latest_assessment(
+            release_manifest_sha256=args.release_manifest_sha256,
+            profile_id=args.profile,
+            program_id=args.program,
+        )
+    except (ProviderRuntimeError, FileNotFoundError, OSError) as exc:
+        code = getattr(exc, "code", "provider_assessment_registry_latest_failed")
+        return _handle_command_error(args.json, str(exc), code=code)
+    payload = {
+        "assessment_registry": str(registry.root),
+        "release_manifest_sha256": args.release_manifest_sha256,
+        "profile_id": args.profile,
+        "program_id": args.program,
+        "assessment": None if latest is None else _published_assessment_payload(latest),
+    }
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    elif latest is None:
+        print("Latest provider assessment: none")
+    else:
+        print(f"Latest provider assessment: {latest.assessment_id}")
+        print(f"Status: {latest.assessment['status']}")
+        print(f"Digest: {latest.content_sha256}")
+    return 0
+
+
+def _provider_assessments_status(args: argparse.Namespace) -> int:
+    try:
+        if (
+            re.fullmatch(
+                r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]+)?Z",
+                args.as_of,
+            )
+            is None
+        ):
+            raise ProviderRuntimeError(
+                "provider_assessment_as_of_invalid",
+                "--as-of must be an RFC 3339 UTC timestamp ending in Z.",
+            )
+        as_of = datetime.fromisoformat(args.as_of.replace("Z", "+00:00"))
+        registry = FilesystemProviderAssessmentRegistry.load(Path(args.root))
+        status = registry.assessment_status_at(
+            release_manifest_sha256=args.release_manifest_sha256,
+            profile_id=args.profile,
+            program_id=args.program,
+            as_of=as_of,
+        )
+    except (ProviderRuntimeError, OSError, ValueError) as exc:
+        code = getattr(exc, "code", "provider_assessment_registry_status_failed")
+        return _handle_command_error(args.json, str(exc), code=code)
+    payload = {
+        "assessment_registry": str(registry.root),
+        "release_manifest_sha256": args.release_manifest_sha256,
+        "profile_id": args.profile,
+        "program_id": args.program,
+        "as_of": args.as_of,
+        "status": status,
+    }
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        print(f"Provider assessment status: {status or 'none'}")
+    return 0
+
+
+def _published_assessment_payload(value: PublishedProviderAssessment) -> dict[str, object]:
+    return {
+        "assessment_id": value.assessment_id,
+        "release_manifest_sha256": value.release_manifest_sha256,
+        "profile_id": value.profile_id,
+        "program_id": value.program_id,
+        "observed_at": value.observed_at,
+        "content_sha256": value.content_sha256,
+        "assessment": value.assessment,
+    }
+
+
+def _load_differential_principal_bindings(
+    path: Path,
+    *,
+    expected_auth_contexts: set[str],
+) -> dict[str, str]:
+    maximum_bytes = 64 * 1024
+    flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(path, flags)
+    except OSError as exc:
+        raise ProviderDifferentialError(
+            "provider_differential_principal_bindings_unreadable",
+            "Principal bindings cannot be opened safely.",
+            {"path": str(path)},
+        ) from exc
+    try:
+        metadata = os.fstat(descriptor)
+        if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > maximum_bytes:
+            raise ProviderDifferentialError(
+                "provider_differential_principal_bindings_invalid",
+                "Principal bindings must be a regular JSON file at most 64 KiB.",
+            )
+        with os.fdopen(descriptor, "rb") as handle:
+            descriptor = -1
+            body = handle.read(maximum_bytes + 1)
+    finally:
+        if descriptor >= 0:
+            os.close(descriptor)
+    if len(body) > maximum_bytes:
+        raise ProviderDifferentialError(
+            "provider_differential_principal_bindings_invalid",
+            "Principal bindings exceed 64 KiB.",
+        )
+
+    def reject_duplicates(pairs: list[tuple[str, object]]) -> dict[str, object]:
+        result: dict[str, object] = {}
+        for key, value in pairs:
+            if key in result:
+                raise ProviderDifferentialError(
+                    "provider_differential_principal_bindings_invalid",
+                    "Principal bindings contain a duplicate JSON key.",
+                    {"key": key},
+                )
+            result[key] = value
+        return result
+
+    try:
+        raw = json.loads(body, object_pairs_hook=reject_duplicates)
+    except ProviderDifferentialError:
+        raise
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ProviderDifferentialError(
+            "provider_differential_principal_bindings_invalid",
+            "Principal bindings must contain one UTF-8 JSON object.",
+        ) from exc
+    if (
+        type(raw) is not dict
+        or set(raw) != {"schema_version", "bindings"}
+        or raw["schema_version"] != "datalox_provider_differential_principal_bindings_v1"
+        or type(raw["bindings"]) is not list
+        or not raw["bindings"]
+    ):
+        raise ProviderDifferentialError(
+            "provider_differential_principal_bindings_invalid",
+            "Principal bindings do not match the v1 contract.",
+        )
+    identifier = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
+    bindings: dict[str, str] = {}
+    for item in raw["bindings"]:
+        if type(item) is not dict or set(item) != {
+            "auth_context_id",
+            "principal_context_id",
+        }:
+            raise ProviderDifferentialError(
+                "provider_differential_principal_bindings_invalid",
+                "Each principal binding must contain exactly two identity fields.",
+            )
+        auth_context_id = item["auth_context_id"]
+        principal_context_id = item["principal_context_id"]
+        if (
+            type(auth_context_id) is not str
+            or identifier.fullmatch(auth_context_id) is None
+            or type(principal_context_id) is not str
+            or identifier.fullmatch(principal_context_id) is None
+            or auth_context_id in bindings
+        ):
+            raise ProviderDifferentialError(
+                "provider_differential_principal_bindings_invalid",
+                "Principal binding identities must be unique stable identifiers.",
+            )
+        bindings[auth_context_id] = principal_context_id
+    if set(bindings) != expected_auth_contexts:
+        raise ProviderDifferentialError(
+            "provider_differential_principal_bindings_incomplete",
+            "Principal bindings must exactly cover the compiled program auth contexts.",
+            {
+                "missing": sorted(expected_auth_contexts - bindings.keys()),
+                "unknown": sorted(bindings.keys() - expected_auth_contexts),
+            },
+        )
+    return bindings
+
+
+def _load_drift_classification_scope(
+    path: Path,
+    *,
+    expected_sha256: str,
+) -> DriftClassificationScope:
+    if re.fullmatch(r"sha256:[0-9a-f]{64}", expected_sha256) is None:
+        raise ProviderDifferentialError(
+            "provider_drift_classification_scope_digest_invalid",
+            "Classification scope digest must use sha256:<64 lowercase hexadecimal characters>.",
+        )
+    maximum_bytes = 64 * 1024
+    flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(path, flags)
+    except OSError as exc:
+        raise ProviderDifferentialError(
+            "provider_drift_classification_scope_unreadable",
+            "Classification scope cannot be opened safely.",
+            {"path": str(path)},
+        ) from exc
+    try:
+        metadata = os.fstat(descriptor)
+        if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > maximum_bytes:
+            raise ProviderDifferentialError(
+                "provider_drift_classification_scope_invalid",
+                "Classification scope must be a regular JSON file at most 64 KiB.",
+            )
+        with os.fdopen(descriptor, "rb") as handle:
+            descriptor = -1
+            body = handle.read(maximum_bytes + 1)
+    finally:
+        if descriptor >= 0:
+            os.close(descriptor)
+    if len(body) > maximum_bytes:
+        raise ProviderDifferentialError(
+            "provider_drift_classification_scope_invalid",
+            "Classification scope exceeds 64 KiB.",
+        )
+
+    def reject_duplicates(pairs: list[tuple[str, object]]) -> dict[str, object]:
+        result: dict[str, object] = {}
+        for key, value in pairs:
+            if key in result:
+                raise ProviderDifferentialError(
+                    "provider_drift_classification_scope_invalid",
+                    "Classification scope contains a duplicate JSON key.",
+                    {"key": key},
+                )
+            result[key] = value
+        return result
+
+    try:
+        raw = json.loads(body, object_pairs_hook=reject_duplicates)
+    except ProviderDifferentialError:
+        raise
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ProviderDifferentialError(
+            "provider_drift_classification_scope_invalid",
+            "Classification scope must contain one UTF-8 JSON object.",
+        ) from exc
+    if type(raw) is not dict:
+        raise ProviderDifferentialError(
+            "provider_drift_classification_scope_invalid",
+            "Classification scope must contain one JSON object.",
+        )
+    actual_sha256 = canonical_json_sha256(raw)
+    if actual_sha256 != expected_sha256:
+        raise ProviderDifferentialError(
+            "provider_drift_classification_scope_digest_mismatch",
+            "Classification scope does not match its expected canonical digest.",
+            {"expected": expected_sha256, "actual": actual_sha256},
+        )
+    return DriftClassificationScope.from_dict(raw)
+
+
+def _require_new_drift_output(path: Path) -> None:
+    if path.exists() or path.is_symlink():
+        raise ProviderDifferentialError(
+            "provider_drift_output_exists",
+            "Provider drift output already exists.",
+            {"path": str(path)},
+        )
+    if not path.parent.is_dir() or path.parent.is_symlink():
+        raise ProviderDifferentialError(
+            "provider_drift_output_parent_invalid",
+            "Provider drift output parent must be an existing regular directory.",
+            {"path": str(path.parent)},
+        )
+
+
+def _write_provider_drift_artifact(path: Path, value: dict[str, object]) -> str:
+    _require_new_drift_output(path)
+    parent = path.parent.resolve(strict=True)
+    destination = parent / path.name
+    payload = canonical_json_bytes(value)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=".datalox-provider-drift-",
+        dir=parent,
+    )
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        temporary.chmod(0o600)
+        try:
+            os.link(temporary, destination)
+        except FileExistsError as exc:
+            raise ProviderDifferentialError(
+                "provider_drift_output_exists",
+                "Provider drift output already exists.",
+                {"path": str(destination)},
+            ) from exc
+        directory_descriptor = os.open(parent, os.O_RDONLY)
+        try:
+            os.fsync(directory_descriptor)
+        finally:
+            os.close(directory_descriptor)
+    finally:
+        temporary.unlink(missing_ok=True)
+    return canonical_json_sha256(value)
+
+
 def _provider_export_envfactory(args: argparse.Namespace) -> int:
     try:
         scenario_templates: dict[str, Path] = {}
@@ -640,7 +1314,7 @@ def _composition_admitted_at(value: str | None) -> datetime | None:
     if not value.endswith("Z"):
         raise ValueError("--admitted-at must be an RFC 3339 UTC timestamp ending in Z")
     try:
-        parsed = datetime.fromisoformat(value[:-1] + "+00:00")
+        parsed = datetime.fromisoformat(value)
     except ValueError as exc:
         raise ValueError("--admitted-at must be a valid RFC 3339 UTC timestamp") from exc
     if parsed.utcoffset() != UTC.utcoffset(None):
@@ -804,10 +1478,27 @@ def _intercept_serve_admitted(args: argparse.Namespace) -> int:
             host=args.host,
             port=args.port,
             prepared=args.prepared,
+            delivery_intervention_configs=_delivery_intervention_configs(
+                args.delivery_intervention
+            ),
         )
     except (ValueError, FileNotFoundError) as exc:
         return _handle_command_error(False, str(exc))
     return 0
+
+
+def _delivery_intervention_configs(values: list[str] | None) -> dict[str, Path] | None:
+    if not values:
+        return None
+    configs: dict[str, Path] = {}
+    for value in values:
+        provider_id, separator, path = value.partition("=")
+        if not separator or not provider_id or not path or provider_id in configs:
+            raise ValueError(
+                "--delivery-intervention requires unique PROVIDER_ID=CONFIG_PATH values"
+            )
+        configs[provider_id] = Path(path)
+    return configs
 
 
 def _intercept_export(args: argparse.Namespace) -> int:
@@ -1357,6 +2048,10 @@ def _build_parser() -> argparse.ArgumentParser:
     build_runtime_parser.add_argument("--provider-id", required=True)
     build_runtime_parser.add_argument("--episode-id", help="World reset seed to compile.")
     build_runtime_parser.add_argument(
+        "--seed-file",
+        help="Task-free provider reset seed to compile without adding it to world task episodes.",
+    )
+    build_runtime_parser.add_argument(
         "--identity-policy",
         help="Provider-native credential-to-role policy for transparent HTTP execution.",
     )
@@ -1384,6 +2079,16 @@ def _build_parser() -> argparse.ArgumentParser:
     admit_provider_parser.add_argument("--json", action="store_true", help="Emit JSON output.")
     admit_provider_parser.set_defaults(func=_provider_admit)
 
+    admit_state_parser = provider_subcommands.add_parser(
+        "admit-state",
+        help="Admit a task-independent state profile against an exact provider runtime.",
+    )
+    admit_state_parser.add_argument("--bundle", required=True)
+    admit_state_parser.add_argument("--profile", required=True)
+    admit_state_parser.add_argument("--out", required=True)
+    admit_state_parser.add_argument("--json", action="store_true", help="Emit JSON output.")
+    admit_state_parser.set_defaults(func=_provider_admit_state)
+
     release_build_parser = provider_subcommands.add_parser(
         "release-build",
         help="Build an immutable multi-profile OCI release from admitted provider runtimes.",
@@ -1395,6 +2100,13 @@ def _build_parser() -> argparse.ArgumentParser:
         required=True,
         metavar=("PROFILE_ID", "BUNDLE", "ADMISSION"),
         help="Admitted reset profile; repeat to add another profile.",
+    )
+    release_build_parser.add_argument(
+        "--state-profile",
+        action="append",
+        nargs=3,
+        metavar=("PROFILE_ID", "STATE_PROFILE", "STATE_ADMISSION"),
+        help="Optional admitted state assets for a declared reset profile; repeat by profile.",
     )
     release_build_parser.add_argument("--release-version", required=True)
     release_build_parser.add_argument("--out", required=True)
@@ -1423,6 +2135,162 @@ def _build_parser() -> argparse.ArgumentParser:
     registry_resolve_parser.add_argument("--reference", required=True)
     registry_resolve_parser.add_argument("--json", action="store_true")
     registry_resolve_parser.set_defaults(func=_provider_registry_resolve)
+
+    differential_parser = provider_subcommands.add_parser(
+        "differential",
+        help="Compare one portable grounded program with an immutable Provider Release profile.",
+    )
+    differential_parser.add_argument(
+        "--registry", required=True, help="Immutable Provider Release registry root."
+    )
+    differential_parser.add_argument(
+        "--reference", required=True, help="Immutable provider@release-version reference."
+    )
+    differential_parser.add_argument("--profile", required=True, help="Release profile ID.")
+    differential_parser.add_argument(
+        "--authority", required=True, help="Exact HTTPS provider authority."
+    )
+    differential_parser.add_argument(
+        "--measurement", required=True, help="Strict provider grounding measurement JSON."
+    )
+    differential_parser.add_argument(
+        "--measurement-sha256",
+        required=True,
+        help="Expected canonical grounding-measurement digest.",
+    )
+    differential_parser.add_argument(
+        "--program", required=True, help="Portable compiled behavior program JSON."
+    )
+    differential_parser.add_argument(
+        "--program-sha256",
+        required=True,
+        help="Expected exact compiled-program file digest.",
+    )
+    differential_parser.add_argument(
+        "--principal-bindings",
+        required=True,
+        help="Exact capture auth-context to Provider Release principal bindings.",
+    )
+    differential_parser.add_argument(
+        "--observed-at",
+        required=True,
+        help="Trusted differential observation time as an RFC 3339 UTC Z timestamp.",
+    )
+    differential_parser.add_argument(
+        "--out", required=True, help="New canonical differential attestation path."
+    )
+    differential_parser.add_argument("--json", action="store_true")
+    differential_parser.set_defaults(func=_provider_differential)
+
+    drift_parser = provider_subcommands.add_parser(
+        "drift",
+        help="Compare grounded provider observations and derive release assessments.",
+    )
+    drift_subcommands = drift_parser.add_subparsers(
+        dest="provider_drift_command",
+        required=True,
+    )
+    drift_compare_parser = drift_subcommands.add_parser(
+        "compare",
+        help="Compare two digest-pinned grounding measurements and portable programs.",
+    )
+    drift_compare_parser.add_argument("--report-id", required=True)
+    drift_compare_parser.add_argument("--baseline-measurement", required=True)
+    drift_compare_parser.add_argument("--baseline-measurement-sha256", required=True)
+    drift_compare_parser.add_argument("--baseline-program", required=True)
+    drift_compare_parser.add_argument("--baseline-program-sha256", required=True)
+    drift_compare_parser.add_argument("--candidate-measurement", required=True)
+    drift_compare_parser.add_argument("--candidate-measurement-sha256", required=True)
+    drift_compare_parser.add_argument(
+        "--candidate-program",
+        help="Compiled candidate program; required only for a complete candidate measurement.",
+    )
+    drift_compare_parser.add_argument(
+        "--candidate-program-sha256",
+        help="Expected exact digest of --candidate-program.",
+    )
+    drift_compare_parser.add_argument(
+        "--classification-scope",
+        help="Optional explicit drift-classification scope JSON.",
+    )
+    drift_compare_parser.add_argument(
+        "--classification-scope-sha256",
+        help="Expected canonical digest of --classification-scope.",
+    )
+    drift_compare_parser.add_argument("--out", required=True)
+    drift_compare_parser.add_argument("--json", action="store_true")
+    drift_compare_parser.set_defaults(func=_provider_drift_compare)
+
+    drift_assess_parser = drift_subcommands.add_parser(
+        "assess",
+        help="Derive a canonical release assessment from source and optional replica evidence.",
+    )
+    drift_assess_parser.add_argument("--assessment-id", required=True)
+    drift_assess_parser.add_argument("--report", required=True)
+    drift_assess_parser.add_argument("--report-sha256", required=True)
+    drift_assess_parser.add_argument("--release-manifest-sha256", required=True)
+    drift_assess_parser.add_argument("--profile", required=True)
+    drift_assess_parser.add_argument("--freshness-window-days", required=True, type=int)
+    drift_assess_parser.add_argument("--attestation")
+    drift_assess_parser.add_argument("--attestation-sha256")
+    drift_assess_parser.add_argument("--out", required=True)
+    drift_assess_parser.add_argument("--json", action="store_true")
+    drift_assess_parser.set_defaults(func=_provider_drift_assess)
+
+    assessments_parser = provider_subcommands.add_parser(
+        "assessments",
+        help="Manage the append-only Provider Release assessment registry.",
+    )
+    assessment_subcommands = assessments_parser.add_subparsers(
+        dest="provider_assessment_command",
+        required=True,
+    )
+    assessments_create_parser = assessment_subcommands.add_parser(
+        "create", help="Create a fresh standalone provider assessment registry."
+    )
+    assessments_create_parser.add_argument("--root", required=True)
+    assessments_create_parser.add_argument("--json", action="store_true")
+    assessments_create_parser.set_defaults(func=_provider_assessments_create)
+
+    assessments_publish_parser = assessment_subcommands.add_parser(
+        "publish", help="Publish one validated drift assessment immutably."
+    )
+    assessments_publish_parser.add_argument("--root", required=True)
+    assessments_publish_parser.add_argument("--assessment", required=True)
+    assessments_publish_parser.add_argument("--json", action="store_true")
+    assessments_publish_parser.set_defaults(func=_provider_assessments_publish)
+
+    for command_name, help_text, callback in (
+        (
+            "list",
+            "List assessments for one exact release/profile/program binding.",
+            _provider_assessments_list,
+        ),
+        (
+            "latest",
+            "Read the latest assessment for one exact release/profile/program binding.",
+            _provider_assessments_latest,
+        ),
+    ):
+        command_parser = assessment_subcommands.add_parser(command_name, help=help_text)
+        command_parser.add_argument("--root", required=True)
+        command_parser.add_argument("--release-manifest-sha256", required=True)
+        command_parser.add_argument("--profile", required=True)
+        command_parser.add_argument("--program", required=True)
+        command_parser.add_argument("--json", action="store_true")
+        command_parser.set_defaults(func=callback)
+
+    assessments_status_parser = assessment_subcommands.add_parser(
+        "status",
+        help="Derive current or stale status at one trusted UTC instant.",
+    )
+    assessments_status_parser.add_argument("--root", required=True)
+    assessments_status_parser.add_argument("--release-manifest-sha256", required=True)
+    assessments_status_parser.add_argument("--profile", required=True)
+    assessments_status_parser.add_argument("--program", required=True)
+    assessments_status_parser.add_argument("--as-of", required=True)
+    assessments_status_parser.add_argument("--json", action="store_true")
+    assessments_status_parser.set_defaults(func=_provider_assessments_status)
 
     export_envfactory_parser = provider_subcommands.add_parser(
         "export-envfactory",
@@ -1647,6 +2515,11 @@ def _build_parser() -> argparse.ArgumentParser:
         "--prepared",
         action="store_true",
         help="Require assets created by intercept prepare-admitted.",
+    )
+    intercept_serve_admitted_parser.add_argument(
+        "--delivery-intervention",
+        action="append",
+        help="Controller config as PROVIDER_ID=CONFIG_PATH; repeatable.",
     )
     intercept_serve_admitted_parser.set_defaults(func=_intercept_serve_admitted)
 

@@ -16,7 +16,7 @@ from datasets import Dataset
 from datalox_dirty_integration.contract import (
     TASK_INSTRUCTIONS,
     provider_admission_path,
-    provider_config_path,
+    provider_grounding_path,
     provider_release_path,
     provider_runtime_bundle_path,
 )
@@ -24,8 +24,10 @@ from datalox_dirty_integration.episode import CommerceEpisode
 from datalox_dirty_integration.policy import SeededCommercePolicy, load_profile
 from datalox_dirty_integration.scoring import (
     EvaluationOracle,
-    request_discipline_for_episode,
-    task_correctness_for_episode,
+    RequestDisciplineReport,
+    TaskVerificationReport,
+    request_discipline_report_for_episode,
+    verify_task_for_episode,
 )
 
 ROLLOUT_EVIDENCE_SCHEMA_VERSION = "datalox_verifiers_rollout_evidence_v1"
@@ -47,7 +49,8 @@ def _write_rollout_evidence(
     intervention_seed: str,
     intervention_enabled: bool,
     exported: dict[str, Any],
-    scores: tuple[float, float],
+    task_verification: TaskVerificationReport,
+    request_discipline: RequestDisciplineReport,
 ) -> Path:
     """Atomically publish controller-only evidence for one completed rollout."""
 
@@ -66,8 +69,8 @@ def _write_rollout_evidence(
             },
             "verification.json": {
                 "schema_version": ROLLOUT_EVIDENCE_SCHEMA_VERSION,
-                "request_discipline": scores[1],
-                "task_correctness": scores[0],
+                "task_correctness": task_verification.to_dict(),
+                "request_discipline": request_discipline.to_dict(),
             },
         }
         artifact_digests: dict[str, str] = {}
@@ -97,7 +100,7 @@ def _write_rollout_evidence(
                 "profile_id": exported["provider_profile_id"],
                 "bundle_version": exported["provider_bundle_version"],
                 "initial_state_fingerprint": exported["initial_state_fingerprint"],
-                "config_sha256": exported["provider_config_sha256"],
+                "grounding_sha256": exported["provider_grounding_sha256"],
                 "runtime_sha256": exported["provider_runtime_sha256"],
                 "admission_sha256": exported["provider_admission_sha256"],
                 "operation_claims_sha256": exported["operation_claims_sha256"],
@@ -126,12 +129,108 @@ def list_products(
 
     Args:
         offset: Provider offset to request. Start at zero.
-        limit: Page size. This admitted slice requires 10.
+        limit: Page size requested from the provider.
     """
 
     if episode is None:
         raise RuntimeError("episode runtime was not injected")
     response = episode.list_products(offset=offset, limit=limit)
+    return _wire_response(response)
+
+
+def create_cart(
+    email: str,
+    region_id: str,
+    episode: CommerceEpisode | None = None,
+) -> str:
+    """Create a Medusa cart.
+
+    Args:
+        email: Customer email for the cart.
+        region_id: Provider region identifier.
+    """
+
+    if episode is None:
+        raise RuntimeError("episode runtime was not injected")
+    return _wire_response(episode.create_cart(email=email, region_id=region_id))
+
+
+def get_cart(cart_id: str, episode: CommerceEpisode | None = None) -> str:
+    """Retrieve a Medusa cart by its provider-issued identifier.
+
+    Args:
+        cart_id: Cart identifier returned by create_cart.
+    """
+
+    if episode is None:
+        raise RuntimeError("episode runtime was not injected")
+    return _wire_response(episode.get_cart(cart_id=cart_id))
+
+
+def add_line_item(
+    cart_id: str,
+    variant_id: str,
+    quantity: int,
+    episode: CommerceEpisode | None = None,
+) -> str:
+    """Add a variant to a Medusa cart.
+
+    Args:
+        cart_id: Cart identifier returned by create_cart.
+        variant_id: Variant identifier returned by list_products.
+        quantity: Positive integer quantity to add.
+    """
+
+    if episode is None:
+        raise RuntimeError("episode runtime was not injected")
+    return _wire_response(
+        episode.add_line_item(cart_id=cart_id, variant_id=variant_id, quantity=quantity)
+    )
+
+
+def update_line_item(
+    cart_id: str,
+    line_item_id: str,
+    quantity: int,
+    episode: CommerceEpisode | None = None,
+) -> str:
+    """Set the quantity of a Medusa cart line item.
+
+    Args:
+        cart_id: Cart identifier returned by create_cart.
+        line_item_id: Line identifier returned by add_line_item.
+        quantity: New integer quantity.
+    """
+
+    if episode is None:
+        raise RuntimeError("episode runtime was not injected")
+    return _wire_response(
+        episode.update_line_item(
+            cart_id=cart_id,
+            line_item_id=line_item_id,
+            quantity=quantity,
+        )
+    )
+
+
+def delete_line_item(
+    cart_id: str,
+    line_item_id: str,
+    episode: CommerceEpisode | None = None,
+) -> str:
+    """Delete a Medusa cart line item.
+
+    Args:
+        cart_id: Cart identifier returned by create_cart.
+        line_item_id: Line identifier returned by add_line_item.
+    """
+
+    if episode is None:
+        raise RuntimeError("episode runtime was not injected")
+    return _wire_response(episode.delete_line_item(cart_id=cart_id, line_item_id=line_item_id))
+
+
+def _wire_response(response: Any) -> str:
     return json.dumps(
         {
             "status_code": response.status_code,
@@ -142,32 +241,13 @@ def list_products(
     )
 
 
-def submit_products(
-    products_json: str,
-    reported_count: int,
-    episode: CommerceEpisode | None = None,
-) -> str:
-    """Submit the complete product set once.
-
-    Args:
-        products_json: JSON array of objects containing string `id` and `title`.
-        reported_count: Collection count represented as a JSON integer.
-    """
-
-    if episode is None:
-        raise RuntimeError("episode runtime was not injected")
-    return json.dumps(
-        episode.submit_products(products_json, reported_count=reported_count), sort_keys=True
-    )
-
-
 class DataloxDirtyIntegrationEnv(vf.StatefulToolEnv):
     """Creates one isolated Datalox provider state per rollout."""
 
     def __init__(
         self,
         *,
-        provider_config: Path,
+        provider_grounding: Path,
         provider_admission: Path,
         provider_runtime_bundle: Path,
         provider_release: Path,
@@ -177,13 +257,13 @@ class DataloxDirtyIntegrationEnv(vf.StatefulToolEnv):
         evidence_dir: str | Path | None,
         **kwargs: Any,
     ) -> None:
-        self.provider_config = provider_config
+        self.provider_grounding = provider_grounding
         self.provider_admission = provider_admission
         self.provider_runtime_bundle = provider_runtime_bundle
         self.provider_release = provider_release
         self._episodes: dict[str, CommerceEpisode] = {}
         self._score_cache: dict[str, tuple[float, float]] = {}
-        self._oracle = EvaluationOracle.from_provider_config(self.provider_config)
+        self._oracle = EvaluationOracle()
         self.profile_name = profile
         self._intervention_seed = intervention_seed
         self.intervention_enabled = intervention_enabled
@@ -203,7 +283,11 @@ class DataloxDirtyIntegrationEnv(vf.StatefulToolEnv):
         rubric.add_cleanup_handler(self._clear_cached_scores)
         super().__init__(tools=[], rubric=rubric, **kwargs)
         self.add_tool(list_products, args_to_skip=["episode"])
-        self.add_tool(submit_products, args_to_skip=["episode"])
+        self.add_tool(create_cart, args_to_skip=["episode"])
+        self.add_tool(get_cart, args_to_skip=["episode"])
+        self.add_tool(add_line_item, args_to_skip=["episode"])
+        self.add_tool(update_line_item, args_to_skip=["episode"])
+        self.add_tool(delete_line_item, args_to_skip=["episode"])
 
     async def setup_state(self, state: vf.State) -> vf.State:
         trajectory_id = state.get("trajectory_id")
@@ -212,7 +296,7 @@ class DataloxDirtyIntegrationEnv(vf.StatefulToolEnv):
         if trajectory_id in self._episodes:
             raise RuntimeError("provider state already exists for this trajectory")
         self._episodes[trajectory_id] = CommerceEpisode(
-            provider_config=self.provider_config,
+            provider_grounding=self.provider_grounding,
             policy=SeededCommercePolicy(load_profile(self.profile_name)),
             intervention_seed=self._intervention_seed,
             intervention_enabled=self.intervention_enabled,
@@ -232,7 +316,7 @@ class DataloxDirtyIntegrationEnv(vf.StatefulToolEnv):
     ) -> dict[str, Any]:
         trajectory_id = state.get("trajectory_id")
         if not isinstance(trajectory_id, str):
-            raise ValueError("Verifiers state requires a trajectory_id")
+            raise TypeError("Verifiers state requires a trajectory_id")
         episode = self._episodes.get(trajectory_id)
         if episode is None:
             raise RuntimeError("provider state is unavailable for this trajectory")
@@ -250,10 +334,11 @@ class DataloxDirtyIntegrationEnv(vf.StatefulToolEnv):
                 episode = self._episodes.pop(trajectory_id, None)
                 if episode is not None:
                     try:
-                        scores = (
-                            task_correctness_for_episode(episode, self._oracle),
-                            request_discipline_for_episode(episode, self._oracle),
+                        task_verification = verify_task_for_episode(episode, self._oracle)
+                        request_discipline = request_discipline_report_for_episode(
+                            episode, self._oracle
                         )
+                        scores = (task_verification.score, request_discipline.score)
                         if self._evidence_dir is not None:
                             _write_rollout_evidence(
                                 evidence_root=self._evidence_dir,
@@ -262,7 +347,8 @@ class DataloxDirtyIntegrationEnv(vf.StatefulToolEnv):
                                 intervention_seed=self._intervention_seed,
                                 intervention_enabled=self.intervention_enabled,
                                 exported=episode.export(),
-                                scores=scores,
+                                task_verification=task_verification,
+                                request_discipline=request_discipline,
                             )
                         self._score_cache[trajectory_id] = scores
                     finally:
@@ -311,12 +397,12 @@ def load_environment(
         raise ValueError("num_tasks must be a positive integer")
     if not isinstance(intervention_seed, str) or not intervention_seed:
         raise ValueError("intervention_seed must be a non-empty string")
-    config_path = provider_config_path().resolve()
+    grounding = provider_grounding_path().resolve()
     admission_path = provider_admission_path().resolve()
     runtime_bundle = provider_runtime_bundle_path().resolve()
     release = provider_release_path().resolve()
-    if not config_path.is_file():
-        raise FileNotFoundError(f"provider config does not exist: {config_path}")
+    if not grounding.is_file():
+        raise FileNotFoundError(f"provider grounding artifact does not exist: {grounding}")
     if not admission_path.is_file():
         raise FileNotFoundError(f"provider admission does not exist: {admission_path}")
     if not runtime_bundle.is_dir():
@@ -328,7 +414,7 @@ def load_environment(
         [{"question": TASK_INSTRUCTIONS, "answer": ""} for _ in range(num_tasks)]
     )
     environment = DataloxDirtyIntegrationEnv(
-        provider_config=config_path,
+        provider_grounding=grounding,
         provider_admission=admission_path,
         provider_runtime_bundle=runtime_bundle,
         provider_release=release,

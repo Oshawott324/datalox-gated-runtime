@@ -1,0 +1,929 @@
+{
+  "behavior_probes": [
+    {
+      "probe_id": "medusa_store_cart_lifecycle",
+      "reset_profile": "default",
+      "steps": [
+        {
+          "covers": [
+            {
+              "behavior": "failure",
+              "operation_id": "medusa.store.products.list"
+            }
+          ],
+          "expected_decision_kind": "deny",
+          "expected_status_code": 400,
+          "operation_id": "medusa.store.products.list",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {},
+            "method": "GET",
+            "path": "/store/products",
+            "query": {
+              "limit": "10",
+              "offset": "0"
+            },
+            "scheme": "https"
+          },
+          "step_id": "missing_publishable_key"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "failure",
+              "operation_id": "medusa.store.products.list"
+            }
+          ],
+          "expected_decision_kind": "deny",
+          "expected_status_code": 400,
+          "operation_id": "medusa.store.products.list",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {
+              "x-publishable-api-key": "pk_invalid"
+            },
+            "method": "GET",
+            "path": "/store/products",
+            "query": {
+              "limit": "10",
+              "offset": "0"
+            },
+            "scheme": "https"
+          },
+          "step_id": "invalid_publishable_key"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "success",
+              "operation_id": "medusa.store.products.list"
+            }
+          ],
+          "expected_decision_kind": "replay",
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.products.list",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "GET",
+            "path": "/store/products",
+            "query": {
+              "limit": "10",
+              "offset": "0"
+            },
+            "scheme": "https"
+          },
+          "step_id": "initial_product_read"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "pagination",
+              "operation_id": "medusa.store.products.list"
+            }
+          ],
+          "expected_decision_kind": "replay",
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.products.list",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "GET",
+            "path": "/store/products",
+            "query": {
+              "limit": "10",
+              "offset": "20"
+            },
+            "scheme": "https"
+          },
+          "step_id": "product_page"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "success",
+              "operation_id": "medusa.store.carts.create"
+            }
+          ],
+          "expected_decision_kind": "shadow_write",
+          "expected_state_change": true,
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.carts.create",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": {
+              "email": "admission@example.test",
+              "region_id": "region_datalox_us"
+            },
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "POST",
+            "path": "/store/carts",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "create_cart"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "duplicate",
+              "operation_id": "medusa.store.carts.create"
+            }
+          ],
+          "expected_decision_kind": "shadow_write",
+          "expected_state_change": true,
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.carts.create",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": {
+              "email": "admission@example.test",
+              "region_id": "region_datalox_us"
+            },
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "POST",
+            "path": "/store/carts",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "duplicate_create"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "failure",
+              "operation_id": "medusa.store.carts.create"
+            }
+          ],
+          "expected_decision_kind": "deny",
+          "expected_state_change": false,
+          "expected_status_code": 400,
+          "operation_id": "medusa.store.carts.create",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": {
+              "email": "admission@example.test",
+              "region_id": "region_datalox_us"
+            },
+            "headers": {},
+            "method": "POST",
+            "path": "/store/carts",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "create_missing_publishable_key"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "failure",
+              "operation_id": "medusa.store.carts.create"
+            }
+          ],
+          "expected_decision_kind": "deny",
+          "expected_state_change": false,
+          "expected_status_code": 400,
+          "operation_id": "medusa.store.carts.create",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": {
+              "email": "admission@example.test",
+              "region_id": "region_datalox_us"
+            },
+            "headers": {
+              "x-publishable-api-key": "pk_invalid"
+            },
+            "method": "POST",
+            "path": "/store/carts",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "create_invalid_publishable_key"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "failure",
+              "operation_id": "medusa.store.carts.create"
+            }
+          ],
+          "expected_decision_kind": "deny",
+          "expected_state_change": false,
+          "expected_status_code": 404,
+          "operation_id": "medusa.store.carts.create",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": {
+              "region_id": "region_missing"
+            },
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "POST",
+            "path": "/store/carts",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "create_invalid_region"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "readback",
+              "operation_id": "medusa.store.carts.create"
+            },
+            {
+              "behavior": "success",
+              "operation_id": "medusa.store.carts.retrieve"
+            }
+          ],
+          "expected_decision_kind": "replay",
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.carts.retrieve",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "GET",
+            "path": "/store/carts/cart_datalox_000001",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "create_readback"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "failure",
+              "operation_id": "medusa.store.carts.retrieve"
+            }
+          ],
+          "expected_decision_kind": "deny",
+          "expected_status_code": 404,
+          "operation_id": "medusa.store.carts.retrieve",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "GET",
+            "path": "/store/carts/cart_missing",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "retrieve_missing_cart"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "success",
+              "operation_id": "medusa.store.carts.line_items.add"
+            }
+          ],
+          "expected_decision_kind": "shadow_write",
+          "expected_state_change": true,
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.carts.line_items.add",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": {
+              "quantity": 1,
+              "variant_id": "variant_datalox_pagination_001"
+            },
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "POST",
+            "path": "/store/carts/cart_datalox_000001/line-items",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "add_line_item"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "duplicate",
+              "operation_id": "medusa.store.carts.line_items.add"
+            }
+          ],
+          "expected_decision_kind": "shadow_write",
+          "expected_state_change": true,
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.carts.line_items.add",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": {
+              "quantity": 1,
+              "variant_id": "variant_datalox_pagination_001"
+            },
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "POST",
+            "path": "/store/carts/cart_datalox_000001/line-items",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "duplicate_add"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "failure",
+              "operation_id": "medusa.store.carts.line_items.add"
+            }
+          ],
+          "expected_decision_kind": "deny",
+          "expected_state_change": false,
+          "expected_status_code": 400,
+          "operation_id": "medusa.store.carts.line_items.add",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": {
+              "quantity": 1,
+              "variant_id": "variant_missing"
+            },
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "POST",
+            "path": "/store/carts/cart_datalox_000001/line-items",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "invalid_variant_add"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "readback",
+              "operation_id": "medusa.store.carts.line_items.add"
+            }
+          ],
+          "expected_decision_kind": "replay",
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.carts.retrieve",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "GET",
+            "path": "/store/carts/cart_datalox_000001",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "add_readback"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "success",
+              "operation_id": "medusa.store.carts.line_items.update"
+            }
+          ],
+          "expected_decision_kind": "shadow_write",
+          "expected_state_change": true,
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.carts.line_items.update",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": {
+              "quantity": 3
+            },
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "POST",
+            "path": "/store/carts/cart_datalox_000001/line-items/cali_datalox_000001",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "update_line_item"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "duplicate",
+              "operation_id": "medusa.store.carts.line_items.update"
+            }
+          ],
+          "expected_decision_kind": "replay",
+          "expected_state_change": false,
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.carts.line_items.update",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": {
+              "quantity": 3
+            },
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "POST",
+            "path": "/store/carts/cart_datalox_000001/line-items/cali_datalox_000001",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "duplicate_update"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "failure",
+              "operation_id": "medusa.store.carts.line_items.update"
+            }
+          ],
+          "expected_decision_kind": "deny",
+          "expected_state_change": false,
+          "expected_status_code": 400,
+          "operation_id": "medusa.store.carts.line_items.update",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": {
+              "quantity": "three"
+            },
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "POST",
+            "path": "/store/carts/cart_datalox_000001/line-items/cali_datalox_000001",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "invalid_quantity_update"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "readback",
+              "operation_id": "medusa.store.carts.line_items.update"
+            }
+          ],
+          "expected_decision_kind": "replay",
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.carts.retrieve",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "GET",
+            "path": "/store/carts/cart_datalox_000001",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "update_readback"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "success",
+              "operation_id": "medusa.store.carts.line_items.delete"
+            }
+          ],
+          "expected_decision_kind": "shadow_write",
+          "expected_state_change": true,
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.carts.line_items.delete",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "DELETE",
+            "path": "/store/carts/cart_datalox_000001/line-items/cali_datalox_000001",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "delete_line_item"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "duplicate",
+              "operation_id": "medusa.store.carts.line_items.delete"
+            }
+          ],
+          "expected_decision_kind": "replay",
+          "expected_state_change": false,
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.carts.line_items.delete",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "DELETE",
+            "path": "/store/carts/cart_datalox_000001/line-items/cali_datalox_000001",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "duplicate_delete"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "failure",
+              "operation_id": "medusa.store.carts.line_items.delete"
+            }
+          ],
+          "expected_decision_kind": "deny",
+          "expected_state_change": false,
+          "expected_status_code": 500,
+          "operation_id": "medusa.store.carts.line_items.delete",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "DELETE",
+            "path": "/store/carts/cart_missing/line-items/cali_missing",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "delete_from_missing_cart"
+        },
+        {
+          "covers": [
+            {
+              "behavior": "readback",
+              "operation_id": "medusa.store.carts.line_items.delete"
+            }
+          ],
+          "expected_decision_kind": "replay",
+          "expected_status_code": 200,
+          "operation_id": "medusa.store.carts.retrieve",
+          "receipt_predicate_refs": [
+            "response_is_object",
+            "call_was_recorded"
+          ],
+          "request": {
+            "authority": "api.medusa.local",
+            "body": null,
+            "headers": {
+              "x-publishable-api-key": "pk_datalox_local_store"
+            },
+            "method": "GET",
+            "path": "/store/carts/cart_datalox_000001",
+            "query": {},
+            "scheme": "https"
+          },
+          "step_id": "delete_readback"
+        }
+      ]
+    }
+  ],
+  "bundle_version": "2.16.0-store-cart-v0",
+  "evidence_sources": [
+    {
+      "artifact_ref": "observations.json",
+      "artifact_sha256": "sha256:ce00055f67b9698f77d6ecedbd2fd5fbc37f7622a9d47193140879e4ca1713cd",
+      "distribution_label": "public",
+      "evidence_id": "medusa_store_cart_g2",
+      "grounding_level": "G2_SELF_HOSTED_REFERENCE",
+      "observed_at": "2026-09-02T16:08:44Z",
+      "rights_basis": "Self-authored sanitized factual measurements from an exact local MIT-licensed Medusa 2.16.0 release; no credentials, raw payload bodies, provider-generated ids, or tenant ids are retained.",
+      "valid_through": "2027-09-02T16:08:44Z"
+    },
+    {
+      "artifact_ref": "provenance.json",
+      "artifact_sha256": "sha256:c6030a60c118259b5aaa829e24ffa623bc2cddd991301ce3618dfd65947f99a0",
+      "distribution_label": "public",
+      "evidence_id": "medusa_store_cart_provenance",
+      "grounding_level": "G2_SELF_HOSTED_REFERENCE",
+      "observed_at": "2026-09-02T16:08:44Z",
+      "rights_basis": "Self-authored provenance manifest containing only release metadata, exact source digests, and retention declarations for an MIT-licensed local reference.",
+      "valid_through": "2027-09-02T16:08:44Z"
+    }
+  ],
+  "operations": [
+    {
+      "behavior_program": "medusa_2_16_0_store_cart_lifecycle_v1",
+      "covered_behaviors": [
+        "success",
+        "failure",
+        "pagination"
+      ],
+      "grounding": {
+        "evidence_refs": [
+          "medusa_store_cart_g2",
+          "medusa_store_cart_provenance"
+        ],
+        "level": "G2_SELF_HOSTED_REFERENCE"
+      },
+      "mutability": "read",
+      "native_surface": {
+        "authority": "api.medusa.local",
+        "method": "GET",
+        "path_template": "/store/products",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "medusa.store.products.list",
+      "rights": {
+        "behavior_distribution_basis": "Only self-authored runtime payloads and sanitized factual measurements from an exact MIT-licensed Medusa 2.16.0 self-hosted reference are distributed.",
+        "distribution_label": "public"
+      },
+      "state_effects": []
+    },
+    {
+      "behavior_program": "medusa_2_16_0_store_cart_lifecycle_v1",
+      "covered_behaviors": [
+        "success",
+        "failure",
+        "duplicate",
+        "readback"
+      ],
+      "grounding": {
+        "evidence_refs": [
+          "medusa_store_cart_g2",
+          "medusa_store_cart_provenance"
+        ],
+        "level": "G2_SELF_HOSTED_REFERENCE"
+      },
+      "mutability": "write",
+      "native_surface": {
+        "authority": "api.medusa.local",
+        "method": "POST",
+        "path_template": "/store/carts",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "medusa.store.carts.create",
+      "rights": {
+        "behavior_distribution_basis": "Only self-authored runtime payloads and sanitized factual measurements from an exact MIT-licensed Medusa 2.16.0 self-hosted reference are distributed.",
+        "distribution_label": "public"
+      },
+      "state_effects": [
+        "cart_created"
+      ]
+    },
+    {
+      "behavior_program": "medusa_2_16_0_store_cart_lifecycle_v1",
+      "covered_behaviors": [
+        "success",
+        "failure"
+      ],
+      "grounding": {
+        "evidence_refs": [
+          "medusa_store_cart_g2",
+          "medusa_store_cart_provenance"
+        ],
+        "level": "G2_SELF_HOSTED_REFERENCE"
+      },
+      "mutability": "read",
+      "native_surface": {
+        "authority": "api.medusa.local",
+        "method": "GET",
+        "path_template": "/store/carts/{cart_id}",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "medusa.store.carts.retrieve",
+      "rights": {
+        "behavior_distribution_basis": "Only self-authored runtime payloads and sanitized factual measurements from an exact MIT-licensed Medusa 2.16.0 self-hosted reference are distributed.",
+        "distribution_label": "public"
+      },
+      "state_effects": []
+    },
+    {
+      "behavior_program": "medusa_2_16_0_store_cart_lifecycle_v1",
+      "covered_behaviors": [
+        "success",
+        "failure",
+        "duplicate",
+        "readback"
+      ],
+      "grounding": {
+        "evidence_refs": [
+          "medusa_store_cart_g2",
+          "medusa_store_cart_provenance"
+        ],
+        "level": "G2_SELF_HOSTED_REFERENCE"
+      },
+      "mutability": "write",
+      "native_surface": {
+        "authority": "api.medusa.local",
+        "method": "POST",
+        "path_template": "/store/carts/{cart_id}/line-items",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "medusa.store.carts.line_items.add",
+      "rights": {
+        "behavior_distribution_basis": "Only self-authored runtime payloads and sanitized factual measurements from an exact MIT-licensed Medusa 2.16.0 self-hosted reference are distributed.",
+        "distribution_label": "public"
+      },
+      "state_effects": [
+        "line_item_created_or_incremented"
+      ]
+    },
+    {
+      "behavior_program": "medusa_2_16_0_store_cart_lifecycle_v1",
+      "covered_behaviors": [
+        "success",
+        "failure",
+        "duplicate",
+        "readback"
+      ],
+      "grounding": {
+        "evidence_refs": [
+          "medusa_store_cart_g2",
+          "medusa_store_cart_provenance"
+        ],
+        "level": "G2_SELF_HOSTED_REFERENCE"
+      },
+      "mutability": "write",
+      "native_surface": {
+        "authority": "api.medusa.local",
+        "method": "POST",
+        "path_template": "/store/carts/{cart_id}/line-items/{line_item_id}",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "medusa.store.carts.line_items.update",
+      "rights": {
+        "behavior_distribution_basis": "Only self-authored runtime payloads and sanitized factual measurements from an exact MIT-licensed Medusa 2.16.0 self-hosted reference are distributed.",
+        "distribution_label": "public"
+      },
+      "state_effects": [
+        "line_item_quantity_set"
+      ]
+    },
+    {
+      "behavior_program": "medusa_2_16_0_store_cart_lifecycle_v1",
+      "covered_behaviors": [
+        "success",
+        "failure",
+        "duplicate",
+        "readback"
+      ],
+      "grounding": {
+        "evidence_refs": [
+          "medusa_store_cart_g2",
+          "medusa_store_cart_provenance"
+        ],
+        "level": "G2_SELF_HOSTED_REFERENCE"
+      },
+      "mutability": "write",
+      "native_surface": {
+        "authority": "api.medusa.local",
+        "method": "DELETE",
+        "path_template": "/store/carts/{cart_id}/line-items/{line_item_id}",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "medusa.store.carts.line_items.delete",
+      "rights": {
+        "behavior_distribution_basis": "Only self-authored runtime payloads and sanitized factual measurements from an exact MIT-licensed Medusa 2.16.0 self-hosted reference are distributed.",
+        "distribution_label": "public"
+      },
+      "state_effects": [
+        "line_item_removed_if_present"
+      ]
+    }
+  ],
+  "provider_id": "medusa",
+  "provider_invariants": [
+    {
+      "expected": "region_datalox_us",
+      "operator": "equals",
+      "pointer": "/state/region_id",
+      "predicate_id": "region_seed_is_fixed",
+      "source": "provider_state"
+    }
+  ],
+  "receipt_predicates": [
+    {
+      "expected_type": "object",
+      "operator": "type",
+      "pointer": "",
+      "predicate_id": "response_is_object",
+      "source": "response_body"
+    },
+    {
+      "expected_type": "array",
+      "operator": "type",
+      "pointer": "/events",
+      "predicate_id": "call_was_recorded",
+      "source": "call_evidence"
+    }
+  ],
+  "reset_profiles": [
+    {
+      "kind": "compiled_seed",
+      "profile_id": "default"
+    }
+  ],
+  "schema_version": "datalox_provider_operation_claims_v1"
+}

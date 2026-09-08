@@ -1,0 +1,34 @@
+{
+  "grounding_gaps": [
+    {
+      "claim": "Medusa Cloud, production tenant, payment, shipping, tax, inventory, promotion, production authorization beyond the observed Store publishable-key check, rate-limit, or latency behavior",
+      "operation_family": "all",
+      "reason": "The evidence comes from one exact self-hosted Medusa 2.16.0 reference release and covers only the declared catalog/cart slice."
+    },
+    {
+      "claim": "Raw provider response payload fidelity",
+      "operation_family": "all",
+      "reason": "The public artifact retains sanitized factual statuses, state relationships, and source digests only. Runtime payload values, deterministic ids, and error text are self-authored."
+    }
+  ],
+  "sources": [
+    {
+      "id": "medusa_2_16_0_store_cart_g2",
+      "kind": "self_hosted_reference_observation",
+      "provider": "Medusa",
+      "provider_version": "2.16.0",
+      "locator": "envs/medusa_store_cart_v0/evidence/observations.json",
+      "grounding_level": "G2_SELF_HOSTED_REFERENCE",
+      "derivation": "Identifier-free factual observations from an exact local MIT-licensed Medusa 2.16.0 deployment. Runtime payload values and error text are self-authored; no credentials, provider-generated identifiers, or captured response bodies are retained.",
+      "supports": [
+        "operation:medusa.store.products.list",
+        "operation:medusa.store.carts.create",
+        "operation:medusa.store.carts.retrieve",
+        "operation:medusa.store.carts.line_items.add",
+        "operation:medusa.store.carts.line_items.update",
+        "operation:medusa.store.carts.line_items.delete",
+        "behavior:success_duplicate_invalid_readback_delete"
+      ]
+    }
+  ]
+}

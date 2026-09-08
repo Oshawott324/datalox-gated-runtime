@@ -1,0 +1,50 @@
+{
+  "schema_version": "datalox_sanitized_provider_result_failure_observation_v1",
+  "provider": "UniProt REST API",
+  "authority": "rest.uniprot.org",
+  "observed_at": "2026-09-02T15:57:34Z",
+  "source_class": "public_production_probe",
+  "capture_utility": {
+    "distribution": "restricted",
+    "sha256": "sha256:e2722c269ca91a500258089e2da4177e7a50b66029acf99383fde89fccce7fbc"
+  },
+  "reviewed_authoring_utility": {
+    "path": "scripts/providers/acquire-uniprot-idmapping-uniref-result-failure.py",
+    "sha256": "sha256:95f2848a9b733abb9c2de70e3a08c7e8a552dc9bc1d6f6fc67dab47e180a2387",
+    "change_after_capture": "future receipts include the exact synthetic request path in addition to the path template"
+  },
+  "private_source_receipt": {
+    "manifest_sha256": "sha256:59e0368b1cd3815060a73880f3c0e27de336c7c66e3277a2979771e2ff02f85b",
+    "signed_contemporaneous_receipt": false
+  },
+  "release_header": "2026_03",
+  "deployment_date_header": "02-September-2026",
+  "operation": "GET /idmapping/uniref/results/{unknown_job_id}",
+  "query": {
+    "format": "json",
+    "size": "1"
+  },
+  "request_relation": "synthetic nonexistent job identifier",
+  "status_code": 404,
+  "response_facts": {
+    "content_type": "application/json",
+    "json_type": "object",
+    "top_level_keys": [
+      "messages",
+      "url"
+    ],
+    "top_level_value_types": {
+      "messages": "list",
+      "url": "str"
+    }
+  },
+  "retention": {
+    "public_raw_request_bytes": false,
+    "public_raw_response_bytes": false,
+    "private_raw_response_bytes": true,
+    "provider_generated_job_ids": false,
+    "submitted_provider_identifiers": false,
+    "tenant_data": false,
+    "credentials": false
+  }
+}

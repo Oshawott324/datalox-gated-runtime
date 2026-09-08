@@ -1,0 +1,33 @@
+{
+  "authorities": [
+    "api.medusa.local"
+  ],
+  "behavior": {
+    "default_actor_role": "store_operator",
+    "identity_path": "identity.json",
+    "implementation": "runtime/world/v1/implementation.py:create_world",
+    "protocol": "world_v1_adapter",
+    "required_runtime_capabilities": [
+      "actors",
+      "role_scoped_tools",
+      "transactions"
+    ],
+    "roles_path": "roles.json",
+    "seed_path": "seed.json",
+    "tools_path": "tools.json"
+  },
+  "bundle_version": "2.16.0-store-cart-v0",
+  "content_hashes": {
+    "identity.json": "sha256:0bcbee31abc9387e2847917f3bd609fd18d3b9ec623ff213f42fbdcc950e723f",
+    "roles.json": "sha256:a7eb4374cc17a7f88b8b51d175a4ef93f541819e7cf132a09bbd07468ccfc271",
+    "runtime/world/v1/contract.py": "sha256:2b230f09b0cf052d14637c216799b17b616f19ba7a26c82ffa39811746bb72dc",
+    "runtime/world/v1/implementation.py": "sha256:8007ca5e1aed30b648a8cdf52d2a7e926c20535faabdf7e1c412c598dd443e34",
+    "seed.json": "sha256:7f14d86770ed0327d889d3957a9b671dc6194f3410cc67ec545a1147814e932f",
+    "source.json": "sha256:13f3e067d4a1cd23400ba2425e2117864c6f5e0fbbd2b95d424bf2aa3f8d4c46",
+    "tools.json": "sha256:c842d648d8bbf3273d46b92f4f9ca096810472cc86c34e8d971a9ce4c3dcff7f"
+  },
+  "provider_id": "medusa",
+  "schema_version": "datalox_provider_runtime_v2",
+  "source_path": "source.json",
+  "wire_protocol": "standard_http_v1"
+}

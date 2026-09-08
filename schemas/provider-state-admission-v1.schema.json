@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalox.dev/schemas/provider-state-admission-v1.schema.json",
+  "title": "Derived provider state-profile admission",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "provider_id",
+    "bundle_version",
+    "provider_runtime_sha256",
+    "profile_sha256",
+    "seed_sha256",
+    "construction_trace_sha256",
+    "construction_replay_sha256",
+    "admitted",
+    "task_independent",
+    "state_families",
+    "relationship_checks",
+    "observation_probe_sha256",
+    "pagination_probe_sha256",
+    "mutation_reset_sha256",
+    "first_execution_sha256",
+    "second_execution_sha256",
+    "construction_step_count"
+  ],
+  "properties": {
+    "schema_version": {"const": "datalox_provider_state_admission_v1"},
+    "profile_id": {"type": "string", "minLength": 1},
+    "provider_id": {"type": "string", "minLength": 1},
+    "bundle_version": {"type": "string", "minLength": 1},
+    "provider_runtime_sha256": {"$ref": "#/$defs/sha256"},
+    "profile_sha256": {"$ref": "#/$defs/sha256"},
+    "seed_sha256": {"$ref": "#/$defs/sha256"},
+    "construction_trace_sha256": {"$ref": "#/$defs/sha256"},
+    "construction_replay_sha256": {"$ref": "#/$defs/sha256"},
+    "admitted": {"const": true},
+    "task_independent": {"const": true},
+    "state_families": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["family_id", "instance_count", "observed_lifecycle_values", "passed"],
+        "properties": {
+          "family_id": {"type": "string", "minLength": 1},
+          "instance_count": {"type": "integer", "minimum": 0},
+          "observed_lifecycle_values": {"type": "array"},
+          "passed": {"const": true}
+        }
+      }
+    },
+    "relationship_checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["check_id", "checked", "passed"],
+        "properties": {
+          "check_id": {"type": "string", "minLength": 1},
+          "checked": {"type": "integer", "minimum": 0},
+          "passed": {"const": true}
+        }
+      }
+    },
+    "observation_probe_sha256": {"$ref": "#/$defs/sha256"},
+    "pagination_probe_sha256": {"$ref": "#/$defs/sha256"},
+    "mutation_reset_sha256": {"$ref": "#/$defs/sha256"},
+    "first_execution_sha256": {"$ref": "#/$defs/sha256"},
+    "second_execution_sha256": {"$ref": "#/$defs/sha256"},
+    "construction_step_count": {"type": "integer", "minimum": 0}
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

@@ -5,12 +5,17 @@ import sys
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
+
 from test_provider_release_registry import _profile
 
 from datalox_gated_runtime.cli import main
+from datalox_gated_runtime.provider_runtime import load_provider_runtime_bundle
 from datalox_gated_runtime.rollout.provider_set import (
     load_materialized_rollout_provider_set_v2,
 )
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def _run_json(arguments: list[str], capsys: object) -> dict[str, object]:
@@ -131,6 +136,39 @@ def test_foundry_cli_builds_publishes_selects_and_materializes(
         "admitted": True,
         "prepared": str(run_root / "prepared.json"),
     }
+
+
+def test_provider_runtime_cli_accepts_task_free_seed_outside_world_episodes(
+    tmp_path: Path, capsys: object
+) -> None:
+    if not (ROOT / "envs/openlmis_supply_chain_v0/world/manifest.json").is_file():
+        pytest.skip("restricted OpenLMIS state-profile fixture is absent")
+    output = tmp_path / "openlmis-runtime"
+    result = _run_json(
+        [
+            "provider",
+            "build-runtime",
+            "--source-world",
+            str(ROOT / "envs/openlmis_supply_chain_v0"),
+            "--seed-file",
+            str(
+                ROOT / "envs/openlmis_supply_chain_v0/state-profiles/regional-network-v1/seed.json"
+            ),
+            "--provider-id",
+            "openlmis",
+            "--authority",
+            "openlmis.example",
+            "--out",
+            str(output),
+        ],
+        capsys,
+    )
+
+    assert Path(str(result["manifest"])).is_file()
+    bundle = load_provider_runtime_bundle(output)
+    assert bundle.seed is not None
+    assert bundle.seed["id"] == "openlmis-regional-network-v1"
+    assert bundle.source["source_seed_sha256"].startswith("sha256:")
 
 
 def test_admitted_interception_cli_rejects_misaligned_bindings(

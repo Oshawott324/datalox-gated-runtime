@@ -9,6 +9,7 @@ import secrets
 import socket
 import threading
 import time
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -170,6 +171,7 @@ def serve_admitted_interception_gateway(
     host: str,
     port: int,
     prepared: bool = False,
+    delivery_intervention_configs: Mapping[str, Path] | None = None,
 ) -> None:
     """Serve a gateway whose providers all carry exact admission bindings."""
 
@@ -195,6 +197,7 @@ def serve_admitted_interception_gateway(
         ),
         run_root=run_root / "providers",
         control_token=control_token,
+        delivery_intervention_configs=delivery_intervention_configs,
     )
     _serve_gateway_process(gateway=gateway, run_root=run_root, host=host, port=port)
 
@@ -447,5 +450,5 @@ def _load_release_config(path: Path) -> tuple[dict[str, object], Path]:
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise ValueError(f"provider release config is invalid: {exc}") from exc
     if not isinstance(raw, dict):
-        raise ValueError("provider release config must contain an object")
+        raise TypeError("provider release config must contain an object")
     return raw, resolved

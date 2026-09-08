@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "datalox-dirty-integration"
 version = "0.1.0"
-description = "A downstream Verifiers fixture for paired Datalox delivery-intervention runs."
+description = "A downstream Verifiers fixture for paired Medusa read interventions and provider writes."
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
@@ -17,6 +17,7 @@ dependencies = [
 
 [project.scripts]
 datalox-dirty-pair = "datalox_dirty_integration.paired:main"
+datalox-dirty-calibrate = "datalox_dirty_integration.calibration:main"
 
 [tool.setuptools.packages.find]
 where = ["."]

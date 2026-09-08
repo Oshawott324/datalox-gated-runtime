@@ -1,0 +1,8 @@
+{
+  "schema_version": "uniprot_idmapping_verifier_v1",
+  "assertions": [
+    {"failure_code": "completed_job_exists", "type": "implementation_check"}
+  ],
+  "reward_atoms": ["completed_job_exists"],
+  "semantic_rubrics": []
+}

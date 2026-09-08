@@ -9,7 +9,6 @@ from pathlib import Path
 
 import jsonschema
 import pytest
-
 from provider_runtime_helpers import (
     PROVIDER_AUTHORITY,
     PROVIDER_ID,
@@ -182,6 +181,7 @@ def _claims(tmp_path: Path) -> Path:
                         "request": deepcopy(write),
                         "expected_status_code": 200,
                         "expected_decision_kind": "shadow_write",
+                        "expected_state_change": True,
                         "covers": [{"operation_id": "counter.increment", "behavior": "duplicate"}],
                         "receipt_predicate_refs": ["response_is_object"],
                     },
@@ -200,6 +200,7 @@ def _claims(tmp_path: Path) -> Path:
                         "request": _request("POST", body={"amount": 2}, headers=invalid_header),
                         "expected_status_code": 400,
                         "expected_decision_kind": "deny",
+                        "expected_state_change": False,
                         "covers": [{"operation_id": "counter.increment", "behavior": "failure"}],
                         "receipt_predicate_refs": ["response_is_object"],
                     },
@@ -229,6 +230,7 @@ def test_provider_admission_executes_writes_receipts_and_functional_reset(tmp_pa
     assert "admission_sha256" not in result.payload
     assert result.payload["admitted"] is True
     assert result.payload["task_free"] is True
+    assert "expected_state_change" not in json.dumps(result.payload)
     assert (
         result.payload["behavior_probes"][0]["first_run_sha256"]
         == (result.payload["behavior_probes"][0]["second_run_sha256"])
@@ -399,6 +401,112 @@ def test_admission_rejects_successful_write_without_observable_state_change(
         )
 
     assert caught.value.code == "provider_admission_write_transition_missing"
+
+
+@pytest.mark.parametrize("step_id", ["write_duplicate", "write_failure"])
+def test_admission_requires_state_relation_for_write_duplicate_and_failure(
+    tmp_path: Path,
+    step_id: str,
+) -> None:
+    bundle = build_stateful_provider_bundle(tmp_path / "bundle-root")
+    claims = _claims(tmp_path)
+    payload = json.loads(claims.read_text(encoding="utf-8"))
+    step = next(
+        item for item in payload["behavior_probes"][0]["steps"] if item["step_id"] == step_id
+    )
+    del step["expected_state_change"]
+    claims.write_text(json.dumps(payload), encoding="utf-8")
+    output = tmp_path / "admission.json"
+
+    with pytest.raises(ProviderRuntimeError) as caught:
+        admit_provider_runtime(
+            bundle_dir=bundle,
+            claims_path=claims,
+            output_path=output,
+            admitted_at=datetime(2026, 8, 25, tzinfo=UTC),
+        )
+
+    assert caught.value.code == "provider_admission_state_relation_missing"
+    assert not output.exists()
+
+
+def test_admission_rejects_write_failure_relation_that_allows_state_change(
+    tmp_path: Path,
+) -> None:
+    bundle = build_stateful_provider_bundle(tmp_path / "bundle-root")
+    claims = _claims(tmp_path)
+    payload = json.loads(claims.read_text(encoding="utf-8"))
+    failure = next(
+        item
+        for item in payload["behavior_probes"][0]["steps"]
+        if item["step_id"] == "write_failure"
+    )
+    failure["expected_state_change"] = True
+    claims.write_text(json.dumps(payload), encoding="utf-8")
+    output = tmp_path / "admission.json"
+
+    with pytest.raises(ProviderRuntimeError) as caught:
+        admit_provider_runtime(
+            bundle_dir=bundle,
+            claims_path=claims,
+            output_path=output,
+            admitted_at=datetime(2026, 8, 25, tzinfo=UTC),
+        )
+
+    assert caught.value.code == "provider_admission_state_relation_invalid"
+    assert not output.exists()
+
+
+def test_admission_rejects_non_boolean_state_relation_without_output(tmp_path: Path) -> None:
+    bundle = build_stateful_provider_bundle(tmp_path / "bundle-root")
+    claims = _claims(tmp_path)
+    payload = json.loads(claims.read_text(encoding="utf-8"))
+    duplicate = next(
+        item
+        for item in payload["behavior_probes"][0]["steps"]
+        if item["step_id"] == "write_duplicate"
+    )
+    duplicate["expected_state_change"] = "true"
+    claims.write_text(json.dumps(payload), encoding="utf-8")
+    output = tmp_path / "admission.json"
+
+    with pytest.raises(ProviderRuntimeError) as caught:
+        admit_provider_runtime(
+            bundle_dir=bundle,
+            claims_path=claims,
+            output_path=output,
+            admitted_at=datetime(2026, 8, 25, tzinfo=UTC),
+        )
+
+    assert caught.value.code == "provider_admission_probe_step_invalid"
+    assert not output.exists()
+
+
+def test_admission_rejects_incorrect_duplicate_state_relation_atomically(
+    tmp_path: Path,
+) -> None:
+    bundle = build_stateful_provider_bundle(tmp_path / "bundle-root")
+    claims = _claims(tmp_path)
+    payload = json.loads(claims.read_text(encoding="utf-8"))
+    duplicate = next(
+        item
+        for item in payload["behavior_probes"][0]["steps"]
+        if item["step_id"] == "write_duplicate"
+    )
+    duplicate["expected_state_change"] = False
+    claims.write_text(json.dumps(payload), encoding="utf-8")
+    output = tmp_path / "admission.json"
+
+    with pytest.raises(ProviderRuntimeError) as caught:
+        admit_provider_runtime(
+            bundle_dir=bundle,
+            claims_path=claims,
+            output_path=output,
+            admitted_at=datetime(2026, 8, 25, tzinfo=UTC),
+        )
+
+    assert caught.value.code == "provider_admission_state_relation_mismatch"
+    assert not output.exists()
 
 
 def test_strict_admission_loader_rejects_forged_reset_result(tmp_path: Path) -> None:

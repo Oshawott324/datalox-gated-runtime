@@ -1,0 +1,206 @@
+{
+  "admitted": true,
+  "behavior_probes": [
+    {
+      "first_run_sha256": "sha256:0f572026dbcc4cecde17b5204c892c3e8cfb9d704ceda10ad28fd66c205c4145",
+      "probe_id": "uniprot_uniref100_async_lifecycle",
+      "second_run_sha256": "sha256:0f572026dbcc4cecde17b5204c892c3e8cfb9d704ceda10ad28fd66c205c4145",
+      "step_count": 8
+    }
+  ],
+  "bundle_version": "2026_03-idmapping-v0",
+  "evidence_sources": [
+    {
+      "artifact_ref": "observed-lifecycle.json",
+      "artifact_sha256": "sha256:02fc0430aa4ec0c84756bc19707356f1d4ebb7f1d34a5ce25c45708a335260ad",
+      "distribution_label": "public",
+      "evidence_id": "uniprot_public_idmapping_lifecycle_2026_09_02",
+      "grounding_level": "G3_PUBLIC_PRODUCTION",
+      "observed_at": "2026-09-02T13:46:05Z",
+      "rights_basis": "Self-authored factual observations without provider payload bytes, credentials, identifiers, or tenant data.",
+      "valid_through": "2027-09-02T00:00:00Z"
+    },
+    {
+      "artifact_ref": "authored-write-completeness.json",
+      "artifact_sha256": "sha256:f810760de402922f14f767eec8415ffe23481803a57979bbe9d7f9dabd5536bb",
+      "distribution_label": "public",
+      "evidence_id": "uniprot_authored_write_completeness_v1",
+      "grounding_level": "G1_SCHEMA_INSTANTIATED",
+      "observed_at": "2026-09-02T16:00:00Z",
+      "rights_basis": "Self-authored local completeness fixture without provider payload bytes, credentials, identifiers, or tenant data.",
+      "valid_through": "2027-09-02T00:00:00Z"
+    },
+    {
+      "artifact_ref": "observed-status-failure.json",
+      "artifact_sha256": "sha256:78a884529d8ba78c279d24b845ee38772015fc6861c6b2e14ea2643fa348b2b7",
+      "distribution_label": "public",
+      "evidence_id": "uniprot_public_idmapping_status_failure_2026_09_02",
+      "grounding_level": "G3_PUBLIC_PRODUCTION",
+      "observed_at": "2026-09-02T15:35:24Z",
+      "rights_basis": "Self-authored sanitized response-shape facts backed by a retained private read-only response receipt.",
+      "valid_through": "2027-09-02T00:00:00Z"
+    },
+    {
+      "artifact_ref": "observed-uniref-result-failure.json",
+      "artifact_sha256": "sha256:4a18b15bf500c363c6ec2f18c34281ee80f2b0a9898b48d54e289cb4e93044ee",
+      "distribution_label": "public",
+      "evidence_id": "uniprot_public_uniref_result_failure_2026_09_02",
+      "grounding_level": "G3_PUBLIC_PRODUCTION",
+      "observed_at": "2026-09-02T15:57:34Z",
+      "rights_basis": "Self-authored sanitized response-shape facts backed by a retained private read-only response receipt.",
+      "valid_through": "2027-09-02T00:00:00Z"
+    }
+  ],
+  "operation_claims_sha256": "sha256:b651d8d31a20fd2c992e48837def9aa4e066c927372c5a440ceadc6b72e93582",
+  "operations": [
+    {
+      "behavior_program": "uniprot_uniref100_async_lifecycle",
+      "covered_behaviors": {
+        "duplicate": true,
+        "failure": true,
+        "readback": true,
+        "success": true
+      },
+      "grounding": {
+        "evidence_refs": [
+          "uniprot_authored_write_completeness_v1",
+          "uniprot_public_idmapping_lifecycle_2026_09_02"
+        ],
+        "grounded": false,
+        "level": "G1_SCHEMA_INSTANTIATED"
+      },
+      "mutability": "write",
+      "native_surface": {
+        "authority": "rest.uniprot.org",
+        "method": "POST",
+        "path_template": "/idmapping/run",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "uniprot.idmapping.run",
+      "rights": {
+        "behavior_distribution_basis": "The executable local fixture is self-authored from non-copyrightable status and state-transition facts.",
+        "distribution_label": "public"
+      },
+      "state_effects": [
+        "jobs",
+        "request_index",
+        "scheduled_events"
+      ]
+    },
+    {
+      "behavior_program": "uniprot_uniref100_async_lifecycle",
+      "covered_behaviors": {
+        "async": true,
+        "failure": true,
+        "success": true
+      },
+      "grounding": {
+        "evidence_refs": [
+          "uniprot_public_idmapping_lifecycle_2026_09_02",
+          "uniprot_public_idmapping_status_failure_2026_09_02"
+        ],
+        "grounded": true,
+        "level": "G3_PUBLIC_PRODUCTION"
+      },
+      "mutability": "read",
+      "native_surface": {
+        "authority": "rest.uniprot.org",
+        "method": "GET",
+        "path_template": "/idmapping/status/{job_id}",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "uniprot.idmapping.status",
+      "rights": {
+        "behavior_distribution_basis": "The executable local fixture is self-authored from non-copyrightable status and state-transition facts.",
+        "distribution_label": "public"
+      },
+      "state_effects": []
+    },
+    {
+      "behavior_program": "uniprot_uniref100_async_lifecycle",
+      "covered_behaviors": {
+        "failure": true,
+        "success": true
+      },
+      "grounding": {
+        "evidence_refs": [
+          "uniprot_public_idmapping_lifecycle_2026_09_02",
+          "uniprot_public_uniref_result_failure_2026_09_02"
+        ],
+        "grounded": true,
+        "level": "G3_PUBLIC_PRODUCTION"
+      },
+      "mutability": "read",
+      "native_surface": {
+        "authority": "rest.uniprot.org",
+        "method": "GET",
+        "path_template": "/idmapping/uniref/results/{job_id}",
+        "scheme": "https",
+        "type": "http"
+      },
+      "operation_id": "uniprot.idmapping.uniref_results",
+      "rights": {
+        "behavior_distribution_basis": "The executable local fixture is self-authored from non-copyrightable status, route, and response-shape facts.",
+        "distribution_label": "public"
+      },
+      "state_effects": []
+    }
+  ],
+  "provider_id": "uniprot",
+  "provider_invariants": [
+    {
+      "expected_type": "object",
+      "operator": "type",
+      "passed": true,
+      "pointer": "/state/jobs",
+      "predicate_id": "jobs_state_is_object",
+      "source": "provider_state"
+    },
+    {
+      "expected_type": "array",
+      "operator": "type",
+      "passed": true,
+      "pointer": "/scheduled_events",
+      "predicate_id": "scheduled_events_is_array",
+      "source": "provider_state"
+    }
+  ],
+  "provider_runtime_sha256": "sha256:27e35f855bf3549600b66ad32ce3e80d3bff21d0877f99cca0b8f0fd35972625",
+  "receipt_predicates": [
+    {
+      "expected_type": "array",
+      "operator": "type",
+      "passed": true,
+      "pointer": "/events",
+      "predicate_id": "call_was_recorded",
+      "source": "call_evidence"
+    },
+    {
+      "expected_type": "object",
+      "operator": "type",
+      "passed": true,
+      "pointer": "",
+      "predicate_id": "response_is_object",
+      "source": "response_body"
+    },
+    {
+      "expected_type": "string",
+      "operator": "type",
+      "passed": true,
+      "pointer": "/jobId",
+      "predicate_id": "response_has_job_id",
+      "source": "response_body"
+    }
+  ],
+  "reset_profiles": [
+    {
+      "functional_equivalence_passed": true,
+      "kind": "compiled_seed",
+      "profile_id": "default"
+    }
+  ],
+  "schema_version": "datalox_provider_admission_v1",
+  "task_free": true
+}

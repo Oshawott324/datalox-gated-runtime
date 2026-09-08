@@ -1,0 +1,478 @@
+{
+  "bundle_version": "1.0.0",
+  "construction": {
+    "base_seed_path": "base-seed.json",
+    "base_seed_sha256": "sha256:2b865483bd1d52cf0f98e790d27364d6ac5bbca3b8b2ede560fbe0cc188c4dc4",
+    "method": "seed_plus_provider_operation_trace_v1",
+    "operation_count": 96,
+    "principal": "trusted_controller",
+    "source_release": "OpenLMIS Reference Distribution v3.19.2 bounded behavior pack",
+    "trace_path": "construction-trace.json",
+    "trace_sha256": "sha256:c44cefdf3e8b41fc720722153019646ab368e74ac966e2ae8d67144cbc899cc1"
+  },
+  "distribution_label": "public",
+  "information_boundary": {
+    "agent_selectable": false,
+    "contains_evaluation_ground_truth": false,
+    "contains_task_objectives": false
+  },
+  "known_gaps": [
+    "Tenant values and cardinalities are self-authored rather than production-derived.",
+    "The pinned disposable reference distribution grounds structures and selected transitions, not production extensions or authorization policy.",
+    "OpenLMIS background timers are not represented by this bounded behavior pack."
+  ],
+  "mutation_probes": [
+    {
+      "actor_id": "state-admission-administrator",
+      "actor_role": "administrator",
+      "arguments": {
+        "createdDate": "2026-07-22T09:00:00+00:00",
+        "important": false,
+        "messages": {
+          "email": {
+            "body": "Reset must remove this controller-authored notification.",
+            "subject": "State admission probe"
+          }
+        },
+        "userId": "00000000-0000-4000-8000-000000000001"
+      },
+      "assertions": [
+        {
+          "expected": "null",
+          "operator": "type",
+          "pointer": ""
+        }
+      ],
+      "expected_state_change": true,
+      "expected_status_code": 200,
+      "operation_id": "notification.create_notification",
+      "probe_id": "notification_write_reset"
+    }
+  ],
+  "observation_probes": [
+    {
+      "actor_id": "state-admission-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "assertions": [
+        {
+          "expected": 5,
+          "operator": "equals",
+          "pointer": "/totalElements"
+        },
+        {
+          "expected": 5,
+          "operator": "length",
+          "pointer": "/content"
+        }
+      ],
+      "expected_status_code": 200,
+      "operation_id": "refdata.list_facilities",
+      "probe_id": "facility_catalog_reachable"
+    },
+    {
+      "actor_id": "state-admission-auditor",
+      "actor_role": "auditor",
+      "arguments": {},
+      "assertions": [
+        {
+          "expected": 4,
+          "operator": "equals",
+          "pointer": "/totalElements"
+        },
+        {
+          "expected": "array",
+          "operator": "type",
+          "pointer": "/content"
+        }
+      ],
+      "expected_status_code": 200,
+      "operation_id": "fulfillment.list_orders",
+      "probe_id": "order_history_reachable"
+    },
+    {
+      "actor_id": "state-admission-facility-clerk",
+      "actor_role": "facility_clerk",
+      "arguments": {},
+      "assertions": [
+        {
+          "expected": "world_tool_hidden",
+          "operator": "equals",
+          "pointer": "/error/code"
+        }
+      ],
+      "expected_status_code": 403,
+      "operation_id": "refdata.list_users",
+      "probe_id": "iam_permission_boundary"
+    }
+  ],
+  "pagination_probes": [
+    {
+      "actor_id": "state-admission-auditor",
+      "actor_role": "auditor",
+      "expected_unique_items": 7,
+      "item_collection_pointer": "/content",
+      "item_id_pointer": "/id",
+      "operation_id": "requisition.search",
+      "pages": [
+        {
+          "arguments": {
+            "page": 0,
+            "size": 3
+          },
+          "assertions": [
+            {
+              "expected": 0,
+              "operator": "equals",
+              "pointer": "/number"
+            },
+            {
+              "expected": 3,
+              "operator": "equals",
+              "pointer": "/size"
+            },
+            {
+              "expected": 7,
+              "operator": "equals",
+              "pointer": "/totalElements"
+            },
+            {
+              "expected": 3,
+              "operator": "equals",
+              "pointer": "/totalPages"
+            }
+          ],
+          "expected_status_code": 200
+        },
+        {
+          "arguments": {
+            "page": 1,
+            "size": 3
+          },
+          "assertions": [
+            {
+              "expected": 1,
+              "operator": "equals",
+              "pointer": "/number"
+            },
+            {
+              "expected": 3,
+              "operator": "equals",
+              "pointer": "/size"
+            },
+            {
+              "expected": 7,
+              "operator": "equals",
+              "pointer": "/totalElements"
+            },
+            {
+              "expected": 3,
+              "operator": "equals",
+              "pointer": "/totalPages"
+            }
+          ],
+          "expected_status_code": 200
+        },
+        {
+          "arguments": {
+            "page": 2,
+            "size": 3
+          },
+          "assertions": [
+            {
+              "expected": 2,
+              "operator": "equals",
+              "pointer": "/number"
+            },
+            {
+              "expected": 3,
+              "operator": "equals",
+              "pointer": "/size"
+            },
+            {
+              "expected": 7,
+              "operator": "equals",
+              "pointer": "/totalElements"
+            },
+            {
+              "expected": 3,
+              "operator": "equals",
+              "pointer": "/totalPages"
+            }
+          ],
+          "expected_status_code": 200
+        }
+      ],
+      "probe_id": "requisition_catalog_three_pages"
+    }
+  ],
+  "profile_id": "regional-network-v1",
+  "provider_id": "openlmis",
+  "relationship_checks": [
+    {
+      "check_id": "requisition_facility",
+      "from_collection_pointer": "/requisitions",
+      "minimum_checked": 7,
+      "nullable": false,
+      "reference_pointer": "/facility/id",
+      "to_collection_pointer": "/facilities",
+      "to_id_pointer": "/id"
+    },
+    {
+      "check_id": "requisition_program",
+      "from_collection_pointer": "/requisitions",
+      "minimum_checked": 7,
+      "nullable": false,
+      "reference_pointer": "/program/id",
+      "to_collection_pointer": "/programs",
+      "to_id_pointer": "/id"
+    },
+    {
+      "check_id": "requisition_period",
+      "from_collection_pointer": "/requisitions",
+      "minimum_checked": 7,
+      "nullable": false,
+      "reference_pointer": "/processingPeriod/id",
+      "to_collection_pointer": "/processing_periods",
+      "to_id_pointer": "/id"
+    },
+    {
+      "check_id": "order_program",
+      "from_collection_pointer": "/orders",
+      "minimum_checked": 4,
+      "nullable": false,
+      "reference_pointer": "/program/id",
+      "to_collection_pointer": "/programs",
+      "to_id_pointer": "/id"
+    },
+    {
+      "check_id": "shipment_order",
+      "from_collection_pointer": "/shipments",
+      "minimum_checked": 2,
+      "nullable": false,
+      "reference_pointer": "/order/id",
+      "to_collection_pointer": "/orders",
+      "to_id_pointer": "/id"
+    },
+    {
+      "check_id": "pod_shipment",
+      "from_collection_pointer": "/proofs_of_delivery",
+      "minimum_checked": 2,
+      "nullable": false,
+      "reference_pointer": "/shipment/id",
+      "to_collection_pointer": "/shipments",
+      "to_id_pointer": "/id"
+    },
+    {
+      "check_id": "stock_card_facility",
+      "from_collection_pointer": "/stock_cards",
+      "minimum_checked": 20,
+      "nullable": false,
+      "reference_pointer": "/facility/id",
+      "to_collection_pointer": "/facilities",
+      "to_id_pointer": "/id"
+    },
+    {
+      "check_id": "stock_card_orderable",
+      "from_collection_pointer": "/stock_cards",
+      "minimum_checked": 20,
+      "nullable": false,
+      "reference_pointer": "/orderable/id",
+      "to_collection_pointer": "/orderables",
+      "to_id_pointer": "/id"
+    }
+  ],
+  "rights_basis": "Self-authored tenant values constructed through Apache-2.0 Datalox code; provider-derived evidence remains separately classified.",
+  "schema_version": "datalox_provider_state_profile_v1",
+  "seed_sha256": "sha256:2a599aeb5c8302c2e541f33e666f1eed66319637592c28c96b64e1cc31b20ac0",
+  "source_episode_id": "openlmis-regional-network-v1",
+  "state_families": [
+    {
+      "family_id": "actors",
+      "grounding_level": "G1_OFFICIAL_SPEC",
+      "instance_count": 8,
+      "lifecycle": null,
+      "source_refs": [
+        "openlmis_refdata_15_4_0"
+      ],
+      "state_pointer": "/users",
+      "value_origin": "self_authored"
+    },
+    {
+      "family_id": "facilities",
+      "grounding_level": "G2_LOCAL_EXECUTED",
+      "instance_count": 5,
+      "lifecycle": null,
+      "source_refs": [
+        "openlmis_refdata_15_4_0",
+        "openlmis_g2_local_execution"
+      ],
+      "state_pointer": "/facilities",
+      "value_origin": "self_authored"
+    },
+    {
+      "family_id": "programs",
+      "grounding_level": "G2_LOCAL_EXECUTED",
+      "instance_count": 2,
+      "lifecycle": null,
+      "source_refs": [
+        "openlmis_refdata_15_4_0",
+        "openlmis_g2_local_execution"
+      ],
+      "state_pointer": "/programs",
+      "value_origin": "self_authored"
+    },
+    {
+      "family_id": "orderables",
+      "grounding_level": "G2_LOCAL_EXECUTED",
+      "instance_count": 6,
+      "lifecycle": null,
+      "source_refs": [
+        "openlmis_refdata_15_4_0",
+        "openlmis_g2_local_execution"
+      ],
+      "state_pointer": "/orderables",
+      "value_origin": "self_authored"
+    },
+    {
+      "family_id": "lots",
+      "grounding_level": "G2_LOCAL_EXECUTED",
+      "instance_count": 12,
+      "lifecycle": null,
+      "source_refs": [
+        "openlmis_refdata_15_4_0",
+        "openlmis_g2_local_execution"
+      ],
+      "state_pointer": "/lots",
+      "value_origin": "self_authored"
+    },
+    {
+      "family_id": "requisitions",
+      "grounding_level": "G2_LOCAL_EXECUTED",
+      "instance_count": 7,
+      "lifecycle": {
+        "required_values": [
+          "INITIATED",
+          "SUBMITTED",
+          "AUTHORIZED",
+          "APPROVED",
+          "RELEASED",
+          "SKIPPED"
+        ],
+        "value_pointer": "/status"
+      },
+      "source_refs": [
+        "openlmis_requisition_8_5_0",
+        "openlmis_behavior_harvest_restricted"
+      ],
+      "state_pointer": "/requisitions",
+      "value_origin": "self_authored"
+    },
+    {
+      "family_id": "stock_cards",
+      "grounding_level": "G2_LOCAL_EXECUTED",
+      "instance_count": 20,
+      "lifecycle": null,
+      "source_refs": [
+        "openlmis_stock_5_3_0",
+        "openlmis_g2_local_execution"
+      ],
+      "state_pointer": "/stock_cards",
+      "value_origin": "self_authored"
+    },
+    {
+      "family_id": "stock_events",
+      "grounding_level": "G2_LOCAL_EXECUTED",
+      "instance_count": 5,
+      "lifecycle": null,
+      "source_refs": [
+        "openlmis_stock_5_3_0",
+        "openlmis_behavior_harvest_restricted"
+      ],
+      "state_pointer": "/stock_events",
+      "value_origin": "self_authored"
+    },
+    {
+      "family_id": "orders",
+      "grounding_level": "G2_LOCAL_EXECUTED",
+      "instance_count": 4,
+      "lifecycle": {
+        "required_values": [
+          "CREATING",
+          "ORDERED",
+          "SHIPPED",
+          "RECEIVED"
+        ],
+        "value_pointer": "/status"
+      },
+      "source_refs": [
+        "openlmis_fulfillment_9_3_0",
+        "openlmis_behavior_harvest_restricted"
+      ],
+      "state_pointer": "/orders",
+      "value_origin": "self_authored"
+    },
+    {
+      "family_id": "shipments",
+      "grounding_level": "G2_LOCAL_EXECUTED",
+      "instance_count": 2,
+      "lifecycle": null,
+      "source_refs": [
+        "openlmis_fulfillment_9_3_0",
+        "openlmis_behavior_harvest_restricted"
+      ],
+      "state_pointer": "/shipments",
+      "value_origin": "self_authored"
+    },
+    {
+      "family_id": "proofs_of_delivery",
+      "grounding_level": "G2_LOCAL_EXECUTED",
+      "instance_count": 2,
+      "lifecycle": {
+        "required_values": [
+          "INITIATED",
+          "CONFIRMED"
+        ],
+        "value_pointer": "/status"
+      },
+      "source_refs": [
+        "openlmis_fulfillment_9_3_0",
+        "openlmis_behavior_harvest_restricted"
+      ],
+      "state_pointer": "/proofs_of_delivery",
+      "value_origin": "self_authored"
+    },
+    {
+      "family_id": "notifications",
+      "grounding_level": "G2_LOCAL_EXECUTED",
+      "instance_count": 1,
+      "lifecycle": null,
+      "source_refs": [
+        "openlmis_notification_4_4_0",
+        "openlmis_behavior_harvest_restricted"
+      ],
+      "state_pointer": "/notifications",
+      "value_origin": "self_authored"
+    },
+    {
+      "family_id": "operation_history",
+      "grounding_level": "G2_LOCAL_EXECUTED",
+      "instance_count": 49,
+      "lifecycle": null,
+      "source_refs": [
+        "openlmis_local_world_execution"
+      ],
+      "state_pointer": "/history",
+      "value_origin": "self_authored"
+    }
+  ],
+  "temporal": {
+    "logical_time": "2026-07-22T08:00:00+00:00",
+    "pending_state_pointers": [
+      "/requisitions",
+      "/orders",
+      "/physical_inventories"
+    ],
+    "scheduled_work_supported": false
+  }
+}
