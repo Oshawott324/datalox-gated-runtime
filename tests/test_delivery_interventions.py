@@ -214,6 +214,70 @@ def test_on_applies_repeat_and_quota_without_modifying_base_evidence(tmp_path: P
     assert session.handle(_request(), lambda: _response(1)).body == _response(1).body
 
 
+def test_observation_changed_separates_execution_from_observable_effect(
+    tmp_path: Path,
+) -> None:
+    """An applied action can still deliver exactly the base response."""
+
+    session = DeliveryInterventionSession(
+        _Policy(),
+        provider=PROVIDER,
+        allowed_read_operation_ids=ALLOWED_READS,
+        seed="seed-a",
+        enabled=True,
+        trace_path=tmp_path / "on.jsonl",
+    )
+
+    # The second request repeats the first page, and the provider was going to
+    # return that same page anyway, so the agent sees nothing new.
+    session.handle(_request(), lambda: _response(1))
+    session.handle(_request(), lambda: _response(1))
+    session.handle(_request(), lambda: _response(3))
+
+    events = session.export()["events"]
+    assert [event["applied"] for event in events] == [False, True, True]
+    assert [event["observation_changed"] for event in events] == [False, False, True]
+    assert events[1]["base_sha256"] == events[1]["delivered_sha256"]
+    assert events[1]["base_sha256"] == events[1]["base"]["response_sha256"]
+    assert events[1]["delivered_sha256"] == events[1]["delivered"]["response_sha256"]
+    assert events[2]["base_sha256"] is None
+    assert events[2]["base"]["invoked"] is False
+    assert events[2]["stage"] == "pre_dispatch"
+
+    drifting = DeliveryInterventionSession(
+        _Policy(),
+        provider=PROVIDER,
+        allowed_read_operation_ids=ALLOWED_READS,
+        seed="seed-b",
+        enabled=True,
+    )
+    drifting.handle(_request(), lambda: _response(1))
+    drifted = drifting.export()["events"][0]
+    assert drifted["applied"] is True
+    assert drifted["observation_changed"] is True
+
+    off = DeliveryInterventionSession(
+        _Policy(),
+        provider=PROVIDER,
+        allowed_read_operation_ids=ALLOWED_READS,
+        seed="seed-a",
+        enabled=False,
+    )
+    off.handle(_request(), lambda: _response(1))
+    off.handle(_request(), lambda: _response(2))
+    counterfactual = off.export()["events"][1]
+    assert counterfactual["decision"]["kind"] == "repeat_page"
+    assert counterfactual["applied"] is False
+    assert counterfactual["observation_changed"] is False
+
+    schema = json.loads(
+        (ROOT / "schemas" / "delivery-intervention-trace-v1.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    jsonschema.Draft202012Validator(schema).validate(session.export())
+
+
 def test_same_seed_repeats_schedule_and_different_seed_selects_another_schedule() -> None:
     first_a = DeliveryInterventionSession(
         _Policy(),
@@ -306,6 +370,11 @@ def test_application_failure_is_traced_and_terminal_until_reset(tmp_path: Path) 
     assert exported["events"][0]["outcome"] == "terminal_failure"
     assert exported["events"][0]["base"]["event_id"] == "evt_invalid_shape"
     assert exported["events"][0]["delivered"] is None
+    # The provider did answer; only the delivery failed, so its digest survives.
+    assert exported["events"][0]["base_sha256"] == exported["events"][0]["base"]["response_sha256"]
+    assert exported["events"][0]["base_sha256"] is not None
+    assert exported["events"][0]["delivered_sha256"] is None
+    assert exported["events"][0]["observation_changed"] is None
     schema = json.loads(
         (ROOT / "schemas/delivery-intervention-trace-v1.schema.json").read_text(encoding="utf-8")
     )

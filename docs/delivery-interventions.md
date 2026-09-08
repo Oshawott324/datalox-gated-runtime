@@ -101,6 +101,39 @@ GET /v1/providers/{provider_id}/delivery-interventions/export
 
 Its strict shape is
 [`delivery-intervention-trace-v1.schema.json`](../schemas/delivery-intervention-trace-v1.schema.json).
+
+### Execution and observable effect are separate claims
+
+`applied` states that the policy action executed. It does not state that the
+agent saw anything different, because an action can execute and still deliver a
+response equal to the base one: a repeated page can name the page the provider
+was about to return anyway.
+
+`observation_changed` carries the observable effect, so counting delivered
+interventions does not require recomputing hashes:
+
+| Field | Meaning |
+| --- | --- |
+| `base_sha256` | canonical digest of the base provider response, `null` when no base call was made |
+| `delivered_sha256` | canonical digest of the response handed to the agent, `null` when nothing was delivered |
+| `observation_changed` | those two digests differ |
+
+The same digests remain available in their original places, `base.response_sha256`
+and `delivered.response_sha256`; the event-level pair exists so that the
+comparison can be queried without walking into both objects.
+
+The digest covers the canonical JSON encoding of `{status_code, headers, body}`,
+not raw transport bytes. Three cases follow from the definition:
+
+- a pre-dispatch action such as a quota response has no base digest, so the
+  delivered observation always counts as changed;
+- an event with no action, and an `off` event that records only the
+  counterfactual decision, delivers the base response and counts as unchanged;
+- a terminal failure delivers no observation at all and records `null`.
+
+An applied action with `observation_changed` false is an observational no-op:
+correct execution, no consequence for the agent. Statistics over `applied`
+alone overstate what a run exercised.
 Reset clears the logical request index, remembered base pages, and intervention
 trace together with the provider reset. The operator-fixed mode, policy, and
 seed remain unchanged.
