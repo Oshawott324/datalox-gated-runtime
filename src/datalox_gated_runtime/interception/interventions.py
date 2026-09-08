@@ -410,6 +410,8 @@ class DeliveryInterventionSession:
             else "post_response"
         )
         response_payload = _response_payload(delivered)
+        delivered_sha256 = canonical_json_sha256(response_payload)
+        base_sha256 = None if base is None else _response_sha256(base)
         action_payload = _action_payload(action)
         source_base = _source_base_payload(self._base_responses, action)
         event = {
@@ -434,15 +436,18 @@ class DeliveryInterventionSession:
             },
             "stage": stage,
             "applied": applied,
+            "base_sha256": base_sha256,
+            "delivered_sha256": delivered_sha256,
+            "observation_changed": delivered_sha256 != base_sha256,
             "outcome": "delivered",
             "base": {
                 "invoked": base is not None,
                 "event_id": None if base is None else base.event_id,
-                "response_sha256": None if base is None else _response_sha256(base),
+                "response_sha256": base_sha256,
             },
             "delivered": {
                 "kind": "response",
-                "response_sha256": canonical_json_sha256(response_payload),
+                "response_sha256": delivered_sha256,
                 "response": response_payload,
             },
             "error": None,
@@ -475,6 +480,7 @@ class DeliveryInterventionSession:
         )
         action = None if safe_decision is None else safe_decision.action
         action_payload = _action_payload(action)
+        base_sha256 = None if base is None else _safe_response_sha256(base)
         event = {
             "event_id": event_id,
             "provider": _provider_binding_payload(self.provider),
@@ -497,11 +503,14 @@ class DeliveryInterventionSession:
             },
             "stage": stage,
             "applied": False,
+            "base_sha256": base_sha256,
+            "delivered_sha256": None,
+            "observation_changed": None,
             "outcome": "terminal_failure",
             "base": {
                 "invoked": base_invoked,
                 "event_id": None if base is None else base.event_id,
-                "response_sha256": None if base is None else _safe_response_sha256(base),
+                "response_sha256": base_sha256,
             },
             "delivered": None,
             "error": {"code": code, "message": message},

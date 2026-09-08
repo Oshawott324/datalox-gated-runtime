@@ -81,6 +81,9 @@
           "decision",
           "stage",
           "applied",
+          "base_sha256",
+          "delivered_sha256",
+          "observation_changed",
           "outcome",
           "base",
           "delivered",
@@ -151,6 +154,15 @@
             ]
           },
           "applied": {"type": "boolean"},
+          "base_sha256": {
+            "type": ["string", "null"],
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "delivered_sha256": {
+            "type": ["string", "null"],
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "observation_changed": {"type": ["boolean", "null"]},
           "outcome": {"enum": ["delivered", "terminal_failure"]},
           "base": {
             "type": "object",
