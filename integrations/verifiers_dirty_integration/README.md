@@ -141,6 +141,41 @@ discipline. The checked aggregate report is
 model-free calibration artifact, not a model rollout or provider-fidelity
 claim.
 
+## Regression trajectories
+
+The acceptance calibration declares three negative trajectories, and between
+them they break three of the twelve named verifier checks. A check nothing can
+break is not evidence that it works, so `tests/` holds further trajectories,
+each a plausible agent mistake: five reach a check the calibration never fails,
+and two give an already covered failure a second cause.
+
+| Trajectory | Check it breaks |
+| --- | --- |
+| buys the most expensive variant | `lowest_price_variant_added_once` |
+| leaves an unrelated second variant in the cart | `final_provider_state_matches` |
+| creates the expected cart twice and leaves both behind | `single_expected_cart_created` |
+| leaves a cart for another address behind | `single_final_cart` |
+| trusts the write responses and never reads the cart back | `confirmation_read_matches` |
+| stops paginating when the catalog total drifts type | `complete_catalog_before_write` |
+| counts a repeated page as progress | `complete_catalog_before_write` |
+
+The last two fail a check the calibration already breaks, but for causes it does
+not exercise: an intervention the agent mishandled rather than pagination it
+abandoned. Each runs on the seed whose first intervention is the one it is
+written for, so neither result can be explained by a fault of the other kind.
+
+Every trajectory must reach its intended check without an earlier failure
+masking it. Verification is fail-fast, so the test asserts that the intended
+check is the first and only reported failure; checks after it are never
+evaluated, and some of them would have failed too.
+
+```bash
+uv run --project integrations/verifiers_dirty_integration --extra dev pytest -q
+```
+
+This is regression coverage. It does not change the acceptance gate, which
+remains the calibration command above.
+
 ## Provider and reward boundary
 
 The base release is the bounded Medusa 2.16.0 Store cart slice at
