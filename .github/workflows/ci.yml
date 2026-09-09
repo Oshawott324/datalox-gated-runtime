@@ -70,6 +70,29 @@ jobs:
         working-directory: .tmp/public-source
         run: uv run --python "${{ matrix.python }}" pytest -q
 
+  fixture:
+    name: verifiers fixture regressions
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: integrations/verifiers_dirty_integration
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.12"
+      - name: Install locked toolchain
+        run: |
+          python -m pip install --disable-pip-version-check "uv==$UV_VERSION"
+          uv sync --frozen --extra dev
+      - name: Lockfile is current
+        run: uv lock --check
+      - name: Regression trajectories
+        run: uv run pytest -q
+
   public-source:
     name: exact public source
     runs-on: ubuntu-latest
