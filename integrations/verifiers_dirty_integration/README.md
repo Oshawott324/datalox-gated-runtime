@@ -170,7 +170,7 @@ check is the first and only reported failure; checks after it are never
 evaluated, and some of them would have failed too.
 
 ```bash
-uv run --project integrations/verifiers_dirty_integration --extra dev pytest -q
+uv --directory integrations/verifiers_dirty_integration run --extra dev pytest -q
 ```
 
 This is regression coverage. It does not change the acceptance gate, which

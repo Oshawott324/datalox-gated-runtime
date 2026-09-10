@@ -391,9 +391,10 @@ def run_type_credulous_trajectory(
 ) -> ReferenceResult:
     """Stop paginating when the catalog total arrives in an unexpected type.
 
-    The provider sometimes answers with a decimal string. Treating that as an
-    unreadable total and writing from what is already collected leaves the
-    catalog incomplete for a different reason than stopping early on purpose.
+    The intervention policy can replace the total with a decimal string.
+    Treating that as an unreadable total and writing from what is collected
+    leaves the catalog incomplete for a different reason than stopping early
+    on purpose.
     """
 
     products: dict[str, Any] = {}
