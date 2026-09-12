@@ -123,6 +123,70 @@ containing provider export, intervention trace, delivered observations,
 verification scores, and a manifest binding every artifact. Evidence never
 enters a later model turn.
 
+## Repeated model-rollout baseline
+
+The repeat experiment measures an unchanged agent on clean and hostile profiles
+before introducing a candidate prompt or harness change. It is separate from
+the model-free Issue #6 acceptance gate below. The
+[September 12 pilot](serhii-noise-floor-20260912.md) reports 60 completed model
+rollouts, the exact configuration, and a reviewed public evidence projection.
+
+The default is GPT-5.6 Sol with medium reasoning, using the native Verifiers
+0.3.1 Responses client and `Environment.evaluate` entry point. Live preflight
+established that Sol's function tools with medium reasoning require Responses,
+rather than Chat Completions. This is the same evaluator used
+by `vf-eval`; the programmatic path exposes client retry and timeout settings
+that the pinned CLI does not. Both evaluator and SDK retries are zero, rollout
+concurrency is one, and parallel tool calls are disabled. The model chooses
+its actions normally. Model seed and temperature are omitted, and the exact
+effective configuration is recorded. The native client replays returned reasoning
+items and tool results with `store=false` and the default processing tier.
+The hosted inference backend is not
+claimed immutable; the pinned client does not retain its backend fingerprint.
+
+The primary cohort has two profiles, seeds `1`, `7`, and `23`, and ten repeats
+per profile/seed: 60 slots. A separate two-slot clean/hostile smoke cohort uses
+seed `7`; its results stay outside the pilot. Both profiles use the same task,
+provider release, and initial state, with their declared policy enabled. Clean
+applies no interventions and has no quota. Its seed labels are scheduling
+blocks over the same task, not independent tenant coverage. Only product-list
+requests advance the fault index; cart retrieval and writes bypass it.
+
+The [repeat commands](../integrations/verifiers_dirty_integration/README.md#measure-repeated-run-variation)
+follow three explicit stages:
+
+- `datalox-dirty-repeat prepare` records a validated, digest-bound manifest and
+  fixed schedule without inference.
+- `datalox-dirty-repeat run` executes that schedule with a fresh provider state
+  per native rollout. It requires the inference credential, an approved total
+  cap, per-rollout allowances, and `--spend-approved`. A controller checks
+  exact Responses input-token counts, reserves the maximum request token cost,
+  and settles raw usage within each rollout's allowance.
+- `datalox-dirty-repeat analyze` verifies retained native/controller artifacts
+  and derives reports offline, without credentials or inference.
+
+Separate smoke and pilot allocations must fit the operator's combined cap.
+The scheduler reserves each slot's full allowance before launch, then releases
+unused funds only after exact token settlement and native evidence pass audit.
+A collection error retains the full allowance. An uncertain charge or
+exhausted budget stops the cohort with explicit error and unstarted
+slots. A model failing the task is valid completed data when its evidence is
+complete and audited; it is not retried to obtain a passing answer.
+
+Reports preserve task and request-discipline components separately, include
+quota exposure and native truncation, and show success-only summaries alongside
+all completed runs. Exact ordered request and observation comparisons retain
+provider IDs, scalar types, duplicate calls, and query order. A first divergence
+can be inspected with its logical read index, base receipt and available base
+response, intervention decision, and delivered observation. Pairwise comparisons
+reuse runs and do not increase the independent sample count.
+
+Clean versus hostile includes both fault exposure and quota; its difference is
+not a causal estimate of schedule coupling alone. The pilot derives descriptive
+ranges rather than an automatic release threshold. Manifests, native outputs,
+digest indexes, verifier reports, and analysis artifacts remain on the trusted
+controller side and require data-release review before sharing.
+
 ## Public Issue #6 acceptance
 
 Run the complete deterministic gate with:

@@ -583,6 +583,7 @@ source = { editable = "." }
 dependencies = [
     { name = "datalox-gated-runtime" },
     { name = "datasets" },
+    { name = "pydantic" },
     { name = "verifiers" },
 ]
 
@@ -595,6 +596,7 @@ dev = [
 requires-dist = [
     { name = "datalox-gated-runtime", editable = "../../" },
     { name = "datasets", specifier = ">=2.14.0" },
+    { name = "pydantic", specifier = ">=2.0,<3" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "verifiers", specifier = "==0.3.1" },
 ]

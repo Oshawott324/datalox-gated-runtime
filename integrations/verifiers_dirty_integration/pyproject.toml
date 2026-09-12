@@ -12,6 +12,7 @@ license = "Apache-2.0"
 dependencies = [
   "datalox-gated-runtime==0.1.0",
   "datasets>=2.14.0",
+  "pydantic>=2.0,<3",
   "verifiers==0.3.1",
 ]
 
@@ -21,6 +22,9 @@ dev = ["pytest>=8.0"]
 [project.scripts]
 datalox-dirty-pair = "datalox_dirty_integration.paired:main"
 datalox-dirty-calibrate = "datalox_dirty_integration.calibration:main"
+datalox-dirty-repeat = "datalox_dirty_integration.repeats:main"
+datalox-dirty-analyze = "datalox_dirty_integration.repeats:analyze_main"
+datalox-dirty-public-evidence = "datalox_dirty_integration.repeat_public:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
