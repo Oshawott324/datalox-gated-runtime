@@ -92,6 +92,8 @@ jobs:
         run: uv lock --check
       - name: Regression trajectories
         run: uv run pytest -q
+      - name: Native repeat collection and public evidence regressions
+        run: uv run pytest -q ../../tests/test_verifiers_repeat_*.py
 
   public-source:
     name: exact public source

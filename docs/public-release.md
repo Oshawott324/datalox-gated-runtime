@@ -55,3 +55,29 @@ objects, branches, tags, or pull-request refs to the public remote.
 Do not change repository visibility until the generated public tree has been
 reviewed and the old private Git history is guaranteed not to become reachable
 from the public remote.
+
+## Reviewed experiment evidence
+
+An experiment snapshot is a GitHub release, not an implicit runtime version or
+PyPI publication. Publish its runner from the verified public source tree.
+Keep raw controller output outside Git and derive an explicitly bounded public
+view only after inspecting its source rights and contents.
+
+For the Verifiers repeated-run experiment:
+
+- retain the original private native audit and collection unchanged;
+- include every scheduled run in the declared completed cohort;
+- record each public artifact with the same digest, origin, date, license,
+  redistribution basis, sensitivity, payload, sanitization and grounding fields
+  required by this policy, in `PUBLIC_EVIDENCE_MANIFEST.json`;
+- run `datalox-dirty-public-evidence --source REVIEWED_DIRECTORY` and scan the
+  expanded directory with Gitleaks before archiving it;
+- publish the evidence archive and its checksum file alongside the exact
+  public source manifest/archive, runtime SBOM and publication provenance;
+- download the public asset and run the documented offline check again.
+
+The public checker validates the declared provider/tool projection. Original
+native-file hashes are commitments to withheld evidence, not substitutes for
+an independent native audit. State this limit on the result page. The
+publication provenance records the checks actually performed; distinguish a
+publisher-generated record from a CI-signed build attestation.

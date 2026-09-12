@@ -96,6 +96,126 @@ provider release, initial state, policy, and policy seed. Hosted inference may
 still vary even at temperature zero; provider/intervention determinism and
 model determinism are separate controls.
 
+## Measure repeated-run variation
+
+The repeat driver uses **GPT-5.6 Sol, medium reasoning**, through the OpenAI API
+and Verifiers 0.3.1's native Responses client and `Environment.evaluate`.
+Sol's function tools with medium reasoning require the Responses API; live
+preflight rejected that combination on Chat Completions. This is the evaluator
+underlying `vf-eval`, not a new agent loop. The programmatic entry point exposes
+the client retry and timeout controls: the pinned CLI's client defaults to ten
+SDK retries even when evaluator retries are zero. The repeat experiment sets
+both retry counts to zero, runs one rollout at a time, and disables parallel
+tool calls. Responses run on the default processing tier with `store=false`;
+the native client carries returned reasoning items and tool results into later
+turns. Model seed and temperature are omitted; the effective configuration is
+retained with the results.
+
+The [September 12 pilot](../../docs/serhii-noise-floor-20260912.md) contains 60
+completed model rollouts and a reviewed, credential-free evidence download.
+The full collection and native audit remain distinct from that public projection.
+New inference requires `OPENAI_API_KEY`;
+provider execution remains local and requires no live Medusa credentials.
+
+Start with two smoke rollouts, one clean and one hostile, using seed `7`:
+
+```bash
+uv run --frozen --project integrations/verifiers_dirty_integration \
+  datalox-dirty-repeat prepare \
+  --experiment-id serhii-smoke \
+  --model gpt-5.6-sol --seeds 7 --repetitions 1 \
+  --max-total-cost-usd "${DATALOX_SMOKE_CAP_USD:?Set the approved smoke cap}" \
+  --per-rollout-reservation-usd "${DATALOX_RESERVATION_USD:?Set the approved per-rollout reservation}" \
+  --output /tmp/datalox-repeat-smoke.json
+
+uv run --frozen --project integrations/verifiers_dirty_integration \
+  datalox-dirty-repeat run \
+  --experiment /tmp/datalox-repeat-smoke.json \
+  --output /tmp/datalox-repeat-smoke \
+  --spend-approved
+
+uv run --frozen --project integrations/verifiers_dirty_integration \
+  datalox-dirty-repeat analyze \
+  --source /tmp/datalox-repeat-smoke \
+  --output /tmp/datalox-repeat-smoke-analysis
+```
+
+`prepare` freezes code, dependencies, task/tool schemas, provider state, policies,
+model settings, and the ordered schedule without calling a model. `run` makes
+paid inference calls. `--spend-approved` confirms the declared spending cap.
+Each rollout has an enforced token-cost allowance equal to its reservation.
+Before each inference request, the controller counts the exact Responses input
+and reserves its highest input rate plus the full permitted output. It settles
+verified raw usage afterward; uncertain charges keep their reservation and stop
+collection. This covers the admitted Sol/default-tier/function-tools lane,
+not unrelated account spending, taxes, or hosted tools.
+
+Choose separate smoke and pilot allocations whose sum fits your approved total.
+The scheduler reserves a full slot allowance before starting it. After the
+rollout's token receipts and native evidence pass audit, it charges the exact
+settled cost and releases unused funds. A failed or uncertain collection keeps
+its full allowance and stops. A slot that exhausts its allowance ends collection
+as a budget failure, not an agent task failure. The cohort may stop before all
+scheduled slots fit the remaining balance. Use fresh manifest and output paths.
+
+Inspect smoke results for request compatibility, complete audited evidence,
+clean-task competence, and cost. Keep them outside the baseline dataset. After
+preflight, freeze the full pilot:
+
+```bash
+uv run --frozen --project integrations/verifiers_dirty_integration \
+  datalox-dirty-repeat prepare \
+  --experiment-id serhii-noise-floor \
+  --model gpt-5.6-sol --seeds 1 7 23 --repetitions 10 \
+  --max-total-cost-usd "${DATALOX_PILOT_CAP_USD:?Set the approved pilot cap}" \
+  --per-rollout-reservation-usd "${DATALOX_RESERVATION_USD:?Set the approved per-rollout reservation}" \
+  --output /tmp/datalox-repeat-pilot.json
+
+uv run --frozen --project integrations/verifiers_dirty_integration \
+  datalox-dirty-repeat run \
+  --experiment /tmp/datalox-repeat-pilot.json \
+  --output /tmp/datalox-repeat-pilot \
+  --spend-approved
+
+uv run --frozen --project integrations/verifiers_dirty_integration \
+  datalox-dirty-repeat analyze \
+  --source /tmp/datalox-repeat-pilot \
+  --output /tmp/datalox-repeat-pilot-analysis
+```
+
+The pilot schedules 60 model-selected trajectories: clean and hostile, three
+policy seeds, ten repetitions per profile/seed. Both profiles enable their
+declared policy; clean applies no interventions and has no quota. All slots use
+the same immutable task and initial provider state. Clean seed labels are
+scheduling blocks, not different tasks or tenants. Only `list_products`
+advances the logical intervention index; cart reads and writes do not.
+
+Analysis is offline and needs no inference key. It verifies native-result and
+controller-evidence digests before reporting task correctness, discipline
+components, request counts, applied versus observation-changing interventions,
+quota exposure, truncation, and exact first-divergence locations. It keeps task
+failures in the data, distinguishes incomplete collection, and supplies separate
+success-only summaries. Clean versus hostile changes both fault exposure and
+quota, so this comparison does not isolate a causal effect of index coupling.
+It sets no automatic regression threshold.
+
+Provider-action differences are compared separately from raw native-message
+differences. The latter include opaque reasoning items and generated response
+IDs; they do not by themselves establish different visible text or actions.
+
+Collection retains `experiment.json`, `schedule.json`, `collection.json`, and
+per-slot native results, token-spending receipts, provider evidence, and
+`index.json` digest bindings.
+Analysis writes `rollouts.jsonl`, `summary.json` (including pairwise divergences),
+and `summary.md`. These are trusted-controller artifacts, never model inputs.
+Review their data classification and sensitive content before sharing them.
+The pinned Verifiers client does not retain the backend fingerprint; that
+field remains unavailable rather than implying an immutable hosted model.
+
+Ctrl-C and ordinary termination stop the active worker and leave the cohort
+incomplete. Host loss or an uncatchable kill can leave a nonterminal collection;
+inspect it and start a fresh cohort. The driver provides no automatic resume.
+
 ## Run the model-free calibration pair
 
 This command runs a deliberately scripted careful client. It establishes
@@ -170,7 +290,7 @@ check is the first and only reported failure; checks after it are never
 evaluated, and some of them would have failed too.
 
 ```bash
-uv run --project integrations/verifiers_dirty_integration --extra dev pytest -q
+uv --directory integrations/verifiers_dirty_integration run --extra dev pytest -q
 ```
 
 This is regression coverage. It does not change the acceptance gate, which
