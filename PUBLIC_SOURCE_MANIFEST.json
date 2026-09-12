@@ -37,8 +37,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "sha256": "sha256:870eab43531a98a449997e3ae72221538295864d3695e9db51ab8b75df69b226",
-      "size": 6083
+      "sha256": "sha256:d65eaba94e47c87f306400b6b3c9af86c2143365f3a3899d58ceed85c217dea9",
+      "size": 6996
     },
     {
       "path": ".github/workflows/release.yml",
@@ -207,8 +207,8 @@
     },
     {
       "path": "docs/public-release.md",
-      "sha256": "sha256:40fb8c0e2d3a6b3193cd34dc7d8e3b480e1636b6de590c74213ded4244e390a8",
-      "size": 2223
+      "sha256": "sha256:edea99ef2ddfa7f70350a7769586c900ac5d3d89b312d7f56cd190e01137dd99",
+      "size": 3664
     },
     {
       "path": "docs/pylabrobot-hamilton-star-provider.md",
@@ -224,6 +224,11 @@
       "path": "docs/rollout-information-boundary.md",
       "sha256": "sha256:69d00c1ad3ea2485674e3be6d0ab68343e6f91b08242f9dfbd45f179a9ec6489",
       "size": 4473
+    },
+    {
+      "path": "docs/serhii-noise-floor-20260912.md",
+      "sha256": "sha256:d023ac47b80e194299f4d3ff9bef2856930fd9517055e05c19ad388a29b32055",
+      "size": 8419
     },
     {
       "path": "docs/slime-rollouts.md",
@@ -247,8 +252,8 @@
     },
     {
       "path": "docs/verifiers-dirty-integration.md",
-      "sha256": "sha256:b13caa78387fe892f5b5ee106fa1ae550dae2262ebd68538e12adfa228696f4e",
-      "size": 7555
+      "sha256": "sha256:4e5d776b02974f7c2d386aa8dbe77f53536598d75c5e55f620b5f29b9a3654d7",
+      "size": 11578
     },
     {
       "path": "docs/verl-grpo-rollouts.md",
@@ -987,8 +992,8 @@
     },
     {
       "path": "integrations/verifiers_dirty_integration/README.md",
-      "sha256": "sha256:ddffcaf04b1c5c85d76fcf862a233a12d7b30ec6bf354313d0397428d2ae1703",
-      "size": 6863
+      "sha256": "sha256:66e6788207e3c3d26ad5e0753c0aff78fe927a010735ea1cccce947ca0bf5db5",
+      "size": 15174
     },
     {
       "path": "integrations/verifiers_dirty_integration/THIRD_PARTY_NOTICES.md",
@@ -1037,8 +1042,43 @@
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/reference.py",
-      "sha256": "sha256:f2d808c4ada0ad255b7f93c97f98f69b0c58a24985080b71cc47226305d6be51",
-      "size": 14242
+      "sha256": "sha256:a9d8e27c9d9a39a852470bc4be756da81d1bfc897e2336d55e6f30bca418fe4d",
+      "size": 23891
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_analysis.py",
+      "sha256": "sha256:24f5763bd7d05908547751ad9e0d015fa74bd1a3fa7d7d33388b312912fb1f51",
+      "size": 31181
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_budget.py",
+      "sha256": "sha256:f4eb7c61ce0a57c3574dedf3dde9862ae71be043f32b58dbc7e6927874e98ac3",
+      "size": 19872
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_contract.py",
+      "sha256": "sha256:ad083d5adce860b8f73d316892f39ee18ec2f4665c6f8ca43e0ed57322fe826b",
+      "size": 8019
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_evidence.py",
+      "sha256": "sha256:9c928a9ef9cdfa3125f566ba2a21de423b91edb3b5ff57a12b45348dec05cddf",
+      "size": 27184
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_native.py",
+      "sha256": "sha256:fd73c80b710f99a0afddac2ec791ffafc56f4e9bdafccbbb404973429b6f1535",
+      "size": 5878
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_public.py",
+      "sha256": "sha256:53cd7b9954556dba3edbbd752e848ec013b6745cf24feb7c8f7a7f94355fff82",
+      "size": 15057
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeats.py",
+      "sha256": "sha256:0fd8698a24d354000299a553708b1e127c148a4bd740ea0e8fd98c148cf111fd",
+      "size": 22625
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/scoring.py",
@@ -1052,13 +1092,18 @@
     },
     {
       "path": "integrations/verifiers_dirty_integration/pyproject.toml",
-      "sha256": "sha256:61515ff8c921c538ddec61200e4e84e336a67cc594343a5d035545d3a8d5004c",
-      "size": 740
+      "sha256": "sha256:25e35604acf12d5d6d42aa8bb79500175693107f2f60eaad043e797bd8e117cd",
+      "size": 1082
     },
     {
       "path": "integrations/verifiers_dirty_integration/rollout-information-boundary.json",
       "sha256": "sha256:20ccc36cdd24af91de2a8ec047ee1c3a69a048afef10081cd581ab3baa64ded3",
       "size": 1356
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/tests/test_regression_trajectories.py",
+      "sha256": "sha256:439473521bdd056cb6d1cd9a21772f6bdbcd022f7089274e56c81f82a511fad3",
+      "size": 6164
     },
     {
       "path": "integrations/verifiers_dirty_integration/upstream-contract.json",
@@ -1067,8 +1112,8 @@
     },
     {
       "path": "integrations/verifiers_dirty_integration/uv.lock",
-      "sha256": "sha256:bf1bcc6f6a1c466550a0b476daf7582dbb4ca506c791ba8e427efc910a453d4c",
-      "size": 788014
+      "sha256": "sha256:f55af5ee36feed9a44c7c0e78844132d0d05763b0938e9be0efac619bc42c5f8",
+      "size": 790521
     },
     {
       "path": "integrations/verl/Dockerfile.task",
@@ -3156,6 +3201,46 @@
       "size": 32957
     },
     {
+      "path": "tests/test_verifiers_repeat_analysis.py",
+      "sha256": "sha256:326e5bd8827456e5c085b67341fd361420947a0e5752825f7fc9abfb6e2e3a63",
+      "size": 17809
+    },
+    {
+      "path": "tests/test_verifiers_repeat_budget.py",
+      "sha256": "sha256:d5b7d523d875c84823040513e0f8ec677670e37c79953e18eed6593facb9cf5b",
+      "size": 14195
+    },
+    {
+      "path": "tests/test_verifiers_repeat_contract.py",
+      "sha256": "sha256:1a9184feb32f6502274272eeac248c94a7485d51fb47c800a57a0ea449e4b823",
+      "size": 10291
+    },
+    {
+      "path": "tests/test_verifiers_repeat_driver.py",
+      "sha256": "sha256:34a7138439adc491aea3a9b0138ef92807652af5733711f78d9ebdac6cc5d31b",
+      "size": 23035
+    },
+    {
+      "path": "tests/test_verifiers_repeat_end_to_end.py",
+      "sha256": "sha256:16c7424dc5ecb12e8d429adbf0731ccd86df376e7f3dd369bee54660bd2f2cbe",
+      "size": 6777
+    },
+    {
+      "path": "tests/test_verifiers_repeat_evidence.py",
+      "sha256": "sha256:0134876e1b4b1649a6fbe727f3e19151f3e129005461d5c4d8839f8f99d18082",
+      "size": 27912
+    },
+    {
+      "path": "tests/test_verifiers_repeat_native.py",
+      "sha256": "sha256:2a1e0290efb6cefc7a46652e46206237d1832c909c8a5ebdee4089850bcec60d",
+      "size": 16707
+    },
+    {
+      "path": "tests/test_verifiers_repeat_public.py",
+      "sha256": "sha256:f10ae2d0d816839a763bb0dae61b401671fbc2dc9b9ab5088a4a76caad735bdf",
+      "size": 5945
+    },
+    {
       "path": "tests/test_verl_integration.py",
       "sha256": "sha256:24a2bb3ced2e7066297b3ba3065d36cb33d576599cbe4a9ec552482691967a20",
       "size": 20596
@@ -3207,5 +3292,5 @@
     }
   ],
   "schema_version": "datalox_public_source_manifest_v1",
-  "source_revision": "af1eca3d88ef2eac762053cbcc46fdc763a77ba2"
+  "source_revision": "cc9cc14e8568488adae81275ccc4f93f1d9d0b3d"
 }
