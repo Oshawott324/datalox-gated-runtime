@@ -15,6 +15,8 @@ import json
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+from datalox_dirty_integration.repeat_arms import ArmExperimentConfig, ArmSlot, arm_controls
+
 if TYPE_CHECKING:
     from datalox_dirty_integration.repeat_contract import ExperimentConfig, RolloutSlot
 
@@ -96,6 +98,15 @@ def run_native_slot(
         "max_turns": config.max_turns,
         "timeout_seconds": config.per_rollout_timeout_seconds,
     }
+    state_columns = list(NATIVE_STATE_COLUMNS)
+    if isinstance(config, ArmExperimentConfig):
+        if not isinstance(slot, ArmSlot):
+            raise TypeError("V2 requires an ArmSlot")
+        environment_args.update(
+            call_budget_controller=True,
+            provider_call_budget=arm_controls(slot)["provider_call_budget"],
+        )
+        state_columns.append("final_env_response")
     environment = vf.load_environment("datalox-dirty-integration", **environment_args)
     sampling = native_sampling_args(config)
     effective_sampling = {**environment.sampling_args, **sampling}
@@ -107,7 +118,7 @@ def run_native_slot(
         "client": client_config.model_dump(mode="json"),
         "sampling_args": effective_sampling,
         "environment_args": environment_args,
-        "state_columns": list(NATIVE_STATE_COLUMNS),
+        "state_columns": state_columns,
         "num_examples": 1,
         "rollouts_per_example": 1,
         "max_concurrent": config.concurrency,
@@ -118,6 +129,8 @@ def run_native_slot(
         "backend_fingerprint_availability": "not_retained_by_verifiers_0.3.1_responses_client",
         "native_metadata_base_url_availability": "not_retained_for_caller_owned_client",
     }
+    if isinstance(config, ArmExperimentConfig):
+        execution["experiment_arm"] = arm_controls(slot)
     with (native_dir / "execution.json").open("x", encoding="utf-8") as handle:
         json.dump(execution, handle, indent=2, sort_keys=True, allow_nan=False)
         handle.write("\n")
@@ -139,7 +152,7 @@ def run_native_slot(
                 rollouts_per_example=1,
                 max_concurrent=config.concurrency,
                 results_path=native_dir,
-                state_columns=list(NATIVE_STATE_COLUMNS),
+                state_columns=state_columns,
                 save_results=True,
                 push_to_hf_hub=False,
                 max_retries=config.evaluator_retries,

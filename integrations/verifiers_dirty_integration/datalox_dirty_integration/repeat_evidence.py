@@ -20,6 +20,13 @@ from datalox_dirty_integration.contract import (
     UPDATE_LINE_ITEM_OPERATION,
 )
 from datalox_dirty_integration.episode import sha256_file
+from datalox_dirty_integration.repeat_arms import (
+    ArmExperimentConfig,
+    ArmSlot,
+    BUDGET_STOP,
+    arm_controls,
+    audit_call_budget,
+)
 
 
 class RepeatEvidenceError(ValueError):
@@ -121,7 +128,7 @@ def _audit_provider_calls(
         raise RepeatEvidenceError("base ledger contains unaccounted provider calls")
 
 
-def _audit_native_trajectory(native: dict[str, Any]) -> None:
+def _audit_native_trajectory(native: dict[str, Any], *, call_budget: bool = False) -> None:
     # These are the pinned framework's own serialization operations. They affect
     # model-message encoding only; provider observations are compared separately.
     from verifiers.legacy.types import Response
@@ -193,6 +200,15 @@ def _audit_native_trajectory(native: dict[str, Any]) -> None:
         )
         _equal(expected_completion, step["completion"], "native response completion")
         previous = [*prompt, *step["completion"]]
+    final_response = native.get("final_env_response") if call_budget else None
+    if final_response is not None:
+        if native["stop_condition"] != BUDGET_STOP or any(
+            message["role"] != "tool" for message in final_response
+        ):
+            raise RepeatEvidenceError(
+                "final environment response requires a budget stop and genuine tools"
+            )
+        previous.extend(final_response)
     _equal(
         native["completion"],
         saved(previous[len(native["prompt"]) :]),
@@ -410,6 +426,20 @@ def collect_slot(
         raise RepeatEvidenceError("required native rollout fields are missing")
     execution = read_json(output / "native" / "execution.json")
     metadata = read_json(output / "native" / "metadata.json")
+    is_v2 = isinstance(config, ArmExperimentConfig)
+    if is_v2:
+        if not isinstance(slot, ArmSlot):
+            raise RepeatEvidenceError("V2 requires a versioned arm slot")
+        _equal(arm_controls(slot), execution.get("experiment_arm"), "experiment arm")
+        from datalox_dirty_integration.repeat_native import NATIVE_STATE_COLUMNS
+
+        _equal(
+            list(NATIVE_STATE_COLUMNS) + ["final_env_response"],
+            execution["state_columns"],
+            "V2 native state columns",
+        )
+    elif "experiment_arm" in execution:
+        raise RepeatEvidenceError("V1 execution contains V2 arm controls")
     for field, expected in {
         "schema_version": "datalox_verifiers_native_execution_v1",
         "verifiers_version": "0.3.1",
@@ -449,6 +479,11 @@ def collect_slot(
         "max_turns": config.max_turns,
         "timeout_seconds": config.per_rollout_timeout_seconds,
     }
+    if is_v2:
+        environment_args.update(
+            call_budget_controller=True,
+            provider_call_budget=arm_controls(slot)["provider_call_budget"],
+        )
     for field, expected in environment_args.items():
         _equal(expected, execution["environment_args"][field], f"native environment {field}")
         _equal(expected, metadata["env_args"][field], f"native metadata environment {field}")
@@ -512,6 +547,8 @@ def collect_slot(
         "delivered-observations.json",
         "verification.json",
     }
+    if is_v2:
+        expected_artifacts.add("call-budget.json")
     if set(manifest["artifacts"]) != expected_artifacts:
         raise RepeatEvidenceError("evidence artifact inventory changed")
     artifacts = {}
@@ -535,7 +572,28 @@ def collect_slot(
         raise RepeatEvidenceError("native rollout hit the collection timeout")
     if native.get("is_completed") is not True:
         raise RepeatEvidenceError("native rollout has no terminal completion")
-    _audit_native_trajectory(native)
+    if is_v2:
+        reason = native["stop_condition"]
+        trajectory = native["trajectory"]
+        if reason == "max_turns_reached":
+            if len(trajectory) != config.max_turns:
+                raise RepeatEvidenceError("native turn termination differs from actual turns")
+        elif reason == "no_tools_called":
+            if not trajectory or trajectory[-1]["response"]["message"].get("tool_calls"):
+                raise RepeatEvidenceError(
+                    "native completion requires a final response without tools"
+                )
+        elif reason == BUDGET_STOP:
+            if native.get("final_env_response") is None:
+                raise RepeatEvidenceError(
+                    "budget termination requires native final environment response"
+                )
+        elif reason == "prompt_too_long":
+            if native.get("prompt_too_long") is not True:
+                raise RepeatEvidenceError("native prompt limit lacks its terminal flag")
+        else:
+            raise RepeatEvidenceError("unexpected V2 native stop condition")
+    _audit_native_trajectory(native, call_budget=is_v2)
     token_budget = _audit_native_budget(
         read_json(output / "native" / "budget.json"), native, config
     )
@@ -579,7 +637,16 @@ def collect_slot(
         "recomputed discipline",
     )
     joined = join_tool_observations(native["completion"], calls)
-    if joined["unexecuted_tool_attempts"] and native["stop_condition"] != "max_turns_reached":
+    if is_v2:
+        audit_call_budget(
+            artifacts["call-budget.json"],
+            slot,
+            {"provider": provider, "intervention": intervention, "delivered_calls": calls},
+            native["stop_condition"],
+            joined["unexecuted_tool_attempts"],
+        )
+    allowed_pending_stops = {"max_turns_reached", BUDGET_STOP} if is_v2 else {"max_turns_reached"}
+    if joined["unexecuted_tool_attempts"] and native["stop_condition"] not in allowed_pending_stops:
         raise RepeatEvidenceError("unexecuted calls require the native turn cap")
     responses = [
         step["response"] for step in native["trajectory"] if step.get("response") is not None
@@ -624,6 +691,8 @@ def collect_slot(
             ],
         },
     }
+    if is_v2:
+        row.update(arm=slot.arm, call_budget=artifacts["call-budget.json"])
     files = {
         str(path.relative_to(output)): sha256_file(path)
         for path in sorted(output.rglob("*"))

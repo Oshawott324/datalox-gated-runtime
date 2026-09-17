@@ -29,6 +29,11 @@ from datalox_dirty_integration.repeat_contract import (
     write_json_exclusive,
 )
 from datalox_dirty_integration.repeat_evidence import collect_slot, read_json
+from datalox_dirty_integration.repeat_arms import (
+    ArmExperimentConfig,
+    build_arm_schedule,
+    parse_experiment,
+)
 
 
 def capture_bindings(model: ModelConfig) -> dict[str, str]:
@@ -91,7 +96,7 @@ def load_experiment(path: Path) -> ExperimentConfig:
     # Pydantic's strict JSON path accepts JSON arrays for declared tuples while
     # retaining strict scalar validation. Reject duplicate/nonfinite JSON first.
     value = read_json(path)
-    return ExperimentConfig.model_validate_json(json.dumps(value, allow_nan=False))
+    return parse_experiment(value)
 
 
 def _atomic_json(path: Path, value: Any) -> None:
@@ -389,7 +394,8 @@ def main(argv: list[str] | None = None) -> int:
     prepare.add_argument("--output", type=Path, required=True)
     prepare.add_argument("--experiment-id", required=True)
     prepare.add_argument("--model", default="gpt-5.6-sol")
-    prepare.add_argument("--repetitions", type=int, default=10)
+    prepare.add_argument("--repetitions", type=int)
+    prepare.add_argument("--experiment-version", choices=("v1", "v2"), default="v1")
     prepare.add_argument("--seeds", nargs="+", default=["1", "7", "23"])
     prepare.add_argument("--max-total-cost-usd", type=float, required=True)
     prepare.add_argument("--per-rollout-reservation-usd", type=float, required=True)
@@ -437,17 +443,22 @@ def main(argv: list[str] | None = None) -> int:
             )
             if checkout.returncode == 0 and revision != checkout.stdout.strip():
                 raise ValueError("source revision must match the checked-out commit")
-        config = ExperimentConfig(
+        is_v2 = args.experiment_version == "v2"
+        repetitions = args.repetitions if args.repetitions is not None else (5 if is_v2 else 10)
+        config_type = ArmExperimentConfig if is_v2 else ExperimentConfig
+        config = config_type(
             experiment_id=args.experiment_id,
             source_revision=revision,
             bindings=capture_bindings(model),
             model=model,
             seeds=tuple(args.seeds),
-            repetitions=args.repetitions,
+            repetitions=repetitions,
             per_rollout_timeout_seconds=args.rollout_timeout_seconds,
             max_total_cost_usd=args.max_total_cost_usd,
             per_rollout_reservation_usd=args.per_rollout_reservation_usd,
-            schedule=build_schedule(tuple(args.seeds), args.repetitions),
+            schedule=build_arm_schedule()
+            if is_v2
+            else build_schedule(tuple(args.seeds), repetitions),
         )
         write_json_exclusive(args.output, config.model_dump(mode="json"))
         print(f"Prepared {len(config.schedule)} slots; no model requests made.")

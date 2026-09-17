@@ -51,6 +51,7 @@ def _write_rollout_evidence(
     exported: dict[str, Any],
     task_verification: TaskVerificationReport,
     request_discipline: RequestDisciplineReport,
+    controller_evidence: dict[str, Any] | None = None,
 ) -> Path:
     """Atomically publish controller-only evidence for one completed rollout."""
 
@@ -73,6 +74,8 @@ def _write_rollout_evidence(
                 "request_discipline": request_discipline.to_dict(),
             },
         }
+        if controller_evidence is not None:
+            artifacts["call-budget.json"] = controller_evidence
         artifact_digests: dict[str, str] = {}
         for name, value in artifacts.items():
             payload = _canonical_json_bytes(value)
@@ -340,21 +343,28 @@ class DataloxDirtyIntegrationEnv(vf.StatefulToolEnv):
                         )
                         scores = (task_verification.score, request_discipline.score)
                         if self._evidence_dir is not None:
+                            exported = episode.export()
                             _write_rollout_evidence(
                                 evidence_root=self._evidence_dir,
                                 trajectory_id=trajectory_id,
                                 profile=self.profile_name,
                                 intervention_seed=self._intervention_seed,
                                 intervention_enabled=self.intervention_enabled,
-                                exported=episode.export(),
+                                exported=exported,
                                 task_verification=task_verification,
                                 request_discipline=request_discipline,
+                                controller_evidence=self._controller_evidence(state, exported),
                             )
                         self._score_cache[trajectory_id] = scores
                     finally:
                         episode.close()
         finally:
             await super().cleanup(state, task=task, resources=resources)
+
+    def _controller_evidence(
+        self, state: vf.State, exported: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        return None
 
     def reward_task_correctness(self, state: vf.State, **kwargs: Any) -> float:
         del kwargs
@@ -383,6 +393,8 @@ def load_environment(
     evidence_dir: str | Path | None = None,
     num_tasks: int = 12,
     max_turns: int = 30,
+    call_budget_controller: bool = False,
+    provider_call_budget: int | None = None,
     **kwargs: Any,
 ) -> vf.Environment:
     """Load through ``vf.load_environment('datalox-dirty-integration', ...)``.
@@ -413,7 +425,15 @@ def load_environment(
     dataset = Dataset.from_list(
         [{"question": TASK_INSTRUCTIONS, "answer": ""} for _ in range(num_tasks)]
     )
-    environment = DataloxDirtyIntegrationEnv(
+    environment_type = DataloxDirtyIntegrationEnv
+    if call_budget_controller:
+        from datalox_dirty_integration.call_budget_environment import CallBudgetIntegrationEnv
+
+        environment_type = CallBudgetIntegrationEnv
+        kwargs["provider_call_budget"] = provider_call_budget
+    elif provider_call_budget is not None:
+        raise ValueError("provider call budget requires the versioned controller")
+    environment = environment_type(
         provider_grounding=grounding,
         provider_admission=admission_path,
         provider_runtime_bundle=runtime_bundle,

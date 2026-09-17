@@ -352,9 +352,20 @@ def _validate_completed(row: dict[str, Any]) -> None:
             native[key] is None or type(native[key]) is bool,
             f"native.{key} must be boolean or null",
         )
+    budget_terminated = (
+        row.get("arm") == "budget12"
+        and native["termination_reason"] == "harness_call_budget_exhausted"
+        and row.get("call_budget", {}).get("limit") == 12
+        and row.get("call_budget", {}).get("executed_provider_calls") == 12
+        and row.get("call_budget", {}).get("rejection") is not None
+        and len(calls) == 12
+    )
     _require(
         not unexecuted
-        or (native["termination_reason"] == "max_turns_reached" and native["is_completed"] is True),
+        or (
+            (native["termination_reason"] == "max_turns_reached" or budget_terminated)
+            and native["is_completed"] is True
+        ),
         "unexecuted tool attempts require a completed native max_turns_reached trajectory",
     )
     _require(
@@ -379,7 +390,8 @@ def _validate_completed(row: dict[str, Any]) -> None:
         except json.JSONDecodeError as error:
             raise RepeatAnalysisError("invalid native pending tool-call encoding") from error
         _require(
-            _canonical(final_calls) == _canonical(unexecuted),
+            _canonical(final_calls[-len(unexecuted) :] if budget_terminated else final_calls)
+            == _canonical(unexecuted),
             "pending calls disagree with the final native assistant message",
         )
     if native["duration_seconds"] is not None:
@@ -549,6 +561,8 @@ def _metrics_fields() -> tuple[str, ...]:
 
 def analyze_rows(rows: list[dict[str, Any]], schedule: list[dict[str, Any]]) -> dict[str, Any]:
     """Analyze every scheduled slot; malformed or silently omitted slots fail closed."""
+    if any("arm" in slot for slot in schedule):
+        return _analyze_arms(rows, schedule)
     _require(
         isinstance(rows, list) and isinstance(schedule, list) and bool(schedule),
         "rows and a nonempty schedule must be arrays",
@@ -689,8 +703,85 @@ def analyze_rows(rows: list[dict[str, Any]], schedule: list[dict[str, Any]]) -> 
     }
 
 
+def _analyze_arms(rows: list[dict[str, Any]], schedule: list[dict[str, Any]]) -> dict[str, Any]:
+    from datalox_dirty_integration.repeat_arms import ARMS, BUDGET_STOP, build_arm_schedule
+
+    _require(
+        schedule == [slot.model_dump(mode="json") for slot in build_arm_schedule()],
+        "V2 analysis requires the frozen 90-slot schedule",
+    )
+    _require(len(rows) == len(schedule), "V2 analysis requires every scheduled slot")
+    by_id = {row["slot_id"]: row for row in rows}
+    _require(len(by_id) == len(rows), "duplicate V2 row")
+    ordered = []
+    for slot in schedule:
+        _require(slot["slot_id"] in by_id, "missing V2 row")
+        row = by_id[slot["slot_id"]]
+        _require(row.get("arm") == slot["arm"], "rollout arm differs from schedule")
+        ordered.append(row)
+    arms = {}
+    for arm in ARMS:
+        selected = [row for row in ordered if row["arm"] == arm]
+        arm_schedule = [
+            {key: value for key, value in slot.items() if key != "arm"}
+            for slot in schedule
+            if slot["arm"] == arm
+        ]
+        arms[arm] = analyze_rows(selected, arm_schedule)
+    comparisons = []
+    for baseline in ordered:
+        if baseline["arm"] != "baseline":
+            continue
+        block = {
+            arm: next(
+                row
+                for row in ordered
+                if row["arm"] == arm
+                and all(row[key] == baseline[key] for key in ("profile", "seed", "repetition"))
+            )
+            for arm in ARMS
+        }
+        outcomes = {}
+        for arm, row in block.items():
+            outcome = {"slot_id": row["slot_id"], "status": row["status"]}
+            if row["status"] == "completed":
+                outcome.update(
+                    task_passed=row["task_correctness"]["passed"],
+                    task_score=row["task_correctness"]["score"],
+                    discipline_score=row["request_discipline"]["score"],
+                    provider_calls=len(row["provider_calls"]),
+                    budget_terminated=row["native"]["termination_reason"] == BUDGET_STOP,
+                    effective_fault_count=sum(
+                        e["observation_changed"] for e in row["interventions"]
+                    ),
+                    applied_fault_count=sum(e["applied"] for e in row["interventions"]),
+                )
+            outcomes[arm] = outcome
+        comparisons.append(
+            {**{key: baseline[key] for key in ("profile", "seed", "repetition")}, "arms": outcomes}
+        )
+    counts = _counts(ordered)
+    return {
+        "schema_version": "datalox_dirty_repeat_analysis_v2",
+        "counts": counts,
+        "cohort_complete": counts["completed"] == counts["scheduled"],
+        "arms": arms,
+        "within_profile_seed_repetition": comparisons,
+        "interpretation": "Finite 12-call stress arm; zero regression is possible. Every scheduled run is retained. Correctness, call counts, budget termination, component scores and effective fault exposure are separate outcomes. No automatic release threshold.",
+    }
+
+
 def render_summary(summary: dict[str, Any]) -> str:
     """Render the derived report without recomputing or changing component scores."""
+    if summary.get("schema_version") == "datalox_dirty_repeat_analysis_v2":
+        return (
+            "# Three-arm provider-call budget comparison\n\n"
+            + summary["interpretation"]
+            + "\n\n"
+            + "\n\n".join(
+                f"## {arm}\n\n{render_summary(report)}" for arm, report in summary["arms"].items()
+            )
+        )
     _require(
         summary.get("schema_version") == "datalox_dirty_repeat_analysis_v1",
         "unsupported analysis report",

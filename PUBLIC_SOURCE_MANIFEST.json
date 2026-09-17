@@ -226,6 +226,11 @@
       "size": 4473
     },
     {
+      "path": "docs/serhii-budget-comparison-20260917.md",
+      "sha256": "sha256:503b49268397dfdb4e221a3c48e5bd5f5857606f80c9bedd135ca640d8cfed96",
+      "size": 6585
+    },
+    {
       "path": "docs/serhii-noise-floor-20260912.md",
       "sha256": "sha256:d023ac47b80e194299f4d3ff9bef2856930fd9517055e05c19ad388a29b32055",
       "size": 8419
@@ -992,8 +997,8 @@
     },
     {
       "path": "integrations/verifiers_dirty_integration/README.md",
-      "sha256": "sha256:66e6788207e3c3d26ad5e0753c0aff78fe927a010735ea1cccce947ca0bf5db5",
-      "size": 15174
+      "sha256": "sha256:197d7dae49779cb0074e108859a0ed702a798af980cddb2befb122a85c1ed784",
+      "size": 17793
     },
     {
       "path": "integrations/verifiers_dirty_integration/THIRD_PARTY_NOTICES.md",
@@ -1016,14 +1021,19 @@
       "size": 16931
     },
     {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/call_budget_environment.py",
+      "sha256": "sha256:1d878dae20e3d72d41114f2269972ada958eeb42ce9112b53f88519712131be0",
+      "size": 4703
+    },
+    {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/contract.py",
       "sha256": "sha256:5022d41d345db8fdd81a6b71cfd7d98202f38bce81060d3edbd469dbec9ab66d",
       "size": 2071
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/environment.py",
-      "sha256": "sha256:3e6d875ceb7703135abb9b2d616500e6b276fcbe5ea09faf7336a3568652dd9c",
-      "size": 16130
+      "sha256": "sha256:c48232c5168550ce40a78757638e9f50218d061191003a4d47e3a284f51c7676",
+      "size": 17070
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/episode.py",
@@ -1047,8 +1057,13 @@
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_analysis.py",
-      "sha256": "sha256:24f5763bd7d05908547751ad9e0d015fa74bd1a3fa7d7d33388b312912fb1f51",
-      "size": 31181
+      "sha256": "sha256:3e78b3e1e6ab0c41cea9cc919c444108c75bb538725b4b144a0253e1f734a474",
+      "size": 35224
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_arms.py",
+      "sha256": "sha256:1929f11a98561986791d75f99b8d234a4ac3c6de982448602dec9fcfba1f38f2",
+      "size": 5122
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_budget.py",
@@ -1062,23 +1077,23 @@
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_evidence.py",
-      "sha256": "sha256:9c928a9ef9cdfa3125f566ba2a21de423b91edb3b5ff57a12b45348dec05cddf",
-      "size": 27184
+      "sha256": "sha256:fdb489b399e8ed8fc0a609a0594484ce67d582874caff33ba28c609349e3ac6f",
+      "size": 30252
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_native.py",
-      "sha256": "sha256:fd73c80b710f99a0afddac2ec791ffafc56f4e9bdafccbbb404973429b6f1535",
-      "size": 5878
+      "sha256": "sha256:21dbe8133761d5875a82a2cc09b206c35c46cdfe038d48ff2fcc830cc0187dc7",
+      "size": 6454
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_public.py",
-      "sha256": "sha256:53cd7b9954556dba3edbbd752e848ec013b6745cf24feb7c8f7a7f94355fff82",
-      "size": 15057
+      "sha256": "sha256:4238afab4f41d48df0d182be77ae9a7b2a4022211b1002a80bac223dbf230806",
+      "size": 17304
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeats.py",
-      "sha256": "sha256:0fd8698a24d354000299a553708b1e127c148a4bd740ea0e8fd98c148cf111fd",
-      "size": 22625
+      "sha256": "sha256:fd1bbbfa6fca8b226b384729d421a4a0614115003721b432114836ff202d54a2",
+      "size": 23036
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/scoring.py",
@@ -3206,6 +3221,11 @@
       "size": 17809
     },
     {
+      "path": "tests/test_verifiers_repeat_arms.py",
+      "sha256": "sha256:e2c87b17698ee6aaae950c9fd43ecca05cfc057f1939d84bf0e55fd44c92e9ef",
+      "size": 12339
+    },
+    {
       "path": "tests/test_verifiers_repeat_budget.py",
       "sha256": "sha256:d5b7d523d875c84823040513e0f8ec677670e37c79953e18eed6593facb9cf5b",
       "size": 14195
@@ -3292,5 +3312,5 @@
     }
   ],
   "schema_version": "datalox_public_source_manifest_v1",
-  "source_revision": "cc9cc14e8568488adae81275ccc4f93f1d9d0b3d"
+  "source_revision": "cd70b5842aaa39ed2efee55190ec3ff181cd272d"
 }

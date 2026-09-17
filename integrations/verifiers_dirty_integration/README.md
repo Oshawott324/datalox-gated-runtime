@@ -98,6 +98,47 @@ model determinism are separate controls.
 
 ## Measure repeated-run variation
 
+### Versioned three-arm call-budget comparison
+
+`prepare --experiment-version v2` freezes 90 slots: baseline, `budget12`, and
+`inert-reporting-label`; clean and hostile profiles; seeds 1, 7, 23; five
+repetitions. Arms are interleaved inside each profile/seed/repetition block.
+Every arm occupies each position within every profile/seed stratum (2/2/1), and
+each of the six arm orders occurs five times overall. V1 remains the default
+and its historical manifest validation and input-digest requirements are unchanged.
+
+The V2 controller retains the original task, tools, provider, fault policy,
+native Verifiers loop, model settings, and reward functions. `budget12` counts
+actual provider-tool invocations, including writes and delivered fault results,
+separately from model turns and indexed reads. Call 12 executes normally and a
+later final answer is allowed. A requested call 13 is suppressed before provider
+or fault-index advancement and terminates through the native stop predicate
+`harness_call_budget_exhausted`. Its rejected call remains in native evidence;
+the harness fabricates no provider response. A budget stop is a collected task
+outcome, while inference/spending failures retain the existing collection-error
+semantics. A same-batch call 12 result is retained as a genuine final environment
+response. The inert label is confined to controller reporting artifacts.
+
+For example, add `--experiment-version v2` to the prepare command below and omit
+`--repetitions` (V2 fixes it at five). Choose a new experiment ID/output and
+explicit spending cap; preparation makes no model calls. The same `run`,
+`analyze`, and reviewed public projection path accept V2. Public projection
+retains tool/effect evidence and controller receipts, withholds model prose and
+reasoning, and still requires explicit rights/content review. The full private
+audit proves native stopping; the public projection verifies its retained
+receipt/transcript subset and source commitments.
+
+Analysis retains every scheduled slot and compares arms inside profile/seed/
+repetition blocks. Correctness, calls, budget termination, component scores,
+applied faults, and changed observations remain separate. This finite stress arm
+can produce zero regression; it is not a guaranteed positive control or an
+automatic release threshold.
+
+The [September 17 comparison](../../docs/serhii-budget-comparison-20260917.md)
+contains 90 completed model rollouts across all three arms, reviewed evidence,
+and an inference-free inspection command. All tasks passed; the 12-call limit
+never rejected a request, so the experiment reports a null effect.
+
 The repeat driver uses **GPT-5.6 Sol, medium reasoning**, through the OpenAI API
 and Verifiers 0.3.1's native Responses client and `Environment.evaluate`.
 Sol's function tools with medium reasoning require the Responses API; live
