@@ -20,6 +20,13 @@ from datalox_dirty_integration.audit import audit_episode_export, canonical_sha2
 from datalox_dirty_integration.episode import sha256_file
 from datalox_dirty_integration.repeat_analysis import first_divergence
 from datalox_dirty_integration.repeat_contract import ExperimentConfig
+from datalox_dirty_integration.repeat_arms import (
+    ARMS,
+    ArmExperimentConfig,
+    BUDGET_STOP,
+    audit_call_budget,
+    parse_experiment,
+)
 from datalox_dirty_integration.repeat_evidence import (
     RepeatEvidenceError,
     _audit_provider_calls,
@@ -94,11 +101,14 @@ def project_slot(source: Path, config: ExperimentConfig, slot: Any) -> dict[str,
             key: native[key] for key in ("is_completed", "is_truncated", "error", "stop_condition")
         },
     }
+    if isinstance(config, ArmExperimentConfig):
+        row["call_budget"] = audited["call_budget"]
     check_row(row, config, slot)
     return row
 
 
 def check_row(row: dict[str, Any], config: ExperimentConfig, slot: Any) -> dict[str, Any]:
+    is_v2 = isinstance(config, ArmExperimentConfig)
     _equal(
         set(row),
         {
@@ -109,7 +119,8 @@ def check_row(row: dict[str, Any], config: ExperimentConfig, slot: Any) -> dict[
             "source_sha256",
             "native_outcome",
             "episode_manifest",
-        },
+        }
+        | ({"call_budget"} if is_v2 else set()),
         "row fields",
     )
     _equal(row["slot"], slot.model_dump(mode="json"), "slot")
@@ -159,6 +170,8 @@ def check_row(row: dict[str, Any], config: ExperimentConfig, slot: Any) -> dict[
             **row["verification"],
         },
     }
+    if is_v2:
+        artifacts["call-budget.json"] = row["call_budget"]
     _equal(set(manifest["artifacts"]), set(artifacts), "original artifact inventory")
     for name, value in artifacts.items():
         payload = (json.dumps(value, indent=2, sort_keys=True) + "\n").encode()
@@ -182,18 +195,42 @@ def check_row(row: dict[str, Any], config: ExperimentConfig, slot: Any) -> dict[
     _equal(expected, row["verification"], "recomputed verification")
     _equal(_tool_projection(row["tool_transcript"]), row["tool_transcript"], "tool-only surface")
     joined = join_tool_observations(row["tool_transcript"], calls)
-    if joined["unexecuted_tool_attempts"]:
+    if is_v2:
+        audit_call_budget(
+            row["call_budget"],
+            slot,
+            exported,
+            row["native_outcome"]["stop_condition"],
+            joined["unexecuted_tool_attempts"],
+        )
+    if joined["unexecuted_tool_attempts"] and not (
+        is_v2 and row["native_outcome"]["stop_condition"] in {BUDGET_STOP, "max_turns_reached"}
+    ):
         raise RepeatEvidenceError("this completed public cohort requires executed tool calls")
     _equal(
         row["native_outcome"],
         {
             "is_completed": True,
-            "is_truncated": False,
+            "is_truncated": row["native_outcome"]["is_truncated"] if is_v2 else False,
             "error": None,
-            "stop_condition": "no_tools_called",
+            "stop_condition": row["native_outcome"]["stop_condition"]
+            if is_v2
+            else "no_tools_called",
         },
         "declared native completion",
     )
+    if is_v2 and (
+        type(row["native_outcome"]["is_truncated"]) is not bool
+        or row["native_outcome"]["stop_condition"]
+        not in {
+            "no_tools_called",
+            "max_turns_reached",
+            BUDGET_STOP,
+            "max_total_completion_tokens_reached",
+            "prompt_too_long",
+        }
+    ):
+        raise RepeatEvidenceError("invalid V2 native outcome")
     if not audit["passed"]:
         raise RepeatEvidenceError("public intervention audit failed")
     return {**expected, "audit": audit, **joined}
@@ -201,6 +238,28 @@ def check_row(row: dict[str, Any], config: ExperimentConfig, slot: Any) -> dict[
 
 def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
     """Provider-only statistics; no raw-native-message or inference audit claim."""
+    if any("arm" in row["slot"] for row in rows):
+        arms = {}
+        for arm in ARMS:
+            selected = [row for row in rows if row["slot"]["arm"] == arm]
+            arm_rows = [
+                {**row, "slot": {key: value for key, value in row["slot"].items() if key != "arm"}}
+                for row in selected
+            ]
+            arms[arm] = summarize(arm_rows)
+            for group in arms[arm]["groups"]:
+                group["budget_terminated_runs"] = sum(
+                    row["native_outcome"]["stop_condition"] == BUDGET_STOP
+                    for row in selected
+                    if (row["slot"]["profile"], row["slot"]["seed"])
+                    == (group["profile"], group["seed"])
+                )
+        return {
+            "scope": SCOPE,
+            "runs": len(rows),
+            "arms": arms,
+            "interpretation": "Finite stress comparison; zero regression is possible; no automatic release threshold.",
+        }
     groups = []
     for profile, seed in sorted({(row["slot"]["profile"], row["slot"]["seed"]) for row in rows}):
         selected = [
@@ -338,7 +397,7 @@ def verify_public_bundle(root: Path) -> dict[str, Any]:
         if path.is_file():
             actual.add(path.relative_to(root).as_posix())
     _equal(actual, FILES | {"PUBLIC_EVIDENCE_MANIFEST.json"}, "exact file set")
-    config = ExperimentConfig.model_validate_json((root / "experiment.json").read_text())
+    config = parse_experiment(read_json(root / "experiment.json"))
     from datalox_dirty_integration.repeat_evidence import parse_json
 
     rows = [parse_json(line) for line in (root / "rollouts.jsonl").read_text().splitlines()]
