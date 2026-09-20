@@ -8,25 +8,26 @@ responses, reasoning continuity, inference receipts or hosted-model identity.
 from __future__ import annotations
 
 import argparse
-from collections import Counter
 import hashlib
 import json
-from pathlib import Path, PurePosixPath
 import re
+from collections import Counter
+from pathlib import Path, PurePosixPath
 from types import SimpleNamespace
 from typing import Any
 
 from datalox_dirty_integration.audit import audit_episode_export, canonical_sha256
 from datalox_dirty_integration.episode import sha256_file
 from datalox_dirty_integration.repeat_analysis import first_divergence
-from datalox_dirty_integration.repeat_contract import ExperimentConfig
 from datalox_dirty_integration.repeat_arms import (
     ARMS,
-    ArmExperimentConfig,
+    BUDGET11_ARMS,
     BUDGET_STOP,
+    ArmExperiment,
     audit_call_budget,
     parse_experiment,
 )
+from datalox_dirty_integration.repeat_contract import ExperimentConfig
 from datalox_dirty_integration.repeat_evidence import (
     RepeatEvidenceError,
     _audit_provider_calls,
@@ -101,14 +102,14 @@ def project_slot(source: Path, config: ExperimentConfig, slot: Any) -> dict[str,
             key: native[key] for key in ("is_completed", "is_truncated", "error", "stop_condition")
         },
     }
-    if isinstance(config, ArmExperimentConfig):
+    if isinstance(config, ArmExperiment):
         row["call_budget"] = audited["call_budget"]
     check_row(row, config, slot)
     return row
 
 
 def check_row(row: dict[str, Any], config: ExperimentConfig, slot: Any) -> dict[str, Any]:
-    is_v2 = isinstance(config, ArmExperimentConfig)
+    has_arms = isinstance(config, ArmExperiment)
     _equal(
         set(row),
         {
@@ -120,7 +121,7 @@ def check_row(row: dict[str, Any], config: ExperimentConfig, slot: Any) -> dict[
             "native_outcome",
             "episode_manifest",
         }
-        | ({"call_budget"} if is_v2 else set()),
+        | ({"call_budget"} if has_arms else set()),
         "row fields",
     )
     _equal(row["slot"], slot.model_dump(mode="json"), "slot")
@@ -170,7 +171,7 @@ def check_row(row: dict[str, Any], config: ExperimentConfig, slot: Any) -> dict[
             **row["verification"],
         },
     }
-    if is_v2:
+    if has_arms:
         artifacts["call-budget.json"] = row["call_budget"]
     _equal(set(manifest["artifacts"]), set(artifacts), "original artifact inventory")
     for name, value in artifacts.items():
@@ -195,7 +196,7 @@ def check_row(row: dict[str, Any], config: ExperimentConfig, slot: Any) -> dict[
     _equal(expected, row["verification"], "recomputed verification")
     _equal(_tool_projection(row["tool_transcript"]), row["tool_transcript"], "tool-only surface")
     joined = join_tool_observations(row["tool_transcript"], calls)
-    if is_v2:
+    if has_arms:
         audit_call_budget(
             row["call_budget"],
             slot,
@@ -204,22 +205,22 @@ def check_row(row: dict[str, Any], config: ExperimentConfig, slot: Any) -> dict[
             joined["unexecuted_tool_attempts"],
         )
     if joined["unexecuted_tool_attempts"] and not (
-        is_v2 and row["native_outcome"]["stop_condition"] in {BUDGET_STOP, "max_turns_reached"}
+        has_arms and row["native_outcome"]["stop_condition"] in {BUDGET_STOP, "max_turns_reached"}
     ):
         raise RepeatEvidenceError("this completed public cohort requires executed tool calls")
     _equal(
         row["native_outcome"],
         {
             "is_completed": True,
-            "is_truncated": row["native_outcome"]["is_truncated"] if is_v2 else False,
+            "is_truncated": row["native_outcome"]["is_truncated"] if has_arms else False,
             "error": None,
             "stop_condition": row["native_outcome"]["stop_condition"]
-            if is_v2
+            if has_arms
             else "no_tools_called",
         },
         "declared native completion",
     )
-    if is_v2 and (
+    if has_arms and (
         type(row["native_outcome"]["is_truncated"]) is not bool
         or row["native_outcome"]["stop_condition"]
         not in {
@@ -230,7 +231,7 @@ def check_row(row: dict[str, Any], config: ExperimentConfig, slot: Any) -> dict[
             "prompt_too_long",
         }
     ):
-        raise RepeatEvidenceError("invalid V2 native outcome")
+        raise RepeatEvidenceError("invalid arm native outcome")
     if not audit["passed"]:
         raise RepeatEvidenceError("public intervention audit failed")
     return {**expected, "audit": audit, **joined}
@@ -239,8 +240,15 @@ def check_row(row: dict[str, Any], config: ExperimentConfig, slot: Any) -> dict[
 def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
     """Provider-only statistics; no raw-native-message or inference audit claim."""
     if any("arm" in row["slot"] for row in rows):
+        names = {row["slot"]["arm"] for row in rows}
+        if names == set(ARMS):
+            arm_names = ARMS
+        elif names == set(BUDGET11_ARMS):
+            arm_names = BUDGET11_ARMS
+        else:
+            raise RepeatEvidenceError("public arm summary requires a complete declared arm set")
         arms = {}
-        for arm in ARMS:
+        for arm in arm_names:
             selected = [row for row in rows if row["slot"]["arm"] == arm]
             arm_rows = [
                 {**row, "slot": {key: value for key, value in row["slot"].items() if key != "arm"}}

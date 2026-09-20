@@ -352,13 +352,16 @@ def _validate_completed(row: dict[str, Any]) -> None:
             native[key] is None or type(native[key]) is bool,
             f"native.{key} must be boolean or null",
         )
+    from datalox_dirty_integration.repeat_arms import CALL_LIMITS
+
+    call_limit = CALL_LIMITS.get(row.get("arm"))
     budget_terminated = (
-        row.get("arm") == "budget12"
+        call_limit is not None
         and native["termination_reason"] == "harness_call_budget_exhausted"
-        and row.get("call_budget", {}).get("limit") == 12
-        and row.get("call_budget", {}).get("executed_provider_calls") == 12
+        and row.get("call_budget", {}).get("limit") == call_limit
+        and row.get("call_budget", {}).get("executed_provider_calls") == call_limit
         and row.get("call_budget", {}).get("rejection") is not None
-        and len(calls) == 12
+        and len(calls) == call_limit
     )
     _require(
         not unexecuted
@@ -704,23 +707,31 @@ def analyze_rows(rows: list[dict[str, Any]], schedule: list[dict[str, Any]]) -> 
 
 
 def _analyze_arms(rows: list[dict[str, Any]], schedule: list[dict[str, Any]]) -> dict[str, Any]:
-    from datalox_dirty_integration.repeat_arms import ARMS, BUDGET_STOP, build_arm_schedule
-
-    _require(
-        schedule == [slot.model_dump(mode="json") for slot in build_arm_schedule()],
-        "V2 analysis requires the frozen 90-slot schedule",
+    from datalox_dirty_integration.repeat_arms import (
+        ARMS,
+        BUDGET11_ARMS,
+        BUDGET_STOP,
+        build_arm_schedule,
+        build_budget11_schedule,
     )
-    _require(len(rows) == len(schedule), "V2 analysis requires every scheduled slot")
+
+    if schedule == [slot.model_dump(mode="json") for slot in build_arm_schedule()]:
+        arm_names, version, limit = ARMS, "v2", 12
+    elif schedule == [slot.model_dump(mode="json") for slot in build_budget11_schedule()]:
+        arm_names, version, limit = BUDGET11_ARMS, "v3", 11
+    else:
+        raise ValueError("arm analysis requires an exact frozen schedule")
+    _require(len(rows) == len(schedule), "arm analysis requires every scheduled slot")
     by_id = {row["slot_id"]: row for row in rows}
-    _require(len(by_id) == len(rows), "duplicate V2 row")
+    _require(len(by_id) == len(rows), "duplicate arm row")
     ordered = []
     for slot in schedule:
-        _require(slot["slot_id"] in by_id, "missing V2 row")
+        _require(slot["slot_id"] in by_id, "missing arm row")
         row = by_id[slot["slot_id"]]
         _require(row.get("arm") == slot["arm"], "rollout arm differs from schedule")
         ordered.append(row)
     arms = {}
-    for arm in ARMS:
+    for arm in arm_names:
         selected = [row for row in ordered if row["arm"] == arm]
         arm_schedule = [
             {key: value for key, value in slot.items() if key != "arm"}
@@ -739,7 +750,7 @@ def _analyze_arms(rows: list[dict[str, Any]], schedule: list[dict[str, Any]]) ->
                 if row["arm"] == arm
                 and all(row[key] == baseline[key] for key in ("profile", "seed", "repetition"))
             )
-            for arm in ARMS
+            for arm in arm_names
         }
         outcomes = {}
         for arm, row in block.items():
@@ -762,20 +773,24 @@ def _analyze_arms(rows: list[dict[str, Any]], schedule: list[dict[str, Any]]) ->
         )
     counts = _counts(ordered)
     return {
-        "schema_version": "datalox_dirty_repeat_analysis_v2",
+        "schema_version": f"datalox_dirty_repeat_analysis_{version}",
         "counts": counts,
         "cohort_complete": counts["completed"] == counts["scheduled"],
         "arms": arms,
         "within_profile_seed_repetition": comparisons,
-        "interpretation": "Finite 12-call stress arm; zero regression is possible. Every scheduled run is retained. Correctness, call counts, budget termination, component scores and effective fault exposure are separate outcomes. No automatic release threshold.",
+        "interpretation": f"Finite {limit}-call stress arm; zero regression is possible. Every scheduled run is retained. Correctness, call counts, budget termination, component scores and effective fault exposure are separate outcomes. No automatic release threshold.",
     }
 
 
 def render_summary(summary: dict[str, Any]) -> str:
     """Render the derived report without recomputing or changing component scores."""
-    if summary.get("schema_version") == "datalox_dirty_repeat_analysis_v2":
+    if summary.get("schema_version") in {
+        "datalox_dirty_repeat_analysis_v2",
+        "datalox_dirty_repeat_analysis_v3",
+    }:
         return (
-            "# Three-arm provider-call budget comparison\n\n"
+            ("# Three-arm" if len(summary["arms"]) == 3 else "# Two-arm")
+            + " provider-call budget comparison\n\n"
             + summary["interpretation"]
             + "\n\n"
             + "\n\n".join(

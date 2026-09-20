@@ -15,7 +15,7 @@ import json
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from datalox_dirty_integration.repeat_arms import ArmExperimentConfig, ArmSlot, arm_controls
+from datalox_dirty_integration.repeat_arms import ArmExperiment, ArmSlot, arm_controls
 
 if TYPE_CHECKING:
     from datalox_dirty_integration.repeat_contract import ExperimentConfig, RolloutSlot
@@ -99,9 +99,9 @@ def run_native_slot(
         "timeout_seconds": config.per_rollout_timeout_seconds,
     }
     state_columns = list(NATIVE_STATE_COLUMNS)
-    if isinstance(config, ArmExperimentConfig):
+    if isinstance(config, ArmExperiment):
         if not isinstance(slot, ArmSlot):
-            raise TypeError("V2 requires an ArmSlot")
+            raise TypeError("Arm experiments require an ArmSlot")
         environment_args.update(
             call_budget_controller=True,
             provider_call_budget=arm_controls(slot)["provider_call_budget"],
@@ -129,7 +129,7 @@ def run_native_slot(
         "backend_fingerprint_availability": "not_retained_by_verifiers_0.3.1_responses_client",
         "native_metadata_base_url_availability": "not_retained_for_caller_owned_client",
     }
-    if isinstance(config, ArmExperimentConfig):
+    if isinstance(config, ArmExperiment):
         execution["experiment_arm"] = arm_controls(slot)
     with (native_dir / "execution.json").open("x", encoding="utf-8") as handle:
         json.dump(execution, handle, indent=2, sort_keys=True, allow_nan=False)
