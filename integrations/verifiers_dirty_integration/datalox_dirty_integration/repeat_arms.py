@@ -1,4 +1,4 @@
-"""Versioned controller contract for the fixed 90-slot, three-arm experiment."""
+"""Versioned, frozen schedules for controller-owned call-budget experiments."""
 
 from __future__ import annotations
 
@@ -14,8 +14,10 @@ from datalox_dirty_integration.repeat_contract import (
     build_schedule,
 )
 
-Arm = Literal["baseline", "budget12", "inert-reporting-label"]
+Arm = Literal["baseline", "budget12", "inert-reporting-label", "budget11"]
 ARMS: tuple[Arm, ...] = ("baseline", "budget12", "inert-reporting-label")
+BUDGET11_ARMS: tuple[Arm, ...] = ("baseline", "budget11")
+CALL_LIMITS = {"baseline": None, "budget12": 12, "inert-reporting-label": None, "budget11": 11}
 BUDGET_STOP = "harness_call_budget_exhausted"
 
 
@@ -23,7 +25,7 @@ class ArmSlot(RolloutSlot):
     slot_id: Annotated[
         str,
         StringConstraints(
-            pattern=r"^r[0-9]+-s[0-9]+-(clean|hostile)-(baseline|budget12|inert-reporting-label)$"
+            pattern=r"^r[0-9]+-s[0-9]+-(clean|hostile)-(baseline|budget12|inert-reporting-label|budget11)$"
         ),
     ]
     arm: Arm
@@ -36,9 +38,18 @@ def build_arm_schedule() -> list[ArmSlot]:
     The thirty blocks use each of the six permutations five times overall.
     Profile order retains the V1 counterbalancing rule. No RNG is involved.
     """
-    orders = tuple(permutations(ARMS))
+    return _arm_schedule(ARMS, 5)
+
+
+def build_budget11_schedule() -> list[ArmSlot]:
+    """Three repeats per cell; nine blocks in each of the two arm orders."""
+    return _arm_schedule(BUDGET11_ARMS, 3)
+
+
+def _arm_schedule(arms: tuple[Arm, ...], repetitions: int) -> list[ArmSlot]:
+    orders = tuple(permutations(arms))
     result = []
-    for slot in build_schedule(("1", "7", "23"), 5):
+    for slot in build_schedule(("1", "7", "23"), repetitions):
         block = ("1", "7", "23").index(slot.seed) * 2 + (slot.profile == "hostile")
         for arm in orders[(block + slot.repetition - 1) % len(orders)]:
             result.append(
@@ -68,23 +79,43 @@ class ArmExperimentConfig(ExperimentConfig):
         return self
 
 
+class Budget11ExperimentConfig(ExperimentConfig):
+    schema_version: Literal["datalox_repeat_experiment_v3"] = "datalox_repeat_experiment_v3"
+    repetitions: Annotated[Literal[3], BeforeValidator(_integer_literal)] = 3
+    schedule: list[ArmSlot]
+
+    @model_validator(mode="after")
+    def fixed_experiment(self) -> Self:
+        if self.per_rollout_reservation_usd > self.max_total_cost_usd:
+            raise ValueError("per-rollout reservation must fit the total spending cap")
+        if self.seeds != ("1", "7", "23") or self.schedule != build_budget11_schedule():
+            raise ValueError("V3 requires the exact counterbalanced 36-slot schedule")
+        return self
+
+
+ArmExperiment = ArmExperimentConfig | Budget11ExperimentConfig
+
+
 def arm_controls(slot: ArmSlot) -> dict[str, Any]:
     """Reporting-only values; never pass the arm or label into the environment."""
     return {
         "arm": slot.arm,
-        "provider_call_budget": 12 if slot.arm == "budget12" else None,
+        "provider_call_budget": CALL_LIMITS[slot.arm],
         "reporting_label": "inert-reporting-label" if slot.arm == "inert-reporting-label" else None,
     }
 
 
-def parse_experiment(value: dict[str, Any]) -> ExperimentConfig | ArmExperimentConfig:
+def parse_experiment(value: dict[str, Any]) -> ExperimentConfig | ArmExperiment:
     import json
 
-    contract = (
-        ArmExperimentConfig
-        if value.get("schema_version") == "datalox_repeat_experiment_v2"
-        else ExperimentConfig
-    )
+    contracts = {
+        "datalox_repeat_experiment_v1": ExperimentConfig,
+        "datalox_repeat_experiment_v2": ArmExperimentConfig,
+        "datalox_repeat_experiment_v3": Budget11ExperimentConfig,
+    }
+    contract = contracts.get(value.get("schema_version"))
+    if contract is None:
+        raise ValueError("unsupported repeat experiment version")
     return contract.model_validate_json(json.dumps(value, allow_nan=False))
 
 
@@ -103,12 +134,12 @@ def audit_call_budget(
     termination_reason: str,
     pending: list[dict[str, Any]],
 ) -> None:
-    """Bind a controller stop to exactly twelve effects and an undispatched call."""
+    """Bind a controller stop to the declared limit and an undispatched call."""
+    from datalox_dirty_integration.call_budget_environment import provider_tool_binds
     from datalox_dirty_integration.repeat_evidence import (
         RepeatEvidenceError,
         _equal,
     )
-    from datalox_dirty_integration.call_budget_environment import provider_tool_binds
 
     limit = arm_controls(slot)["provider_call_budget"]
     count = len(exported["delivered_calls"])
@@ -130,12 +161,14 @@ def audit_call_budget(
         if termination_reason == BUDGET_STOP:
             raise RepeatEvidenceError("budget termination requires a rejected request")
         return
-    if limit != 12 or count != 12 or termination_reason != BUDGET_STOP or not pending:
-        raise RepeatEvidenceError("budget rejection requires call 13 and native budget termination")
+    if limit is None or count != limit or termination_reason != BUDGET_STOP or not pending:
+        raise RepeatEvidenceError(
+            "budget rejection requires limit + 1 and native budget termination"
+        )
     _equal(
         rejection,
         {
-            "requested_call_number": 13,
+            "requested_call_number": limit + 1,
             "tool": pending[0],
             "effect_sha256": effect_digest(exported),
         },

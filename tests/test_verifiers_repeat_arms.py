@@ -1,34 +1,36 @@
 """Offline native-loop fixtures for the V2 controller, never model evidence."""
 
-from collections import Counter
-from copy import deepcopy
 import hashlib
 import json
+from collections import Counter
+from copy import deepcopy
 
 import pytest
 import test_verifiers_repeat_native as fixtures
-
 from datalox_dirty_integration.repeat_arms import (
     ARMS,
-    ArmExperimentConfig,
     BUDGET_STOP,
+    ArmExperimentConfig,
+    Budget11ExperimentConfig,
     build_arm_schedule,
+    build_budget11_schedule,
     parse_experiment,
 )
 from datalox_dirty_integration.repeat_contract import ModelConfig
-from datalox_dirty_integration.repeat_evidence import collect_slot, RepeatEvidenceError
+from datalox_dirty_integration.repeat_evidence import RepeatEvidenceError, collect_slot
 from datalox_dirty_integration.repeat_native import run_native_slot
+from datalox_dirty_integration.repeat_public import check_row, project_slot
 from datalox_dirty_integration.repeats import capture_bindings
-from datalox_dirty_integration.repeat_public import project_slot, check_row
 
 native_transport = fixtures.native_transport
 
 
-def config():
+def config(*, limit=12):
     model = ModelConfig(
         max_completion_tokens=4096, request_timeout_seconds=30.0, connect_timeout_seconds=5.0
     )
-    return ArmExperimentConfig(
+    config_type = ArmExperimentConfig if limit == 12 else Budget11ExperimentConfig
+    return config_type(
         experiment_id="offline-three-arm-fixture",
         source_revision="a" * 40,
         bindings=capture_bindings(model),
@@ -36,7 +38,7 @@ def config():
         per_rollout_timeout_seconds=120.0,
         max_total_cost_usd=7.0,
         per_rollout_reservation_usd=0.4,
-        schedule=build_arm_schedule(),
+        schedule=build_arm_schedule() if limit == 12 else build_budget11_schedule(),
     )
 
 
@@ -80,22 +82,29 @@ def test_frozen_native_configs_admit_v1_and_v2(native_transport):
     ],
 )
 @pytest.mark.parametrize("same_batch", [False, True])
-def test_call_13_stops_before_read_or_write_and_exports_native_evidence(
+@pytest.mark.parametrize("limit", [11, 12])
+def test_next_call_stops_before_read_or_write_and_exports_native_evidence(
     tmp_path,
     native_transport,
     requested,
     same_batch,
+    limit,
 ):
-    frozen = config()
+    frozen = config(limit=limit)
     slot = next(
-        slot for slot in frozen.schedule if slot.arm == "budget12" and slot.profile == "hostile"
+        slot
+        for slot in frozen.schedule
+        if slot.arm == f"budget{limit}" and slot.profile == "hostile"
     )
-    calls = [fixtures._call(f"call-{i}", "list_products", offset=0, limit=10) for i in range(1, 13)]
-    rejected = fixtures._call("call-13", requested[0], **requested[1])
+    calls = [
+        fixtures._call(f"call-{i}", "list_products", offset=0, limit=10)
+        for i in range(1, limit + 1)
+    ]
+    rejected = fixtures._call(f"call-{limit + 1}", requested[0], **requested[1])
     if same_batch:
         responses = [
-            fixtures._response(tool_calls=calls[:11]),
-            fixtures._response(tool_calls=[calls[11], rejected]),
+            fixtures._response(tool_calls=calls[:-1]),
+            fixtures._response(tool_calls=[calls[-1], rejected]),
         ]
     else:
         responses = [
@@ -109,13 +118,13 @@ def test_call_13_stops_before_read_or_write_and_exports_native_evidence(
     assert native["error"] is None and native["is_completed"] is True
     assert len(native_transport["requests"]) == 2
     row = collect_slot(tmp_path, frozen, slot)
-    assert len(row["provider_calls"]) == 12
-    assert len(row["interventions"]) == 12
-    assert row["call_budget"]["executed_provider_calls"] == 12
-    assert row["unexecuted_tool_attempts"][0]["id"] == "call-13"
+    assert len(row["provider_calls"]) == limit
+    assert len(row["interventions"]) == limit
+    assert row["call_budget"]["executed_provider_calls"] == limit
+    assert row["unexecuted_tool_attempts"][0]["id"] == f"call-{limit + 1}"
     tools = [message for message in native["completion"] if message["role"] == "tool"]
-    assert len(tools) == 12 and tools[-1]["tool_call_id"] == "call-12"
-    assert not any(message["tool_call_id"] == "call-13" for message in tools)
+    assert len(tools) == limit and tools[-1]["tool_call_id"] == f"call-{limit}"
+    assert not any(message["tool_call_id"] == f"call-{limit + 1}" for message in tools)
     assert row == collect_slot(tmp_path, frozen, slot, verify_index=True)
     public = project_slot(tmp_path, frozen, slot)
     assert "Finished fixture" not in json.dumps(public)
@@ -157,14 +166,17 @@ def test_call_13_stops_before_read_or_write_and_exports_native_evidence(
         collect_slot(tmp_path, frozen, slot)
 
 
-def test_call_12_runs_and_final_answer_remains_available(tmp_path, native_transport):
-    frozen = config()
-    slot = next(slot for slot in frozen.schedule if slot.arm == "budget12")
+@pytest.mark.parametrize("limit", [11, 12])
+def test_last_allowed_call_runs_and_final_answer_remains_available(
+    tmp_path, native_transport, limit
+):
+    frozen = config(limit=limit)
+    slot = next(slot for slot in frozen.schedule if slot.arm == f"budget{limit}")
     native_transport["responses"] = [
         fixtures._response(
             tool_calls=[
                 fixtures._call(f"call-{i}", "list_products", offset=0, limit=10)
-                for i in range(1, 12)
+                for i in range(1, limit)
             ]
         ),
         fixtures._response(
@@ -182,7 +194,7 @@ def test_call_12_runs_and_final_answer_remains_available(tmp_path, native_transp
     run_native_slot(frozen, slot, tmp_path)
     row = collect_slot(tmp_path, frozen, slot)
     assert row["native"]["termination_reason"] == "no_tools_called"
-    assert len(row["provider_calls"]) == 12
+    assert len(row["provider_calls"]) == limit
     assert row["provider_calls"][-1]["request"]["method"] == "POST"
     assert row["provider_calls"][-1]["observation"]["status_code"] < 300
     assert row["call_budget"]["rejection"] is None

@@ -231,6 +231,21 @@
       "size": 6585
     },
     {
+      "path": "docs/serhii-budget11-20260918.md",
+      "sha256": "sha256:7ab39f67ff2e20fb03e3cea95816e3dfcc2f2718bc7280410c75b9629ce87ba3",
+      "size": 4428
+    },
+    {
+      "path": "docs/serhii-budget11-20260920.md",
+      "sha256": "sha256:1051cf867a225b433d63faaad521c69f38c869dbfced3ef15658651336672fe4",
+      "size": 7172
+    },
+    {
+      "path": "docs/serhii-budget11-protocol.md",
+      "sha256": "sha256:e5fd17e88505feeec9df01ff37c1a528bc631df847468cc3f310033923e9b61a",
+      "size": 4543
+    },
+    {
       "path": "docs/serhii-noise-floor-20260912.md",
       "sha256": "sha256:d023ac47b80e194299f4d3ff9bef2856930fd9517055e05c19ad388a29b32055",
       "size": 8419
@@ -997,8 +1012,8 @@
     },
     {
       "path": "integrations/verifiers_dirty_integration/README.md",
-      "sha256": "sha256:197d7dae49779cb0074e108859a0ed702a798af980cddb2befb122a85c1ed784",
-      "size": 17793
+      "sha256": "sha256:2f0aba6d96922fa503c539abc9b4f98ae9bf00cd18839703417c7e0046d4fc0f",
+      "size": 18800
     },
     {
       "path": "integrations/verifiers_dirty_integration/THIRD_PARTY_NOTICES.md",
@@ -1022,8 +1037,8 @@
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/call_budget_environment.py",
-      "sha256": "sha256:1d878dae20e3d72d41114f2269972ada958eeb42ce9112b53f88519712131be0",
-      "size": 4703
+      "sha256": "sha256:dee4bab843f3b350362360a77f4d2d091cd11367368602d25ba8f5ea88f84e8e",
+      "size": 4715
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/contract.py",
@@ -1057,13 +1072,13 @@
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_analysis.py",
-      "sha256": "sha256:3e78b3e1e6ab0c41cea9cc919c444108c75bb538725b4b144a0253e1f734a474",
-      "size": 35224
+      "sha256": "sha256:c3be3f758296943929d54ba7566859f3d61a3b25247dd25cfac7de61850f4b2f",
+      "size": 35806
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_arms.py",
-      "sha256": "sha256:1929f11a98561986791d75f99b8d234a4ac3c6de982448602dec9fcfba1f38f2",
-      "size": 5122
+      "sha256": "sha256:2095ffde5e04f2ec7565a745a8c5e71e128563f1b0408005a65ae5b356e6b31b",
+      "size": 6549
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_budget.py",
@@ -1077,23 +1092,28 @@
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_evidence.py",
-      "sha256": "sha256:fdb489b399e8ed8fc0a609a0594484ce67d582874caff33ba28c609349e3ac6f",
-      "size": 30252
+      "sha256": "sha256:d387772f28b0280fc6120c0f5e161ee1f8c64697b4b04be72b570b14d4a600d5",
+      "size": 30283
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_native.py",
-      "sha256": "sha256:21dbe8133761d5875a82a2cc09b206c35c46cdfe038d48ff2fcc830cc0187dc7",
-      "size": 6454
+      "sha256": "sha256:8f304cedea92d6d9b7629894ad052f428c66524616f1c080d74adebffa6a0692",
+      "size": 6448
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_public.py",
-      "sha256": "sha256:4238afab4f41d48df0d182be77ae9a7b2a4022211b1002a80bac223dbf230806",
-      "size": 17304
+      "sha256": "sha256:98c989084fca5fadeeb53260aa45f05e9e648f0820712eac169fc584e0227bcd",
+      "size": 17639
+    },
+    {
+      "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeat_replay.py",
+      "sha256": "sha256:417e9d79c57e986d75f57eafd279cb9b2870a3155fed8c3d524dcec9dff89a46",
+      "size": 7423
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/repeats.py",
-      "sha256": "sha256:fd1bbbfa6fca8b226b384729d421a4a0614115003721b432114836ff202d54a2",
-      "size": 23036
+      "sha256": "sha256:a4ef7972a07449624ebb8d8089cb4e8bbe481a5cbb106b539d33714c0352f1c5",
+      "size": 23310
     },
     {
       "path": "integrations/verifiers_dirty_integration/datalox_dirty_integration/scoring.py",
@@ -3222,13 +3242,18 @@
     },
     {
       "path": "tests/test_verifiers_repeat_arms.py",
-      "sha256": "sha256:e2c87b17698ee6aaae950c9fd43ecca05cfc057f1939d84bf0e55fd44c92e9ef",
-      "size": 12339
+      "sha256": "sha256:28d677fd54ddf7b8abb991a71e9776e9626bd4e1d05bfa7234393f9beb53ed6c",
+      "size": 12786
     },
     {
       "path": "tests/test_verifiers_repeat_budget.py",
       "sha256": "sha256:d5b7d523d875c84823040513e0f8ec677670e37c79953e18eed6593facb9cf5b",
       "size": 14195
+    },
+    {
+      "path": "tests/test_verifiers_repeat_budget11.py",
+      "sha256": "sha256:abbb3a48eff64b32e5628ea5ee815a597da5b6b4817e1762eb0050185a9a0373",
+      "size": 4816
     },
     {
       "path": "tests/test_verifiers_repeat_contract.py",
@@ -3312,5 +3337,5 @@
     }
   ],
   "schema_version": "datalox_public_source_manifest_v1",
-  "source_revision": "cd70b5842aaa39ed2efee55190ec3ff181cd272d"
+  "source_revision": "47a3e3f8dd51594a08b62c3edd0efb51de7b395f"
 }

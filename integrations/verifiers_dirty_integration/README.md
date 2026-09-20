@@ -98,6 +98,24 @@ model determinism are separate controls.
 
 ## Measure repeated-run variation
 
+### Eleven-call follow-up
+
+The [V3 protocol](../../docs/serhii-budget11-protocol.md) tests the specific
+prediction that an 11-call cap blocks the final confirmation in `hostile/23`
+while the other settings still pass. It freezes 36 new model-selected runs,
+baseline versus capped, across both profiles and all three seeds.
+
+The [September 20 results](../../docs/serhii-budget11-20260920.md) contain all
+36 reviewed runs and an inference-free inspection command. The cap blocked
+confirmation in the three predicted `hostile/23` runs; every other run passed.
+
+Use `repeats prepare --experiment-version v3` with a fresh experiment ID and
+output. The existing runner, audit and public-evidence checker support V3;
+the earlier V1/V2 manifests keep their original schedules. The separate
+`python -m datalox_dirty_integration.repeat_replay` command re-executes reviewed
+actions locally to check the prediction without inference. Its output is a
+recorded-action counterfactual, not new agent-performance evidence.
+
 ### Versioned three-arm call-budget comparison
 
 `prepare --experiment-version v2` freezes 90 slots: baseline, `budget12`, and

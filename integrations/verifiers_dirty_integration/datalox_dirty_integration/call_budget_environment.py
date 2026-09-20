@@ -7,20 +7,20 @@ and counts its recorded provider invocation, including writes and fault results.
 
 from __future__ import annotations
 
-from typing import Any
 import inspect
 import json
+from typing import Any
 
 import verifiers as vf
 
 from datalox_dirty_integration.environment import (
     DataloxDirtyIntegrationEnv,
-    list_products,
-    create_cart,
-    get_cart,
     add_line_item,
-    update_line_item,
+    create_cart,
     delete_line_item,
+    get_cart,
+    list_products,
+    update_line_item,
 )
 from datalox_dirty_integration.repeat_arms import effect_digest
 
@@ -54,9 +54,9 @@ def provider_tool_binds(tool: dict[str, Any]) -> bool:
 class CallBudgetIntegrationEnv(DataloxDirtyIntegrationEnv):
     def __init__(self, *, provider_call_budget: int | None, **kwargs: Any) -> None:
         if provider_call_budget is not None and (
-            type(provider_call_budget) is not int or provider_call_budget != 12
+            type(provider_call_budget) is not int or provider_call_budget <= 0
         ):
-            raise ValueError("V2 provider_call_budget must be 12 or None")
+            raise ValueError("provider_call_budget must be a positive integer or None")
         self._provider_call_budget = provider_call_budget
         self._rejections: dict[str, dict[str, Any]] = {}
         super().__init__(**kwargs)

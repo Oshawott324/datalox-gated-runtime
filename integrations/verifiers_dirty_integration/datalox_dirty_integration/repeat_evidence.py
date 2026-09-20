@@ -21,9 +21,9 @@ from datalox_dirty_integration.contract import (
 )
 from datalox_dirty_integration.episode import sha256_file
 from datalox_dirty_integration.repeat_arms import (
-    ArmExperimentConfig,
-    ArmSlot,
     BUDGET_STOP,
+    ArmExperiment,
+    ArmSlot,
     arm_controls,
     audit_call_budget,
 )
@@ -426,8 +426,8 @@ def collect_slot(
         raise RepeatEvidenceError("required native rollout fields are missing")
     execution = read_json(output / "native" / "execution.json")
     metadata = read_json(output / "native" / "metadata.json")
-    is_v2 = isinstance(config, ArmExperimentConfig)
-    if is_v2:
+    has_arms = isinstance(config, ArmExperiment)
+    if has_arms:
         if not isinstance(slot, ArmSlot):
             raise RepeatEvidenceError("V2 requires a versioned arm slot")
         _equal(arm_controls(slot), execution.get("experiment_arm"), "experiment arm")
@@ -479,7 +479,7 @@ def collect_slot(
         "max_turns": config.max_turns,
         "timeout_seconds": config.per_rollout_timeout_seconds,
     }
-    if is_v2:
+    if has_arms:
         environment_args.update(
             call_budget_controller=True,
             provider_call_budget=arm_controls(slot)["provider_call_budget"],
@@ -547,7 +547,7 @@ def collect_slot(
         "delivered-observations.json",
         "verification.json",
     }
-    if is_v2:
+    if has_arms:
         expected_artifacts.add("call-budget.json")
     if set(manifest["artifacts"]) != expected_artifacts:
         raise RepeatEvidenceError("evidence artifact inventory changed")
@@ -572,7 +572,7 @@ def collect_slot(
         raise RepeatEvidenceError("native rollout hit the collection timeout")
     if native.get("is_completed") is not True:
         raise RepeatEvidenceError("native rollout has no terminal completion")
-    if is_v2:
+    if has_arms:
         reason = native["stop_condition"]
         trajectory = native["trajectory"]
         if reason == "max_turns_reached":
@@ -593,7 +593,7 @@ def collect_slot(
                 raise RepeatEvidenceError("native prompt limit lacks its terminal flag")
         else:
             raise RepeatEvidenceError("unexpected V2 native stop condition")
-    _audit_native_trajectory(native, call_budget=is_v2)
+    _audit_native_trajectory(native, call_budget=has_arms)
     token_budget = _audit_native_budget(
         read_json(output / "native" / "budget.json"), native, config
     )
@@ -637,7 +637,7 @@ def collect_slot(
         "recomputed discipline",
     )
     joined = join_tool_observations(native["completion"], calls)
-    if is_v2:
+    if has_arms:
         audit_call_budget(
             artifacts["call-budget.json"],
             slot,
@@ -645,7 +645,9 @@ def collect_slot(
             native["stop_condition"],
             joined["unexecuted_tool_attempts"],
         )
-    allowed_pending_stops = {"max_turns_reached", BUDGET_STOP} if is_v2 else {"max_turns_reached"}
+    allowed_pending_stops = (
+        {"max_turns_reached", BUDGET_STOP} if has_arms else {"max_turns_reached"}
+    )
     if joined["unexecuted_tool_attempts"] and native["stop_condition"] not in allowed_pending_stops:
         raise RepeatEvidenceError("unexecuted calls require the native turn cap")
     responses = [
@@ -691,7 +693,7 @@ def collect_slot(
             ],
         },
     }
-    if is_v2:
+    if has_arms:
         row.update(arm=slot.arm, call_budget=artifacts["call-budget.json"])
     files = {
         str(path.relative_to(output)): sha256_file(path)

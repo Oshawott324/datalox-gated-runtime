@@ -21,6 +21,13 @@ from datalox_dirty_integration.audit import canonical_sha256
 from datalox_dirty_integration.contract import repository_root
 from datalox_dirty_integration.episode import CommerceEpisode, sha256_file
 from datalox_dirty_integration.policy import SeededCommercePolicy, load_profile
+from datalox_dirty_integration.repeat_arms import (
+    ArmExperimentConfig,
+    Budget11ExperimentConfig,
+    build_arm_schedule,
+    build_budget11_schedule,
+    parse_experiment,
+)
 from datalox_dirty_integration.repeat_contract import (
     ExperimentConfig,
     ModelConfig,
@@ -29,11 +36,6 @@ from datalox_dirty_integration.repeat_contract import (
     write_json_exclusive,
 )
 from datalox_dirty_integration.repeat_evidence import collect_slot, read_json
-from datalox_dirty_integration.repeat_arms import (
-    ArmExperimentConfig,
-    build_arm_schedule,
-    parse_experiment,
-)
 
 
 def capture_bindings(model: ModelConfig) -> dict[str, str]:
@@ -395,7 +397,7 @@ def main(argv: list[str] | None = None) -> int:
     prepare.add_argument("--experiment-id", required=True)
     prepare.add_argument("--model", default="gpt-5.6-sol")
     prepare.add_argument("--repetitions", type=int)
-    prepare.add_argument("--experiment-version", choices=("v1", "v2"), default="v1")
+    prepare.add_argument("--experiment-version", choices=("v1", "v2", "v3"), default="v1")
     prepare.add_argument("--seeds", nargs="+", default=["1", "7", "23"])
     prepare.add_argument("--max-total-cost-usd", type=float, required=True)
     prepare.add_argument("--per-rollout-reservation-usd", type=float, required=True)
@@ -443,9 +445,17 @@ def main(argv: list[str] | None = None) -> int:
             )
             if checkout.returncode == 0 and revision != checkout.stdout.strip():
                 raise ValueError("source revision must match the checked-out commit")
-        is_v2 = args.experiment_version == "v2"
-        repetitions = args.repetitions if args.repetitions is not None else (5 if is_v2 else 10)
-        config_type = ArmExperimentConfig if is_v2 else ExperimentConfig
+        config_type, default_repetitions = {
+            "v1": (ExperimentConfig, 10),
+            "v2": (ArmExperimentConfig, 5),
+            "v3": (Budget11ExperimentConfig, 3),
+        }[args.experiment_version]
+        repetitions = args.repetitions if args.repetitions is not None else default_repetitions
+        schedule = {
+            "v1": lambda: build_schedule(tuple(args.seeds), repetitions),
+            "v2": build_arm_schedule,
+            "v3": build_budget11_schedule,
+        }[args.experiment_version]()
         config = config_type(
             experiment_id=args.experiment_id,
             source_revision=revision,
@@ -456,9 +466,7 @@ def main(argv: list[str] | None = None) -> int:
             per_rollout_timeout_seconds=args.rollout_timeout_seconds,
             max_total_cost_usd=args.max_total_cost_usd,
             per_rollout_reservation_usd=args.per_rollout_reservation_usd,
-            schedule=build_arm_schedule()
-            if is_v2
-            else build_schedule(tuple(args.seeds), repetitions),
+            schedule=schedule,
         )
         write_json_exclusive(args.output, config.model_dump(mode="json"))
         print(f"Prepared {len(config.schedule)} slots; no model requests made.")
