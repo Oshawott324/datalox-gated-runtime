@@ -236,6 +236,11 @@
       "size": 4428
     },
     {
+      "path": "docs/serhii-budget11-20260920.md",
+      "sha256": "sha256:1051cf867a225b433d63faaad521c69f38c869dbfced3ef15658651336672fe4",
+      "size": 7172
+    },
+    {
       "path": "docs/serhii-budget11-protocol.md",
       "sha256": "sha256:e5fd17e88505feeec9df01ff37c1a528bc631df847468cc3f310033923e9b61a",
       "size": 4543
@@ -1007,8 +1012,8 @@
     },
     {
       "path": "integrations/verifiers_dirty_integration/README.md",
-      "sha256": "sha256:7b29afcd5f7066264c546ec96f2f52542c4b08a997a9a70f8e393e907c13d994",
-      "size": 18566
+      "sha256": "sha256:2f0aba6d96922fa503c539abc9b4f98ae9bf00cd18839703417c7e0046d4fc0f",
+      "size": 18800
     },
     {
       "path": "integrations/verifiers_dirty_integration/THIRD_PARTY_NOTICES.md",
@@ -3332,5 +3337,5 @@
     }
   ],
   "schema_version": "datalox_public_source_manifest_v1",
-  "source_revision": "6bf1c6ab80cd4af8f719a6ea35aab8812bc1a192"
+  "source_revision": "47a3e3f8dd51594a08b62c3edd0efb51de7b395f"
 }

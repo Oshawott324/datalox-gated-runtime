@@ -105,6 +105,10 @@ prediction that an 11-call cap blocks the final confirmation in `hostile/23`
 while the other settings still pass. It freezes 36 new model-selected runs,
 baseline versus capped, across both profiles and all three seeds.
 
+The [September 20 results](../../docs/serhii-budget11-20260920.md) contain all
+36 reviewed runs and an inference-free inspection command. The cap blocked
+confirmation in the three predicted `hostile/23` runs; every other run passed.
+
 Use `repeats prepare --experiment-version v3` with a fresh experiment ID and
 output. The existing runner, audit and public-evidence checker support V3;
 the earlier V1/V2 manifests keep their original schedules. The separate
