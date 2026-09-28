@@ -183,7 +183,7 @@ def run_invalid_write_trajectory(
 ) -> ReferenceResult:
     """Use the fixture's modeled invalid quantity write and leave incorrect state."""
 
-    products = _complete_clean_catalog(episode)
+    products = _complete_validated_catalog(episode)
     variant_id = _lowest_variant(products.values())
     if variant_id is None:
         raise ValueError("invalid-write calibration could not select a variant")
@@ -244,7 +244,7 @@ def run_extra_variant_trajectory(
 ) -> ReferenceResult:
     """Complete the task, then leave an unrelated second variant in the cart."""
 
-    products = _complete_clean_catalog(episode)
+    products = _complete_validated_catalog(episode)
     variant_id = _lowest_variant(products.values())
     if variant_id is None:
         raise ValueError("extra-variant calibration could not select a variant")
@@ -283,7 +283,7 @@ def run_wrong_variant_trajectory(
 ) -> ReferenceResult:
     """Read the whole catalog, then buy the most expensive variant instead."""
 
-    products = _complete_clean_catalog(episode)
+    products = _complete_validated_catalog(episode)
     highest_id = _highest_variant(products.values())
     cheapest_id = _lowest_variant(products.values())
     if highest_id is None or cheapest_id is None or highest_id == cheapest_id:
@@ -306,7 +306,7 @@ def run_second_cart_trajectory(
 ) -> ReferenceResult:
     """Create the expected cart twice, complete one, and leave both behind."""
 
-    products = _complete_clean_catalog(episode)
+    products = _complete_validated_catalog(episode)
     variant_id = _lowest_variant(products.values())
     if variant_id is None:
         raise ValueError("second-cart calibration could not select a variant")
@@ -334,7 +334,7 @@ def run_unrelated_cart_trajectory(
     and shows up as a second cart in the provider's final state.
     """
 
-    products = _complete_clean_catalog(episode)
+    products = _complete_validated_catalog(episode)
     variant_id = _lowest_variant(products.values())
     if variant_id is None:
         raise ValueError("unrelated-cart calibration could not select a variant")
@@ -357,7 +357,7 @@ def run_unconfirmed_write_trajectory(
 ) -> ReferenceResult:
     """Take the write responses as proof and never read the cart back."""
 
-    products = _complete_clean_catalog(episode)
+    products = _complete_validated_catalog(episode)
     variant_id = _lowest_variant(products.values())
     if variant_id is None:
         raise ValueError("unconfirmed-write calibration could not select a variant")
@@ -499,18 +499,31 @@ def _complete_cart(
     )
 
 
-def _complete_clean_catalog(episode: CommerceEpisode) -> dict[str, dict[str, Any]]:
+def _complete_validated_catalog(
+    episode: CommerceEpisode,
+    *,
+    attempt_budget: int = 24,
+) -> dict[str, dict[str, Any]]:
+    """Read the whole catalog by re-requesting any page with the wrong offset.
+
+    A trajectory written to break one check has to reach that check first.
+    Refusing a repeated page would stop it on most faulted seeds, so this
+    re-requests instead, as the careful reference does. The intended check is
+    then the first reported failure; later checks are not evaluated.
+    """
+
     products: dict[str, dict[str, Any]] = {}
     offset = 0
-    while True:
+    for _ in range(attempt_budget):
         page = _require_page_response(episode.list_products(offset=offset, limit=10))
         if page["offset"] != offset:
-            raise ValueError("clean catalog calibration received a repeated page")
+            continue
         for product in page["products"]:
             products[product["id"]] = product
         if not page["products"]:
             return products
         offset += 10
+    raise ValueError("validated catalog read exhausted its attempt budget")
 
 
 def _scan_until_quota(

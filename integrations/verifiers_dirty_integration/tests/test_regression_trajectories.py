@@ -10,6 +10,11 @@ Each row carries its own seed, because a trajectory written to fail on one
 intervention proves nothing if an earlier intervention of another kind already
 broke the same check.
 
+Six of these trajectories read the whole catalog before committing the mistake
+they are written for. They are also run on faulted cells, because a trajectory
+that stops on a repeated page never reaches its check, and a check covered only
+on the clean profile is not covered where faults make it matter.
+
 This is regression coverage. It does not change the V1 acceptance gate.
 """
 
@@ -31,6 +36,7 @@ from datalox_dirty_integration.reference import (
     run_careful_reference,
     run_credulous_repeat_trajectory,
     run_extra_variant_trajectory,
+    run_invalid_write_trajectory,
     run_second_cart_trajectory,
     run_type_credulous_trajectory,
     run_unconfirmed_write_trajectory,
@@ -84,6 +90,26 @@ REGRESSIONS: tuple[tuple[str, Callable[..., Any], str, str, str], ...] = (
         "7",
         "complete_catalog_before_write",
     ),
+)
+
+
+#: Trajectories that read the whole catalog first, and the check each breaks.
+CATALOG_FIRST: tuple[tuple[str, Callable[..., Any], str], ...] = (
+    ("invalid_write", run_invalid_write_trajectory, "quantity_transition_correct"),
+    ("wrong_variant", run_wrong_variant_trajectory, "lowest_price_variant_added_once"),
+    ("extra_variant", run_extra_variant_trajectory, "final_provider_state_matches"),
+    ("second_cart", run_second_cart_trajectory, "single_expected_cart_created"),
+    ("unrelated_cart", run_unrelated_cart_trajectory, "single_final_cart"),
+    ("unconfirmed_write", run_unconfirmed_write_trajectory, "confirmation_read_matches"),
+)
+
+#: Faulted cells whose catalog reads include a repeated page. A read that
+#: refused a mismatched page stopped every CATALOG_FIRST trajectory on all four.
+FAULT_CELLS: tuple[tuple[str, str], ...] = (
+    ("realistic", "3"),
+    ("realistic", "7"),
+    ("hostile", "3"),
+    ("hostile", "7"),
 )
 
 
@@ -171,3 +197,29 @@ def test_incomplete_catalog_has_two_distinct_causes() -> None:
     assert repeat_kinds[0] == "repeat_page"
     assert drift.failed_check_ids == ("complete_catalog_before_write",)
     assert repeat.failed_check_ids == ("complete_catalog_before_write",)
+
+
+@pytest.mark.parametrize(
+    ("profile", "seed"),
+    FAULT_CELLS,
+    ids=[f"{profile}-{seed}" for profile, seed in FAULT_CELLS],
+)
+@pytest.mark.parametrize(
+    ("name", "trajectory", "intended"),
+    CATALOG_FIRST,
+    ids=[row[0] for row in CATALOG_FIRST],
+)
+def test_catalog_first_trajectory_reaches_its_check_under_faults(
+    name: str, trajectory: Callable[..., Any], intended: str, profile: str, seed: str
+) -> None:
+    """A repeated page on the catalog read must not stop the trajectory early.
+
+    The applied kinds are asserted too: a cell where no page was repeated would
+    pass without exercising the re-request at all.
+    """
+
+    del name
+    report, kinds = _run(trajectory, profile, seed)
+    assert "repeat_page" in kinds
+    assert report.failed_check_ids == (intended,)
+    assert report.score == 0.0

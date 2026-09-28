@@ -289,6 +289,14 @@ masking it. Verification is fail-fast, so the test asserts that the intended
 check is the first and only reported failure; checks after it are never
 evaluated, and some of them would have failed too.
 
+The first five, and the calibration's invalid-write negative, read the whole
+catalog before committing their mistake. That read re-requests any page whose
+offset does not match, as the careful reference does, so a repeated page cannot
+stop a trajectory before its check. The tests run all six on faulted
+`realistic` and `hostile` cells as well, and assert that a repeated page was
+actually delivered there. Across all 60 seeds of every profile, each of the six
+fails its own check first on every one of the 180 profile/seed combinations.
+
 ```bash
 uv --directory integrations/verifiers_dirty_integration run --extra dev pytest -q
 ```
